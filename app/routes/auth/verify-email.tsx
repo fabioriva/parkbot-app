@@ -13,6 +13,8 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { getInstance } from "~/middleware/i18next";
 
+import type { Route } from "./+types/verify-email";
+
 export async function loader({ context, request }: Route.LoaderArgs) {}
 
 export async function action({ context, request }: Route.ActionArgs) {}

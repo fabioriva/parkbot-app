@@ -10,7 +10,7 @@ export default [
   layout("routes/auth/layout.tsx", [
     route("login", "routes/auth/login.tsx"),
     // route("logout", "routes/auth/logout.tsx"),
-    // route("signup", "routes/auth/signup.tsx"),
+    route("signup", "routes/auth/signup.tsx"),
     route("verify-email", "routes/auth/verify-email.tsx"),
   ]),
   route("api/locales/:lng/:ns", "./routes/locales.ts"),

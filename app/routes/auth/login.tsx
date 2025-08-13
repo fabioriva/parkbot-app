@@ -36,6 +36,7 @@ export async function action({ context, request }: Route.ActionArgs) {
       message: i18n.t("login.action.mesgThree"),
     };
   }
+  // ...
 }
 
 export default function Login({ actionData }: Route.ComponentProps) {
