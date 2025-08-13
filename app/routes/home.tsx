@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { data, Form, Link } from "react-router";
+import { Button } from "~/components/ui/button";
 
 import type { Route } from "./+types/home";
 
@@ -17,14 +18,16 @@ export default function Home() {
       <div className="flex flex-col gap-6 text-center">
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <h2 className="text-xl">{t("description")}</h2>
-        <Link to="/login">Login</Link>
+        <Link className="underline" to="/login">
+          Login to Parkbot
+        </Link>
         <Form className="space-x-6">
-          <button type="submit" name="lng" value="en">
+          <Button type="submit" name="lng" value="en">
             English
-          </button>
-          <button type="submit" name="lng" value="it">
+          </Button>
+          <Button type="submit" name="lng" value="it">
             Italiano
-          </button>
+          </Button>
         </Form>
       </div>
     </div>
