@@ -1,0 +1,22 @@
+import { useTranslation } from "react-i18next";
+import { data, href, Link } from "react-router";
+
+export async function loader() {
+  return data(null, { status: 404 });
+}
+
+export default function Component() {
+  let { t } = useTranslation("notFound");
+
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="flex flex-col gap-6 text-center">
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
+        <p className="text-sm">{t("description")}</p>
+        <Link className="underline" to={href("/")}>
+          {t("backToHome")}
+        </Link>
+      </div>
+    </div>
+  );
+}
