@@ -45,7 +45,6 @@ export default function Login({ actionData }: Route.ComponentProps) {
       <CardHeader className="text-center">
         <CardTitle className="text-lg">{t("login.cardTitle")}</CardTitle>
         <CardDescription>{t("login.cardDescription")}</CardDescription>
-        {/* <CardAction>Card Action</CardAction> */}
       </CardHeader>
       <CardContent>
         <Form method="post">
