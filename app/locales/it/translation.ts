@@ -5,6 +5,7 @@ export default {
     cardTitle: "Accedi a Parkbot",
     cardDescription: "Inserisci la tua email per accedere",
     forgot: "Password dimenticata?",
+    signup: "Non hai un account?",
     action: {
       mesgOne: "Inserisci la tua email e password",
       mesgTwo: "Campi non validi o mancanti",
