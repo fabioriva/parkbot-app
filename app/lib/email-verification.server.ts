@@ -2,6 +2,7 @@ import { encodeBase32 } from "@oslojs/encoding";
 import { createCookie } from "react-router";
 import { db } from "./db.server";
 import { generateRandomOTP } from "./random.server";
+import sgMail from "@sendgrid/mail";
 
 const COLLECTION = "email_verification_requests";
 
@@ -35,6 +36,26 @@ export async function createEmailVerificationRequest(
 export async function deleteUserEmailVerificationRequest(email: string): void {
   const requests = db.collection(COLLECTION);
   await requests.deleteOne({ email });
+}
+
+export async function sendVerificationEmail(email: string, code: string): void {
+  console.log(`To ${email}: Your verification code is ${code}`);
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const msg = {
+    to: email,
+    from: process.env.SENGRID_SENDER,
+    subject: "Parkbot web service email verification code",
+    text: `To ${email}: Your verification code is ${code}`,
+    html: `To ${email}: Your verification code is <strong>${code}</strong>`,
+  };
+  try {
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error(error);
+    if (error.response) {
+      console.error(error.response.body);
+    }
+  }
 }
 
 export interface EmailVerificationRequest {

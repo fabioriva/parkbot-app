@@ -12,7 +12,10 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { checkEmailAvailability } from "~/lib/email.server";
-import { createEmailVerificationRequest } from "~/lib/email-verification.server";
+import {
+  createEmailVerificationRequest,
+  sendVerificationEmail,
+} from "~/lib/email-verification.server";
 import { verifyPasswordStrength } from "~/lib/password.server";
 import { createUser } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
@@ -74,7 +77,10 @@ export async function action({ context, request }: Route.ActionArgs) {
     user.email
   );
   console.log(emailVerificationRequest);
-  // sendVerificationEmail(emailVerificationRequest.email, emailVerificationRequest.code);
+  sendVerificationEmail(
+    emailVerificationRequest.email,
+    emailVerificationRequest.code
+  );
   // ....
 }
 
