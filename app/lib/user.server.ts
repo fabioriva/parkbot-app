@@ -6,6 +6,8 @@ import {
 import { hashPassword } from "./password.server";
 import { generateRandomRecoveryCode } from "./random.server";
 
+const COLLECTION = "users";
+
 export async function createUser(
   email: string,
   username: string,
@@ -14,7 +16,7 @@ export async function createUser(
   const passwordHash = await hashPassword(password);
   const recoveryCode = generateRandomRecoveryCode();
   const encryptedRecoveryCode = encryptString(recoveryCode);
-  const users = db.collection("users");
+  const users = db.collection(COLLECTION);
   await users.createIndex({ email: 1 }, { unique: true });
   const doc = {
     email,
@@ -27,7 +29,7 @@ export async function createUser(
   const result = await users.insertOne(doc);
   console.log(passwordHash, recoveryCode, encryptedRecoveryCode, result);
   const user: User = {
-    id: result.insertedId,
+    // id: result.insertedId,
     username,
     email,
     emailVerified: false,
@@ -37,7 +39,7 @@ export async function createUser(
 }
 
 export interface User {
-  id: number;
+  // id: number;
   email: string;
   username: string;
   emailVerified: boolean;
