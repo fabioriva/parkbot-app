@@ -14,6 +14,7 @@ import { Label } from "~/components/ui/label";
 import { checkEmailAvailability } from "~/lib/email.server";
 import {
   createEmailVerificationRequest,
+  emailVerificationRequestCookie,
   sendVerificationEmail,
 } from "~/lib/email-verification.server";
 import { verifyPasswordStrength } from "~/lib/password.server";
@@ -81,10 +82,27 @@ export async function action({ context, request }: Route.ActionArgs) {
     emailVerificationRequest.email,
     emailVerificationRequest.code
   );
-  // ....
+  const cookie =
+    (await emailVerificationRequestCookie.parse(
+      request.headers.get("Cookie")
+    )) || {};
+  cookie.id = emailVerificationRequest.id;
+  return redirect("/login", {
+    headers: {
+      "Set-Cookie": await emailVerificationRequestCookie.serialize(cookie, {
+        expires: emailVerificationRequest.expiresAt,
+      }),
+    },
+  });
+  // const sessionFlags: SessionFlags = {
+  // 	twoFactorVerified: false
+  // };
+  // const sessionToken = generateSessionToken();
+  // const session = createSession(sessionToken, user.id, sessionFlags);
+  // setSessionTokenCookie(sessionToken, session.expiresAt);
 }
 
-export default function Login({ actionData }: Route.ComponentProps) {
+export default function Signup({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
     <Card>

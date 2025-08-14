@@ -6,6 +6,18 @@ import sgMail from "@sendgrid/mail";
 
 const COLLECTION = "email_verification_requests";
 
+export const emailVerificationRequestCookie = createCookie(
+  "__email_verification",
+  {
+    httpOnly: true,
+    // maxAge: 0,
+    path: "/",
+    sameSite: "lax",
+    secrets: [process.env.COOKIE_SIGNATURE],
+    secure: true,
+  }
+);
+
 export async function createEmailVerificationRequest(
   userId: number,
   email: string
