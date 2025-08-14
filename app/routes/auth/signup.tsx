@@ -11,7 +11,9 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { checkEmailAvailability } from "~/lib/email.server";
 import { verifyPasswordStrength } from "~/lib/password.server";
+import { createUser } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/signup";
@@ -47,13 +49,12 @@ export async function action({ context, request }: Route.ActionArgs) {
       message: i18n.t("signup.action.mesgThree"),
     };
   }
-  // const emailAvailable = checkEmailAvailability(email);
-  // if (!emailAvailable) {
-  //   return {
-  //     message: i18n.t("signup.action.mesgFour"),
-  //   };
-  // }
-
+  const emailAvailable = await checkEmailAvailability(email);
+  if (!emailAvailable) {
+    return {
+      message: i18n.t("signup.action.mesgFour"),
+    };
+  }
   const strongPassword = await verifyPasswordStrength(password);
   if (!strongPassword) {
     return {
@@ -65,6 +66,8 @@ export async function action({ context, request }: Route.ActionArgs) {
       message: i18n.t("signup.action.mesgSeven"),
     };
   }
+  const user = await createUser(email, username, password);
+  console.log(user);
   // ....
 }
 

@@ -4,5 +4,8 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  optimizeDeps: {
+    exclude: ["@node-rs/argon2", "@node-rs/bcrypt"],
+  },
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
 });
