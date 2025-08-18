@@ -50,12 +50,13 @@ export async function deleteUserEmailVerificationRequest(email: string): void {
   await requests.deleteOne({ email });
 }
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 export async function sendVerificationEmail(email: string, code: string): void {
   console.log(`To ${email}: Your verification code is ${code}`);
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const msg = {
     to: email,
-    from: process.env.SENGRID_SENDER,
+    from: process.env.SENDGRID_SENDER,
     subject: "Parkbot web service email verification code",
     text: `To ${email}: Your verification code is ${code}`,
     html: `To ${email}: Your verification code is <strong>${code}</strong>`,
