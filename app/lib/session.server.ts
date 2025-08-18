@@ -16,7 +16,6 @@ export function generateSessionToken(): string {
 
 export async function createSession(
   token: string,
-  // apsId: number,
   userId: string,
   flags: SessionFlags
 ): Promise<Session> {
