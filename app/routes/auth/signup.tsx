@@ -14,12 +14,14 @@ import { Label } from "~/components/ui/label";
 import { checkEmailAvailability } from "~/lib/email.server";
 import {
   createEmailVerificationRequest,
-  // emailVerificationRequestCookie,
   sendVerificationEmail,
 } from "~/lib/email-verification.server";
 import { verifyPasswordStrength } from "~/lib/password.server";
+import { createSession, generateSessionToken } from "~/lib/session.server";
 import { createUser } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
+
+import type { SessionFlags } from "~/lib/server/session";
 
 import type { Route } from "./+types/signup";
 
@@ -77,34 +79,32 @@ export async function action({ context, request }: Route.ActionArgs) {
     user.id,
     user.email
   );
+  console.log(emailVerificationRequest);
   const expires = emailVerificationRequest.expiresAt.toUTCString();
   sendVerificationEmail(
     emailVerificationRequest.email,
     emailVerificationRequest.code
   );
-  return redirect("/login", {
-    headers: {
-      "Set-Cookie": `__email_verification=${emailVerificationRequest.id}; Expires=${expires}; HttpOnly; Secure; SameSite=Lax`,
-    },
-  });
-  // const cookie =
-  //   (await emailVerificationRequestCookie.parse(
-  //     request.headers.get("Cookie")
-  //   )) || {};
-  // cookie.id = emailVerificationRequest.id;
+  const sessionToken = generateSessionToken();
+  const sessionFlags: SessionFlags = {
+    twoFactorVerified: false,
+  };
+  const session = await createSession(sessionToken, user.id, sessionFlags);
+  console.log(session);
+
   // return redirect("/login", {
   //   headers: {
-  //     "Set-Cookie": await emailVerificationRequestCookie.serialize(cookie, {
-  //       expires: emailVerificationRequest.expiresAt,
-  //     }),
+  //     "Set-Cookie": `__email_verification=${emailVerificationRequest.id}; Expires=${expires}; HttpOnly; Secure; SameSite=Lax`,
   //   },
   // });
-  // const sessionFlags: SessionFlags = {
-  // 	twoFactorVerified: false
-  // };
-  // const sessionToken = generateSessionToken();
-  // const session = createSession(sessionToken, user.id, sessionFlags);
-  // setSessionTokenCookie(sessionToken, session.expiresAt);
+  const emailVerificationCookie = `__email_verification=${emailVerificationRequest.id}; Expires=${expires}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  const sessionCookie = `__session=${sessionToken}; Expires=${expires}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  return redirect("/login", {
+    headers: [
+      ["Set-Cookie", emailVerificationCookie],
+      ["Set-Cookie", sessionCookie],
+    ],
+  });
 }
 
 export default function Signup({ actionData }: Route.ComponentProps) {

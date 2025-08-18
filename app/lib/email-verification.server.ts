@@ -21,7 +21,7 @@ const COLLECTION = "email_verification_requests";
 export async function createEmailVerificationRequest(
   userId: string,
   email: string
-): EmailVerificationRequest {
+): Promise<EmailVerificationRequest> {
   deleteUserEmailVerificationRequest(userId);
   const idBytes = new Uint8Array(20);
   crypto.getRandomValues(idBytes);
@@ -46,14 +46,19 @@ export async function createEmailVerificationRequest(
   return request;
 }
 
-export async function deleteUserEmailVerificationRequest(userId: string): void {
+export async function deleteUserEmailVerificationRequest(
+  userId: string
+): Promise<void> {
   const requests = db.collection(COLLECTION);
   await requests.deleteOne({ userId });
 }
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-export async function sendVerificationEmail(email: string, code: string): void {
+export async function sendVerificationEmail(
+  email: string,
+  code: string
+): Promise<void> {
   console.log(`To ${email}: Your verification code is ${code}`);
   const msg = {
     to: email,
@@ -66,9 +71,9 @@ export async function sendVerificationEmail(email: string, code: string): void {
     await sgMail.send(msg);
   } catch (error) {
     console.error(error);
-    if (error.response) {
-      console.error(error.response.body);
-    }
+    // if (error.response) {
+    //   console.error(error.response.body);
+    // }
   }
 }
 
