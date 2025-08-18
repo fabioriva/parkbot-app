@@ -19,10 +19,9 @@ const COLLECTION = "email_verification_requests";
 // );
 
 export async function createEmailVerificationRequest(
-  userId: number,
+  userId: string,
   email: string
 ): EmailVerificationRequest {
-  console.log(userId, email);
   deleteUserEmailVerificationRequest(userId);
   const idBytes = new Uint8Array(20);
   crypto.getRandomValues(idBytes);

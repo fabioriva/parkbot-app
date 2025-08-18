@@ -77,10 +77,6 @@ export async function action({ context, request }: Route.ActionArgs) {
     user.id,
     user.email
   );
-  console.log(
-    typeof emailVerificationRequest.expiresAt,
-    emailVerificationRequest.expiresAt
-  );
   const expires = emailVerificationRequest.expiresAt.toUTCString();
   sendVerificationEmail(
     emailVerificationRequest.email,
