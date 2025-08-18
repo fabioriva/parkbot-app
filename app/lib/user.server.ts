@@ -37,6 +37,12 @@ export async function createUser(
   return user;
 }
 
+export async function getUserFromEmail(email: string): Promise<User> | null {
+  const users = db.collection(COLLECTION);
+  const user = await users.findOne({ email });
+  return user;
+}
+
 export interface User {
   id: string; // use mongodb unique ObjectId _id;
   email: string;

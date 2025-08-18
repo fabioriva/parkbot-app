@@ -12,6 +12,7 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { getUserFromEmail } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/login";
@@ -34,6 +35,12 @@ export async function action({ context, request }: Route.ActionArgs) {
   if (!z.string().email().safeParse(email).success) {
     return {
       message: i18n.t("login.action.mesgThree"),
+    };
+  }
+  const user = await getUserFromEmail(email);
+  if (user === null) {
+    return {
+      message: i18n.t("login.action.mesgFour"),
     };
   }
   // ...
