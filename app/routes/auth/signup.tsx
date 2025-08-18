@@ -14,7 +14,7 @@ import { Label } from "~/components/ui/label";
 import { checkEmailAvailability } from "~/lib/email.server";
 import {
   createEmailVerificationRequest,
-  emailVerificationRequestCookie,
+  // emailVerificationRequestCookie,
   sendVerificationEmail,
 } from "~/lib/email-verification.server";
 import { verifyPasswordStrength } from "~/lib/password.server";
@@ -77,23 +77,32 @@ export async function action({ context, request }: Route.ActionArgs) {
     user.id,
     user.email
   );
-  console.log(emailVerificationRequest);
+  console.log(
+    typeof emailVerificationRequest.expiresAt,
+    emailVerificationRequest.expiresAt
+  );
+  const expires = emailVerificationRequest.expiresAt.toUTCString();
   sendVerificationEmail(
     emailVerificationRequest.email,
     emailVerificationRequest.code
   );
-  const cookie =
-    (await emailVerificationRequestCookie.parse(
-      request.headers.get("Cookie")
-    )) || {};
-  cookie.id = emailVerificationRequest.id;
   return redirect("/login", {
     headers: {
-      "Set-Cookie": await emailVerificationRequestCookie.serialize(cookie, {
-        expires: emailVerificationRequest.expiresAt,
-      }),
+      "Set-Cookie": `__email_verification=${emailVerificationRequest.id}; Expires=${expires}; HttpOnly; Secure; SameSite=Lax`,
     },
   });
+  // const cookie =
+  //   (await emailVerificationRequestCookie.parse(
+  //     request.headers.get("Cookie")
+  //   )) || {};
+  // cookie.id = emailVerificationRequest.id;
+  // return redirect("/login", {
+  //   headers: {
+  //     "Set-Cookie": await emailVerificationRequestCookie.serialize(cookie, {
+  //       expires: emailVerificationRequest.expiresAt,
+  //     }),
+  //   },
+  // });
   // const sessionFlags: SessionFlags = {
   // 	twoFactorVerified: false
   // };

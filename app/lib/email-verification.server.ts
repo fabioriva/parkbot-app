@@ -1,22 +1,22 @@
 import { encodeBase32 } from "@oslojs/encoding";
-import { createCookie } from "react-router";
+// import { createCookie } from "react-router";
 import { db } from "./db.server";
 import { generateRandomOTP } from "./random.server";
 import sgMail from "@sendgrid/mail";
 
 const COLLECTION = "email_verification_requests";
 
-export const emailVerificationRequestCookie = createCookie(
-  "__email_verification",
-  {
-    httpOnly: true,
-    // maxAge: 0,
-    path: "/",
-    sameSite: "lax",
-    secrets: [process.env.COOKIE_SIGNATURE],
-    secure: true,
-  }
-);
+// export const emailVerificationRequestCookie = createCookie(
+//   "__email_verification",
+//   {
+//     httpOnly: true,
+//     // maxAge: 0,
+//     path: "/",
+//     sameSite: "lax",
+//     secrets: [process.env.COOKIE_SIGNATURE],
+//     secure: true,
+//   }
+// );
 
 export async function createEmailVerificationRequest(
   userId: number,
@@ -28,15 +28,22 @@ export async function createEmailVerificationRequest(
   crypto.getRandomValues(idBytes);
   const id = encodeBase32(idBytes).toLowerCase();
   const code = generateRandomOTP();
-  const expiresAt = new Date(Date.now() + 1000 * 60 * 10);
+  const expiresAt = new Date(Date.now() + 1000 * 60 * 10); // 1 min = 1000 * 60
   const requests = db.collection(COLLECTION);
-  const request: EmailVerificationRequest = {
+  const doc = {
     userId,
     code,
     email,
     expires_at: expiresAt,
   };
-  const result = await requests.insertOne(request);
+  const result = await requests.insertOne(doc);
+  const request: EmailVerificationRequest = {
+    id: result.insertedId.toString(),
+    userId,
+    code,
+    email,
+    expiresAt,
+  };
   return request;
 }
 
@@ -67,6 +74,7 @@ export async function sendVerificationEmail(email: string, code: string): void {
 }
 
 export interface EmailVerificationRequest {
+  id: string; // use mongodb unique ObjectId _id;
   userId: string;
   code: string;
   email: string;
