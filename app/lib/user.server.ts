@@ -27,9 +27,8 @@ export async function createUser(
     registered2FA: false,
   };
   const result = await users.insertOne(doc);
-  console.log(passwordHash, recoveryCode, encryptedRecoveryCode, result);
   const user: User = {
-    // id: result.insertedId,
+    id: result.insertedId.toString(),
     username,
     email,
     emailVerified: false,
@@ -39,7 +38,7 @@ export async function createUser(
 }
 
 export interface User {
-  // id: number;
+  id: string; // use mongodb unique ObjectId _id;
   email: string;
   username: string;
   emailVerified: boolean;
