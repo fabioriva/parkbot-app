@@ -23,7 +23,7 @@ export async function createEmailVerificationRequest(
   email: string
 ): EmailVerificationRequest {
   console.log(userId, email);
-  deleteUserEmailVerificationRequest(email); // userId);
+  deleteUserEmailVerificationRequest(userId);
   const idBytes = new Uint8Array(20);
   crypto.getRandomValues(idBytes);
   const id = encodeBase32(idBytes).toLowerCase();
@@ -31,23 +31,18 @@ export async function createEmailVerificationRequest(
   const expiresAt = new Date(Date.now() + 1000 * 60 * 10);
   const requests = db.collection(COLLECTION);
   const request: EmailVerificationRequest = {
-    // id,
-    // userId,
+    userId,
     code,
     email,
     expires_at: expiresAt,
   };
   const result = await requests.insertOne(request);
-  console.log(result);
   return request;
-  // db.prepare(
-  //   "INSERT INTO email_verification_request (id, user_id, code, email, expires_at) VALUES (?, ?, ?, ?, ?) RETURNING id"
-  // ).run(id, userId, code, email, Math.floor(expiresAt.getTime() / 1000));
 }
 
-export async function deleteUserEmailVerificationRequest(email: string): void {
+export async function deleteUserEmailVerificationRequest(userId: string): void {
   const requests = db.collection(COLLECTION);
-  await requests.deleteOne({ email });
+  await requests.deleteOne({ userId });
 }
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -72,8 +67,7 @@ export async function sendVerificationEmail(email: string, code: string): void {
 }
 
 export interface EmailVerificationRequest {
-  // id: string;
-  // userId: number;
+  userId: string;
   code: string;
   email: string;
   expiresAt: Date;
