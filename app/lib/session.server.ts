@@ -21,20 +21,15 @@ export async function createSession(
 ): Promise<Session> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30); // 1 month
-  const doc = {
-    sessionId,
+  const session: Session = {
+    id: sessionId,
     userId,
     expiresAt,
     twoFactorVerified: flags.twoFactorVerified,
   };
   const sessions = db.collection(COLLECTION);
-  const result = await sessions.insertOne(doc);
-  const session: Session = {
-    sessionId,
-    userId,
-    expiresAt,
-    twoFactorVerified: flags.twoFactorVerified,
-  };
+  await sessions.insertOne(session);
+  console.log(session);
   return session;
 }
 
@@ -45,7 +40,7 @@ export interface SessionFlags {
 
 export interface Session extends SessionFlags {
   // apsId: number,
-  sessionId: string;
+  id: string;
   userId: string;
   expiresAt: Date;
 }

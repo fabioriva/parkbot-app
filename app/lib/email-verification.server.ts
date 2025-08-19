@@ -29,20 +29,15 @@ export async function createEmailVerificationRequest(
   const code = generateRandomOTP();
   const expiresAt = new Date(Date.now() + 1000 * 60 * 10); // 1 min = 1000 * 60
   const requests = db.collection(COLLECTION);
-  const doc = {
-    userId,
-    code,
-    email,
-    expires_at: expiresAt,
-  };
-  const result = await requests.insertOne(doc);
   const request: EmailVerificationRequest = {
-    id: result.insertedId.toString(),
+    id,
     userId,
     code,
     email,
     expiresAt,
   };
+  await requests.insertOne(request);
+  console.log(request);
   return request;
 }
 

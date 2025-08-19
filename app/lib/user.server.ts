@@ -35,6 +35,8 @@ export async function createUser(
     emailVerified: false,
     registered2FA: false,
   };
+  console.log(user);
+
   return user;
 }
 

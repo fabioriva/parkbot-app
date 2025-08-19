@@ -88,8 +88,8 @@ export async function action({ context, request }: Route.ActionArgs) {
   };
   const session = await createSession(sessionToken, user.id, sessionFlags);
   // redirect and set email verification / session cookies
-  const emailVerificationCookie = `__email_verification=${emailVerificationRequest.id}; Expires=${expires}; HttpOnly; Path=/; Secure; SameSite=Lax`;
-  const sessionCookie = `__session=${sessionToken}; Expires=${expires}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  const emailVerificationCookie = `__email_verification=${emailVerificationRequest.id}; Expires=${emailVerificationRequest.expiresAt.toUTCString()}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  const sessionCookie = `__session=${sessionToken}; Expires=${session.expiresAt.toUTCString()}; HttpOnly; Path=/; Secure; SameSite=Lax`;
   return redirect("/login", {
     headers: [
       ["Set-Cookie", emailVerificationCookie],
