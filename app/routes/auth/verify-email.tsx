@@ -53,7 +53,7 @@ export default function VerifyEmail({
         </div>
         <Form method="post">
           <div className="flex flex-col gap-6">
-            <Button action="/resend-email" title="Resend code" />
+            <Button action="/resend-code" title="Resend code" />
           </div>
         </Form>
       </CardContent>
