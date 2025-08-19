@@ -24,7 +24,7 @@ export async function createSession(
   const doc = {
     sessionId,
     userId,
-    expires_at: expiresAt,
+    expiresAt,
     twoFactorVerified: flags.twoFactorVerified,
   };
   const sessions = db.collection(COLLECTION);
