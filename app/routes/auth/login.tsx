@@ -12,9 +12,12 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getUserFromEmail } from "~/lib/user.server";
+import { verifyPasswordHash } from "~/lib/password.server";
+import { createSession, generateSessionToken } from "~/lib/session.server";
+import { getUserFromEmail, getUserPasswordHash } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
+import type { SessionFlags } from "~/lib/server/session";
 import type { Route } from "./+types/login";
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -43,7 +46,25 @@ export async function action({ context, request }: Route.ActionArgs) {
       message: i18n.t("login.action.mesgFour"),
     };
   }
-  // ...
+  const passwordHash = await getUserPasswordHash(user.id);
+  const validPassword = await verifyPasswordHash(passwordHash, password);
+  if (!validPassword) {
+    return {
+      message: i18n.t("login.action.mesgFive"),
+    };
+  }
+  const sessionToken = generateSessionToken();
+  const sessionFlags: SessionFlags = {
+    twoFactorVerified: false,
+  };
+  const session = await createSession(sessionToken, user.id, sessionFlags);
+  const expires = session.expiresAt.toUTCString();
+  const sessionCookie = `__session=${sessionToken}; Expires=${expires}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  return redirect("/verify-email", {
+    headers: {
+      "Set-Cookie": sessionCookie,
+    },
+  });
 }
 
 export default function Login({ actionData }: Route.ComponentProps) {

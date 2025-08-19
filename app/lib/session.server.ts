@@ -22,7 +22,7 @@ export async function createSession(
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30); // 1 month
   const doc = {
-    id: sessionId,
+    sessionId,
     userId,
     expires_at: expiresAt,
     twoFactorVerified: flags.twoFactorVerified,
@@ -30,7 +30,7 @@ export async function createSession(
   const sessions = db.collection(COLLECTION);
   const result = await sessions.insertOne(doc);
   const session: Session = {
-    id: sessionId,
+    sessionId,
     userId,
     expiresAt,
     twoFactorVerified: flags.twoFactorVerified,
@@ -44,8 +44,8 @@ export interface SessionFlags {
 }
 
 export interface Session extends SessionFlags {
-  id: string;
-  // apsId,
+  // apsId: number,
+  sessionId: string;
   userId: string;
   expiresAt: Date;
 }
