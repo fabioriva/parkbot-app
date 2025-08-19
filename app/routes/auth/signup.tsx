@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
+import * as cookie from "cookie";
 import * as z from "zod";
 import Button from "~/components/submitFormButton";
 import {
@@ -17,12 +18,21 @@ import {
   sendVerificationEmail,
 } from "~/lib/email-verification.server";
 import { verifyPasswordStrength } from "~/lib/password.server";
-import { createSession, generateSessionToken } from "~/lib/session.server";
+import {
+  createSession,
+  generateSessionToken,
+  getSession,
+} from "~/lib/session.server";
 import { createUser } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
 import type { SessionFlags } from "~/lib/server/session";
 import type { Route } from "./+types/signup";
+
+export async function loader({ context, request }: Route.LoaderArgs) {
+  // const { session, user } = await getSession(request);
+  await getSession(request);
+}
 
 export async function action({ context, request }: Route.ActionArgs) {
   let i18n = getInstance(context);
@@ -88,8 +98,26 @@ export async function action({ context, request }: Route.ActionArgs) {
   };
   const session = await createSession(sessionToken, user.id, sessionFlags);
   // redirect and set email verification / session cookies
-  const emailVerificationCookie = `__email_verification=${emailVerificationRequest.id}; Expires=${emailVerificationRequest.expiresAt.toUTCString()}; HttpOnly; Path=/; Secure; SameSite=Lax`;
-  const sessionCookie = `__session=${sessionToken}; Expires=${session.expiresAt.toUTCString()}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  // const emailVerificationCookie = `__email_verification=${emailVerificationRequest.id}; Expires=${emailVerificationRequest.expiresAt.toUTCString()}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  const emailVerificationCookie = cookie.serialize(
+    "__email_verification",
+    emailVerificationRequest.id,
+    {
+      expires: emailVerificationRequest.expiresAt,
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      secure: true,
+    }
+  );
+  // const sessionCookie = `__session=${sessionToken}; Expires=${session.expiresAt.toUTCString()}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  const sessionCookie = cookie.serialize("__session", sessionToken, {
+    expires: session.expiresAt,
+    httpOnly: true,
+    path: "/",
+    sameSite: "lax",
+    secure: true,
+  });
   return redirect("/login", {
     headers: [
       ["Set-Cookie", emailVerificationCookie],

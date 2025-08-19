@@ -3,16 +3,10 @@ import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
 } from "@oslojs/encoding";
+import * as cookie from "cookie";
 import { db } from "./db.server";
 
 const COLLECTION = "sessions";
-
-export function generateSessionToken(): string {
-  const tokenBytes = new Uint8Array(20);
-  crypto.getRandomValues(tokenBytes);
-  const token = encodeBase32LowerCaseNoPadding(tokenBytes).toLowerCase();
-  return token;
-}
 
 export async function createSession(
   token: string,
@@ -31,6 +25,33 @@ export async function createSession(
   await sessions.insertOne(session);
   console.log(session);
   return session;
+}
+
+export function generateSessionToken(): string {
+  const tokenBytes = new Uint8Array(20);
+  crypto.getRandomValues(tokenBytes);
+  const token = encodeBase32LowerCaseNoPadding(tokenBytes).toLowerCase();
+  return token;
+}
+
+export async function getSession(request: Request): SessionValidationResult {
+  const cookieHeader = request.headers.get("Cookie");
+  const cookies = cookie.parse(cookieHeader);
+  console.log(cookies, cookies.__session);
+  const token = cookies?.__session ?? null;
+  console.log(token);
+  if (token === null) {
+    return { session: null, user: null };
+  }
+  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  console.log(sessionId);
+
+  // const token = (await sessionCookie.parse(cookieHeader))?.token ?? null;
+  // console.log(token);
+  // const token = (await sessionCookie.parse(cookieHeader))?.token ?? null;
+  // const result = validateSessionToken(token);
+  // console.log("From getSession()", result);
+  // return result;
 }
 
 export interface SessionFlags {
