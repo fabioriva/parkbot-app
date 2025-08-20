@@ -1,5 +1,8 @@
 import { MongoClient } from "mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI);
+console.log(import.meta.env.VITE_MONGODB_URI);
+console.log(import.meta.env.VITE_MONGODB_DB);
 
-export const db = client.db(process.env.MONGODB_DB);
+const client = new MongoClient(import.meta.env.VITE_MONGODB_URI);
+
+export const db = client.db(import.meta.env.VITE_MONGODB_DB);

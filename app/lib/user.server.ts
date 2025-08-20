@@ -1,7 +1,9 @@
 import { db } from "./db.server";
 import { ObjectId } from "mongodb";
 import {
-  /*decrypt, decryptToString,*/ encrypt,
+  // decrypt,
+  // decryptToString,
+  encrypt,
   encryptString,
 } from "./encryption.server";
 import { hashPassword } from "./password.server";

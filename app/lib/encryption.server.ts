@@ -2,7 +2,7 @@ import { createCipheriv /*, createDecipheriv*/ } from "crypto";
 import { decodeBase64 } from "@oslojs/encoding";
 import { DynamicBuffer } from "@oslojs/binary";
 
-const key = decodeBase64(process.env.ENCRYPTION_KEY ?? "");
+const key = decodeBase64(import.meta.env.VITE_ENCRYPTION_KEY ?? "");
 
 export function encrypt(data: Uint8Array): Uint8Array {
   const iv = new Uint8Array(16);
