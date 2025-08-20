@@ -29,6 +29,11 @@ export async function createSession(
   return session;
 }
 
+export async function deleteSession(sessionId: string): Promise<void> {
+  const requests = db.collection(COLLECTION);
+  await requests.deleteOne({ sessionId });
+}
+
 export function generateSessionToken(): string {
   const tokenBytes = new Uint8Array(20);
   crypto.getRandomValues(tokenBytes);
