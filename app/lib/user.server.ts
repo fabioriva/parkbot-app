@@ -30,6 +30,12 @@ export async function createUser(
     registered2FA: false,
   };
   const result = await users.insertOne(doc);
+  await users.updateOne(
+    { _id: result.insertedId },
+    { $set: { id: result.insertedId.toString() } }
+  );
+  console.log(result);
+
   const user: User = {
     id: result.insertedId.toString(),
     email,
@@ -58,12 +64,12 @@ export async function getUserFromEmail(email: string): Promise<User> | null {
 
 export async function getUserPasswordHash(id: string): Promise<string> | null {
   const users = db.collection(COLLECTION);
-  const result = await users.findOne(
+  const user = await users.findOne(
     { _id: new ObjectId(id) },
     { projection: { _id: 0, passwordHash: 1 } }
   );
-  // console.log(id, result);
-  return result.passwordHash;
+  // console.log(id, user);
+  return user.passwordHash;
 }
 
 export interface User {
