@@ -11,13 +11,40 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { getEmailVerificationRequest } from "~/lib/email-verification.server";
 import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/verify-email";
 
 export async function loader({ context, request }: Route.LoaderArgs) {}
 
-export async function action({ context, request }: Route.ActionArgs) {}
+export async function action({ context, request }: Route.ActionArgs) {
+  const emailVerificationRequest = await getEmailVerificationRequest(request);
+  if (emailVerificationRequest === null) {
+    return {
+      message: "Not authenticated",
+    };
+  }
+  const formData = await request.formData();
+  const code = formData.get("code");
+  if (typeof code !== "string") {
+    return {
+      message: "Invalid or missing fields",
+    };
+  }
+  if (code === "") {
+    return {
+      message: "Enter your code",
+    };
+  }
+  // ...
+  if (emailVerificationRequest.code !== code) {
+    return {
+      message: "Incorrect code.",
+    };
+  }
+  // ..
+}
 
 export default function VerifyEmail({
   actionData,

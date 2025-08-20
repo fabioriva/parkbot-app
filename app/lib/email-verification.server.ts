@@ -3,6 +3,7 @@ import sgMail from "@sendgrid/mail";
 import * as cookie from "cookie";
 import { db } from "./db.server";
 import { generateRandomOTP } from "./random.server";
+import { getSession } from "~/lib/session.server";
 
 const COLLECTION = "email_verification_requests";
 
@@ -41,26 +42,35 @@ export async function getEmailVerification(
   id: string
 ): Promise<EmailVerificationRequest> | null {
   const requests = db.collection(COLLECTION);
-  const request = await users.findOne(
+  const request = await requests.findOne(
     { id, userId },
     { projection: { _id: 0 } }
   );
-  console.log(id, userId, request);
+  console.log(userId, id, request);
   return request;
 }
 
 export async function getEmailVerificationRequest(
   request: Request
 ): Promise<EmailVerificationRequest> | null {
+  const { user } = await getSession(request);
+  if (user === null) {
+    return null;
+  }
   const cookieHeader = request.headers.get("Cookie");
   const cookies = cookie.parse(cookieHeader);
-  console.log(cookies, cookies.__email_verification);
+  console.log(cookies);
   const id = cookies?.__email_verification ?? null;
   console.log(id);
   if (id === null) {
     return null;
   }
-  const emailVerificationRequest = getUserEmailVerification(user.id, id);
+  const emailVerificationRequest = await getEmailVerification(user.id, id);
+  console.log(emailVerificationRequest);
+  // if (emailVerificationRequest === null) {
+  // 	deleteEmailVerificationRequestCookie();
+  // }
+  return emailVerificationRequest;
 }
 
 sgMail.setApiKey(import.meta.env.VITE_SENDGRID_API_KEY);
