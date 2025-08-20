@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
+import * as cookie from "cookie";
 import * as z from "zod";
 import Button from "~/components/submitFormButton";
 import {
@@ -17,7 +18,7 @@ import { createSession, generateSessionToken } from "~/lib/session.server";
 import { getUserFromEmail, getUserPasswordHash } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
-import type { SessionFlags } from "~/lib/server/session";
+import type { SessionFlags } from "~/lib/server/session.server";
 import type { Route } from "./+types/login";
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -58,8 +59,15 @@ export async function action({ context, request }: Route.ActionArgs) {
     twoFactorVerified: false,
   };
   const session = await createSession(sessionToken, user.id, sessionFlags);
-  const expires = session.expiresAt.toUTCString();
-  const sessionCookie = `__session=${sessionToken}; Expires=${expires}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  // const expires = session.expiresAt.toUTCString();
+  // const sessionCookie = `__session=${sessionToken}; Expires=${expires}; HttpOnly; Path=/; Secure; SameSite=Lax`;
+  const sessionCookie = cookie.serialize("__session", sessionToken, {
+    expires: session.expiresAt,
+    httpOnly: true,
+    path: "/",
+    sameSite: "lax",
+    secure: true,
+  });
   return redirect("/verify-email", {
     headers: {
       "Set-Cookie": sessionCookie,
@@ -117,7 +125,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
       <CardFooter>
         <div className="text-center text-sm">
           {t("login.signup")}{" "}
-          <a href="signup" className="underline underline-offset-4">
+          <a href="/signup" className="underline underline-offset-4">
             Sign up
           </a>
         </div>

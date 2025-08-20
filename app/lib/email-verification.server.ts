@@ -3,7 +3,7 @@ import sgMail from "@sendgrid/mail";
 import * as cookie from "cookie";
 import { db } from "./db.server";
 import { generateRandomOTP } from "./random.server";
-import { getSession } from "~/lib/session.server";
+import { getSession } from "./session.server";
 
 const COLLECTION = "email_verification_requests";
 
@@ -40,7 +40,7 @@ export async function deleteUserEmailVerificationRequest(
 export async function getEmailVerification(
   userId: string,
   id: string
-): Promise<EmailVerificationRequest> | null {
+): Promise<EmailVerificationRequest | null> {
   const requests = db.collection(COLLECTION);
   const request = await requests.findOne(
     { id, userId },
@@ -52,7 +52,7 @@ export async function getEmailVerification(
 
 export async function getEmailVerificationRequest(
   request: Request
-): Promise<EmailVerificationRequest> | null {
+): Promise<EmailVerificationRequest | null> {
   const { user } = await getSession(request);
   if (user === null) {
     return null;

@@ -48,7 +48,7 @@ export async function createUser(
   return user;
 }
 
-export async function getUserFromEmail(email: string): Promise<User> | null {
+export async function getUserFromEmail(email: string): Promise<User | null> {
   const users = db.collection(COLLECTION);
   const result = await users.findOne({ email });
   const user: User = {
@@ -62,7 +62,7 @@ export async function getUserFromEmail(email: string): Promise<User> | null {
   return user;
 }
 
-export async function getUserPasswordHash(id: string): Promise<string> | null {
+export async function getUserPasswordHash(id: string): Promise<string | null> {
   const users = db.collection(COLLECTION);
   const user = await users.findOne(
     { _id: new ObjectId(id) },

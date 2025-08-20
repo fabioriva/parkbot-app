@@ -6,7 +6,7 @@ import {
 import * as cookie from "cookie";
 import { db } from "./db.server";
 
-import type { User } from "./user";
+import type { User } from "./user.server";
 
 const COLLECTION = "sessions";
 
@@ -14,7 +14,7 @@ export async function createSession(
   token: string,
   userId: string,
   flags: SessionFlags
-): Promise<Session> | null {
+): Promise<Session | null> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30); // 1 month
   const session: Session = {
@@ -71,10 +71,10 @@ export async function getSession(
   }
   const sessionValidationResult = result.shift();
   const session: Session = {
-    id: sessionValidationResult.id,
-    userId: sessionValidationResult.userId,
-    expiresAt: sessionValidationResult.expiresAt,
-    twoFactorVerified: sessionValidationResult.twoFactorVerified,
+    id: sessionValidationResult?.id,
+    userId: sessionValidationResult?.userId,
+    expiresAt: sessionValidationResult?.expiresAt,
+    twoFactorVerified: sessionValidationResult?.twoFactorVerified,
   };
   console.log(session);
   const user: User = {
