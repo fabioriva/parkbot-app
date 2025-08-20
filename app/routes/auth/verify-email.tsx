@@ -43,7 +43,9 @@ export async function action({ context, request }: Route.ActionArgs) {
       message: "Incorrect code.",
     };
   }
-  // ..
+  // email_verification delete momgodb
+  // email_verification delete cookie
+  // user update email and set as verified
 }
 
 export default function VerifyEmail({
