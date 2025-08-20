@@ -16,7 +16,15 @@ import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/verify-email";
 
-export async function loader({ context, request }: Route.LoaderArgs) {}
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const emailVerificationRequest = await getEmailVerificationRequest(request);
+  console.log("!!!!!!!!!!!", emailVerificationRequest);
+
+  if (emailVerificationRequest === null) {
+    return redirect("/login");
+  }
+  return { emailVerificationRequest };
+}
 
 export async function action({ context, request }: Route.ActionArgs) {
   const emailVerificationRequest = await getEmailVerificationRequest(request);
@@ -26,7 +34,9 @@ export async function action({ context, request }: Route.ActionArgs) {
     };
   }
   const formData = await request.formData();
+  const intent = formData.get("intent");
   const code = formData.get("code");
+
   if (typeof code !== "string") {
     return {
       message: "Invalid or missing fields",
@@ -59,12 +69,15 @@ export default function VerifyEmail({
         <CardTitle className="text-lg">{t("verifyEmail.cardTitle")}</CardTitle>
         <CardDescription>
           {t("verifyEmail.cardDescription")}{" "}
-          {/* {loaderData?.verificationRequest?.email} */}
+          <span className="underline underline-offset-4">
+            {loaderData.emailVerificationRequest?.email}
+          </span>
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         <Form method="post">
           <div className="flex flex-col gap-6">
+            <input type="hidden" name="intent" value="submit" />
             <div className="grid gap-3">
               <Label htmlFor="code">Verification code</Label>
               <Input type="text" name="code" id="code" required />
@@ -82,6 +95,7 @@ export default function VerifyEmail({
         </div>
         <Form method="post">
           <div className="flex flex-col gap-6">
+            <input type="hidden" name="intent" value="resend" />
             <Button action="/resend-code" title="Resend code" />
           </div>
         </Form>
