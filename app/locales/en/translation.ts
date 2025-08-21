@@ -11,7 +11,7 @@ export default {
     },
     setup: {
       cardTitle: "Set up two-factor authentication",
-      cardDescription: "Description",
+      cardDescription: "Scan the QR code with your camera",
     },
   },
   forgotPassword: {

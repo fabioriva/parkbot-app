@@ -26,19 +26,27 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     30,
     6
   );
-  const qrcode = renderSVG(keyURI);
-  return qrcode;
+  return { keyURI };
 }
 
 export default function TwoFASetup({ loaderData }: Route.ComponentProps) {
   let { t } = useTranslation();
+  console.log(loaderData);
+  const qrcode = renderSVG(loaderData.keyURI);
   return (
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-lg">{t("twoFA.setup.cardTitle")}</CardTitle>
         <CardDescription>{t("twoFA.setup.cardDescription")}</CardDescription>
       </CardHeader>
-      <CardContent></CardContent>
+      <CardContent>
+        <div
+          className="h-[200px] w-[200px]"
+          dangerouslySetInnerHTML={{
+            __html: qrcode,
+          }}
+        />
+      </CardContent>
     </Card>
   );
 }
