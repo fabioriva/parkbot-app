@@ -9,8 +9,8 @@ export default {
   login: {
     cardTitle: "Accedi a Parkbot",
     cardDescription: "Inserisci la tua email per accedere",
-    forgot: "Password dimenticata?",
-    signup: "Non hai un account?",
+    forgotLink: "Password dimenticata?",
+    signupLink: "Non hai un account?",
     action: {
       mesgOne: "Inserisci la tua email e password",
       mesgTwo: "Campi non validi o mancanti",
@@ -45,5 +45,9 @@ export default {
   verifyEmail: {
     cardTitle: "Verifica il tuo indirizzo email",
     cardDescription: "Abbiamo inviato un codice a",
+    codeLabel: "Codice di verifica",
+    changeMailLink: "Cambia la tua email",
+    resendButton: "Rinvia codice",
+    submitButton: "Invia",
   },
 } satisfies typeof import("~/locales/en/translation").default;

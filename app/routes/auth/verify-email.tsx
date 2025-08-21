@@ -17,13 +17,12 @@ import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/verify-email";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  const emailVerificationRequest = await getEmailVerificationRequest(request);
-  console.log("!!!!!!!!!!!", emailVerificationRequest);
-
-  if (emailVerificationRequest === null) {
-    return redirect("/login");
-  }
-  return { emailVerificationRequest };
+  // const emailVerificationRequest = await getEmailVerificationRequest(request);
+  // console.log("!!!!!!!!!!!", emailVerificationRequest);
+  // if (emailVerificationRequest === null) {
+  //   return redirect("/login");
+  // }
+  // return { emailVerificationRequest };
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -70,7 +69,7 @@ export default function VerifyEmail({
         <CardDescription>
           {t("verifyEmail.cardDescription")}{" "}
           <span className="underline underline-offset-4">
-            {loaderData.emailVerificationRequest?.email}
+            {loaderData?.emailVerificationRequest?.email}
           </span>
         </CardDescription>
       </CardHeader>
@@ -79,10 +78,13 @@ export default function VerifyEmail({
           <div className="flex flex-col gap-6">
             <input type="hidden" name="intent" value="submit" />
             <div className="grid gap-3">
-              <Label htmlFor="code">Verification code</Label>
+              <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
               <Input type="text" name="code" id="code" required />
             </div>
-            <Button action="/verify-email" title="Submit" />
+            <Button
+              action="/verify-email"
+              title={t("verifyEmail.submitButton")}
+            />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
@@ -96,7 +98,10 @@ export default function VerifyEmail({
         <Form method="post">
           <div className="flex flex-col gap-6">
             <input type="hidden" name="intent" value="resend" />
-            <Button action="/resend-code" title="Resend code" />
+            <Button
+              action="/resend-code"
+              title={t("verifyEmail.resendButton")}
+            />
           </div>
         </Form>
       </CardContent>
@@ -105,7 +110,9 @@ export default function VerifyEmail({
           <p className="text-sm text-red-500">{loaderData.message}</p>
         ) : null}
         <div className="text-sm">
-          <Link href="/settings">Change your email</Link>
+          <Link className="underline underline-offset-4" href="/settings">
+            {t("verifyEmail.changeMailLink")}
+          </Link>
         </div>
       </CardFooter>
     </Card>

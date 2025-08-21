@@ -45,5 +45,9 @@ export default {
   verifyEmail: {
     cardTitle: "Verify your email address",
     cardDescription: "We sent an 8-digit code to",
+    codeLabel: "Verification code",
+    changeMailLink: "Change your email",
+    resendButton: "Resend code",
+    submitButton: "Submit",
   },
 };
