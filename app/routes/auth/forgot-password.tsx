@@ -18,8 +18,10 @@ export default function Login({ actionData }: Route.ComponentProps) {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("forgot.cardTitle")}</CardTitle>
-        <CardDescription>{t("forgot.cardDescription")}</CardDescription>
+        <CardTitle className="text-lg">
+          {t("forgotPassword.cardTitle")}
+        </CardTitle>
+        <CardDescription>{t("forgotPassword.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form method="post">
@@ -44,7 +46,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
       </CardContent>
       <CardFooter>
         <div className="text-center text-sm">
-          {t("forgot.login")}{" "}
+          {t("forgotPassword.login")}{" "}
           <a href="/login" className="underline underline-offset-4">
             Login
           </a>
