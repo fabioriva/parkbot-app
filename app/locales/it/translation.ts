@@ -1,16 +1,18 @@
 export default {
   title: "parkbot-app (it)",
   description: "Supervisione dei sistemi di parcheggio automatizzati",
+  submitButton: "Invia",
   forgotPassword: {
     cardTitle: "Password dimenticata?",
-    cardDescription: "Description",
-    login: "Accedi",
+    cardDescription: "Descrizione",
+    loginLink: "Ritorna a",
   },
   login: {
     cardTitle: "Accedi a Parkbot",
     cardDescription: "Inserisci la tua email per accedere",
     forgotLink: "Password dimenticata?",
-    signupLink: "Non hai un account?",
+    signup: "Non hai un account?",
+    signupLink: "Iscriviti",
     action: {
       mesgOne: "Inserisci la tua email e password",
       mesgTwo: "Campi non validi o mancanti",
@@ -48,6 +50,5 @@ export default {
     codeLabel: "Codice di verifica",
     changeMailLink: "Cambia la tua email",
     resendButton: "Rinvia codice",
-    submitButton: "Invia",
   },
 } satisfies typeof import("~/locales/en/translation").default;

@@ -81,10 +81,7 @@ export default function VerifyEmail({
               <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
               <Input type="text" name="code" id="code" required />
             </div>
-            <Button
-              action="/verify-email"
-              title={t("verifyEmail.submitButton")}
-            />
+            <Button action="/verify-email" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}

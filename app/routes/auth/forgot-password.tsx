@@ -37,7 +37,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
                 // required
               />
             </div>
-            <Button action="/forgot-password" title="Submit" />
+            <Button action="/forgot-password" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
@@ -46,7 +46,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
       </CardContent>
       <CardFooter>
         <div className="text-center text-sm">
-          {t("forgotPassword.login")}{" "}
+          {t("forgotPassword.loginLink")}{" "}
           <a href="/login" className="underline underline-offset-4">
             Login
           </a>

@@ -187,7 +187,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 // required
               />
             </div>
-            <Button action="/signup" title="Submit" />
+            <Button action="/signup" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}

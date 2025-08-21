@@ -104,7 +104,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
                   href="/forgot-password"
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                 >
-                  {t("login.forgot")}
+                  {t("login.forgotLink")}
                 </a>
               </div>
               <Input
@@ -115,7 +115,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
                 // required
               />
             </div>
-            <Button action="/login" title="Submit" />
+            <Button action="/login" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
@@ -126,7 +126,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
         <div className="text-center text-sm">
           {t("login.signup")}{" "}
           <a href="/signup" className="underline underline-offset-4">
-            Sign up
+            {t("login.signupLink")}
           </a>
         </div>
       </CardFooter>
