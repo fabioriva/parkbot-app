@@ -9,6 +9,10 @@ export default {
       codeLabel: "OTP code",
       recoveryLink: "Use recovery code",
     },
+    setup: {
+      cardTitle: "Set up two-factor authentication",
+      cardDescription: "Description",
+    },
   },
   forgotPassword: {
     cardTitle: "Forgot Password",
