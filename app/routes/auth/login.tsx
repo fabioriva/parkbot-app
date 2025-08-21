@@ -101,7 +101,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <a
-                  href="#"
+                  href="/forgot-password"
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                 >
                   {t("login.forgot")}

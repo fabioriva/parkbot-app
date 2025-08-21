@@ -1,6 +1,11 @@
 export default {
   title: "parkbot-app (en)",
   description: "The robotic parking monitoring tool",
+  forgot: {
+    cardTitle: "Forgot Password",
+    cardDescription: "Description",
+    login: "Back to",
+  },
   login: {
     cardTitle: "Login to Parkbot",
     cardDescription: "Enter your email below to login to your account",

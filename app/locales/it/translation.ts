@@ -1,6 +1,11 @@
 export default {
   title: "parkbot-app (it)",
   description: "Supervisione dei sistemi di parcheggio automatizzati",
+  forgot: {
+    cardTitle: "Password dimenticata?",
+    cardDescription: "Description",
+    login: "Accedi",
+  },
   login: {
     cardTitle: "Accedi a Parkbot",
     cardDescription: "Inserisci la tua email per accedere",
