@@ -2,6 +2,14 @@ export default {
   title: "parkbot-app (it)",
   description: "Supervisione dei sistemi di parcheggio automatizzati",
   submitButton: "Invia",
+  twoFA: {
+    auth: {
+      cardTitle: "Two-factor authentication",
+      cardDescription: "Inserisci il codice OTP generato",
+      codeLabel: "Codice OTP",
+      recoveryLink: "Utilizza il codice di recupero",
+    },
+  },
   forgotPassword: {
     cardTitle: "Password dimenticata?",
     cardDescription: "Descrizione",

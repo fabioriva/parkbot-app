@@ -2,6 +2,14 @@ export default {
   title: "parkbot-app (en)",
   description: "The robotic parking monitoring tool",
   submitButton: "Submit",
+  twoFA: {
+    auth: {
+      cardTitle: "Two-factor authentication",
+      cardDescription: "Enter the OTP code from your authenticator app",
+      codeLabel: "OTP code",
+      recoveryLink: "Use recovery code",
+    },
+  },
   forgotPassword: {
     cardTitle: "Forgot Password",
     cardDescription: "Description",
