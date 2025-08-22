@@ -42,7 +42,7 @@ export default function TwoFactorAuthentication({
           <p className="text-sm text-red-500">{loaderData.message}</p>
         ) : null}
         <div className="text-sm">
-          <a className="underline underline-offset-4" href="/2fa-reset">
+          <a className="underline underline-offset-4" href="/2fa/reset">
             {t("twoFA.auth.recoveryLink")}
           </a>
         </div>

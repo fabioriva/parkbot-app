@@ -76,11 +76,11 @@ export default function VerifyEmail({
       <CardContent className="space-y-3">
         <Form method="post">
           <div className="flex flex-col gap-6">
-            <input type="hidden" name="intent" value="submit" />
             <div className="grid gap-3">
               <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
               <Input type="text" name="code" id="code" required />
             </div>
+            <input type="hidden" name="intent" value="submit" />
             <Button action="/verify-email" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
