@@ -9,9 +9,15 @@ export default {
       codeLabel: "Codice OTP",
       recoveryLink: "Utilizza il codice di recupero",
     },
+    reset: {
+      cardTitle: "Recupera il tuo account",
+      cardDescription: "Invia il tuo codice di recupero",
+      codeLabel: "Codice di recupero",
+    },
     setup: {
       cardTitle: "Set up two-factor authentication",
       cardDescription: "Inquadra il codice QR con lo smartphone",
+      codeLabel: "Codice OTP",
     },
   },
   forgotPassword: {

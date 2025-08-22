@@ -61,7 +61,7 @@ export default function TwoFASetup({
                 hidden
                 required
               />
-              <Label htmlFor="code">OTP code</Label>
+              <Label htmlFor="code">{t("twoFA.setup.codeLabel")}</Label>
               <Input type="text" name="code" id="code" required />
             </div>
             <Button action="/2fa/setupl" title={t("submitButton")} />
