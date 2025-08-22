@@ -30,7 +30,7 @@ export default function TwoFactorAuthentication({
               <Label htmlFor="code">{t("twoFA.auth.codeLabel")}</Label>
               <Input type="text" name="code" id="code" required />
             </div>
-            <Button action="/2fa-authentication" title={t("submitButton")} />
+            <Button action="/2fa/authentication" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
