@@ -46,6 +46,13 @@ export default {
       mesgOne: "Not authenticated",
     },
   },
+  recoveryCode: {
+    cardTitle: "Recovery code",
+    cardDescription: "Your recovery code is",
+    cardContent:
+      "You can use this recovery code if you lose access to your second factors (2FA)",
+    nextLink: "Next",
+  },
   signup: {
     cardTitle: "Create a Parkbot account",
     cardDescription: `Your username must be at least 3 characters long and your password must be at least 8 characters long.`,
