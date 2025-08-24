@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-// import { AuroraText } from "~/components/magicui/aurora-text";
+import { AuroraText } from "~/components/magicui/auroraText";
 
 export default function Auth() {
   return (
@@ -10,8 +10,8 @@ export default function Auth() {
             <img src="bot.svg" alt="Parkbot" />
           </div> */}
           <h1 className="text-3xl font-bold tracking-tighter">
-            {/* <AuroraText>Parkbot</AuroraText> web service */}
-            Parkbot web service
+            <AuroraText>Parkbot</AuroraText> web service
+            {/* Parkbot web service */}
           </h1>
         </a>
         <Outlet />
