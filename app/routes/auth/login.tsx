@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
 import * as cookie from "cookie";
 import * as z from "zod";
-import Button from "~/components/submitFormButton";
+import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
   CardContent,
@@ -115,7 +115,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
                 // required
               />
             </div>
-            <Button action="/login" title={t("submitButton")} />
+            <SubmitFormButton action="/login" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}

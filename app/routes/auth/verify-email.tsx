@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
-import Button from "~/components/submitFormButton";
+import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
   CardContent,
@@ -131,7 +131,10 @@ export default function VerifyEmail({
               <Input type="text" name="code" id="code" required />
             </div>
             <input type="hidden" name="intent" value="submit" />
-            <Button action="/verify-email" title={t("submitButton")} />
+            <SubmitFormButton
+              action="/verify-email"
+              title={t("submitButton")}
+            />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
@@ -145,7 +148,7 @@ export default function VerifyEmail({
         <Form method="post">
           <div className="flex flex-col gap-6">
             <input type="hidden" name="intent" value="resend" />
-            <Button
+            <SubmitFormButton
               action="/resend-code"
               title={t("verifyEmail.resendButton")}
             />

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
 
-import Button from "~/components/submitFormButton";
+import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
   CardContent,
@@ -37,7 +37,10 @@ export default function Login({ actionData }: Route.ComponentProps) {
                 // required
               />
             </div>
-            <Button action="/forgot-password" title={t("submitButton")} />
+            <SubmitFormButton
+              action="/forgot-password"
+              title={t("submitButton")}
+            />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}

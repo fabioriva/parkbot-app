@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
 import * as cookie from "cookie";
-import Button from "~/components/submitFormButton";
+import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
   CardContent,
@@ -75,7 +75,7 @@ export default function Logout({ loaderData }: Route.ComponentProps) {
       <CardContent>
         <Form method="post">
           <div className="flex flex-col gap-6">
-            <Button action="/logout" title="Logout" />
+            <SubmitFormButton action="/logout" title="Logout" />
           </div>
         </Form>
       </CardContent>

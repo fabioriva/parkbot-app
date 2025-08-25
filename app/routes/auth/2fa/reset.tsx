@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
-import Button from "~/components/submitFormButton";
+import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
   CardContent,
@@ -30,7 +30,7 @@ export default function TwoFAReset({
               <Label htmlFor="code">{t("twoFA.reset.codeLabel")}</Label>
               <Input type="text" name="code" id="code" required />
             </div>
-            <Button action="/2fa/reset" title={t("submitButton")} />
+            <SubmitFormButton action="/2fa/reset" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
