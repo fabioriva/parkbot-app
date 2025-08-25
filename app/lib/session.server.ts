@@ -45,7 +45,7 @@ export async function createSession(
   };
   const sessions = db.collection(COLLECTION);
   await sessions.insertOne(session);
-  console.log(session);
+  console.log("created session:", session);
   return session;
 }
 
@@ -71,8 +71,6 @@ export async function getSession(
     return { session: null, user: null };
   }
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  console.log("sessionId:", sessionId);
-  //
   const sessions = db.collection(COLLECTION);
   const result = await sessions
     .aggregate([
@@ -81,14 +79,14 @@ export async function getSession(
       {
         $lookup: {
           from: "users", // The collection to join
-          localField: "userId", // Field in the 'orders' collection
-          foreignField: "id", // Field in the 'customers' collection
+          localField: "userId", // Field in the 'sessions' collection
+          foreignField: "id", // Field in the 'users' collection
           as: "user", // Alias for the joined data
         },
       },
     ])
     .toArray();
-  console.log("Session query:", typeof result, result);
+  console.log("Session query:", sessionId, result);
   if (result.length === 0) {
     return { session: null, user: null };
   }
@@ -108,6 +106,19 @@ export async function getSession(
     registered2FA: sessionValidationResult.user[0].registered2FA,
   };
   console.log("user:", user);
+  if (Date.now() >= session.expiresAt.getTime()) {
+    await deleteSession(session.id);
+    return { session: null, user: null };
+  }
+  if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
+    session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+    await db
+      .collection(COLLECTION)
+      .updateOne(
+        { id: session.id },
+        { $set: { expiresAt: Math.floor(session.expiresAt.getTime() / 1000) } }
+      );
+  }
   return { session, user };
 }
 
