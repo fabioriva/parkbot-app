@@ -1,6 +1,5 @@
 import { encodeBase32 } from "@oslojs/encoding";
 import sgMail from "@sendgrid/mail";
-// import * as cookie from "cookie";
 import { createCookie } from "react-router";
 import { db } from "./db.server";
 import { generateRandomOTP } from "./random.server";
@@ -72,7 +71,6 @@ export async function getEmailVerification(
     { id, userId },
     { projection: { _id: 0 } }
   );
-  console.log(userId, id, request);
   return request;
 }
 
@@ -83,10 +81,6 @@ export async function getEmailVerificationRequest(
   if (user === null) {
     return null;
   }
-  // const cookieHeader = request.headers.get("Cookie");
-  // const cookies = cookie.parse(cookieHeader);
-  // console.log(cookies);
-  // const id = cookies?.__email_verification ?? null;
 
   const emailVerificationCookie = await getEmailVerificationCookie(request);
   const id = emailVerificationCookie.id;

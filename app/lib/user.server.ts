@@ -34,7 +34,7 @@ export async function createUser(
     { _id: result.insertedId },
     { $set: { id: result.insertedId.toString() } }
   );
-  console.log(result);
+  console.log("updated one user:", result);
 
   const user: User = {
     id: result.insertedId.toString(),
@@ -43,7 +43,7 @@ export async function createUser(
     emailVerified: false,
     registered2FA: false,
   };
-  console.log(user);
+  console.log("created user:", user);
 
   return user;
 }

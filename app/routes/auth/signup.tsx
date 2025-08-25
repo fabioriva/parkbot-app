@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-// import * as cookie from "cookie";
 import * as z from "zod";
 import Button from "~/components/submitFormButton";
 import {
@@ -96,11 +95,6 @@ export async function action({ context, request }: Route.ActionArgs) {
     emailVerificationRequest.email,
     emailVerificationRequest.code
   );
-  // const emailVerificationCookieHeader = request.headers.get("Cookie");
-  // const emailVerificationCookie =
-  //   (await emailVerificationCookieContainer.parse(
-  //     emailVerificationCookieHeader
-  //   )) || {};
   const emailVerificationCookie = await getEmailVerificationCookie(request);
   emailVerificationCookie.id = emailVerificationRequest.id;
 
@@ -111,44 +105,15 @@ export async function action({ context, request }: Route.ActionArgs) {
   const session = await createSession(sessionToken, user.id, sessionFlags);
   const sessionCookie = await getSessionCookie(request);
   sessionCookie.token = sessionToken;
-  // redirect and set email verification / session cookies
-  // const emailVerificationCookie = `__email_verification=${emailVerificationRequest.id}; Expires=${emailVerificationRequest.expiresAt.toUTCString()}; HttpOnly; Path=/; Secure; SameSite=Lax`;
-  // const emailVerificationCookie = cookie.serialize(
-  //   "__email_verification",
-  //   emailVerificationRequest.id,
-  //   {
-  //     expires: emailVerificationRequest.expiresAt,
-  //     httpOnly: true,
-  //     path: "/",
-  //     sameSite: "lax",
-  //     secure: true,
-  //   }
-  // );
-  // const sessionCookie = `__session=${sessionToken}; Expires=${session.expiresAt.toUTCString()}; HttpOnly; Path=/; Secure; SameSite=Lax`;
-  // const sessionCookie = cookie.serialize("__session", sessionToken, {
-  //   expires: session.expiresAt,
-  //   httpOnly: true,
-  //   path: "/",
-  //   sameSite: "lax",
-  //   secure: true,
-  // });
+
   return redirect("/login", {
     headers: [
-      // ["Set-Cookie", emailVerificationCookie],
-      // [
-      //   "Set-Cookie",
-      //   await emailVerificationCookieContainer.serialize(
-      //     emailVerificationCookie,
-      //     { expires: emailVerificationRequest.expiresAt }
-      //   ),
-      // ],
       [
         "Set-Cookie",
         await setEmailVerificationCookie(emailVerificationCookie, {
           expires: emailVerificationRequest.expiresAt,
         }),
       ],
-      // ["Set-Cookie", sessionCookie],
       [
         "Set-Cookie",
         await setSessionCookie(sessionCookie, { expires: session.expiresAt }),

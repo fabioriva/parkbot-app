@@ -3,7 +3,6 @@ import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
 } from "@oslojs/encoding";
-// import * as cookie from "cookie";
 import { createCookie } from "react-router";
 import { db } from "./db.server";
 
@@ -65,16 +64,9 @@ export function generateSessionToken(): string {
 export async function getSession(
   request: Request
 ): Promise<SessionValidationResult> {
-  // const cookieHeader = request.headers.get("Cookie");
-  // const cookies = cookie.parse(cookieHeader);
-  // console.log(cookies);
-  // const token = cookies?.__session ?? null;
   const sessionCookie = await getSessionCookie(request);
   const token = sessionCookie.token;
   console.log("sessionCookie:", sessionCookie, token);
-
-  // const token = (await sessionCookie.parse(cookieHeader))?.token ?? null;
-  // console.log(token);
   if (token === null) {
     return { session: null, user: null };
   }
@@ -97,7 +89,6 @@ export async function getSession(
     ])
     .toArray();
   console.log("Session query:", typeof result, result);
-  // if (result === null) {
   if (result.length === 0) {
     return { session: null, user: null };
   }
