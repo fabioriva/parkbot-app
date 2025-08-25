@@ -6,7 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
@@ -22,9 +22,6 @@ import type { Route } from "./+types/logout";
 export async function loader({ context, request }: Route.LoaderArgs) {
   let i18n = getInstance(context);
   const { session, user } = await getSession(request);
-  // if (session === null) {
-  //   return { message: i18n.t("logout.loader.mesgOne") };
-  // }
   if (session === null) {
     return redirect("/login");
   }
@@ -79,11 +76,11 @@ export default function Logout({ loaderData }: Route.ComponentProps) {
           </div>
         </Form>
       </CardContent>
-      <CardFooter>
+      {/* <CardFooter>
         {loaderData ? (
           <p className="text-sm text-red-500">{loaderData.message}</p>
         ) : null}
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }

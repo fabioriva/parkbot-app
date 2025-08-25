@@ -51,6 +51,9 @@ export async function createUser(
 export async function getUserFromEmail(email: string): Promise<User | null> {
   const users = db.collection(COLLECTION);
   const result = await users.findOne({ email });
+  if (result === null) {
+    return null;
+  }
   const user: User = {
     id: result._id.toString(),
     email, // : result.email,
