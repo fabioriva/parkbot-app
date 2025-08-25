@@ -1,6 +1,7 @@
+import { CopyIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
-import Button from "~/components/submitFormButton";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,6 +12,26 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { getSession } from "~/lib/session.server";
+import { getUserRecoveryCode } from "~/lib/user.server";
+
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const { session, user } = await getSession(request);
+  if (session === null) {
+    return redirect("/login");
+  }
+  if (!user.emailVerified) {
+    return redirect("/verify-email");
+  }
+  if (!user.registered2FA) {
+    return redirect("/2fa/setup");
+  }
+  if (!session.twoFactorVerified) {
+    return redirect("/2fa(authentication");
+  }
+  const recoveryCode = await getUserRecoveryCode(user.id);
+  return { recoveryCode };
+}
 
 export default function TwoFactorAuthentication({
   actionData,
@@ -21,15 +42,25 @@ export default function TwoFactorAuthentication({
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-lg">{t("recoveryCode.cardTitle")}</CardTitle>
-        <CardDescription>
-          {t("recoveryCode.cardDescription")}:{" "}
-          <span className="underline underline-offset-4">
-            {loaderData?.recoveryCode}
-          </span>
-        </CardDescription>
+        <CardDescription>{t("recoveryCode.cardDescription")} </CardDescription>
       </CardHeader>
       <CardContent>
-        <p>{t("recoveryCode.cardContent")}.</p>
+        <div className="relative bg-gray-800 text-white rounded-lg p-4">
+          <pre className="overflow-x-auto">
+            <code>{loaderData.recoveryCode}</code>
+          </pre>
+          <Button
+            variant="secondary"
+            size="icon"
+            className="absolute top-2 right-2 size-8 bg-gray-700 hover:bg-gray-600"
+            onClick={() =>
+              navigator.clipboard.writeText(loaderData.recoveryCode)
+            }
+          >
+            <CopyIcon />
+          </Button>
+        </div>
+        <p className="mt-3 text-sm">{t("recoveryCode.cardContent")}.</p>
       </CardContent>
       <CardFooter>
         {loaderData ? (

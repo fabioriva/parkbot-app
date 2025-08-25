@@ -35,7 +35,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     return redirect("/2fa/setup");
   }
   if (!session.twoFactorVerified) {
-    return redirect("/2fa");
+    return redirect("/2fa/authentication");
   }
 }
 

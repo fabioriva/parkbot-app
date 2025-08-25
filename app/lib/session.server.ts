@@ -49,9 +49,9 @@ export async function createSession(
   return session;
 }
 
-export async function deleteSession(sessionId: string): Promise<void> {
+export async function deleteSession(id: string): Promise<void> {
   const requests = db.collection(COLLECTION);
-  await requests.deleteOne({ sessionId });
+  await requests.deleteOne({ id });
 }
 
 export function generateSessionToken(): string {
@@ -86,11 +86,15 @@ export async function getSession(
       },
     ])
     .toArray();
-  console.log("Session query:", sessionId, result);
   if (result.length === 0) {
     return { session: null, user: null };
   }
   const sessionValidationResult = result.shift();
+  console.log(
+    "Session validation result:",
+    sessionValidationResult,
+    sessionValidationResult.user[0]
+  );
   const session: Session = {
     id: sessionValidationResult.id,
     userId: sessionValidationResult.userId,
@@ -103,7 +107,7 @@ export async function getSession(
     email: sessionValidationResult.user[0].email,
     username: sessionValidationResult.user[0].username,
     emailVerified: sessionValidationResult.user[0].emailVerified,
-    registered2FA: sessionValidationResult.user[0].registered2FA,
+    registered2FA: sessionValidationResult.user[0].totpKey ? true : false, // sessionValidationResult.user[0].registered2FA,
   };
   console.log("user:", user);
   if (Date.now() >= session.expiresAt.getTime()) {
@@ -120,6 +124,11 @@ export async function getSession(
       );
   }
   return { session, user };
+}
+
+export async function setSessionAs2FAVerified(id: string): void {
+  const sessions = db.collection(COLLECTION);
+  await sessions.updateOne({ id }, { $set: { twoFactorVerified: true } });
 }
 
 export interface SessionFlags {

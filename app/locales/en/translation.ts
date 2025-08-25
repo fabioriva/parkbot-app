@@ -48,7 +48,7 @@ export default {
   },
   recoveryCode: {
     cardTitle: "Recovery code",
-    cardDescription: "Your recovery code is",
+    cardDescription: "Copy and save the following code to a safe place",
     cardContent:
       "You can use this recovery code if you lose access to your second factors (2FA)",
     nextLink: "Next",

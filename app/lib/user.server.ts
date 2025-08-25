@@ -1,8 +1,8 @@
+import { Binary, ObjectId } from "mongodb";
 import { db } from "./db.server";
-import { ObjectId } from "mongodb";
 import {
-  // decrypt,
-  // decryptToString,
+  decrypt,
+  decryptToString,
   encrypt,
   encryptString,
 } from "./encryption.server";
@@ -25,9 +25,9 @@ export async function createUser(
     email,
     username,
     passwordHash,
-    recoveryCode: encryptedRecoveryCode,
+    recoveryCode: new Binary(encryptedRecoveryCode), // Save the Uint8Array as Binary
     emailVerified: false,
-    registered2FA: false,
+    // registered2FA: false,
   };
   const result = await users.insertOne(doc);
   await users.updateOne(
@@ -56,9 +56,9 @@ export async function getUserFromEmail(email: string): Promise<User | null> {
     email, // : result.email,
     username: result.username,
     emailVerified: result.emailVerified,
-    registered2FA: result.registered2FA,
+    registered2FA: result.totpKey ? true : false, // result.registered2FA,
   };
-  // console.log(user);
+  console.log("getUserFromEmail", user);
   return user;
 }
 
@@ -68,8 +68,33 @@ export async function getUserPasswordHash(id: string): Promise<string | null> {
     { _id: new ObjectId(id) },
     { projection: { _id: 0, passwordHash: 1 } }
   );
-  // console.log(id, user);
   return user.passwordHash;
+}
+
+export async function getUserRecoveryCode(id: string): string {
+  const users = db.collection(COLLECTION);
+  const user = await users.findOne(
+    { id },
+    { projection: { recoveryCode: 1, _id: 0 } }
+  );
+  if (user === null) {
+    throw new Error("Invalid user ID");
+  }
+  return decryptToString(new Uint8Array(user.recoveryCode.buffer)); // Convert the Binary object to a Uint8Array
+}
+
+export async function updateUserEmailAndSetEmailAsVerified(
+  id: string,
+  email: string
+): void {
+  const users = db.collection(COLLECTION);
+  await users.updateOne({ id }, { $set: { email, emailVerified: true } });
+}
+
+export async function updateUserTOTPKey(id: string, key: Uint8Array): void {
+  const encrypted = encrypt(key);
+  const users = db.collection(COLLECTION);
+  await users.updateOne({ id }, { $set: { totpKey: new Binary(encrypted) } });
 }
 
 export interface User {

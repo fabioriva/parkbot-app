@@ -11,50 +11,100 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getEmailVerificationRequest } from "~/lib/email-verification.server";
+import {
+  createEmailVerificationRequest,
+  deleteUserEmailVerificationRequest,
+  getEmailVerificationCookie,
+  getEmailVerificationRequest,
+  sendVerificationEmail,
+  setEmailVerificationCookie,
+} from "~/lib/email-verification.server";
+import { getSession } from "~/lib/session.server";
+import { updateUserEmailAndSetEmailAsVerified } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/verify-email";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  const emailVerificationRequest = await getEmailVerificationRequest(request);
-  // console.log("!!!!!!!!!!!", emailVerificationRequest);
-  // if (emailVerificationRequest === null) {
-  //   return redirect("/login");
-  // }
-  // return { emailVerificationRequest };
+  const { user } = await getSession(request);
+  if (user === null) {
+    return redirect("/login");
+  }
+  console.log("verify-email loader:", user);
+  // TODO: Ideally we'd sent a new verification email automatically if the previous one is expired,
+  // but we can't set cookies inside server components.
+  const verificationRequest = await getEmailVerificationRequest(request);
+  console.log("verificationRequest:", verificationRequest);
+  // create email verification request
+  if (verificationRequest === null && !user.emailVerified) {
+    const emailVerificationRequest = await createEmailVerificationRequest(
+      user.id,
+      user.email
+    );
+    sendVerificationEmail(
+      emailVerificationRequest.email,
+      emailVerificationRequest.code
+    );
+    const emailVerificationCookie = await getEmailVerificationCookie(request);
+    emailVerificationCookie.id = emailVerificationRequest.id;
+    return redirect("/verify-email", {
+      headers: {
+        "Set-Cookie": await setEmailVerificationCookie(
+          emailVerificationCookie,
+          {
+            expires: emailVerificationRequest.expiresAt,
+          }
+        ),
+      },
+    });
+  }
+  // redirect
+  if (verificationRequest === null && user.emailVerified) {
+    return redirect("/"); // TODO: redirect correctly
+  }
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
-  const emailVerificationRequest = await getEmailVerificationRequest(request);
-  if (emailVerificationRequest === null) {
+  const { user } = await getSession(request);
+  const verificationRequest = await getEmailVerificationRequest(request);
+  if (verificationRequest === null) {
     return {
       message: "Not authenticated",
     };
   }
   const formData = await request.formData();
-  const intent = formData.get("intent");
   const code = formData.get("code");
-
-  if (typeof code !== "string") {
-    return {
-      message: "Invalid or missing fields",
-    };
+  const intent = formData.get("intent");
+  console.log("code:", code, verificationRequest.code, "intent:", intent);
+  if (intent === "submit") {
+    if (typeof code !== "string") {
+      return {
+        message: "Invalid or missing fields",
+      };
+    }
+    if (code === "") {
+      return {
+        message: "Enter your code",
+      };
+    }
+    // ...
+    if (verificationRequest.code !== code) {
+      return {
+        message: "Incorrect code.",
+      };
+    }
+    await deleteUserEmailVerificationRequest(user.id);
+    // invalidateUserPasswordResetSessions(user.id); // TODO
+    await updateUserEmailAndSetEmailAsVerified(user.id, user.email);
+    const emailVerificationCookie = await getEmailVerificationCookie(request);
+    const cookie = await setEmailVerificationCookie(emailVerificationCookie, {
+      maxAge: 0,
+    });
+    if (!user.registered2FA) {
+      return redirect("/2fa/setup", { headers: { "Set-Cookie": cookie } });
+    }
+    return redirect("/", { headers: { "Set-Cookie": cookie } });
   }
-  if (code === "") {
-    return {
-      message: "Enter your code",
-    };
-  }
-  // ...
-  if (emailVerificationRequest.code !== code) {
-    return {
-      message: "Incorrect code.",
-    };
-  }
-  // email_verification delete momgodb
-  // email_verification delete cookie
-  // user update email and set as verified
 }
 
 export default function VerifyEmail({

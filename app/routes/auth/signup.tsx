@@ -33,8 +33,8 @@ import type { SessionFlags } from "~/lib/server/session";
 import type { Route } from "./+types/signup";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  // const { session, user } = await getSession(request);
-  await getSession(request);
+  const { session, user } = await getSession(request);
+  // ...
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -86,18 +86,18 @@ export async function action({ context, request }: Route.ActionArgs) {
     };
   }
   const user = await createUser(email, username, password);
+  // create email verification request
   const emailVerificationRequest = await createEmailVerificationRequest(
     user.id,
     user.email
   );
-  const expires = emailVerificationRequest.expiresAt.toUTCString();
   sendVerificationEmail(
     emailVerificationRequest.email,
     emailVerificationRequest.code
   );
   const emailVerificationCookie = await getEmailVerificationCookie(request);
   emailVerificationCookie.id = emailVerificationRequest.id;
-
+  // create session
   const sessionToken = generateSessionToken();
   const sessionFlags: SessionFlags = {
     twoFactorVerified: false,
@@ -105,8 +105,8 @@ export async function action({ context, request }: Route.ActionArgs) {
   const session = await createSession(sessionToken, user.id, sessionFlags);
   const sessionCookie = await getSessionCookie(request);
   sessionCookie.token = sessionToken;
-
-  return redirect("/login", {
+  // set cookies & redirect
+  return redirect("/2fa/setup", {
     headers: [
       [
         "Set-Cookie",
