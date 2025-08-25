@@ -17,7 +17,7 @@ import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/verify-email";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  // const emailVerificationRequest = await getEmailVerificationRequest(request);
+  const emailVerificationRequest = await getEmailVerificationRequest(request);
   // console.log("!!!!!!!!!!!", emailVerificationRequest);
   // if (emailVerificationRequest === null) {
   //   return redirect("/login");

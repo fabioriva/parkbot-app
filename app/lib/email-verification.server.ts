@@ -1,11 +1,37 @@
 import { encodeBase32 } from "@oslojs/encoding";
 import sgMail from "@sendgrid/mail";
-import * as cookie from "cookie";
+// import * as cookie from "cookie";
+import { createCookie } from "react-router";
 import { db } from "./db.server";
 import { generateRandomOTP } from "./random.server";
 import { getSession } from "./session.server";
 
 const COLLECTION = "email_verification_requests";
+
+export const emailVerificationCookieContainer = createCookie(
+  "__email_verification",
+  {
+    httpOnly: true,
+    path: "/",
+    sameSite: "lax",
+    secure: true,
+    secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
+  }
+);
+
+export async function getEmailVerificationCookie(
+  request: Request
+): Promise<any> {
+  const cookieHeader = request.headers.get("Cookie");
+  return (await emailVerificationCookieContainer.parse(cookieHeader)) || {};
+}
+
+export async function setEmailVerificationCookie(
+  value: any,
+  options?: CookieSerializeOptions
+): Promise<string> {
+  return await emailVerificationCookieContainer.serialize(value, options);
+}
 
 export async function createEmailVerificationRequest(
   userId: string,
@@ -57,11 +83,14 @@ export async function getEmailVerificationRequest(
   if (user === null) {
     return null;
   }
-  const cookieHeader = request.headers.get("Cookie");
-  const cookies = cookie.parse(cookieHeader);
-  console.log(cookies);
-  const id = cookies?.__email_verification ?? null;
-  console.log(id);
+  // const cookieHeader = request.headers.get("Cookie");
+  // const cookies = cookie.parse(cookieHeader);
+  // console.log(cookies);
+  // const id = cookies?.__email_verification ?? null;
+
+  const emailVerificationCookie = await getEmailVerificationCookie(request);
+  const id = emailVerificationCookie.id;
+  console.log("emailVerificationCookie:", emailVerificationCookie, id);
   if (id === null) {
     return null;
   }

@@ -3,12 +3,33 @@ import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
 } from "@oslojs/encoding";
-import * as cookie from "cookie";
+// import * as cookie from "cookie";
+import { createCookie } from "react-router";
 import { db } from "./db.server";
 
 import type { User } from "./user.server";
 
 const COLLECTION = "sessions";
+
+export const sessionCookieContainer = createCookie("__session", {
+  httpOnly: true,
+  path: "/",
+  sameSite: "lax",
+  secure: true,
+  secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
+});
+
+export async function getSessionCookie(request: Request): Promise<any> {
+  const cookieHeader = request.headers.get("Cookie");
+  return (await sessionCookieContainer.parse(cookieHeader)) || {};
+}
+
+export async function setSessionCookie(
+  value: any,
+  options?: CookieSerializeOptions
+): Promise<string> {
+  return await sessionCookieContainer.serialize(value, options);
+}
 
 export async function createSession(
   token: string,
@@ -44,22 +65,27 @@ export function generateSessionToken(): string {
 export async function getSession(
   request: Request
 ): Promise<SessionValidationResult> {
-  const cookieHeader = request.headers.get("Cookie");
-  const cookies = cookie.parse(cookieHeader);
-  console.log(cookies);
-  const token = cookies?.__session ?? null;
-  console.log(token);
+  // const cookieHeader = request.headers.get("Cookie");
+  // const cookies = cookie.parse(cookieHeader);
+  // console.log(cookies);
+  // const token = cookies?.__session ?? null;
+  const sessionCookie = await getSessionCookie(request);
+  const token = sessionCookie.token;
+  console.log("sessionCookie:", sessionCookie, token);
+
   // const token = (await sessionCookie.parse(cookieHeader))?.token ?? null;
   // console.log(token);
   if (token === null) {
     return { session: null, user: null };
   }
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  console.log(sessionId);
+  console.log("sessionId:", sessionId);
   //
   const sessions = db.collection(COLLECTION);
   const result = await sessions
     .aggregate([
+      { $match: { id: sessionId } }, // Filter documents
+      { $limit: 1 },
       {
         $lookup: {
           from: "users", // The collection to join
@@ -70,18 +96,19 @@ export async function getSession(
       },
     ])
     .toArray();
-  console.log(result);
-  if (result === null) {
+  console.log("Session query:", typeof result, result);
+  // if (result === null) {
+  if (result.length === 0) {
     return { session: null, user: null };
   }
   const sessionValidationResult = result.shift();
   const session: Session = {
-    id: sessionValidationResult?.id,
-    userId: sessionValidationResult?.userId,
-    expiresAt: sessionValidationResult?.expiresAt,
-    twoFactorVerified: sessionValidationResult?.twoFactorVerified,
+    id: sessionValidationResult.id,
+    userId: sessionValidationResult.userId,
+    expiresAt: sessionValidationResult.expiresAt,
+    twoFactorVerified: sessionValidationResult.twoFactorVerified,
   };
-  console.log(session);
+  console.log("session:", session);
   const user: User = {
     id: sessionValidationResult.user[0].id,
     email: sessionValidationResult.user[0].email,
@@ -89,7 +116,7 @@ export async function getSession(
     emailVerified: sessionValidationResult.user[0].emailVerified,
     registered2FA: sessionValidationResult.user[0].registered2FA,
   };
-  console.log(user);
+  console.log("user:", user);
   return { session, user };
 }
 
