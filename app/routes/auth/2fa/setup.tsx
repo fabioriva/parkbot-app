@@ -31,13 +31,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   const totpKey = new Uint8Array(20);
   crypto.getRandomValues(totpKey);
   const encodedTOTPKey = encodeBase64(totpKey);
-  const keyURI = createTOTPKeyURI(
-    "ParkbotApp",
-    "user.username",
-    totpKey,
-    30,
-    6
-  );
+  const keyURI = createTOTPKeyURI("Parkbot App", user.username, totpKey, 30, 6);
   return { encodedTOTPKey, keyURI };
 }
 
