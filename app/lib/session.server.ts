@@ -20,6 +20,7 @@ export const sessionCookieContainer = createCookie("__session", {
 
 export async function getSessionCookie(request: Request): Promise<any> {
   const cookieHeader = request.headers.get("Cookie");
+  console.log(cookieHeader);
   return (await sessionCookieContainer.parse(cookieHeader)) || {};
 }
 
@@ -45,7 +46,6 @@ export async function createSession(
   };
   const sessions = db.collection(COLLECTION);
   await sessions.insertOne(session);
-  console.log("created session:", session);
   return session;
 }
 
@@ -65,6 +65,7 @@ export async function getSession(
   request: Request
 ): Promise<SessionValidationResult> {
   const sessionCookie = await getSessionCookie(request);
+  console.log(sessionCookie);
   const token = sessionCookie.token;
   console.log("sessionCookie:", sessionCookie, token);
   if (token === null) {

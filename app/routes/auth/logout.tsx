@@ -18,8 +18,7 @@ import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/logout";
 
-export async function loader({ context, request }: Route.LoaderArgs) {
-  let i18n = getInstance(context);
+export async function loader({ request }: Route.LoaderArgs) {
   const { session, user } = await getSession(request);
   if (session === null) {
     return redirect("/login");

@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-import * as cookie from "cookie";
 import * as z from "zod";
 import SubmitFormButton from "~/components/submitFormButton";
 import {
@@ -14,12 +13,34 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { verifyPasswordHash } from "~/lib/password.server";
-import { createSession, generateSessionToken } from "~/lib/session.server";
+import {
+  createSession,
+  generateSessionToken,
+  getSession,
+  getSessionCookie,
+  setSessionCookie,
+} from "~/lib/session.server";
 import { getUserFromEmail, getUserPasswordHash } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
 import type { SessionFlags } from "~/lib/server/session.server";
 import type { Route } from "./+types/login";
+
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const { session, user } = await getSession(request);
+  if (session !== null) {
+    if (!user.emailVerified) {
+      return redirect("/verify-email");
+    }
+    if (!user.registered2FA) {
+      return redirect("/2fa/setup");
+    }
+    if (!session.twoFactorVerified) {
+      return redirect("/2fa/authentication");
+    }
+    return redirect("/");
+  }
+}
 
 export async function action({ context, request }: Route.ActionArgs) {
   let i18n = getInstance(context);
@@ -59,20 +80,19 @@ export async function action({ context, request }: Route.ActionArgs) {
     twoFactorVerified: false,
   };
   const session = await createSession(sessionToken, user.id, sessionFlags);
-  // const expires = session.expiresAt.toUTCString();
-  // const sessionCookie = `__session=${sessionToken}; Expires=${expires}; HttpOnly; Path=/; Secure; SameSite=Lax`;
-  const sessionCookie = cookie.serialize("__session", sessionToken, {
+  const sessionCookie = await getSessionCookie(request);
+  sessionCookie.token = sessionToken;
+  const cookie = await setSessionCookie(sessionCookie, {
     expires: session.expiresAt,
-    httpOnly: true,
-    path: "/",
-    sameSite: "lax",
-    secure: true,
   });
-  return redirect("/verify-email", {
-    headers: {
-      "Set-Cookie": sessionCookie,
-    },
-  });
+  // set session cookie & redirect
+  if (!user.emailVerified) {
+    return redirect("/verify-email", { headers: { "Set-Cookie": cookie } });
+  }
+  if (!user.registered2FA) {
+    return redirect("/2fa/setup", { headers: { "Set-Cookie": cookie } });
+  }
+  return redirect("/2fa/authentication", { headers: { "Set-Cookie": cookie } });
 }
 
 export default function Login({ actionData }: Route.ComponentProps) {

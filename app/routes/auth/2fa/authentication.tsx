@@ -1,3 +1,4 @@
+import { verifyTOTP } from "@oslojs/otp";
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
 import SubmitFormButton from "~/components/submitFormButton";
@@ -11,6 +12,64 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { getSession, setSessionAs2FAVerified } from "~/lib/session.server";
+import { getUserTOTPKey } from "~/lib/user.server";
+
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const { session, user } = await getSession(request);
+  if (session === null) {
+    return redirect("/login");
+  }
+  if (!user.emailVerified) {
+    return redirect("/verify-email");
+  }
+  if (!user.registered2FA) {
+    return redirect("/2fa/setup");
+  }
+  if (session.twoFactorVerified) {
+    return redirect("/");
+  }
+}
+
+export async function action({ context, request }: Route.ActionArgs) {
+  const { session, user } = await getSession(request);
+  if (session === null) {
+    return {
+      message: "Not authenticated",
+    };
+  }
+  if (!user.emailVerified || !user.registered2FA || session.twoFactorVerified) {
+    return {
+      message: "Forbidden",
+    };
+  }
+  const formData = await request.formData();
+  const code = formData.get("code");
+  if (typeof code !== "string") {
+    return {
+      message: "Invalid or missing fields",
+    };
+  }
+  if (code === "") {
+    return {
+      message: "Please enter your code",
+    };
+  }
+  const totpKey = await getUserTOTPKey(user.id);
+  console.log(totpKey);
+  if (totpKey === null) {
+    return {
+      message: "Forbidden",
+    };
+  }
+  if (!verifyTOTP(totpKey, 30, 6, code)) {
+    return {
+      message: "Invalid code",
+    };
+  }
+  await setSessionAs2FAVerified(session.id);
+  return redirect("/");
+}
 
 export default function TwoFactorAuthentication({
   actionData,

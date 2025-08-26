@@ -43,8 +43,6 @@ export async function createUser(
     emailVerified: false,
     registered2FA: false,
   };
-  console.log("created user:", user);
-
   return user;
 }
 
@@ -59,9 +57,8 @@ export async function getUserFromEmail(email: string): Promise<User | null> {
     email, // : result.email,
     username: result.username,
     emailVerified: result.emailVerified,
-    registered2FA: result.totpKey ? true : false, // result.registered2FA,
+    registered2FA: result.totpKey ? true : false, // registered2FA if totpKey is not null
   };
-  console.log("getUserFromEmail", user);
   return user;
 }
 
@@ -83,7 +80,23 @@ export async function getUserRecoveryCode(id: string): string {
   if (user === null) {
     throw new Error("Invalid user ID");
   }
-  return decryptToString(new Uint8Array(user.recoveryCode.buffer)); // Convert the Binary object to a Uint8Array
+  return decryptToString(new Uint8Array(user.recoveryCode.buffer)); // Convert Binary object to a Uint8Array
+}
+
+export async function getUserTOTPKey(id: string): Uint8Array | null {
+  const users = db.collection(COLLECTION);
+  const user = await users.findOne(
+    { id },
+    { projection: { totpKey: 1, _id: 0 } }
+  );
+  if (user === null) {
+    throw new Error("Invalid user ID");
+  }
+  const encrypted = new Uint8Array(user.totpKey.buffer); // Convert Binary object to a Uint8Array
+  if (encrypted === null) {
+    return null;
+  }
+  return decrypt(encrypted);
 }
 
 export async function updateUserEmailAndSetEmailAsVerified(
