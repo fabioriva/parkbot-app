@@ -1,4 +1,4 @@
-import type { Route } from "./+types/aps";
+import type { Route } from "./+types/dashboard";
 
 export async function loader({ params }: Route.LoaderArgs) {
   console.log(params);
