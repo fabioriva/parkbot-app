@@ -2,6 +2,7 @@ import {
   type RouteConfig,
   index,
   layout,
+  prefix,
   route,
 } from "@react-router/dev/routes";
 
@@ -17,6 +18,11 @@ export default [
     route("recovery-code", "routes/auth/recovery-code.tsx"),
     route("signup", "routes/auth/signup.tsx"),
     route("verify-email", "routes/auth/verify-email.tsx"),
+  ]),
+  ...prefix("aps", [
+    layout("routes/aps/layout.tsx", [
+      route(":aps/dashboard", "routes/aps/dashboard.tsx"),
+    ]),
   ]),
   route("api/locales/:lng/:ns", "./routes/locales.ts"),
   route("*", "./routes/not-found.tsx"),
