@@ -9,16 +9,27 @@ export default function Auth() {
           {/* <div className="flex size-12 items-center justify-center rounded-md">
             <img src="bot.svg" alt="Parkbot" />
           </div> */}
-          <h1 className="text-3xl font-bold tracking-tighter">
+          <h1 className="text-4xl font-bold tracking-tighter">
             <AuroraText>Parkbot</AuroraText> web service
-            {/* Parkbot web service */}
           </h1>
         </a>
         <Outlet />
       </div>
       <span className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance ">
-        By clicking submit, you agree to our <a href="#">Terms of Service</a>
+        By clicking submit, you agree to our <a href="#">Terms of Service.</a>
       </span>
+      <footer className="text-center text-primary text-sm tracking-tighter">
+        {"© "}
+        {new Date().getFullYear()}{" "}
+        <a
+          className="hover:underline hover:text-blue-600"
+          href="https://www.sotefin.com/"
+        >
+          Sotefin.
+        </a>{" "}
+        All rights reserved.
+        {/* <br className="inline sm:hidden" /> Made with ❤️ in Switzerland. */}
+      </footer>
     </div>
   );
 }
