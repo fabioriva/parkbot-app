@@ -24,6 +24,12 @@ export default {
     cardTitle: "Forgot Password",
     cardDescription: "Description",
     loginLink: "Back to",
+    action: {
+      mesgOne: "Please enter your email",
+      mesgTwo: "Invalid or missing field",
+      mesgThree: "Invalid email address",
+      mesgFour: "Account does not exist",
+    },
   },
   login: {
     cardTitle: "Login to Parkbot",

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-
+import * as z from "zod";
 import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
@@ -12,8 +12,37 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { getUserFromEmail } from "~/lib/user.server";
+import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/forgot-password";
+
+export async function action({ context, request }: Route.ActionArgs) {
+  let i18n = getInstance(context);
+  const formData = await request.formData();
+  const email = formData.get("email");
+  if (email === "") {
+    return {
+      message: i18n.t("forgotPassword.action.mesgOne"),
+    };
+  }
+  if (typeof email !== "string") {
+    return {
+      message: i18n.t("forgotPassword.action.mesgTwo"),
+    };
+  }
+  if (!z.string().email().safeParse(email).success) {
+    return {
+      message: i18n.t("forgotPassword.action.mesgThree"),
+    };
+  }
+  const user = await getUserFromEmail(email);
+  if (user === null) {
+    return {
+      message: i18n.t("forgotPassword.action.mesgFour"),
+    };
+  }
+}
 
 export default function ForgotPassword({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();

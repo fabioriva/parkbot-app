@@ -24,6 +24,12 @@ export default {
     cardTitle: "Password dimenticata?",
     cardDescription: "Descrizione",
     loginLink: "Ritorna a",
+    action: {
+      mesgOne: "Inserisci la tua email",
+      mesgTwo: "Campo non valido o mancante",
+      mesgThree: "Indirizzo email non valido",
+      mesgFour: "Account non trovato",
+    },
   },
   login: {
     cardTitle: "Accedi a Parkbot",
