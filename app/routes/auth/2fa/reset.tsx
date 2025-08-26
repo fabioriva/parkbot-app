@@ -12,6 +12,8 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
+import type { Route } from "./+types/reset";
+
 export default function TwoFAReset({
   actionData,
   loaderData,

@@ -93,14 +93,14 @@ export async function action({ context, request }: Route.ActionArgs) {
         message: "Incorrect code.",
       };
     }
-    await deleteUserEmailVerificationRequest(user.id);
+    await deleteUserEmailVerificationRequest(user?.id);
     // invalidateUserPasswordResetSessions(user.id); // TODO
-    await updateUserEmailAndSetEmailAsVerified(user.id, user.email);
+    await updateUserEmailAndSetEmailAsVerified(user?.id, user?.email);
     const emailVerificationCookie = await getEmailVerificationCookie(request);
     const cookie = await setEmailVerificationCookie(emailVerificationCookie, {
       maxAge: 0,
     });
-    if (!user.registered2FA) {
+    if (!user?.registered2FA) {
       return redirect("/2fa/setup", { headers: { "Set-Cookie": cookie } });
     }
     return redirect("/", { headers: { "Set-Cookie": cookie } });
@@ -156,11 +156,11 @@ export default function VerifyEmail({
         </Form>
       </CardContent>
       <CardFooter>
-        {loaderData ? (
+        {/* {loaderData ? (
           <p className="text-sm text-red-500">{loaderData.message}</p>
-        ) : null}
+        ) : null} */}
         <div className="text-sm">
-          <Link className="underline underline-offset-4" href="/settings">
+          <Link className="underline underline-offset-4" to="/settings">
             {t("verifyEmail.changeMailLink")}
           </Link>
         </div>

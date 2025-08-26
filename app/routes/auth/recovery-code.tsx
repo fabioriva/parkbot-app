@@ -15,6 +15,8 @@ import { Label } from "~/components/ui/label";
 import { getSession } from "~/lib/session.server";
 import { getUserRecoveryCode } from "~/lib/user.server";
 
+import type { Route } from "./+types/recovery-code";
+
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { session, user } = await getSession(request);
   if (session === null) {

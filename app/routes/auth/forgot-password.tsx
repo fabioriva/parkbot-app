@@ -13,7 +13,9 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
-export default function Login({ actionData }: Route.ComponentProps) {
+import type { Route } from "./+types/forgot-password";
+
+export default function ForgotPassword({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
     <Card>

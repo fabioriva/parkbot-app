@@ -23,7 +23,7 @@ import {
 import { getUserFromEmail, getUserPasswordHash } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
-import type { SessionFlags } from "~/lib/server/session.server";
+import type { SessionFlags } from "~/lib/session.server";
 import type { Route } from "./+types/login";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -83,7 +83,7 @@ export async function action({ context, request }: Route.ActionArgs) {
   const sessionCookie = await getSessionCookie(request);
   sessionCookie.token = sessionToken;
   const cookie = await setSessionCookie(sessionCookie, {
-    expires: session.expiresAt,
+    expires: session?.expiresAt,
   });
   // set session cookie & redirect
   if (!user.emailVerified) {

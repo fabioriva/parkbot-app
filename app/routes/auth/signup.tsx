@@ -29,7 +29,7 @@ import {
 import { createUser } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
-import type { SessionFlags } from "~/lib/server/session";
+import type { SessionFlags } from "~/lib/session";
 import type { Route } from "./+types/signup";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -116,7 +116,7 @@ export async function action({ context, request }: Route.ActionArgs) {
       ],
       [
         "Set-Cookie",
-        await setSessionCookie(sessionCookie, { expires: session.expiresAt }),
+        await setSessionCookie(sessionCookie, { expires: session?.expiresAt }),
       ],
     ],
   });

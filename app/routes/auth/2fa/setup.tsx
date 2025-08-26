@@ -17,6 +17,8 @@ import { Label } from "~/components/ui/label";
 import { getSession, setSessionAs2FAVerified } from "~/lib/session.server";
 import { updateUserTOTPKey } from "~/lib/user.server";
 
+import type { Route } from "./+types/setup";
+
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { session, user } = await getSession(request);
   if (session === null) {

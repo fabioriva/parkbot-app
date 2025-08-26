@@ -15,6 +15,8 @@ import { Label } from "~/components/ui/label";
 import { getSession, setSessionAs2FAVerified } from "~/lib/session.server";
 import { getUserTOTPKey } from "~/lib/user.server";
 
+import type { Route } from "./+types/authentication";
+
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { session, user } = await getSession(request);
   if (session === null) {
@@ -100,9 +102,9 @@ export default function TwoFactorAuthentication({
         </Form>
       </CardContent>
       <CardFooter>
-        {loaderData ? (
+        {/* {loaderData ? (
           <p className="text-sm text-red-500">{loaderData.message}</p>
-        ) : null}
+        ) : null} */}
         <div className="text-sm">
           <a className="underline underline-offset-4" href="/2fa/reset">
             {t("twoFA.auth.recoveryLink")}
