@@ -1,6 +1,4 @@
-// "use client";
-
-import React, { memo } from "react";
+import * as React from "react";
 
 interface AuroraTextProps {
   children: React.ReactNode;
@@ -9,7 +7,7 @@ interface AuroraTextProps {
   speed?: number;
 }
 
-export const AuroraText = memo(
+export const AuroraText = React.memo(
   ({
     children,
     className = "",
