@@ -21,7 +21,6 @@ export const sessionCookieContainer = createCookie("__session", {
 
 export async function getSessionCookie(request: Request): Promise<any> {
   const cookieHeader = request.headers.get("Cookie");
-  console.log(cookieHeader);
   return (await sessionCookieContainer.parse(cookieHeader)) || {};
 }
 
@@ -66,7 +65,6 @@ export async function getSession(
   request: Request
 ): Promise<SessionValidationResult> {
   const sessionCookie = await getSessionCookie(request);
-  console.log(sessionCookie);
   const token = sessionCookie.token;
   console.log("sessionCookie:", sessionCookie, token);
   if (token === null) {
@@ -92,24 +90,22 @@ export async function getSession(
     return { session: null, user: null };
   }
   const sessionValidationResult = result.shift();
-  console.log(
-    "Session validation result:",
-    sessionValidationResult,
-    sessionValidationResult.user[0]
-  );
+  const sessionValidationUser = sessionValidationResult?.user.shift();
+  console.log("Session validation result:", sessionValidationResult);
+  console.log("Session validation user:", sessionValidationUser);
   const session: Session = {
-    id: sessionValidationResult.id,
-    userId: sessionValidationResult.userId,
-    expiresAt: sessionValidationResult.expiresAt,
-    twoFactorVerified: sessionValidationResult.twoFactorVerified,
+    id: sessionValidationResult?.id,
+    userId: sessionValidationResult?.userId,
+    expiresAt: sessionValidationResult?.expiresAt,
+    twoFactorVerified: sessionValidationResult?.twoFactorVerified,
   };
   console.log("session:", session);
   const user: User = {
-    id: sessionValidationResult.user[0].id,
-    email: sessionValidationResult.user[0].email,
-    username: sessionValidationResult.user[0].username,
-    emailVerified: sessionValidationResult.user[0].emailVerified,
-    registered2FA: sessionValidationResult.user[0].totpKey ? true : false, // sessionValidationResult.user[0].registered2FA,
+    id: sessionValidationUser?.id,
+    email: sessionValidationUser?.email,
+    username: sessionValidationUser?.username,
+    emailVerified: sessionValidationUser?.emailVerified,
+    registered2FA: sessionValidationUser?.totpKey ? true : false,
   };
   console.log("user:", user);
   if (Date.now() >= session.expiresAt.getTime()) {
@@ -128,7 +124,7 @@ export async function getSession(
   return { session, user };
 }
 
-export async function setSessionAs2FAVerified(id: string): void {
+export async function setSessionAs2FAVerified(id: string): Promise<void> {
   const sessions = db.collection(COLLECTION);
   await sessions.updateOne({ id }, { $set: { twoFactorVerified: true } });
 }
