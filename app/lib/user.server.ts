@@ -68,10 +68,13 @@ export async function getUserPasswordHash(id: string): Promise<string | null> {
     { _id: new ObjectId(id) },
     { projection: { _id: 0, passwordHash: 1 } }
   );
+  if (user === null) {
+    throw new Error("Invalid user ID");
+  }
   return user.passwordHash;
 }
 
-export async function getUserRecoveryCode(id: string): string {
+export async function getUserRecoveryCode(id: string): Promise<string> {
   const users = db.collection(COLLECTION);
   const user = await users.findOne(
     { id },
@@ -83,7 +86,7 @@ export async function getUserRecoveryCode(id: string): string {
   return decryptToString(new Uint8Array(user.recoveryCode.buffer)); // Convert Binary object to a Uint8Array
 }
 
-export async function getUserTOTPKey(id: string): Uint8Array | null {
+export async function getUserTOTPKey(id: string): Promise<Uint8Array | null> {
   const users = db.collection(COLLECTION);
   const user = await users.findOne(
     { id },
@@ -102,12 +105,15 @@ export async function getUserTOTPKey(id: string): Uint8Array | null {
 export async function updateUserEmailAndSetEmailAsVerified(
   id: string,
   email: string
-): void {
+): Promise<void> {
   const users = db.collection(COLLECTION);
   await users.updateOne({ id }, { $set: { email, emailVerified: true } });
 }
 
-export async function updateUserTOTPKey(id: string, key: Uint8Array): void {
+export async function updateUserTOTPKey(
+  id: string,
+  key: Uint8Array
+): Promise<void> {
   const encrypted = encrypt(key);
   const users = db.collection(COLLECTION);
   await users.updateOne({ id }, { $set: { totpKey: new Binary(encrypted) } });
