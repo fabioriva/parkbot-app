@@ -5,6 +5,8 @@ import { db } from "./db.server";
 import { generateRandomOTP } from "./random.server";
 import { getSession } from "./session.server";
 
+import type { SerializeOptions as CookieSerializeOptions } from "cookie";
+
 const COLLECTION = "email_verification_requests";
 
 export const emailVerificationCookieContainer = createCookie(
@@ -67,10 +69,13 @@ export async function getEmailVerification(
   id: string
 ): Promise<EmailVerificationRequest | null> {
   const requests = db.collection(COLLECTION);
-  const request = await requests.findOne(
+  const request = await requests.findOne<EmailVerificationRequest>(
     { id, userId },
     { projection: { _id: 0 } }
   );
+  if (request === null) {
+    return null;
+  }
   return request;
 }
 
@@ -81,7 +86,6 @@ export async function getEmailVerificationRequest(
   if (user === null) {
     return null;
   }
-
   const emailVerificationCookie = await getEmailVerificationCookie(request);
   const id = emailVerificationCookie.id;
   console.log("emailVerificationCookie:", emailVerificationCookie, id);
@@ -90,9 +94,11 @@ export async function getEmailVerificationRequest(
   }
   const emailVerificationRequest = await getEmailVerification(user.id, id);
   console.log(emailVerificationRequest);
-  // if (emailVerificationRequest === null) {
-  // 	deleteEmailVerificationRequestCookie();
-  // }
+  if (emailVerificationRequest === null) {
+    await setEmailVerificationCookie(emailVerificationCookie, {
+      maxAge: 0,
+    });
+  }
   return emailVerificationRequest;
 }
 

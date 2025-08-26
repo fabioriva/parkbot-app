@@ -6,6 +6,7 @@ import {
 import { createCookie } from "react-router";
 import { db } from "./db.server";
 
+import type { SerializeOptions as CookieSerializeOptions } from "cookie";
 import type { User } from "./user.server";
 
 const COLLECTION = "sessions";
