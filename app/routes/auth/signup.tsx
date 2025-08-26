@@ -29,7 +29,7 @@ import {
 import { createUser } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
-import type { SessionFlags } from "~/lib/session";
+import type { SessionFlags } from "~/lib/session.server";
 import type { Route } from "./+types/signup";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -111,7 +111,7 @@ export async function action({ context, request }: Route.ActionArgs) {
       [
         "Set-Cookie",
         await setEmailVerificationCookie(emailVerificationCookie, {
-          expires: emailVerificationRequest.expiresAt,
+          expires: emailVerificationRequest?.expiresAt,
         }),
       ],
       [
