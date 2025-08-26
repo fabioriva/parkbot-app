@@ -35,7 +35,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   return { recoveryCode };
 }
 
-export default function TwoFactorAuthentication({
+export default function RecoveryCode({
   actionData,
   loaderData,
 }: Route.ComponentProps) {
