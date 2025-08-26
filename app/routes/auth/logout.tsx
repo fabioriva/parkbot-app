@@ -1,19 +1,18 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-import * as cookie from "cookie";
 import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
   CardContent,
   CardDescription,
-  // CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
 import {
   deleteSession,
   getSession,
-  // sessionCookie,
+  getSessionCookie,
+  setSessionCookie,
 } from "~/lib/session.server";
 import { getInstance } from "~/middleware/i18next";
 
@@ -39,29 +38,14 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 export async function action({ request }: Route.ActionArgs) {
   const { session } = await getSession(request);
   await deleteSession(session?.id);
-  const sessionCookie = cookie.serialize("__session", "", {
+  const sessionCookie = await getSessionCookie(request);
+  const cookie = await setSessionCookie(sessionCookie, {
     maxAge: 0,
   });
-  return redirect("/login", {
-    headers: {
-      "Set-Cookie": sessionCookie,
-    },
-  });
-  // return redirect("/login", {
-  //   headers: {
-  //     "Set-Cookie": await sessionCookie.serialize(cookie, { maxAge: 0 }),
-  //   },
-  // });
-  // const cookie =
-  //   (await sessionCookie.parse(request.headers.get("Cookie"))) || {};
-  // return redirect("/login", {
-  //   headers: {
-  //     "Set-Cookie": await sessionCookie.serialize(cookie, { maxAge: 0 }),
-  //   },
-  // });
+  return redirect("/login", { headers: { "Set-Cookie": cookie } });
 }
 
-export default function Logout({ loaderData }: Route.ComponentProps) {
+export default function Logout() {
   let { t } = useTranslation();
   return (
     <Card>
@@ -76,11 +60,6 @@ export default function Logout({ loaderData }: Route.ComponentProps) {
           </div>
         </Form>
       </CardContent>
-      {/* <CardFooter>
-        {loaderData ? (
-          <p className="text-sm text-red-500">{loaderData.message}</p>
-        ) : null}
-      </CardFooter> */}
     </Card>
   );
 }
