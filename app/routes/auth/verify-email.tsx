@@ -156,9 +156,6 @@ export default function VerifyEmail({
         </Form>
       </CardContent>
       <CardFooter>
-        {/* {loaderData ? (
-          <p className="text-sm text-red-500">{loaderData.message}</p>
-        ) : null} */}
         <div className="text-sm">
           <Link className="underline underline-offset-4" to="/settings">
             {t("verifyEmail.changeMailLink")}
