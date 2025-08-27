@@ -70,7 +70,7 @@ export async function action({ context, request }: Route.ActionArgs) {
     };
   }
   await setSessionAs2FAVerified(session.id);
-  return redirect("/");
+  return redirect("/aps/test/dashboard");
 }
 
 export default function TwoFactorAuthentication({
