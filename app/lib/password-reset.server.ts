@@ -55,11 +55,90 @@ export async function createPasswordResetSession(
   return session;
 }
 
+export async function deleteSession(id: string): Promise<void> {
+  const requests = db.collection(COLLECTION);
+  await requests.deleteOne({ id });
+}
+
+export async function getPasswordResetSession(
+  request: Request
+): Promise<PasswordResetSessionValidationResult> {
+  const passwordResetSessionCookie =
+    await getPasswordResetSessionCookie(request);
+  const token = passwordResetSessionCookie.token;
+  console.log("passwordResetSessionCookie:", passwordResetSessionCookie, token);
+  if (token === null) {
+    return { session: null, user: null };
+  }
+  // Validate
+  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  const sessions = db.collection(COLLECTION);
+  const result = await sessions
+    .aggregate([
+      { $match: { id: sessionId } }, // Filter documents
+      { $limit: 1 },
+      {
+        $lookup: {
+          from: "users", // The collection to join
+          localField: "userId", // Field in the 'sessions' collection
+          foreignField: "id", // Field in the 'users' collection
+          as: "user", // Alias for the joined data
+        },
+      },
+    ])
+    .toArray();
+  if (result.length === 0) {
+    return { session: null, user: null };
+  }
+  const sessionValidationResult = result.shift();
+  const sessionValidationUser = sessionValidationResult?.user.shift();
+  console.log(
+    "Password reset session validation result:",
+    sessionValidationResult
+  );
+  console.log("Password reset session validation user:", sessionValidationUser);
+  const session: PasswordResetSession = {
+    id: sessionValidationResult?.id,
+    userId: sessionValidationResult?.userId,
+    email: sessionValidationResult?.email,
+    code: sessionValidationResult?.code,
+    expiresAt: sessionValidationResult?.expiresAt,
+    emailVerified: sessionValidationResult?.emailVerified,
+    twoFactorVerified: sessionValidationResult?.twoFactorVerified,
+  };
+  console.log("session:", session);
+  const user: User = {
+    id: sessionValidationUser?.id,
+    email: sessionValidationUser?.email,
+    username: sessionValidationUser?.username,
+    emailVerified: sessionValidationUser?.emailVerified,
+    registered2FA: sessionValidationUser?.totpKey ? true : false,
+  };
+  console.log("user:", user);
+  if (Date.now() >= session.expiresAt.getTime()) {
+    await deleteSession(session.id);
+    return { session: null, user: null };
+  }
+  return { session, user };
+}
+
 export async function invalidateUserPasswordResetSessions(
   userId: string
 ): Promise<void> {
   const requests = db.collection(COLLECTION);
   await requests.deleteOne({ userId });
+}
+
+export async function setPasswordResetSessionAsEmailVerified(id: string): void {
+  // db.execute("UPDATE password_reset_session SET email_verified = 1 WHERE id = ?", [sessionId]);
+  const sessions = db.collection(COLLECTION);
+  await sessions.updateOne({ id }, { $set: { emailVerified: true } });
+}
+
+export async function setPasswordResetSessionAs2FAVerified(id: string): void {
+  // db.execute("UPDATE password_reset_session SET two_factor_verified = 1 WHERE id = ?", [sessionId]);
+  const sessions = db.collection(COLLECTION);
+  await sessions.updateOne({ id }, { $set: { twoFactorVerified: true } });
 }
 
 export async function sendPasswordResetEmail(
