@@ -12,6 +12,14 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import {
+  createPasswordResetSession,
+  invalidateUserPasswordResetSessions,
+  sendPasswordResetEmail,
+  getPasswordResetSessionCookie,
+  setPasswordResetSessionCookie,
+} from "~/lib/password-reset.server";
+import { generateSessionToken } from "~/lib/session.server";
 import { getUserFromEmail } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
@@ -42,6 +50,22 @@ export async function action({ context, request }: Route.ActionArgs) {
       message: i18n.t("forgotPassword.action.mesgFour"),
     };
   }
+  invalidateUserPasswordResetSessions(user.id);
+  const sessionToken = generateSessionToken();
+  const session = await createPasswordResetSession(
+    sessionToken,
+    user.id,
+    user.email
+  );
+  console.log(session);
+  sendPasswordResetEmail(session.email, session.code);
+  const sessionCookie = await getPasswordResetSessionCookie(request);
+  sessionCookie.token = sessionToken;
+  const cookie = await setPasswordResetSessionCookie(sessionCookie, {
+    expires: session?.expiresAt,
+  });
+  // return redirect("/reset-password/verify-email");
+  return redirect("/reset/verify-email", { headers: { "Set-Cookie": cookie } });
 }
 
 export default function ForgotPassword({ actionData }: Route.ComponentProps) {

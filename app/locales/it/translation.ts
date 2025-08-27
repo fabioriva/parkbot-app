@@ -22,8 +22,8 @@ export default {
   },
   forgotPassword: {
     cardTitle: "Password dimenticata?",
-    cardDescription: "Descrizione",
-    loginLink: "Ritorna a",
+    cardDescription: "Verifica l'identità inviando la tua email",
+    loginLink: "Ritorna alla pagina di ",
     action: {
       mesgOne: "Inserisci la tua email",
       mesgTwo: "Campo non valido o mancante",

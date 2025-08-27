@@ -14,9 +14,9 @@ import { Label } from "~/components/ui/label";
 import {
   createEmailVerificationRequest,
   deleteUserEmailVerificationRequest,
-  getEmailVerificationCookie,
   getEmailVerificationRequest,
   sendVerificationEmail,
+  getEmailVerificationCookie,
   setEmailVerificationCookie,
 } from "~/lib/email-verification.server";
 import { getSession } from "~/lib/session.server";

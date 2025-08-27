@@ -1,3 +1,4 @@
+import sgMail from "@sendgrid/mail";
 import { db } from "./db.server";
 
 const COLLECTION = "users";
@@ -11,3 +12,7 @@ export async function checkEmailAvailability(email: string): Promise<boolean> {
   const user = await users.findOne({ email });
   return user === null ? true : false;
 }
+
+sgMail.setApiKey(import.meta.env.VITE_SENDGRID_API_KEY);
+
+export { sgMail };

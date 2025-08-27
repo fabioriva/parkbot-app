@@ -22,7 +22,7 @@ export default {
   },
   forgotPassword: {
     cardTitle: "Forgot Password",
-    cardDescription: "Description",
+    cardDescription: "Verify your identity using your email",
     loginLink: "Back to",
     action: {
       mesgOne: "Please enter your email",

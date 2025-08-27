@@ -1,7 +1,8 @@
 import { encodeBase32 } from "@oslojs/encoding";
-import sgMail from "@sendgrid/mail";
+// import sgMail from "@sendgrid/mail";
 import { createCookie } from "react-router";
 import { db } from "./db.server";
+import { sgMail } from "./email.server";
 import { generateRandomOTP } from "./random.server";
 import { getSession } from "./session.server";
 
@@ -102,7 +103,7 @@ export async function getEmailVerificationRequest(
   return emailVerificationRequest;
 }
 
-sgMail.setApiKey(import.meta.env.VITE_SENDGRID_API_KEY);
+// sgMail.setApiKey(import.meta.env.VITE_SENDGRID_API_KEY);
 
 export async function sendVerificationEmail(
   email: string,
