@@ -19,6 +19,7 @@ import {
   getEmailVerificationCookie,
   setEmailVerificationCookie,
 } from "~/lib/email-verification.server";
+import { invalidateUserPasswordResetSessions } from "~/lib/password-reset.server";
 import { getSession } from "~/lib/session.server";
 import { updateUserEmailAndSetEmailAsVerified } from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
@@ -94,7 +95,7 @@ export async function action({ context, request }: Route.ActionArgs) {
       };
     }
     await deleteUserEmailVerificationRequest(user?.id);
-    // invalidateUserPasswordResetSessions(user.id); // TODO
+    await invalidateUserPasswordResetSessions(user?.id);
     await updateUserEmailAndSetEmailAsVerified(user?.id, user?.email);
     const emailVerificationCookie = await getEmailVerificationCookie(request);
     const cookie = await setEmailVerificationCookie(emailVerificationCookie, {

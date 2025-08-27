@@ -110,6 +110,15 @@ export async function updateUserEmailAndSetEmailAsVerified(
   await users.updateOne({ id }, { $set: { email, emailVerified: true } });
 }
 
+export async function updateUserPassword(
+  id: string,
+  password: string
+): Promise<void> {
+  const passwordHash = await hashPassword(password);
+  const users = db.collection(COLLECTION);
+  await users.updateOne({ id }, { $set: { passwordHash } });
+}
+
 export async function updateUserTOTPKey(
   id: string,
   key: Uint8Array

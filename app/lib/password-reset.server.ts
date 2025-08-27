@@ -37,9 +37,9 @@ export async function setPasswordResetSessionCookie(
 
 export async function createPasswordResetSession(
   token: string,
-  userId: number,
+  userId: string,
   email: string
-): PasswordResetSession {
+): Promise<PasswordResetSession> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const session: PasswordResetSession = {
     id: sessionId,
@@ -126,16 +126,20 @@ export async function invalidateUserPasswordResetSessions(
   userId: string
 ): Promise<void> {
   const requests = db.collection(COLLECTION);
-  await requests.deleteOne({ userId });
+  await requests.deleteMany({ userId });
 }
 
-export async function setPasswordResetSessionAsEmailVerified(id: string): void {
+export async function setPasswordResetSessionAsEmailVerified(
+  id: string
+): Promise<void> {
   // db.execute("UPDATE password_reset_session SET email_verified = 1 WHERE id = ?", [sessionId]);
   const sessions = db.collection(COLLECTION);
   await sessions.updateOne({ id }, { $set: { emailVerified: true } });
 }
 
-export async function setPasswordResetSessionAs2FAVerified(id: string): void {
+export async function setPasswordResetSessionAs2FAVerified(
+  id: string
+): Promise<void> {
   // db.execute("UPDATE password_reset_session SET two_factor_verified = 1 WHERE id = ?", [sessionId]);
   const sessions = db.collection(COLLECTION);
   await sessions.updateOne({ id }, { $set: { twoFactorVerified: true } });

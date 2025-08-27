@@ -124,6 +124,11 @@ export async function getSession(
   return { session, user };
 }
 
+export async function invalidateUserSessions(userId: string): void {
+  const requests = db.collection(COLLECTION);
+  await requests.deleteMany({ userId });
+}
+
 export async function setSessionAs2FAVerified(id: string): Promise<void> {
   const sessions = db.collection(COLLECTION);
   await sessions.updateOne({ id }, { $set: { twoFactorVerified: true } });

@@ -50,7 +50,7 @@ export async function action({ context, request }: Route.ActionArgs) {
       message: i18n.t("forgotPassword.action.mesgFour"),
     };
   }
-  invalidateUserPasswordResetSessions(user.id);
+  await invalidateUserPasswordResetSessions(user.id);
   const sessionToken = generateSessionToken();
   const session = await createPasswordResetSession(
     sessionToken,
@@ -64,7 +64,7 @@ export async function action({ context, request }: Route.ActionArgs) {
   const cookie = await setPasswordResetSessionCookie(sessionCookie, {
     expires: session?.expiresAt,
   });
-  return redirect("/reset/email", { headers: { "Set-Cookie": cookie } });
+  return redirect("/reset/verify-email", { headers: { "Set-Cookie": cookie } });
 }
 
 export default function ForgotPassword({ actionData }: Route.ComponentProps) {
