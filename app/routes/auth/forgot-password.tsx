@@ -28,43 +28,41 @@ import type { Route } from "./+types/forgot-password";
 export async function action({ context, request }: Route.ActionArgs) {
   let i18n = getInstance(context);
   const formData = await request.formData();
-  const email = formData.get("email");
-  if (email === "") {
-    return {
-      message: i18n.t("forgotPassword.action.mesgOne"),
-    };
-  }
-  if (typeof email !== "string") {
-    return {
-      message: i18n.t("forgotPassword.action.mesgTwo"),
-    };
-  }
-  if (!z.string().email().safeParse(email).success) {
-    return {
-      message: i18n.t("forgotPassword.action.mesgThree"),
-    };
-  }
-  const user = await getUserFromEmail(email);
-  if (user === null) {
-    return {
-      message: i18n.t("forgotPassword.action.mesgFour"),
-    };
-  }
-  await invalidateUserPasswordResetSessions(user.id);
-  const sessionToken = generateSessionToken();
-  const session = await createPasswordResetSession(
-    sessionToken,
-    user.id,
-    user.email
-  );
-  console.log(session);
-  sendPasswordResetEmail(session.email, session.code);
-  const sessionCookie = await getPasswordResetSessionCookie(request);
-  sessionCookie.token = sessionToken;
-  const cookie = await setPasswordResetSessionCookie(sessionCookie, {
-    expires: session?.expiresAt,
+  const FormSchema = z.object({
+    email: z
+      .string()
+      .min(1, i18n.t("auth.emptyField"))
+      .email(i18n.t("auth.emailInvalid")),
   });
-  return redirect("/reset/verify-email", { headers: { "Set-Cookie": cookie } });
+  const result = FormSchema.safeParse(Object.fromEntries(formData));
+  if (result.success) {
+    const email = formData.get("email");
+    const user = await getUserFromEmail(email);
+    if (user === null) {
+      return {
+        message: i18n.t("auth.accountNotFound"),
+      };
+    }
+    await invalidateUserPasswordResetSessions(user.id);
+    const sessionToken = generateSessionToken();
+    const session = await createPasswordResetSession(
+      sessionToken,
+      user.id,
+      user.email
+    );
+    sendPasswordResetEmail(session.email, session.code);
+    const sessionCookie = await getPasswordResetSessionCookie(request);
+    sessionCookie.token = sessionToken;
+    const cookie = await setPasswordResetSessionCookie(sessionCookie, {
+      expires: session?.expiresAt,
+    });
+    return redirect("/reset/verify-email", {
+      headers: { "Set-Cookie": cookie },
+    });
+  } else {
+    const error = result.error.issues.shift().message;
+    return { message: error };
+  }
 }
 
 export default function ForgotPassword({ actionData }: Route.ComponentProps) {
@@ -83,7 +81,7 @@ export default function ForgotPassword({ actionData }: Route.ComponentProps) {
             <div className="grid gap-3">
               <Label htmlFor="email">Email</Label>
               <Input
-                type="email"
+                // type="email"
                 name="email"
                 id="email"
                 autoComplete="email"

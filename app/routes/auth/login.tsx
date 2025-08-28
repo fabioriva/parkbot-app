@@ -45,54 +45,57 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 export async function action({ context, request }: Route.ActionArgs) {
   let i18n = getInstance(context);
   const formData = await request.formData();
-  const email = formData.get("email");
-  const password = formData.get("password");
-  if (email === "" || password === "") {
-    return {
-      message: i18n.t("login.action.mesgOne"),
-    };
-  }
-  if (typeof email !== "string" || typeof password !== "string") {
-    return {
-      message: i18n.t("login.action.mesgTwo"),
-    };
-  }
-  if (!z.string().email().safeParse(email).success) {
-    return {
-      message: i18n.t("login.action.mesgThree"),
-    };
-  }
-  const user = await getUserFromEmail(email);
-  if (user === null) {
-    return {
-      message: i18n.t("login.action.mesgFour"),
-    };
-  }
-  const passwordHash = await getUserPasswordHash(user.id);
-  const validPassword = await verifyPasswordHash(passwordHash, password);
-  if (!validPassword) {
-    return {
-      message: i18n.t("login.action.mesgFive"),
-    };
-  }
-  const sessionToken = generateSessionToken();
-  const sessionFlags: SessionFlags = {
-    twoFactorVerified: false,
-  };
-  const session = await createSession(sessionToken, user.id, sessionFlags);
-  const sessionCookie = await getSessionCookie(request);
-  sessionCookie.token = sessionToken;
-  const cookie = await setSessionCookie(sessionCookie, {
-    expires: session?.expiresAt,
+  const FormSchema = z.object({
+    email: z
+      .string()
+      .min(1, i18n.t("auth.emptyField"))
+      .email(i18n.t("auth.emailInvalid")),
+    password: z
+      .string()
+      .min(1, i18n.t("auth.emptyField"))
+      .min(8, i18n.t("auth.passwordMin"))
+      .max(255, i18n.t("auth.passwordMax")),
   });
-  // set session cookie & redirect
-  if (!user.emailVerified) {
-    return redirect("/verify-email", { headers: { "Set-Cookie": cookie } });
+  const result = FormSchema.safeParse(Object.fromEntries(formData));
+  if (result.success) {
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const user = await getUserFromEmail(email);
+    if (user === null) {
+      return {
+        message: i18n.t("auth.accountNotFound"),
+      };
+    }
+    const passwordHash = await getUserPasswordHash(user.id);
+    const validPassword = await verifyPasswordHash(passwordHash, password);
+    if (!validPassword) {
+      return {
+        message: i18n.t("auth.passwordInvalid"),
+      };
+    }
+    const sessionToken = generateSessionToken();
+    const sessionFlags: SessionFlags = {
+      twoFactorVerified: false,
+    };
+    const session = await createSession(sessionToken, user.id, sessionFlags);
+    const sessionCookie = await getSessionCookie(request);
+    sessionCookie.token = sessionToken;
+    const cookie = await setSessionCookie(sessionCookie, {
+      expires: session?.expiresAt,
+    });
+    if (!user.emailVerified) {
+      return redirect("/verify-email", { headers: { "Set-Cookie": cookie } });
+    }
+    if (!user.registered2FA) {
+      return redirect("/2fa/setup", { headers: { "Set-Cookie": cookie } });
+    }
+    return redirect("/2fa/authentication", {
+      headers: { "Set-Cookie": cookie },
+    });
+  } else {
+    const error = result.error.issues.shift().message;
+    return { message: error };
   }
-  if (!user.registered2FA) {
-    return redirect("/2fa/setup", { headers: { "Set-Cookie": cookie } });
-  }
-  return redirect("/2fa/authentication", { headers: { "Set-Cookie": cookie } });
 }
 
 export default function Login({ actionData }: Route.ComponentProps) {
@@ -109,7 +112,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
             <div className="grid gap-3">
               <Label htmlFor="email">Email</Label>
               <Input
-                type="email"
+                // type="email"
                 name="email"
                 id="email"
                 autoComplete="email"

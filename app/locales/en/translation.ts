@@ -2,34 +2,19 @@ export default {
   title: "parkbot-app (en)",
   description: "The robotic parking monitoring tool",
   submitButton: "Submit",
-  twoFA: {
-    auth: {
-      cardTitle: "Two-factor authentication",
-      cardDescription: "Enter the OTP code from your authenticator app",
-      codeLabel: "OTP code",
-      recoveryLink: "Use recovery code",
-    },
-    reset: {
-      cardTitle: "Recover your account",
-      cardDescription: "Enter your recovery code",
-      codeLabel: "Recovery code",
-    },
-    setup: {
-      cardTitle: "Set up two-factor authentication",
-      cardDescription: "Scan the QR code with your camera",
-      codeLabel: "OTP code",
-    },
+  auth: {
+    accountNotFound: "Account does not exist",
+    emailInvalid: "Invalid email address",
+    emptyField: "Missing field",
+    passwordInvalid: "Invalid password",
+    passwordMax: "Password too long",
+    passwordMin: "Password too short",
+    passwordWeak: "Weak password",
   },
   forgotPassword: {
     cardTitle: "Forgot Password",
     cardDescription: "Verify your identity using your email",
     loginLink: "Back to",
-    action: {
-      mesgOne: "Please enter your email",
-      mesgTwo: "Invalid or missing field",
-      mesgThree: "Invalid email address",
-      mesgFour: "Account does not exist",
-    },
   },
   login: {
     cardTitle: "Login to Parkbot",
@@ -37,20 +22,10 @@ export default {
     forgotLink: "Forgot your password?",
     signup: "Don't have an account?",
     signupLink: "Sign up",
-    action: {
-      mesgOne: "Please enter your email and password",
-      mesgTwo: "Invalid or missing fields",
-      mesgThree: "Invalid email address",
-      mesgFour: "Account does not exist",
-      mesgFive: "Invalid password",
-    },
   },
   logout: {
     cardTitle: "Logout from Parkbot",
     cardDescription: "Are you sure you want to log out?",
-    loader: {
-      mesgOne: "Not authenticated",
-    },
   },
   recoveryCode: {
     cardTitle: "Recovery code",
@@ -73,6 +48,24 @@ export default {
       mesgFive: "Invalid username",
       mesgSix: "Weak password",
       mesgSeven: "Password doesn't match",
+    },
+  },
+  twoFA: {
+    auth: {
+      cardTitle: "Two-factor authentication",
+      cardDescription: "Enter the OTP code from your authenticator app",
+      codeLabel: "OTP code",
+      recoveryLink: "Use recovery code",
+    },
+    reset: {
+      cardTitle: "Recover your account",
+      cardDescription: "Enter your recovery code",
+      codeLabel: "Recovery code",
+    },
+    setup: {
+      cardTitle: "Set up two-factor authentication",
+      cardDescription: "Scan the QR code with your camera",
+      codeLabel: "OTP code",
     },
   },
   verifyEmail: {
