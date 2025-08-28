@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-import * as z from "zod";
 import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
@@ -12,6 +11,10 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import {
+  ForgotPasswordSchema,
+  validateForm,
+} from "~/lib/form-validation.server";
 import {
   createPasswordResetSession,
   invalidateUserPasswordResetSessions,
@@ -28,14 +31,11 @@ import type { Route } from "./+types/forgot-password";
 export async function action({ context, request }: Route.ActionArgs) {
   let i18n = getInstance(context);
   const formData = await request.formData();
-  const FormSchema = z.object({
-    email: z
-      .string()
-      .min(1, i18n.t("auth.emptyField"))
-      .email(i18n.t("auth.emailInvalid")),
-  });
-  const result = FormSchema.safeParse(Object.fromEntries(formData));
-  if (result.success) {
+  const result = validateForm(formData, ForgotPasswordSchema);
+  if (!result.success) {
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
+  } else {
     const email = formData.get("email");
     const user = await getUserFromEmail(email);
     if (user === null) {
@@ -59,9 +59,6 @@ export async function action({ context, request }: Route.ActionArgs) {
     return redirect("/reset/verify-email", {
       headers: { "Set-Cookie": cookie },
     });
-  } else {
-    const error = result.error.issues.shift().message;
-    return { message: error };
   }
 }
 
