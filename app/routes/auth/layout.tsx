@@ -15,21 +15,27 @@ export default function Auth() {
         </a>
         <Outlet />
       </div>
-      <span className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance ">
-        By clicking submit, you agree to our <a href="#">Terms of Service.</a>
+      <span className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance">
+        By clicking submit, you agree to our <a href="#">Terms of Service</a>
       </span>
-      <footer className="text-center text-primary text-sm tracking-tighter">
-        {"© "}
-        {new Date().getFullYear()}{" "}
-        <a
-          className="hover:underline hover:text-blue-600"
-          href="https://www.sotefin.com/"
-        >
-          Sotefin.
-        </a>{" "}
-        All rights reserved.
-        {/* <br className="inline sm:hidden" /> Made with ❤️ in Switzerland. */}
-      </footer>
+      {/* <footer className="space-y-1.5">
+        <p className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance">
+          By clicking submit, you agree to our <a href="#">Terms of Service</a>
+        </p>
+        <p className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance">
+          All rights reserved.{" © "}
+          {new Date().getFullYear()}{" "}
+          <a href="https://www.sotefin.com/" target="_blank">
+            Sotefin SA
+          </a>
+        </p>
+        <p className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance">
+          Crafted with ❤️ in{" "}
+          <a href="https://en.wikipedia.org/wiki/Switzerland" target="_blank">
+            Switzerland
+          </a>
+        </p>
+      </footer> */}
     </div>
   );
 }
