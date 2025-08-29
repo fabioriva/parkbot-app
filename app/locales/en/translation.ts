@@ -8,6 +8,7 @@ export default {
     emailInvalid: "Invalid email address",
     emailUsed: "Email is already used",
     emptyField: "Missing field",
+    keyInvalid: "Invalid key",
     passwordDiff: "Password doesn't match",
     passwordInvalid: "Invalid password",
     passwordMax: "Password too long",

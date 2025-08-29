@@ -1,4 +1,5 @@
-import { z, ZodError } from "zod";
+import * as z from "zod";
+import type { ZodError } from "zod";
 
 const email = z.string().min(1, "auth.emptyField").email("auth.emailInvalid");
 

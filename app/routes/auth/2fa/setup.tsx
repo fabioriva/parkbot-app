@@ -14,8 +14,10 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { TotpCodeSchema, validateForm } from "~/lib/form-validation.server";
 import { getSession, setSessionAs2FAVerified } from "~/lib/session.server";
 import { updateUserTOTPKey } from "~/lib/user.server";
+import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/setup";
 
@@ -33,68 +35,37 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   const totpKey = new Uint8Array(20);
   crypto.getRandomValues(totpKey);
   const encodedTOTPKey = encodeBase64(totpKey);
-  const keyURI = createTOTPKeyURI("Parkbot App", user.username, totpKey, 30, 6);
+  const keyURI = createTOTPKeyURI("Parkbot", user.username, totpKey, 30, 6);
   return { encodedTOTPKey, keyURI };
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
-  const { session, user } = await getSession(request);
-  if (session === null) {
-    return {
-      message: "Not authenticated",
-    };
-  }
-  if (!user.emailVerified) {
-    return {
-      message: "Forbidden",
-    };
-  }
-  if (user.registered2FA && !session.twoFactorVerified) {
-    return {
-      message: "Forbidden",
-    };
-  }
-
+  let i18n = getInstance(context);
   const formData = await request.formData();
-  const encodedKey = formData.get("key");
-  const code = formData.get("code");
-  console.log("code:", code, "encoded key:", encodedKey);
-  if (typeof encodedKey !== "string" || typeof code !== "string") {
-    return {
-      message: "Invalid or missing fields",
-    };
+  const result = validateForm(formData, TotpCodeSchema);
+  if (!result.success) {
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
+  } else {
+    const { session, user } = await getSession(request);
+    const encodedKey = formData.get("key");
+    const code = formData.get("code");
+    let key: Uint8Array;
+    try {
+      key = decodeBase64(encodedKey);
+    } catch {
+      return { message: i18n.t("auth.keyInvalid") };
+    }
+    if (key.byteLength !== 20) {
+      return { message: i18n.t("auth.keyInvalid") };
+    }
+    if (!verifyTOTP(key, 30, 6, code)) {
+      return { message: i18n.t("auth.codeInvalid") };
+    }
+    await updateUserTOTPKey(session.userId, key);
+    await setSessionAs2FAVerified(session.id);
+    return redirect("/recovery-code");
   }
-  if (code === "") {
-    return {
-      message: "Please enter your code",
-    };
-  }
-  if (encodedKey.length !== 28) {
-    return {
-      message: "Please enter your code",
-    };
-  }
-  let key: Uint8Array;
-  try {
-    key = decodeBase64(encodedKey);
-  } catch {
-    return {
-      message: "Invalid key",
-    };
-  }
-  if (key.byteLength !== 20) {
-    return {
-      message: "Invalid key",
-    };
-  }
-  if (!verifyTOTP(key, 30, 6, code)) {
-    return {
-      message: "Invalid code",
-    };
-  }
-  await updateUserTOTPKey(session.userId, key);
-  await setSessionAs2FAVerified(session.id);
-  return redirect("/recovery-code");
 }
 
 export default function TwoFASetup({
@@ -129,7 +100,12 @@ export default function TwoFASetup({
                 readOnly
               />
               <Label htmlFor="code">{t("twoFA.setup.codeLabel")}</Label>
-              <Input type="text" name="code" id="code" required />
+              <Input
+                type="text"
+                name="code"
+                id="code"
+                // required
+              />
             </div>
             <SubmitFormButton action="/2fa/setup" title={t("submitButton")} />
             {actionData ? (

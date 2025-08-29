@@ -47,7 +47,7 @@ export default function RecoveryCode({
         <CardDescription>{t("recoveryCode.cardDescription")} </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="relative bg-gray-800 text-white rounded-lg p-4">
+        <div className="relative bg-gray-800 text-white rounded-lg p-8">
           <pre className="overflow-x-auto">
             <code>{loaderData.recoveryCode}</code>
           </pre>
@@ -69,7 +69,10 @@ export default function RecoveryCode({
           <p className="text-sm text-red-500">{loaderData.message}</p>
         ) : null}
         <div className="text-sm">
-          <a className="underline underline-offset-4" href="/">
+          <a
+            className="underline underline-offset-4"
+            href="/aps/test/dashboard"
+          >
             {t("recoveryCode.nextLink")}
           </a>
         </div>
