@@ -16,7 +16,7 @@ import {
   setPasswordResetSessionAsEmailVerified,
 } from "~/lib/password-reset.server";
 
-import type { Route } from "./+types/reset/verify-email";
+import type { Route } from "./+types/verify-email";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { session } = await getPasswordResetSession(request);

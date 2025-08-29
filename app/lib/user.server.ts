@@ -105,7 +105,7 @@ export async function getUserTOTPKey(id: string): Promise<Uint8Array | null> {
 export async function resetUser2FAWithRecoveryCode(
   id: number,
   recoveryCode: string
-): boolean {
+): Promise<boolean> {
   const users = db.collection(COLLECTION);
   const user = await users.findOne(
     { id },

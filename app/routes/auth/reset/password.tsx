@@ -20,7 +20,7 @@ import {
 import { invalidateUserSessions } from "~/lib/session.server";
 import { updateUserPassword } from "~/lib/user.server";
 
-import type { Route } from "./+types/reset/password";
+import type { Route } from "./+types/password";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { session, user } = await getPasswordResetSession(request);

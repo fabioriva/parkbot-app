@@ -18,7 +18,7 @@ import {
 } from "~/lib/password-reset.server";
 import { getUserTOTPKey } from "~/lib/user.server";
 
-import type { Route } from "./+types/reset/2fa";
+import type { Route } from "./+types/2fa";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { session, user } = await getPasswordResetSession(request);

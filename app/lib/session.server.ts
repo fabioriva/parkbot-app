@@ -124,7 +124,7 @@ export async function getSession(
   return { session, user };
 }
 
-export async function invalidateUserSessions(userId: string): void {
+export async function invalidateUserSessions(userId: string): Promise<void> {
   const requests = db.collection(COLLECTION);
   await requests.deleteMany({ userId });
 }

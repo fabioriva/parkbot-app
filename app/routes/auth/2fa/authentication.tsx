@@ -44,7 +44,7 @@ export async function action({ context, request }: Route.ActionArgs) {
     return { message: i18n.t(error) };
   } else {
     const { session, user } = await getSession(request);
-    const totpKey = await getUserTOTPKey(user.id);
+    const totpKey = await getUserTOTPKey(user?.id);
     if (totpKey === null) {
       return {
         message: "Forbidden",
@@ -57,7 +57,7 @@ export async function action({ context, request }: Route.ActionArgs) {
     if (!verifyTOTP(totpKey, 30, 6, code)) {
       return { message: i18n.t("auth.codeInvalid") };
     }
-    await setSessionAs2FAVerified(session.id);
+    await setSessionAs2FAVerified(session?.id);
     return redirect("/aps/test/dashboard");
   }
 }

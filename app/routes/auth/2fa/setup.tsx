@@ -62,8 +62,8 @@ export async function action({ context, request }: Route.ActionArgs) {
     if (!verifyTOTP(key, 30, 6, code)) {
       return { message: i18n.t("auth.codeInvalid") };
     }
-    await updateUserTOTPKey(session.userId, key);
-    await setSessionAs2FAVerified(session.id);
+    await updateUserTOTPKey(session?.userId, key);
+    await setSessionAs2FAVerified(session?.id);
     return redirect("/recovery-code");
   }
 }

@@ -43,7 +43,7 @@ export async function action({ context, request }: Route.ActionArgs) {
   } else {
     const { user } = await getSession(request);
     const code = formData.get("code");
-    const valid = await resetUser2FAWithRecoveryCode(user.id, code);
+    const valid = await resetUser2FAWithRecoveryCode(user?.id, code);
     if (!valid) {
       return {
         message: i18n.t("auth.codeInvalid"),
