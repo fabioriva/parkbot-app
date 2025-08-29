@@ -43,9 +43,7 @@ export default {
   signup: {
     cardTitle: "Creare un account Parkbot",
     cardDescription: `Il tuo username deve essere lungo almeno 3 caratteri e la password almeno 8 caratteri.`,
-    cardContent: {
-      confirmPassword: "Conferma password",
-    },
+    confirmLabel: "Conferma password",
   },
   twoFA: {
     auth: {

@@ -95,83 +95,6 @@ export async function action({ context, request }: Route.ActionArgs) {
       ],
     });
   }
-
-  // if (email === "" || password === "" || username === "") {
-  //   return {
-  //     message: i18n.t("signup.action.mesgOne"),
-  //   };
-  // }
-  // if (
-  //   typeof email !== "string" ||
-  //   typeof username !== "string" ||
-  //   typeof password !== "string"
-  // ) {
-  //   return {
-  //     message: i18n.t("signup.action.mesgTwo"),
-  //   };
-  // }
-  // if (!z.string().min(4).max(31).safeParse(username).success) {
-  //   return {
-  //     message: i18n.t("signup.action.mesgFive"),
-  //   };
-  // }
-  // if (!z.string().email().safeParse(email).success) {
-  //   return {
-  //     message: i18n.t("signup.action.mesgThree"),
-  //   };
-  // }
-  // const emailAvailable = await checkEmailAvailability(email);
-  // if (!emailAvailable) {
-  //   return {
-  //     message: i18n.t("signup.action.mesgFour"),
-  //   };
-  // }
-  // const strongPassword = await verifyPasswordStrength(password);
-  // if (!strongPassword) {
-  //   return {
-  //     message: i18n.t("signup.action.mesgSix"),
-  //   };
-  // }
-  // if (confirm !== password) {
-  //   return {
-  //     message: i18n.t("signup.action.mesgSeven"),
-  //   };
-  // }
-  // const user = await createUser(email, username, password);
-  // // create email verification request
-  // const emailVerificationRequest = await createEmailVerificationRequest(
-  //   user.id,
-  //   user.email
-  // );
-  // sendVerificationEmail(
-  //   emailVerificationRequest.email,
-  //   emailVerificationRequest.code
-  // );
-  // const emailVerificationCookie = await getEmailVerificationCookie(request);
-  // emailVerificationCookie.id = emailVerificationRequest.id;
-  // // create session
-  // const sessionToken = generateSessionToken();
-  // const sessionFlags: SessionFlags = {
-  //   twoFactorVerified: false,
-  // };
-  // const session = await createSession(sessionToken, user.id, sessionFlags);
-  // const sessionCookie = await getSessionCookie(request);
-  // sessionCookie.token = sessionToken;
-  // // set cookies & redirect
-  // return redirect("/2fa/setup", {
-  //   headers: [
-  //     [
-  //       "Set-Cookie",
-  //       await setEmailVerificationCookie(emailVerificationCookie, {
-  //         expires: emailVerificationRequest?.expiresAt,
-  //       }),
-  //     ],
-  //     [
-  //       "Set-Cookie",
-  //       await setSessionCookie(sessionCookie, { expires: session?.expiresAt }),
-  //     ],
-  //   ],
-  // });
 }
 
 export default function Signup({ actionData }: Route.ComponentProps) {
@@ -223,9 +146,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
               />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="confirm">
-                {t("signup.cardContent.confirmPassword")}
-              </Label>
+              <Label htmlFor="confirm">{t("signup.confirmLabel")}</Label>
               <Input
                 type="password"
                 name="confirm"
