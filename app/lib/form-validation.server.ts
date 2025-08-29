@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { z, ZodError } from "zod";
 
 const email = z.string().min(1, "auth.emptyField").email("auth.emailInvalid");
 
@@ -17,7 +17,18 @@ export const LoginSchema = z.object({
   password,
 });
 
-export function validateForm(formData: object, formSchema: object) {
+export const SignupSchema = z.object({
+  username: z
+    .string()
+    .min(1, "auth.emptyField")
+    .min(4, "auth.usernameMin")
+    .max(32, "auth.usernameMax"),
+  email,
+  password,
+  confirm: password,
+});
+
+export function validateForm(formData: any, formSchema: any): ZodError {
   const result = formSchema.safeParse(Object.fromEntries(formData));
   return result;
 }

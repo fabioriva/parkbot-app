@@ -5,11 +5,15 @@ export default {
   auth: {
     accountNotFound: "Account non trovato",
     emailInvalid: "Indirizzo email non valido",
+    emailUsed: "Indirizzo email già utilizzato",
     emptyField: "Campo mancante",
+    passwordDiff: "La password non coincide",
     passwordInvalid: "Password non valida",
     passwordMax: "Password troppo lunga",
     passwordMin: "Password troppo corta",
     passwordWeak: "Password debole",
+    usernameMax: "Username troppo lunga",
+    usernameMin: "Username troppo corto",
   },
   forgotPassword: {
     cardTitle: "Password dimenticata?",
@@ -39,15 +43,6 @@ export default {
     cardDescription: `Il tuo username deve essere lungo almeno 3 caratteri e la password almeno 8 caratteri.`,
     cardContent: {
       confirmPassword: "Conferma password",
-    },
-    action: {
-      mesgOne: "Inserisci il tuo username, email e password",
-      mesgTwo: "Campi non validi o mancanti",
-      mesgThree: "Indirizzo email non valido",
-      mesgFour: "Indirizzo email già utilizzato",
-      mesgFive: "Username non valido",
-      mesgSix: "Password debole",
-      mesgSeven: "La password non coincide",
     },
   },
   twoFA: {

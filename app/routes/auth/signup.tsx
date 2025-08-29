@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-import * as z from "zod";
 import SubmitFormButton from "~/components/submitFormButton";
 import {
   Card,
@@ -18,6 +17,7 @@ import {
   sendVerificationEmail,
   setEmailVerificationCookie,
 } from "~/lib/email-verification.server";
+import { SignupSchema, validateForm } from "~/lib/form-validation.server";
 import { verifyPasswordStrength } from "~/lib/password.server";
 import {
   createSession,
@@ -40,86 +40,138 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 export async function action({ context, request }: Route.ActionArgs) {
   let i18n = getInstance(context);
   const formData = await request.formData();
-  const email = formData.get("email");
-  const confirm = formData.get("confirm");
-  const password = formData.get("password");
-  const username = formData.get("username");
-  if (email === "" || password === "" || username === "") {
-    return {
-      message: i18n.t("signup.action.mesgOne"),
+  const result = validateForm(formData, SignupSchema);
+  if (!result.success) {
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
+  } else {
+    const username = formData.get("username");
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const confirm = formData.get("confirm");
+    const emailAvailable = await checkEmailAvailability(email);
+    if (!emailAvailable) {
+      return { message: i18n.t("auth.emailUsed") };
+    }
+    const strongPassword = await verifyPasswordStrength(password);
+    if (!strongPassword) {
+      return { message: i18n.t("auth.passwordWeak") };
+    }
+    if (confirm !== password) {
+      return { message: i18n.t("auth.passwordDiff") };
+    }
+    const user = await createUser(email, username, password);
+    const emailVerificationRequest = await createEmailVerificationRequest(
+      user.id,
+      user.email
+    );
+    sendVerificationEmail(
+      emailVerificationRequest.email,
+      emailVerificationRequest.code
+    );
+    const emailVerificationCookie = await getEmailVerificationCookie(request);
+    emailVerificationCookie.id = emailVerificationRequest.id;
+    const sessionToken = generateSessionToken();
+    const sessionFlags: SessionFlags = {
+      twoFactorVerified: false,
     };
-  }
-  if (
-    typeof email !== "string" ||
-    typeof username !== "string" ||
-    typeof password !== "string"
-  ) {
-    return {
-      message: i18n.t("signup.action.mesgTwo"),
-    };
-  }
-  if (!z.string().min(4).max(31).safeParse(username).success) {
-    return {
-      message: i18n.t("signup.action.mesgFive"),
-    };
-  }
-  if (!z.string().email().safeParse(email).success) {
-    return {
-      message: i18n.t("signup.action.mesgThree"),
-    };
-  }
-  const emailAvailable = await checkEmailAvailability(email);
-  if (!emailAvailable) {
-    return {
-      message: i18n.t("signup.action.mesgFour"),
-    };
-  }
-  const strongPassword = await verifyPasswordStrength(password);
-  if (!strongPassword) {
-    return {
-      message: i18n.t("signup.action.mesgSix"),
-    };
-  }
-  if (confirm !== password) {
-    return {
-      message: i18n.t("signup.action.mesgSeven"),
-    };
-  }
-  const user = await createUser(email, username, password);
-  // create email verification request
-  const emailVerificationRequest = await createEmailVerificationRequest(
-    user.id,
-    user.email
-  );
-  sendVerificationEmail(
-    emailVerificationRequest.email,
-    emailVerificationRequest.code
-  );
-  const emailVerificationCookie = await getEmailVerificationCookie(request);
-  emailVerificationCookie.id = emailVerificationRequest.id;
-  // create session
-  const sessionToken = generateSessionToken();
-  const sessionFlags: SessionFlags = {
-    twoFactorVerified: false,
-  };
-  const session = await createSession(sessionToken, user.id, sessionFlags);
-  const sessionCookie = await getSessionCookie(request);
-  sessionCookie.token = sessionToken;
-  // set cookies & redirect
-  return redirect("/2fa/setup", {
-    headers: [
-      [
-        "Set-Cookie",
-        await setEmailVerificationCookie(emailVerificationCookie, {
-          expires: emailVerificationRequest?.expiresAt,
-        }),
+    const session = await createSession(sessionToken, user.id, sessionFlags);
+    const sessionCookie = await getSessionCookie(request);
+    sessionCookie.token = sessionToken;
+    return redirect("/2fa/setup", {
+      headers: [
+        [
+          "Set-Cookie",
+          await setEmailVerificationCookie(emailVerificationCookie, {
+            expires: emailVerificationRequest?.expiresAt,
+          }),
+        ],
+        [
+          "Set-Cookie",
+          await setSessionCookie(sessionCookie, {
+            expires: session?.expiresAt,
+          }),
+        ],
       ],
-      [
-        "Set-Cookie",
-        await setSessionCookie(sessionCookie, { expires: session?.expiresAt }),
-      ],
-    ],
-  });
+    });
+  }
+
+  // if (email === "" || password === "" || username === "") {
+  //   return {
+  //     message: i18n.t("signup.action.mesgOne"),
+  //   };
+  // }
+  // if (
+  //   typeof email !== "string" ||
+  //   typeof username !== "string" ||
+  //   typeof password !== "string"
+  // ) {
+  //   return {
+  //     message: i18n.t("signup.action.mesgTwo"),
+  //   };
+  // }
+  // if (!z.string().min(4).max(31).safeParse(username).success) {
+  //   return {
+  //     message: i18n.t("signup.action.mesgFive"),
+  //   };
+  // }
+  // if (!z.string().email().safeParse(email).success) {
+  //   return {
+  //     message: i18n.t("signup.action.mesgThree"),
+  //   };
+  // }
+  // const emailAvailable = await checkEmailAvailability(email);
+  // if (!emailAvailable) {
+  //   return {
+  //     message: i18n.t("signup.action.mesgFour"),
+  //   };
+  // }
+  // const strongPassword = await verifyPasswordStrength(password);
+  // if (!strongPassword) {
+  //   return {
+  //     message: i18n.t("signup.action.mesgSix"),
+  //   };
+  // }
+  // if (confirm !== password) {
+  //   return {
+  //     message: i18n.t("signup.action.mesgSeven"),
+  //   };
+  // }
+  // const user = await createUser(email, username, password);
+  // // create email verification request
+  // const emailVerificationRequest = await createEmailVerificationRequest(
+  //   user.id,
+  //   user.email
+  // );
+  // sendVerificationEmail(
+  //   emailVerificationRequest.email,
+  //   emailVerificationRequest.code
+  // );
+  // const emailVerificationCookie = await getEmailVerificationCookie(request);
+  // emailVerificationCookie.id = emailVerificationRequest.id;
+  // // create session
+  // const sessionToken = generateSessionToken();
+  // const sessionFlags: SessionFlags = {
+  //   twoFactorVerified: false,
+  // };
+  // const session = await createSession(sessionToken, user.id, sessionFlags);
+  // const sessionCookie = await getSessionCookie(request);
+  // sessionCookie.token = sessionToken;
+  // // set cookies & redirect
+  // return redirect("/2fa/setup", {
+  //   headers: [
+  //     [
+  //       "Set-Cookie",
+  //       await setEmailVerificationCookie(emailVerificationCookie, {
+  //         expires: emailVerificationRequest?.expiresAt,
+  //       }),
+  //     ],
+  //     [
+  //       "Set-Cookie",
+  //       await setSessionCookie(sessionCookie, { expires: session?.expiresAt }),
+  //     ],
+  //   ],
+  // });
 }
 
 export default function Signup({ actionData }: Route.ComponentProps) {

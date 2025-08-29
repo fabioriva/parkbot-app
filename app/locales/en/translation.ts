@@ -5,11 +5,15 @@ export default {
   auth: {
     accountNotFound: "Account does not exist",
     emailInvalid: "Invalid email address",
+    emailUsed: "Email is already used",
     emptyField: "Missing field",
+    passwordDiff: "Password doesn't match",
     passwordInvalid: "Invalid password",
     passwordMax: "Password too long",
     passwordMin: "Password too short",
     passwordWeak: "Weak password",
+    usernameMax: "Username too long",
+    usernameMin: "Username too short",
   },
   forgotPassword: {
     cardTitle: "Forgot Password",
@@ -39,15 +43,6 @@ export default {
     cardDescription: `Your username must be at least 3 characters long and your password must be at least 8 characters long.`,
     cardContent: {
       confirmPassword: "Confirm password",
-    },
-    action: {
-      mesgOne: "Please enter your username, email and password",
-      mesgTwo: "Invalid or missing fields",
-      mesgThree: "Invalid email address",
-      mesgFour: "Email is already used",
-      mesgFive: "Invalid username",
-      mesgSix: "Weak password",
-      mesgSeven: "Password doesn't match",
     },
   },
   twoFA: {
