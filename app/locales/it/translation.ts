@@ -69,6 +69,6 @@ export default {
     cardDescription: "Abbiamo inviato un codice a",
     codeLabel: "Codice di verifica",
     changeMailLink: "Cambia la tua email",
-    resendButton: "Rinvia codice",
+    resendButton: "Invia codice",
   },
 } satisfies typeof import("~/locales/en/translation").default;
