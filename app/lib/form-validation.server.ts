@@ -34,8 +34,8 @@ export const TotpCodeSchema = z.object({
   code: z
     .string()
     .min(1, "auth.emptyField")
-    .length(6)
-    .regex(new RegExp("\\d+")), // Matches one or more digits
+    .length(6, "auth.codeInvalid")
+    .regex(new RegExp("\\d+"), "auth.codeInvalid"), // Matches one or more digits
 });
 
 export const SignupSchema = z.object({
@@ -50,7 +50,11 @@ export const SignupSchema = z.object({
 });
 
 export const VerifyMailSchema = z.object({
-  code: z.string().min(1, "auth.emptyField").length(8).uppercase(),
+  code: z
+    .string()
+    .min(1, "auth.emptyField")
+    .length(8, "auth.codeInvalid")
+    .uppercase("auth.codeInvalid"),
 });
 
 export function validateForm(formData: any, formSchema: any): ZodError {

@@ -12,8 +12,10 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { TotpCodeSchema, validateForm } from "~/lib/form-validation.server";
 import { getSession, setSessionAs2FAVerified } from "~/lib/session.server";
 import { getUserTOTPKey } from "~/lib/user.server";
+import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/authentication";
 
@@ -34,48 +36,34 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
-  const { session, user } = await getSession(request);
-  if (session === null) {
-    return {
-      message: "Not authenticated",
-    };
-  }
-  if (!user.emailVerified || !user.registered2FA || session.twoFactorVerified) {
-    return {
-      message: "Forbidden",
-    };
-  }
+  let i18n = getInstance(context);
   const formData = await request.formData();
-  const code = formData.get("code");
-  if (typeof code !== "string") {
-    return {
-      message: "Invalid or missing fields",
-    };
+  const result = validateForm(formData, TotpCodeSchema);
+  if (!result.success) {
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
+  } else {
+    const { session, user } = await getSession(request);
+    const totpKey = await getUserTOTPKey(user.id);
+    if (totpKey === null) {
+      return {
+        message: "Forbidden",
+      };
+    }
+    const code = formData.get("code");
+    if (!verifyTOTP(totpKey, 30, 6, code)) {
+      return { message: i18n.t("auth.codeInvalid") };
+    }
+    if (!verifyTOTP(totpKey, 30, 6, code)) {
+      return { message: i18n.t("auth.codeInvalid") };
+    }
+    await setSessionAs2FAVerified(session.id);
+    return redirect("/aps/test/dashboard");
   }
-  if (code === "") {
-    return {
-      message: "Please enter your code",
-    };
-  }
-  const totpKey = await getUserTOTPKey(user.id);
-  console.log(totpKey);
-  if (totpKey === null) {
-    return {
-      message: "Forbidden",
-    };
-  }
-  if (!verifyTOTP(totpKey, 30, 6, code)) {
-    return {
-      message: "Invalid code",
-    };
-  }
-  await setSessionAs2FAVerified(session.id);
-  return redirect("/aps/test/dashboard");
 }
 
 export default function TwoFactorAuthentication({
   actionData,
-  loaderData,
 }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
@@ -89,7 +77,12 @@ export default function TwoFactorAuthentication({
           <div className="flex flex-col gap-6">
             <div className="grid gap-3">
               <Label htmlFor="code">{t("twoFA.auth.codeLabel")}</Label>
-              <Input type="text" name="code" id="code" required />
+              <Input
+                type="text"
+                name="code"
+                id="code"
+                // required
+              />
             </div>
             <SubmitFormButton
               action="/2fa/authentication"
@@ -102,9 +95,6 @@ export default function TwoFactorAuthentication({
         </Form>
       </CardContent>
       <CardFooter>
-        {/* {loaderData ? (
-          <p className="text-sm text-red-500">{loaderData.message}</p>
-        ) : null} */}
         <div className="text-sm">
           <a className="underline underline-offset-4" href="/2fa/reset">
             {t("twoFA.auth.recoveryLink")}
