@@ -2,11 +2,24 @@ import { z, ZodError } from "zod";
 
 const email = z.string().min(1, "auth.emptyField").email("auth.emailInvalid");
 
+// password string must contain at least:
+// one uppercase letter,
+// one lowercase letter,
+// one number,
+// one special character,
+// and is at least 8 characters long
 const password = z
   .string()
   .min(1, "auth.emptyField")
   .min(8, "auth.passwordMin")
-  .max(255, "auth.passwordMax");
+  .max(255, "auth.passwordMax")
+  .regex(new RegExp(".*[A-Z].*"), "One uppercase character")
+  .regex(new RegExp(".*[a-z].*"), "One lowercase character")
+  .regex(new RegExp(".*\\d.*"), "One number")
+  .regex(
+    new RegExp(".*[`~<>?,./!@#$%^&*()\\-_+=\\\"'|{}\\[\\];:\\\\].*"),
+    "One special character"
+  );
 
 export const ForgotPasswordSchema = z.object({
   email,
@@ -15,6 +28,14 @@ export const ForgotPasswordSchema = z.object({
 export const LoginSchema = z.object({
   email,
   password,
+});
+
+export const TotpCodeSchema = z.object({
+  code: z
+    .string()
+    .min(1, "auth.emptyField")
+    .length(6)
+    .regex(new RegExp("\\d+")), // Matches one or more digits
 });
 
 export const SignupSchema = z.object({
