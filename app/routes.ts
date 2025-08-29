@@ -18,7 +18,7 @@ export default [
     route("recovery-code", "routes/auth/recovery-code.tsx"),
     route("reset/2fa", "routes/auth/reset/2fa.tsx"),
     route("reset/password", "routes/auth/reset/password.tsx"),
-    route("reset/verify-email", "routes/auth/reset/verify-email.tsx"),
+    route("reset/verify-email", "routes/auth/reset/verify.tsx"),
     route("signup", "routes/auth/signup.tsx"),
     route("verify-email", "routes/auth/verify-email.tsx"),
   ]),
