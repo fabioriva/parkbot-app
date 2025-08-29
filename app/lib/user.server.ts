@@ -102,6 +102,34 @@ export async function getUserTOTPKey(id: string): Promise<Uint8Array | null> {
   return decrypt(encrypted);
 }
 
+export async function resetUser2FAWithRecoveryCode(
+  id: number,
+  recoveryCode: string
+): boolean {
+  const users = db.collection(COLLECTION);
+  const user = await users.findOne(
+    { id },
+    { projection: { recoveryCode: 1, _id: 0 } }
+  );
+  if (user === null) {
+    return null;
+  }
+  console.log(user);
+  const encryptedRecoveryCode = new Uint8Array(user.recoveryCode.buffer); // Convert Binary object to a Uint8Array
+  const userRecoveryCode = decryptToString(encryptedRecoveryCode);
+  if (recoveryCode !== userRecoveryCode) {
+    return false;
+  }
+  const newRecoveryCode = generateRandomRecoveryCode();
+  const encryptedNewRecoveryCode = encryptString(newRecoveryCode);
+  const result = await users.updateOne(
+    { id },
+    { $set: { recoveryCode: encryptedNewRecoveryCode, totpKey: null } }
+  );
+  console.log(result);
+  return result.modifiedCount > 0;
+}
+
 export async function updateUserEmailAndSetEmailAsVerified(
   id: string,
   email: string

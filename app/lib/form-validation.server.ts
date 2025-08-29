@@ -25,12 +25,21 @@ export const LoginSchema = z.object({
   password,
 });
 
+export const RecoveryCodeSchema = z.object({
+  code: z
+    .string()
+    .min(1, "auth.emptyField")
+    .length(16, "auth.codeInvalid")
+    .uppercase("auth.codeInvalid")
+    .regex(new RegExp("^[A-Z0-9]+$"), "auth.codeInvalid"), // Matches any uppercase letter (A-Z) or digit (0-9)
+});
+
 export const TotpCodeSchema = z.object({
   code: z
     .string()
     .min(1, "auth.emptyField")
     .length(6, "auth.codeInvalid")
-    .regex(new RegExp("\\d+"), "auth.codeInvalid"), // Matches one or more digits
+    .regex(new RegExp("^\\d+$"), "auth.codeInvalid"), // Matches one or more digits
 });
 
 export const SignupSchema = z.object({
