@@ -62,7 +62,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   }
   // redirect
   if (verificationRequest === null && user.emailVerified) {
-    return redirect("/"); // TODO: redirect correctly
+    return redirect("/aps/test/dashboard");
   }
 }
 
