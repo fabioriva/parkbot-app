@@ -90,9 +90,8 @@ export async function action({ context, request }: Route.ActionArgs) {
   // }
   const result = validateForm(formData, VerifyMailSchema);
   if (!result.success) {
-    // const error = result.error.issues.shift().message;
-    // return { message: i18n.t(error) };
-    return { message: i18n.t("auth.codeInvalid") };
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
   } else {
     const code = formData.get("code");
     await deleteUserEmailVerificationRequest(user?.id);

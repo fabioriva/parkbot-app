@@ -61,7 +61,7 @@ export const VerifyMailSchema = z.object({
     .uppercase("auth.codeInvalid"),
 });
 
-export function validateForm(formData: any, formSchema: any) {
+export function validateForm(formData, formSchema) {
   const result = formSchema.safeParse(Object.fromEntries(formData));
   return result;
 }

@@ -11,16 +11,17 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { VerifyMailSchema, validateForm } from "~/lib/form-validation.server";
 import {
   getPasswordResetSession,
   setPasswordResetSessionAsEmailVerified,
 } from "~/lib/password-reset.server";
+import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/verify-email";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { session } = await getPasswordResetSession(request);
-  console.log("!!!!!!!!!!!", session);
   if (session === null) {
     return redirect("/forgot-password");
   }
@@ -30,49 +31,76 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     }
     return redirect("/reset/password");
   }
+  return { email: session.email };
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
-  const { session } = await getPasswordResetSession(request);
-  if (session === null) {
-    return {
-      message: "Not authenticated",
-    };
-  }
-  if (session.emailVerified) {
-    return {
-      message: "Forbidden",
-    };
-  }
+  let i18n = getInstance(context);
   const formData = await request.formData();
-  const code = formData.get("code");
-  if (typeof code !== "string") {
-    return {
-      message: "Invalid or missing fields",
-    };
+  const result = validateForm(formData, VerifyMailSchema);
+  if (!result.success) {
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
+  } else {
+    const { session } = await getPasswordResetSession(request);
+
+    const code = formData.get("code");
+    if (session.code !== code) {
+      return { message: i18n.t("auth.codeInvalid") };
+    }
+    await setPasswordResetSessionAsEmailVerified(session.id);
+    // const emailMatches = await setUserAsEmailVerifiedIfEmailMatches(
+    //   session.userId,
+    //   session.email
+    // );
+    // if (!emailMatches) {
+    //   return {
+    //     message: "Please restart the process",
+    //   };
+    // }
+    return redirect("/reset/2fa");
   }
-  if (code === "") {
-    return {
-      message: "Enter your code",
-    };
-  }
-  // ...
-  if (session.code !== code) {
-    return {
-      message: "Incorrect code.",
-    };
-  }
-  await setPasswordResetSessionAsEmailVerified(session.id);
-  // const emailMatches = await setUserAsEmailVerifiedIfEmailMatches(
-  //   session.userId,
-  //   session.email
-  // );
-  // if (!emailMatches) {
+
+  // const { session } = await getPasswordResetSession(request);
+  // if (session === null) {
   //   return {
-  //     message: "Please restart the process",
+  //     message: "Not authenticated",
   //   };
   // }
-  return redirect("/reset/2fa");
+  // if (session.emailVerified) {
+  //   return {
+  //     message: "Forbidden",
+  //   };
+  // }
+  // const formData = await request.formData();
+  // const code = formData.get("code");
+  // if (typeof code !== "string") {
+  //   return {
+  //     message: "Invalid or missing fields",
+  //   };
+  // }
+  // if (code === "") {
+  //   return {
+  //     message: "Enter your code",
+  //   };
+  // }
+  // ...
+  // if (session.code !== code) {
+  //   return {
+  //     message: "Incorrect code.",
+  //   };
+  // }
+  // await setPasswordResetSessionAsEmailVerified(session.id);
+  // // const emailMatches = await setUserAsEmailVerifiedIfEmailMatches(
+  // //   session.userId,
+  // //   session.email
+  // // );
+  // // if (!emailMatches) {
+  // //   return {
+  // //     message: "Please restart the process",
+  // //   };
+  // // }
+  // return redirect("/reset/2fa");
 }
 
 export default function ResetPasswordVerifyEmail({
@@ -87,7 +115,7 @@ export default function ResetPasswordVerifyEmail({
         <CardDescription>
           {t("verifyEmail.cardDescription")}{" "}
           <span className="underline underline-offset-4">
-            {loaderData?.emailVerificationRequest?.email}
+            {loaderData?.email}
           </span>
         </CardDescription>
       </CardHeader>
@@ -96,9 +124,13 @@ export default function ResetPasswordVerifyEmail({
           <div className="flex flex-col gap-6">
             <div className="grid gap-3">
               <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
-              <Input type="text" name="code" id="code" required />
+              <Input
+                type="text"
+                name="code"
+                id="code"
+                // required
+              />
             </div>
-            {/* <input type="hidden" name="intent" value="submit" /> */}
             <SubmitFormButton
               action="/reset/verify-email"
               title={t("submitButton")}
@@ -108,28 +140,7 @@ export default function ResetPasswordVerifyEmail({
             ) : null}
           </div>
         </Form>
-        {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-          <span className="bg-card text-muted-foreground relative z-10 px-3">
-            Or
-          </span>
-        </div>
-        <Form method="post">
-          <div className="flex flex-col gap-6">
-            <input type="hidden" name="intent" value="resend" />
-            <SubmitFormButton
-              action="/resend-code"
-              title={t("verifyEmail.resendButton")}
-            />
-          </div>
-        </Form> */}
       </CardContent>
-      {/* <CardFooter>
-        <div className="text-sm">
-          <Link className="underline underline-offset-4" to="/settings">
-            {t("verifyEmail.changeMailLink")}
-          </Link>
-        </div>
-      </CardFooter> */}
     </Card>
   );
 }
