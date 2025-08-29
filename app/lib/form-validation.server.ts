@@ -28,6 +28,10 @@ export const SignupSchema = z.object({
   confirm: password,
 });
 
+export const VerifyMailSchema = z.object({
+  code: z.string().min(1, "auth.emptyField").length(8).uppercase(),
+});
+
 export function validateForm(formData: any, formSchema: any): ZodError {
   const result = formSchema.safeParse(Object.fromEntries(formData));
   return result;

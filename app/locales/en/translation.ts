@@ -4,6 +4,7 @@ export default {
   submitButton: "Submit",
   auth: {
     accountNotFound: "Account does not exist",
+    codeInvalid: "Incorrect code",
     emailInvalid: "Invalid email address",
     emailUsed: "Email is already used",
     emptyField: "Missing field",

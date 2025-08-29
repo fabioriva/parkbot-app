@@ -4,6 +4,7 @@ export default {
   submitButton: "Invia",
   auth: {
     accountNotFound: "Account non trovato",
+    codeInvalid: "Codice non valido",
     emailInvalid: "Indirizzo email non valido",
     emailUsed: "Indirizzo email già utilizzato",
     emptyField: "Campo mancante",
@@ -12,7 +13,7 @@ export default {
     passwordMax: "Password troppo lunga",
     passwordMin: "Password troppo corta",
     passwordWeak: "Password debole",
-    usernameMax: "Username troppo lunga",
+    usernameMax: "Username troppo lungo",
     usernameMin: "Username troppo corto",
   },
   forgotPassword: {

@@ -19,6 +19,7 @@ import {
   getEmailVerificationCookie,
   setEmailVerificationCookie,
 } from "~/lib/email-verification.server";
+import { VerifyMailSchema, validateForm } from "~/lib/form-validation.server";
 import { invalidateUserPasswordResetSessions } from "~/lib/password-reset.server";
 import { getSession } from "~/lib/session.server";
 import { updateUserEmailAndSetEmailAsVerified } from "~/lib/user.server";
@@ -73,27 +74,26 @@ export async function action({ context, request }: Route.ActionArgs) {
       message: "Not authenticated",
     };
   }
+  let i18n = getInstance(context);
   const formData = await request.formData();
-  const code = formData.get("code");
   const intent = formData.get("intent");
-  console.log("code:", code, verificationRequest.code, "intent:", intent);
-  if (intent === "submit") {
-    if (typeof code !== "string") {
-      return {
-        message: "Invalid or missing fields",
-      };
-    }
-    if (code === "") {
-      return {
-        message: "Enter your code",
-      };
-    }
-    // ...
-    if (verificationRequest.code !== code) {
-      return {
-        message: "Incorrect code.",
-      };
-    }
+  // if (intent === "resend-code") {
+  //   const emailVerificationRequest = await createEmailVerificationRequest(
+  //     user.id,
+  //     user.email
+  //   );
+  //   sendVerificationEmail(
+  //     emailVerificationRequest.email,
+  //     emailVerificationRequest.code
+  //   );
+  //   return { message: "A new verification code was sent to your inbox." };
+  // }
+  const result = validateForm(formData, VerifyMailSchema);
+  if (!result.success) {
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
+  } else {
+    const code = formData.get("code");
     await deleteUserEmailVerificationRequest(user?.id);
     await invalidateUserPasswordResetSessions(user?.id);
     await updateUserEmailAndSetEmailAsVerified(user?.id, user?.email);
@@ -129,7 +129,12 @@ export default function VerifyEmail({
           <div className="flex flex-col gap-6">
             <div className="grid gap-3">
               <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
-              <Input type="text" name="code" id="code" required />
+              <Input
+                type="text"
+                name="code"
+                id="code"
+                // required
+              />
             </div>
             <input type="hidden" name="intent" value="submit" />
             <SubmitFormButton
@@ -141,20 +146,20 @@ export default function VerifyEmail({
             ) : null}
           </div>
         </Form>
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+        {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-card text-muted-foreground relative z-10 px-3">
             Or
           </span>
         </div>
         <Form method="post">
           <div className="flex flex-col gap-6">
-            <input type="hidden" name="intent" value="resend" />
+            <input type="hidden" name="intent" value="resend-code" />
             <SubmitFormButton
-              action="/resend-code"
+              action="/verify-email"
               title={t("verifyEmail.resendButton")}
             />
           </div>
-        </Form>
+        </Form> */}
       </CardContent>
       <CardFooter>
         <div className="text-sm">
