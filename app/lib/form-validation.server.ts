@@ -2,23 +2,17 @@ import { z, ZodError } from "zod";
 
 const email = z.string().min(1, "auth.emptyField").email("auth.emailInvalid");
 
-// password string must contain at least:
-// one uppercase letter,
-// one lowercase letter,
-// one number,
-// one special character,
-// and is at least 8 characters long
 const password = z
   .string()
   .min(1, "auth.emptyField")
-  .min(8, "auth.passwordMin")
-  .max(255, "auth.passwordMax")
-  .regex(new RegExp(".*[A-Z].*"), "One uppercase character")
-  .regex(new RegExp(".*[a-z].*"), "One lowercase character")
-  .regex(new RegExp(".*\\d.*"), "One number")
+  .min(8, "auth.passwordMin") // password string must be at least 8 characters long
+  .max(255, "auth.passwordMax") // password string must be less than 255 characters long
+  .regex(new RegExp(".*[A-Z].*"), "auth.passwordInvalid") // one uppercase letter
+  .regex(new RegExp(".*[a-z].*"), "auth.passwordInvalid") // one lowercase letter
+  .regex(new RegExp(".*\\d.*"), "auth.passwordInvalid") // one number
   .regex(
     new RegExp(".*[`~<>?,./!@#$%^&*()\\-_+=\\\"'|{}\\[\\];:\\\\].*"),
-    "One special character"
+    "auth.passwordInvalid" // one special character
   );
 
 export const ForgotPasswordSchema = z.object({
