@@ -91,7 +91,7 @@ export default function ResetPasswordVerifyEmail({
               />
             </div>
             <SubmitFormButton
-              action="/reset/verify"
+              action="/reset/verify-email"
               title={t("submitButton")}
             />
             {actionData ? (

@@ -56,7 +56,7 @@ export async function action({ context, request }: Route.ActionArgs) {
     const cookie = await setPasswordResetSessionCookie(sessionCookie, {
       expires: session?.expiresAt,
     });
-    return redirect("/reset/verify", {
+    return redirect("/reset/verify-email", {
       headers: { "Set-Cookie": cookie },
     });
   }
