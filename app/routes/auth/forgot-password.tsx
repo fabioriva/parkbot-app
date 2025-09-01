@@ -56,7 +56,7 @@ export async function action({ context, request }: Route.ActionArgs) {
     const cookie = await setPasswordResetSessionCookie(sessionCookie, {
       expires: session?.expiresAt,
     });
-    return redirect("/reset/verify-email", {
+    return redirect("/reset-password/verify-email", {
       headers: { "Set-Cookie": cookie },
     });
   }
@@ -88,7 +88,7 @@ export default function ForgotPassword({ actionData }: Route.ComponentProps) {
             </div>
             <SubmitFormButton
               action="/forgot-password"
-              title={t("submitButton")}
+              title={t("forgotPassword.sendButton")}
             />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>

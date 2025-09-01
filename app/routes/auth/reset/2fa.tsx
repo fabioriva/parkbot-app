@@ -35,13 +35,13 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     return redirect("/forgot-password");
   }
   if (!session.emailVerified) {
-    return redirect("/reset/verify-email");
+    return redirect("/reset-password/verify-email");
   }
   if (!user.registered2FA) {
-    return redirect("/reset/password");
+    return redirect("/reset-password/password");
   }
   if (session.twoFactorVerified) {
-    return redirect("/reset/password");
+    return redirect("/reset-password/password");
   }
 }
 
@@ -70,7 +70,7 @@ export async function action({ context, request }: Route.ActionArgs) {
         };
       }
       await setPasswordResetSessionAs2FAVerified(session.id);
-      return redirect("/reset/password");
+      return redirect("/reset-password/password");
     }
   } else {
     // Recovery code
@@ -85,7 +85,7 @@ export async function action({ context, request }: Route.ActionArgs) {
           message: i18n.t("auth.codeInvalid"),
         };
       }
-      return redirect("/reset/password");
+      return redirect("/reset-password/password");
     }
   }
   // if (session === null) {
@@ -149,7 +149,10 @@ export default function ResetPassword2FA({
               <Input type="text" name="code" id="code" required />
             </div>
             <input type="hidden" name="intent" value="otp" />
-            <SubmitFormButton action="/reset/2fa" title={t("submitButton")} />
+            <SubmitFormButton
+              action="/reset-password/2fa"
+              title={t("submitButton")}
+            />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
@@ -157,7 +160,7 @@ export default function ResetPassword2FA({
         </Form>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-card text-muted-foreground relative z-10 px-3">
-            Or
+            {t("twoFA.reset.orDivider")}
           </span>
         </div>
         <Form method="post">

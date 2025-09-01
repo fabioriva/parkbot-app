@@ -19,8 +19,10 @@ export default {
   },
   forgotPassword: {
     cardTitle: "Forgot Password",
-    cardDescription: "Verify your identity using your email",
+    cardDescription:
+      "We'll send you a code to your email address to verify your identity",
     loginLink: "Back to",
+    sendButton: "Send code",
   },
   login: {
     cardTitle: "Login to Parkbot",
@@ -56,6 +58,7 @@ export default {
       cardTitle: "Recover your account",
       cardDescription: "Enter your recovery code",
       codeLabel: "Recovery code",
+      orDivider: "Or use your",
     },
     setup: {
       cardTitle: "Set up two-factor authentication",

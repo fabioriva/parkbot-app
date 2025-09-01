@@ -27,9 +27,9 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   }
   if (session.emailVerified) {
     if (!session.twoFactorVerified) {
-      return redirect("/reset/2fa");
+      return redirect("/reset-password/2fa");
     }
-    return redirect("/reset/password");
+    return redirect("/reset-password/password");
   }
   return { email: session.email };
 }
@@ -58,7 +58,7 @@ export async function action({ context, request }: Route.ActionArgs) {
     //     message: "Please restart the process",
     //   };
     // }
-    return redirect("/reset/2fa");
+    return redirect("/reset-password/2fa");
   }
 }
 
@@ -91,7 +91,7 @@ export default function ResetPasswordVerifyEmail({
               />
             </div>
             <SubmitFormButton
-              action="/reset/verify-email"
+              action="/reset-password/verify-email"
               title={t("submitButton")}
             />
             {actionData ? (
