@@ -54,9 +54,6 @@ export async function action({ context, request }: Route.ActionArgs) {
     if (!verifyTOTP(totpKey, 30, 6, code)) {
       return { message: i18n.t("auth.codeInvalid") };
     }
-    if (!verifyTOTP(totpKey, 30, 6, code)) {
-      return { message: i18n.t("auth.codeInvalid") };
-    }
     await setSessionAs2FAVerified(session?.id);
     return redirect("/aps/test/dashboard");
   }
