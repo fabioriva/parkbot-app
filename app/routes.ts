@@ -31,6 +31,7 @@ export default [
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
     ]),
   ]),
+  route("action/set-theme", "./routes/action.set-theme.ts"),
   route("api/locales/:lng/:ns", "./routes/locales.ts"),
   route("*", "./routes/not-found.tsx"),
 ] satisfies RouteConfig;
