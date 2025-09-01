@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
-import SubmitFormButton from "~/components/submitFormButton";
+import SubmitFormButton from "~/components/submit-form-button";
 import {
   Card,
   CardContent,

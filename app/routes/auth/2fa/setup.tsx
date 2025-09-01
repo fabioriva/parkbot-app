@@ -3,7 +3,7 @@ import { createTOTPKeyURI, verifyTOTP } from "@oslojs/otp";
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
 import { renderSVG } from "uqr";
-import SubmitFormButton from "~/components/submitFormButton";
+import SubmitFormButton from "~/components/submit-form-button";
 import {
   Card,
   CardContent,
