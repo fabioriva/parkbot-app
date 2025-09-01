@@ -34,6 +34,11 @@ export const RecoveryCodeSchema = z.object({
     .regex(new RegExp("^[A-Z0-9]+$"), "auth.codeInvalid"), // Matches any uppercase letter (A-Z) or digit (0-9)
 });
 
+export const ResetPasswordSchema = z.object({
+  password,
+  confirm: password,
+});
+
 export const TotpCodeSchema = z.object({
   code: z
     .string()

@@ -10,6 +10,10 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import {
+  ResetPasswordSchema,
+  validateForm,
+} from "~/lib/form-validation.server";
 import { verifyPasswordStrength } from "~/lib/password.server";
 import {
   getPasswordResetSession,
@@ -17,9 +21,17 @@ import {
   getPasswordResetSessionCookie,
   setPasswordResetSessionCookie,
 } from "~/lib/password-reset.server";
-import { invalidateUserSessions } from "~/lib/session.server";
+import {
+  invalidateUserSessions,
+  createSession,
+  generateSessionToken,
+  getSessionCookie,
+  setSessionCookie,
+} from "~/lib/session.server";
 import { updateUserPassword } from "~/lib/user.server";
+import { getInstance } from "~/middleware/i18next";
 
+import type { SessionFlags } from "~/lib/session.server";
 import type { Route } from "./+types/password";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -39,56 +51,102 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
-  const { session: passwordResetSession, user } =
-    await getPasswordResetSession(request);
-  if (passwordResetSession === null) {
-    return {
-      message: "Not authenticated",
-    };
-  }
-  if (!passwordResetSession.emailVerified) {
-    return {
-      message: "Forbidden",
-    };
-  }
-  if (user.registered2FA && !passwordResetSession.twoFactorVerified) {
-    return {
-      message: "Forbidden",
-    };
-  }
+  let i18n = getInstance(context);
   const formData = await request.formData();
-  const password = formData.get("password");
-  if (password === "") {
-    return {
-      message: i18n.t("login.action.mesgOne"),
+  const result = validateForm(formData, ResetPasswordSchema);
+  if (!result.success) {
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
+  } else {
+    const password = formData.get("password");
+    const confirm = formData.get("confirm");
+    const strongPassword = await verifyPasswordStrength(password);
+    if (!strongPassword) {
+      return { message: i18n.t("auth.passwordWeak") };
+    }
+    if (confirm !== password) {
+      return { message: i18n.t("auth.passwordDiff") };
+    }
+    const { session: passwordResetSession, user } =
+      await getPasswordResetSession(request);
+    await invalidateUserPasswordResetSessions(passwordResetSession.userId);
+    await invalidateUserSessions(passwordResetSession.userId);
+    await updateUserPassword(passwordResetSession.userId, password);
+    const passwordResetSessionCookie =
+      await getPasswordResetSessionCookie(request);
+    await setPasswordResetSessionCookie(passwordResetSessionCookie, {
+      maxAge: 0,
+    });
+    const sessionToken = generateSessionToken();
+    const sessionFlags: SessionFlags = {
+      twoFactorVerified: passwordResetSession.twoFactorVerified,
     };
+    const session = await createSession(sessionToken, user.id, sessionFlags);
+    const sessionCookie = await getSessionCookie(request);
+    sessionCookie.token = sessionToken;
+    const cookie = await setSessionCookie(sessionCookie, {
+      expires: session?.expiresAt,
+    });
+    return redirect("/aps/test/dashboard", {
+      headers: { "Set-Cookie": cookie },
+    });
   }
-  if (typeof password !== "string") {
-    return {
-      message: i18n.t("login.action.mesgTwo"),
-    };
-  }
-  const strongPassword = await verifyPasswordStrength(password);
-  if (!strongPassword) {
-    return {
-      message: i18n.t("signup.action.mesgSix"),
-    };
-  }
-  await invalidateUserPasswordResetSessions(passwordResetSession.userId);
-  await invalidateUserSessions(passwordResetSession.userId);
-  await updateUserPassword(passwordResetSession.userId, password);
-  // deletePasswordResetSessionTokenCookie();
-  const sessionCookie = await getPasswordResetSessionCookie(request);
-  const cookie = await setPasswordResetSessionCookie(sessionCookie, {
-    maxAge: 0,
-  });
-  // const sessionFlags: SessionFlags = {
-  // 	twoFactorVerified: passwordResetSession.twoFactorVerified
-  // };
+
+  // const { session: passwordResetSession, user } =
+  //   await getPasswordResetSession(request);
+  // if (passwordResetSession === null) {
+  //   return {
+  //     message: "Not authenticated",
+  //   };
+  // }
+  // if (!passwordResetSession.emailVerified) {
+  //   return {
+  //     message: "Forbidden",
+  //   };
+  // }
+  // if (user.registered2FA && !passwordResetSession.twoFactorVerified) {
+  //   return {
+  //     message: "Forbidden",
+  //   };
+  // }
+
+  // const formData = await request.formData();
+  // const password = formData.get("password");
+  // if (password === "") {
+  //   return {
+  //     message: i18n.t("login.action.mesgOne"),
+  //   };
+  // }
+  // if (typeof password !== "string") {
+  //   return {
+  //     message: i18n.t("login.action.mesgTwo"),
+  //   };
+  // }
+  // const strongPassword = await verifyPasswordStrength(password);
+  // if (!strongPassword) {
+  //   return {
+  //     message: i18n.t("signup.action.mesgSix"),
+  //   };
+  // }
+  // await invalidateUserPasswordResetSessions(passwordResetSession.userId);
+  // await invalidateUserSessions(passwordResetSession.userId);
+  // await updateUserPassword(passwordResetSession.userId, password);
+  // const passwordResetSessionCookie =
+  //   await getPasswordResetSessionCookie(request);
+  // await setPasswordResetSessionCookie(passwordResetSessionCookie, {
+  //   maxAge: 0,
+  // });
   // const sessionToken = generateSessionToken();
-  // const session = createSession(sessionToken, user.id, sessionFlags);
-  // setSessionTokenCookie(sessionToken, session.expiresAt);
-  return redirect("/aps/test/dashboard");
+  // const sessionFlags: SessionFlags = {
+  //   twoFactorVerified: passwordResetSession.twoFactorVerified,
+  // };
+  // const session = await createSession(sessionToken, user.id, sessionFlags);
+  // const sessionCookie = await getSessionCookie(request);
+  // sessionCookie.token = sessionToken;
+  // const cookie = await setSessionCookie(sessionCookie, {
+  //   expires: session?.expiresAt,
+  // });
+  // return redirect("/aps/test/dashboard", { headers: { "Set-Cookie": cookie } });
 }
 
 export default function ResetPassword({ actionData }) {
@@ -109,6 +167,17 @@ export default function ResetPassword({ actionData }) {
                 name="password"
                 id="password"
                 autoComplete="new-password"
+                // required
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="confirm">{t("signup.confirmLabel")}</Label>
+              <Input
+                type="password"
+                name="confirm"
+                id="confirm"
+                autoComplete="current-password"
+                // placeholder="Confirm password"
                 // required
               />
             </div>

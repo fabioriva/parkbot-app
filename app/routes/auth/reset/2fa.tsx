@@ -12,12 +12,19 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { TotpCodeSchema, validateForm } from "~/lib/form-validation.server";
+import {
+  RecoveryCodeSchema,
+  TotpCodeSchema,
+  validateForm,
+} from "~/lib/form-validation.server";
 import {
   getPasswordResetSession,
   setPasswordResetSessionAs2FAVerified,
 } from "~/lib/password-reset.server";
-import { getUserTOTPKey } from "~/lib/user.server";
+import {
+  getUserTOTPKey,
+  resetUser2FAWithRecoveryCode,
+} from "~/lib/user.server";
 import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/2fa";
@@ -39,30 +46,48 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
+  const { session, user } = await getPasswordResetSession(request);
   let i18n = getInstance(context);
   const formData = await request.formData();
-  const result = validateForm(formData, TotpCodeSchema);
-  if (!result.success) {
-    const error = result.error.issues.shift().message;
-    return { message: i18n.t(error) };
+  const code = formData.get("code");
+  const intent = formData.get("intent");
+  if (intent === "otp") {
+    // OTP
+    const result = validateForm(formData, TotpCodeSchema);
+    if (!result.success) {
+      const error = result.error.issues.shift().message;
+      return { message: i18n.t(error) };
+    } else {
+      const totpKey = await getUserTOTPKey(user?.id);
+      if (totpKey === null) {
+        return {
+          message: "Forbidden",
+        };
+      }
+      if (!verifyTOTP(totpKey, 30, 6, code)) {
+        return {
+          message: "Invalid code",
+        };
+      }
+      await setPasswordResetSessionAs2FAVerified(session.id);
+      return redirect("/reset/password");
+    }
   } else {
-    const { session, user } = await getPasswordResetSession(request);
-    const totpKey = await getUserTOTPKey(user?.id);
-    if (totpKey === null) {
-      return {
-        message: "Forbidden",
-      };
+    // Recovery code
+    const result = validateForm(formData, RecoveryCodeSchema);
+    if (!result.success) {
+      const error = result.error.issues.shift().message;
+      return { message: i18n.t(error) };
+    } else {
+      const valid = await resetUser2FAWithRecoveryCode(user?.id, code);
+      if (!valid) {
+        return {
+          message: i18n.t("auth.codeInvalid"),
+        };
+      }
+      return redirect("/reset/password");
     }
-    const code = formData.get("code");
-    if (!verifyTOTP(totpKey, 30, 6, code)) {
-      return {
-        message: "Invalid code",
-      };
-    }
-    await setPasswordResetSessionAs2FAVerified(session.id);
-    return redirect("/reset/password");
   }
-
   // if (session === null) {
   //   return {
   //     message: "Not authenticated",
@@ -123,6 +148,7 @@ export default function ResetPassword2FA({
               <Label htmlFor="code">{t("twoFA.auth.codeLabel")}</Label>
               <Input type="text" name="code" id="code" required />
             </div>
+            <input type="hidden" name="intent" value="otp" />
             <SubmitFormButton action="/reset/2fa" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
@@ -140,6 +166,7 @@ export default function ResetPassword2FA({
               <Label htmlFor="code">{t("twoFA.reset.codeLabel")}</Label>
               <Input type="text" name="code" id="code" required />
             </div>
+            <input type="hidden" name="intent" value="recovery" />
             <SubmitFormButton action="/2fa/reset" title={t("submitButton")} />
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
