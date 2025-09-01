@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import { AuroraText } from "~/components/magicui/auroraText";
+import { AuroraText } from "~/components/magicui/aurora-text";
 
 export default function Auth() {
   return (
