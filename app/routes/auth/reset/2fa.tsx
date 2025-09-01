@@ -12,11 +12,13 @@ import {
 } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { TotpCodeSchema, validateForm } from "~/lib/form-validation.server";
 import {
   getPasswordResetSession,
   setPasswordResetSessionAs2FAVerified,
 } from "~/lib/password-reset.server";
 import { getUserTOTPKey } from "~/lib/user.server";
+import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/2fa";
 
@@ -26,58 +28,81 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     return redirect("/forgot-password");
   }
   if (!session.emailVerified) {
-    return redirect("/reset-password/verify-email");
+    return redirect("/reset/verify-email");
   }
   if (!user.registered2FA) {
-    return redirect("/reset-password");
+    return redirect("/reset/password");
   }
   if (session.twoFactorVerified) {
-    return redirect("/reset-password");
+    return redirect("/reset/password");
   }
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
-  const { session, user } = await getPasswordResetSession(request);
-  if (session === null) {
-    return {
-      message: "Not authenticated",
-    };
-  }
-  if (
-    !session.emailVerified ||
-    !user.registered2FA ||
-    session.twoFactorVerified
-  ) {
-    return {
-      message: "Forbidden",
-    };
-  }
+  let i18n = getInstance(context);
   const formData = await request.formData();
-  const code = formData.get("code");
-  if (typeof code !== "string") {
-    return {
-      message: "Invalid or missing fields",
-    };
+  const result = validateForm(formData, TotpCodeSchema);
+  if (!result.success) {
+    const error = result.error.issues.shift().message;
+    return { message: i18n.t(error) };
+  } else {
+    const { session, user } = await getPasswordResetSession(request);
+    const totpKey = await getUserTOTPKey(user?.id);
+    if (totpKey === null) {
+      return {
+        message: "Forbidden",
+      };
+    }
+    const code = formData.get("code");
+    if (!verifyTOTP(totpKey, 30, 6, code)) {
+      return {
+        message: "Invalid code",
+      };
+    }
+    await setPasswordResetSessionAs2FAVerified(session.id);
+    return redirect("/reset/password");
   }
-  if (code === "") {
-    return {
-      message: "Enter your code",
-    };
-  }
-  const totpKey = await getUserTOTPKey(user.id);
-  console.log(totpKey);
-  if (totpKey === null) {
-    return {
-      message: "Forbidden",
-    };
-  }
-  if (!verifyTOTP(totpKey, 30, 6, code)) {
-    return {
-      message: "Invalid code",
-    };
-  }
-  await setPasswordResetSessionAs2FAVerified(session.id);
-  return redirect("/reset/password");
+
+  // if (session === null) {
+  //   return {
+  //     message: "Not authenticated",
+  //   };
+  // }
+  // if (
+  //   !session.emailVerified ||
+  //   !user.registered2FA ||
+  //   session.twoFactorVerified
+  // ) {
+  //   return {
+  //     message: "Forbidden",
+  //   };
+  // }
+  // const formData = await request.formData();
+  // const code = formData.get("code");
+  // if (typeof code !== "string") {
+  //   return {
+  //     message: "Invalid or missing fields",
+  //   };
+  // }
+  // if (code === "") {
+  //   return {
+  //     message: "Enter your code",
+  //   };
+  // }
+  // const totpKey = await getUserTOTPKey(user.id);
+  // console.log(totpKey);
+  // if (totpKey === null) {
+  //   return {
+  //     message: "Forbidden",
+  //   };
+  // }
+  // if (!verifyTOTP(totpKey, 30, 6, code)) {
+  //   return {
+  //     message: "Invalid code",
+  //   };
+  // }
+  // await setPasswordResetSessionAs2FAVerified(session.id);
+  // return redirect("/reset/password");
 }
 
 export default function ResetPassword2FA({
