@@ -31,7 +31,6 @@ export const unstable_middleware = [i18nextMiddleware];
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { getTheme } = await themeSessionResolver(request);
   let theme = getTheme();
-  console.log("From root loader", theme);
   let locale = getLocale(context);
   return data(
     { theme },
@@ -73,11 +72,8 @@ export const links: Route.LinksFunction = () => [
 //   );
 // }
 
-// export default function App({ loaderData }: Route.ComponentProps) {
-export function App({ loaderData }: Route.ComponentProps) {
-  console.log("root loaderData", loaderData);
+export function App() {
   const data = useLoaderData();
-  console.log("root useLoaderData", data);
   const [theme] = useTheme();
   let { i18n } = useTranslation();
 
@@ -108,8 +104,6 @@ export function App({ loaderData }: Route.ComponentProps) {
 }
 
 export default function AppWithProviders({ loaderData }: Route.ComponentProps) {
-  console.log("root loaderData", loaderData);
-
   const data = useLoaderData();
   return (
     <ThemeProvider
