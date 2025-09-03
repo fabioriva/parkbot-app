@@ -6,8 +6,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
+import { ModeToggle } from "~/components/mode-toggle";
 
-export default function ApsLayout() {
+export async function loader({ context, request }: Route.LoaderArgs) {}
+
+export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   return (
     <SidebarProvider
       style={
@@ -24,7 +27,9 @@ export default function ApsLayout() {
             orientation="vertical"
             className="mr-2 data-[orientation=vertical]:h-4"
           />
-          <span>...</span>
+          <div className="grow-1" />
+          <div>A</div>
+          <ModeToggle />
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <Outlet />
