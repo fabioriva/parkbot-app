@@ -14,9 +14,6 @@ export default function Dashboard({ params }: Route.ComponentProps) {
 
   return (
     <>
-      <h1>
-        Aps = <span className="capitalize">{params.aps}</span>
-      </h1>
       <p>{t("login.forgotLink")}</p>
     </>
   );
