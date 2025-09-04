@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import { Link, Outlet } from "react-router";
+import { useChangeLanguage } from "remix-i18next/react";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -6,11 +8,19 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
+import { LocaleToggle } from "~/components/locale-toggle";
 import { ModeToggle } from "~/components/mode-toggle";
+import { getLocale } from "~/middleware/i18next";
 
-export async function loader({ context, request }: Route.LoaderArgs) {}
+export async function loader({ context }: Route.LoaderArgs) {
+  let locale = getLocale(context);
+  return { locale };
+}
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
+  const [locale, setLocale] = useState(loaderData?.locale);
+  useChangeLanguage(locale);
+
   return (
     <SidebarProvider
       style={
@@ -28,7 +38,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             className="mr-2 data-[orientation=vertical]:h-4"
           />
           <div className="grow-1" />
-          <div>A</div>
+          <LocaleToggle locale={locale} setLocale={(lang) => setLocale(lang)} />
           <ModeToggle />
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
