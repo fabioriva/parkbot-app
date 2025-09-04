@@ -1,0 +1,30 @@
+import { useTranslation } from "react-i18next";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+
+export function LocaleToggle({ locale, setLocale }) {
+  const { i18n } = useTranslation();
+  const languages = Object.keys(i18n.store.data);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <span className="uppercase">{locale}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {languages.map((lang) => (
+          <DropdownMenuItem onClick={() => setLocale(lang)} key={lang}>
+            {lang}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
