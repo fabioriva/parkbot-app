@@ -8,52 +8,48 @@ import {
   ChartTooltipContent,
 } from "~/components/ui/chart";
 
-export const description = "A stacked bar chart with a legend";
+export function OperationsBarChart({ operations }) {
+  console.log(operations);
+  const chartData = operations[0].data.map((item) => ({
+    hour: item.name,
+    entries: item.entries,
+    exits: item.exits,
+  }));
+  console.log(chartData);
+  const chartConfig = {
+    entries: {
+      label: "Entries",
+      color: "var(--chart-1)",
+    },
+    exits: {
+      label: "Exits",
+      color: "var(--chart-2)",
+    },
+  } satisfies ChartConfig;
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--chart-2)",
-  },
-} satisfies ChartConfig;
-
-export function OperationsBarChart() {
   return (
     <ChartContainer config={chartConfig}>
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="month"
+          dataKey="hour"
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          tickFormatter={(value) => value.slice(0, 3)}
+          // tickFormatter={(value) => value.slice(0, 3)}
         />
         <ChartTooltip content={<ChartTooltipContent hideLabel />} />
         <ChartLegend content={<ChartLegendContent />} />
         <Bar
-          dataKey="desktop"
+          dataKey="entries"
           stackId="a"
-          fill="var(--color-desktop)"
+          fill="var(--color-entries)"
           radius={[0, 0, 4, 4]}
         />
         <Bar
-          dataKey="mobile"
+          dataKey="exits"
           stackId="a"
-          fill="var(--color-mobile)"
+          fill="var(--color-exits)"
           radius={[4, 4, 0, 0]}
         />
       </BarChart>

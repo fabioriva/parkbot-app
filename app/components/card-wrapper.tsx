@@ -8,12 +8,12 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 
-export function CardWrapper({ children }) {
+export function CardWrapper({ children, description, title }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Pie Chart - Occupancy</CardTitle>
-        <CardDescription>Parking occupancy</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>{children}</CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
