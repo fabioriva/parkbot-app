@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
 import { ChartPie } from "lucide-react";
-import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
@@ -24,7 +23,7 @@ export function MapBadge({ occupancy }) {
         </Badge>
       </TooltipTrigger>
       <TooltipContent className="aspect-square w-[250px] h-[250px]">
-        <h1 className="font-bold text-sm text-neutral-500">System occupancy</h1>
+        <p>System occupancy</p>
         <OccupancyChart occupancy={occupancy} />
       </TooltipContent>
     </Tooltip>
