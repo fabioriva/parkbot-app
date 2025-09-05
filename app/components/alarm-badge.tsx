@@ -14,7 +14,7 @@ interface AlarmBadgeProps {
 export function AlarmBadge({ active }: AlarmBadgeProps) {
   return (
     <>
-      {active >= 0 && (
+      {active > 0 && (
         <Tooltip>
           <TooltipTrigger>
             <Badge
