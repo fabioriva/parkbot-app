@@ -7,7 +7,11 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 
-export function AlarmBadge({ active }) {
+interface AlarmBadgeProps {
+  active: number;
+}
+
+export function AlarmBadge({ active }: AlarmBadgeProps) {
   return (
     <>
       {active >= 0 && (
