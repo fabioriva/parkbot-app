@@ -7,7 +7,16 @@ import {
   ChartTooltipContent,
 } from "~/components/ui/chart";
 
-export function OccupancyChart({ occupancy }) {
+interface OccupancyItem {
+  id: string;
+  value: number;
+}
+
+interface OccupancyChartProps {
+  occupancy: OccupancyItem[];
+}
+
+export function OccupancyChart({ occupancy }: OccupancyChartProps) {
   const chartData = occupancy.map((item) => ({
     ...item,
     fill: `var(--color-${item.id})`,
