@@ -21,7 +21,7 @@ export function LocaleToggle({ locale, setLocale }) {
       <DropdownMenuContent align="end">
         {languages.map((lang) => (
           <DropdownMenuItem onClick={() => setLocale(lang)} key={lang}>
-            {lang}
+            <span>{lang}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

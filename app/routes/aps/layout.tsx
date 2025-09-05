@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Outlet } from "react-router";
+import { data, Link, Outlet } from "react-router";
 import { useChangeLanguage } from "remix-i18next/react";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
@@ -15,9 +15,9 @@ import { ModeToggle } from "~/components/mode-toggle";
 import { useInfo } from "~/lib/ws";
 import { getLocale } from "~/middleware/i18next";
 
-export async function loader({ context }: Route.LoaderArgs) {
+export async function loader({ context, params }: Route.LoaderArgs) {
   let locale = getLocale(context);
-  let aps = { ns: "muse" };
+  let aps = params.aps;
   return { aps, locale };
 }
 
@@ -25,7 +25,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   const [locale, setLocale] = useState(loaderData?.locale);
   useChangeLanguage(locale);
   // ws
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps?.ns}/info`;
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps}/info`;
   const { comm, map } = useInfo(url);
 
   return (

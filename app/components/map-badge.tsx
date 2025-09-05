@@ -24,7 +24,7 @@ export function MapBadge({ occupancy }) {
         </Badge>
       </TooltipTrigger>
       <TooltipContent className="aspect-square w-[250px] h-[250px]">
-        <h1 className="font-bold text-sm">System occupancy</h1>
+        <h1 className="font-bold text-sm text-neutral-500">System occupancy</h1>
         <OccupancyChart occupancy={occupancy} />
       </TooltipContent>
     </Tooltip>

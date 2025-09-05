@@ -35,7 +35,7 @@ export function OccupancyChart({ occupancy }) {
   return (
     <ChartContainer
       config={chartConfig}
-      className="aspect-square max-w-[250px] max-h-[250px]"
+      className="aspect-square mx-auto max-h-[250px]"
     >
       <PieChart>
         <ChartTooltip
@@ -62,7 +62,7 @@ export function OccupancyChart({ occupancy }) {
                     <tspan
                       x={viewBox.cx}
                       y={viewBox.cy}
-                      className="text-3xl font-bold fill-current text-white dark:text-black"
+                      className="text-3xl font-bold fill-neutral-500"
                     >
                       {totalSpaces.toLocaleString()}
                     </tspan>
