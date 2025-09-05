@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/sidebar";
 import { AlarmBadge } from "~/components/alarm-badge";
 import { CommBadge } from "~/components/comm-badge";
-import { MapBadge } from "~/components/map-badge";
+import { OccupancyBadge } from "~/components/occupancy-badge";
 import { LocaleToggle } from "~/components/locale-toggle";
 import { ModeToggle } from "~/components/mode-toggle";
 import { useInfo } from "~/lib/ws";
@@ -49,7 +49,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             <span className="capitalize">{loaderData?.aps?.ns}</span>
           </div>
           <AlarmBadge active={diag || 0} />
-          <MapBadge occupancy={map} />
+          <OccupancyBadge occupancy={map} />
           <CommBadge status={comm} />
           <LocaleToggle locale={locale} setLocale={(lang) => setLocale(lang)} />
           <ModeToggle />
