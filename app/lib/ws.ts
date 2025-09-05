@@ -24,8 +24,7 @@ export function useInfo(url) {
     if (!ws.current) return;
     ws.current.onmessage = (e) => {
       const message = JSON.parse(e.data);
-      console.log(e.data);
-
+      // console.log(e.data);
       Object.keys(message).forEach((key) => {
         if (key === "comm") {
           setComm(message[key]);
