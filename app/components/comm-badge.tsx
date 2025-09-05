@@ -6,7 +6,11 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 
-export function CommBadge({ status }) {
+interface CommBadgeProps {
+  status: boolean;
+}
+
+export function CommBadge({ status }: CommBadgeProps) {
   return (
     <Tooltip>
       <TooltipTrigger>
