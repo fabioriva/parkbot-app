@@ -8,10 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-type LocaleToggleProps = {
+interface LocaleToggleProps {
   locale: string;
   setLocale: React.Dispatch<React.SetStateAction<string>>;
-};
+}
 
 export function LocaleToggle({ locale, setLocale }: LocaleToggleProps) {
   const { i18n } = useTranslation();
