@@ -8,7 +8,16 @@ import {
 } from "~/components/ui/tooltip";
 import { OccupancyChart } from "~/components/occupancy-chart";
 
-export function MapBadge({ occupancy }) {
+interface MapItem {
+  id: string;
+  value: number;
+}
+
+interface MapBadgeProps {
+  occupancy: MapItem[];
+}
+
+export function MapBadge({ occupancy }: MapBadgeProps) {
   const [busy, ,] = occupancy;
   return (
     <Tooltip>
