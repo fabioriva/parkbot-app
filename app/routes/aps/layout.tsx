@@ -8,7 +8,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
-import { Comm } from "~/components/comm-badge";
+import { CommBadge } from "~/components/comm-badge";
+import { MapBadge } from "~/components/map-badge";
 import { LocaleToggle } from "~/components/locale-toggle";
 import { ModeToggle } from "~/components/mode-toggle";
 import { useInfo } from "~/lib/ws";
@@ -25,7 +26,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   useChangeLanguage(locale);
   // ws
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps?.ns}/info`;
-  const { comm } = useInfo(url);
+  const { comm, map } = useInfo(url);
 
   return (
     <SidebarProvider
@@ -46,7 +47,8 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
           <div className="grow-1">
             <span className="capitalize">{loaderData?.aps?.ns}</span>
           </div>
-          <Comm status={comm} />
+          <MapBadge occupancy={map} />
+          <CommBadge status={comm} />
           <LocaleToggle locale={locale} setLocale={(lang) => setLocale(lang)} />
           <ModeToggle />
         </header>

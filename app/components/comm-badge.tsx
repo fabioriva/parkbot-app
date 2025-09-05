@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 
-export function Comm({ status }) {
+export function CommBadge({ status }) {
   return (
     <Tooltip>
       <TooltipTrigger>

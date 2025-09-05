@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useChangeLanguage } from "remix-i18next/react";
 import { ModeToggle } from "~/components/mode-toggle";
+// import { OccupancyChart } from "~/components/occupancy-chart";
 
 import type { Route } from "./+types/dashboard";
 
@@ -15,6 +16,7 @@ export default function Dashboard({ params }: Route.ComponentProps) {
   return (
     <>
       <p>{t("login.forgotLink")}</p>
+      {/* <OccupancyChart /> */}
     </>
   );
 }
