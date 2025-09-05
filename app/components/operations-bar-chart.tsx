@@ -8,14 +8,23 @@ import {
   ChartTooltipContent,
 } from "~/components/ui/chart";
 
-export function OperationsBarChart({ operations }) {
-  console.log(operations);
-  const chartData = operations[0].data.map((item) => ({
+interface OperationsItem {
+  name: string;
+  entries: number;
+  exits: number;
+  total: number;
+}
+
+interface OperationsBarChartProps {
+  operations: OperationsItem[];
+}
+
+export function OperationsBarChart({ operations }: OperationsBarChartProps) {
+  const chartData = operations.map((item) => ({
     hour: item.name,
     entries: item.entries,
     exits: item.exits,
   }));
-  console.log(chartData);
   const chartConfig = {
     entries: {
       label: "Entries",
