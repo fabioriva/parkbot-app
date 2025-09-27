@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { Wifi, WifiOff } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
@@ -14,7 +15,7 @@ export function CommBadge({ status }: CommBadgeProps) {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Badge
+        {/* <Badge
           className={clsx({
             "bg-green-100 border-green-200 text-green-600": status,
             "bg-red-100 border-red-200 text-red-600": !status,
@@ -22,7 +23,8 @@ export function CommBadge({ status }: CommBadgeProps) {
           })}
         >
           PLC
-        </Badge>
+        </Badge> */}
+        {status ? <Wifi color="green" /> : <WifiOff color="red" />}
       </TooltipTrigger>
       <TooltipContent>
         <p className="uppercase">{status ? "online" : "offline"}</p>

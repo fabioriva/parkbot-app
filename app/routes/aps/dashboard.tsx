@@ -25,8 +25,8 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <p>{t("login.forgotLink")}</p>
-      <div className="grid grid-cols-3 gap-4 items-center">
+      {/* <p>{t("login.forgotLink")}</p> */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-center">
         <CardWrapper
           title="Pie Chart - Occupancy"
           description="Parking occupancy"

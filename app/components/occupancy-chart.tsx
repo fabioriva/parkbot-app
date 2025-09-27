@@ -44,7 +44,7 @@ export function OccupancyChart({ occupancy }: OccupancyChartProps) {
   return (
     <ChartContainer
       config={chartConfig}
-      className="aspect-square mx-auto max-h-[250px]"
+      className="aspect-square mx-auto max-h-[240px]"
     >
       <PieChart>
         <ChartTooltip

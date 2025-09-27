@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { CircleParking as Car } from "lucide-react";
 import { ChartPie } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -19,17 +20,24 @@ interface OccupancyBadgeProps {
 
 export function OccupancyBadge({ occupancy }: OccupancyBadgeProps) {
   const [busy, ,] = occupancy;
+  const cars = busy && busy.value > 0 ? true : false;
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Badge
+        {/* <Badge
           className={clsx({
             "bg-orange-100 border-orange-200 text-orange-600": true,
             "rounded-sm font-bold border text-sm": true,
           })}
         >
           <ChartPie /> {(busy && busy.value) || "---"}
-        </Badge>
+        </Badge> */}
+        <Car
+        // color={clsx({
+        //   orange: cars,
+        //   gray: !cars,
+        // })}
+        />
       </TooltipTrigger>
       <TooltipContent className="aspect-square w-[250px] h-[250px]">
         <p>System occupancy</p>
