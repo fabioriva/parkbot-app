@@ -1,3 +1,6 @@
+import { UserCog } from "lucide-react";
+import { Avatar, AvatarFallback } from "~/components/ui/avatar";
+
 interface HistoryItem {
   name: string;
   entries: number;
@@ -15,9 +18,20 @@ export function HistoryList({ history }: HistoryListProps) {
       {history.map((item, key) => (
         <div className="flex items-center justify-between text-sm" key={key}>
           <div className="flex items-center gap-4">
-            <span className="bg-indigo-100 border-indigo-600 text-indigo-600 font-semibold py-1 rounded-sm text-center w-12">
-              {item.device.key}
-            </span>
+            {item.device.id !== 0 ? (
+              <span className="bg-indigo-100 border-indigo-600 text-indigo-600 font-semibold py-1 rounded-sm text-center w-12">
+                {item.device.key}
+              </span>
+            ) : (
+              <span className="flex justify-center w-12">
+                <Avatar>
+                  <AvatarFallback>
+                    <UserCog size={24} />
+                  </AvatarFallback>
+                </Avatar>
+              </span>
+            )}
+
             <div className="flex flex-col gap-0.5">
               <p className="leading-none font-medium">{item.mode.key}</p>
               <p className="text-muted-foreground text-xs">
