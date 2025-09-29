@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useChangeLanguage } from "remix-i18next/react";
 import { CardWrapper } from "~/components/card-wrapper";
+import { Device } from "~/components/device";
 import { HistoryList } from "~/components/history-list";
 import { ModeToggle } from "~/components/mode-toggle";
 import { OccupancyChart } from "~/components/occupancy-chart";
@@ -21,12 +22,15 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
   useChangeLanguage("en");
   //
   console.log(loaderData);
-  const { activity, occupancy, operations } = loaderData?.data;
+  const { activity, occupancy, operations, system } = loaderData?.data;
   const [busy, free, lock] = occupancy;
 
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 items-center">
+        {system.map((item, key) => (
+          <Device device={item} key={key} />
+        ))}
         <CardWrapper
           title="Recent activity"
           description={`Last ${activity.count} operations`}
