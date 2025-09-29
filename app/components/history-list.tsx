@@ -11,7 +11,7 @@ interface HistoryListProps {
 
 export function HistoryList({ history }: HistoryListProps) {
   return (
-    <div className="grid gap-1.5">
+    <div className="grid gap-3">
       {history.map((item, key) => (
         <div className="flex items-center justify-between text-sm" key={key}>
           <div className="flex items-center gap-4">
