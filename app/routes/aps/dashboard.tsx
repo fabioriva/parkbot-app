@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useChangeLanguage } from "remix-i18next/react";
 import { CardWrapper } from "~/components/card-wrapper";
+import { HistoryList } from "~/components/history-list";
 import { ModeToggle } from "~/components/mode-toggle";
 import { OccupancyChart } from "~/components/occupancy-chart";
 import { OperationsBarChart } from "~/components/operations-bar-chart";
@@ -19,14 +20,19 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
   let { t } = useTranslation();
   useChangeLanguage("en");
   //
-  // console.log(loaderData);
-  const { occupancy, operations } = loaderData?.data;
+  console.log(loaderData);
+  const { activity, occupancy, operations } = loaderData?.data;
   const [busy, free, lock] = occupancy;
 
   return (
     <>
-      {/* <p>{t("login.forgotLink")}</p> */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 items-center">
+        <CardWrapper
+          title="Recent activity"
+          description={`Last ${activity.count} operations`}
+        >
+          <HistoryList history={activity.documents} />
+        </CardWrapper>
         <CardWrapper
           title="Pie Chart - Occupancy"
           description="Parking occupancy"
