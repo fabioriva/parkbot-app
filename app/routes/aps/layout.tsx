@@ -8,10 +8,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
-import { AlarmBadge } from "~/components/alarm-badge";
-import { CommBadge } from "~/components/comm-badge";
-import { OccupancyBadge } from "~/components/occupancy-badge";
+import { AlarmBadge } from "~/components/alarm-info";
+import { CommBadge } from "~/components/comm-info";
 import { LocaleToggle } from "~/components/locale-toggle";
+import { OccupancyBadge } from "~/components/parking-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { useInfo } from "~/lib/ws";
 import { getLocale } from "~/middleware/i18next";
@@ -49,8 +49,12 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             <span className="capitalize">{loaderData?.aps?.ns}</span>
           </div>
           <AlarmBadge active={diag || 0} />
-          <OccupancyBadge occupancy={map} />
           <CommBadge status={comm} />
+          <OccupancyBadge occupancy={map} />
+          <Separator
+            orientation="vertical"
+            className="ml-2 data-[orientation=vertical]:h-4"
+          />
           <LocaleToggle locale={locale} setLocale={(lang) => setLocale(lang)} />
           <ModeToggle />
         </header>
