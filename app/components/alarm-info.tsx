@@ -13,7 +13,7 @@ interface AlarmInfoProps {
 export function AlarmInfo({ active }: AlarmInfoProps) {
   return (
     <>
-      {active >= 0 && (
+      {active > 0 && (
         <Tooltip>
           <TooltipTrigger>
             <Bell color="red" />
