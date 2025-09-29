@@ -31,7 +31,6 @@ export function HistoryList({ history }: HistoryListProps) {
                 </Avatar>
               </span>
             )}
-
             <div className="flex flex-col gap-0.5">
               <p className="leading-none font-medium">{item.mode.key}</p>
               <p className="text-muted-foreground text-xs">
