@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { CircleStop, RotateCw, RotateCcw } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -54,26 +55,28 @@ export function DeviceView({ device }: DeviceProps) {
             className="w-full"
             // defaultValue="item-0"
           >
+            {/* Drives */}
             {view.drives.map((drive, key) => (
-              <AccordionItem value={`item-${key}`}>
+              <AccordionItem value={`drive-${key}`}>
                 <AccordionTrigger className="flex hover:no-underline">
                   <div
-                    className={clsx("flex gap-3 grow", {
+                    className={clsx("flex gap-3 grow uppercase", {
                       "text-green-600": drive.enable,
+                      "text-red-600": !drive.enable,
                     })}
                   >
-                    {drive.name}
+                    {drive.name}&nbsp;{drive.enable ? "ready" : "not ready"}
                   </div>
                   <div>{drive.speed}&nbsp;Hz</div>
                   <div>{drive.current}&nbsp;A</div>
                   {/* <Info bit={drive.enable} color="green" /> */}
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-1.5">
-                  <div className="flex justify-between text-muted-foreground">
+                  <p className="flex justify-between text-muted-foreground">
                     <span>0</span>
                     <span>status word</span>
                     <span>15</span>
-                  </div>
+                  </p>
                   <div className="grid grid-cols-16 gap-0.5">
                     {[...(drive.status >>> 0).toString(2).padEnd(16, "0")].map(
                       (bit, key) => (
@@ -113,45 +116,36 @@ export function DeviceView({ device }: DeviceProps) {
                 </AccordionContent>
               </AccordionItem>
             ))}
+            {/* Motors */}
+            {view.motors.map((motor, key) => (
+              <AccordionItem value={`motor-${key}`}>
+                <AccordionTrigger className="flex hover:no-underline">
+                  <div className="grow">
+                    {motor.name.key}&nbsp;{motor.name.query?.id}
+                  </div>
+                  {motor.run.status ? (
+                    <Badge
+                      className="bg-yellow-200 text-yellow-600"
+                      variant="secondary"
+                    >
+                      <RotateCw className="animate-spin" /> {motor.message}
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary">
+                      <CircleStop /> {motor.message}
+                    </Badge>
+                  )}
+                </AccordionTrigger>
+                <AccordionContent className="flex gap-1.5">
+                  {motor.io.map((bit, key) => (
+                    <Info bit={bit} color="green" key={key} />
+                  ))}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         </TabsContent>
       ))}
-      {/* <TabsContent value="tab-1">
-        <DeviceInfo />
-        <Accordion className="border px-3 w-full" type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="flex hover:no-underline">
-              <div className="flex gap-3 grow">IV1</div>
-              <div>0 Hz</div>
-              <div>0 A</div>
-              <Info color="green" label="IV1" status={true} />
-            </AccordionTrigger>
-            <AccordionContent>
-              Yes. It adheres to the WAI-ARIA design pattern.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-2">
-            <AccordionTrigger>Shipping Details</AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-              <p>
-                We offer worldwide shipping through trusted courier partners.
-                Standard delivery takes 3-5 business days, while express
-                shipping ensures delivery within 1-2 business days.
-              </p>
-              <p>
-                All orders are carefully packaged and fully insured. Track your
-                shipment in real-time through our dedicated tracking portal.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </TabsContent>
-      <TabsContent value="tab-2">
-        <DeviceInfo />
-      </TabsContent>
-      <TabsContent value="tab-3">
-        <DeviceInfo />
-      </TabsContent> */}
     </Tabs>
   );
 }
