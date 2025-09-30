@@ -29,6 +29,7 @@ export default [
   ...prefix("aps", [
     layout("routes/aps/layout.tsx", [
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
+      route(":aps/overview", "routes/aps/overview.tsx"),
     ]),
   ]),
   route("action/set-theme", "./routes/action.set-theme.ts"),

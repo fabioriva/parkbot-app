@@ -18,7 +18,7 @@ interface DeviceProps {
 
 export function Device({ device }: DeviceProps) {
   const [LS, LC, LA] = device.c;
-  const ADVANCED = false;
+  const ADVANCED = true;
   return (
     <Card>
       <CardHeader>

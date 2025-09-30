@@ -10,7 +10,7 @@ import { OperationsBarChart } from "~/components/operations-bar-chart";
 import type { Route } from "./+types/dashboard";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  console.log(params);
+  // console.log(params);
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/dashboard`;
   const res = await fetch(url);
   const data = await res.json();
@@ -20,8 +20,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 export default function Dashboard({ loaderData }: Route.ComponentProps) {
   let { t } = useTranslation();
   useChangeLanguage("en");
-  //
-  console.log(loaderData);
+
   const { activity, occupancy, operations, system } = loaderData?.data;
   const [busy, free, lock] = occupancy;
 
