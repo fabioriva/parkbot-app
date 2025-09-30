@@ -31,13 +31,7 @@ function Info({ bit, color }) {
 }
 
 export function DeviceView({ device }: DeviceProps) {
-  console.log(typeof device.views, device.views.length, device.views);
-  const statusWord = [
-    ...(device.views[0].status >>> 0).toString(2).padEnd(16, "0"),
-  ].map((b, key) => ({
-    b,
-  }));
-  console.log(statusWord);
+  // console.log(device);
   return (
     <Tabs defaultValue="tab-0">
       <TabsList className="w-full">
@@ -57,7 +51,7 @@ export function DeviceView({ device }: DeviceProps) {
           >
             {/* Drives */}
             {view.drives.map((drive, key) => (
-              <AccordionItem value={`drive-${key}`}>
+              <AccordionItem value={`drive-${key}`} key={key}>
                 <AccordionTrigger className="flex hover:no-underline">
                   <div
                     className={clsx("flex gap-3 grow uppercase", {
@@ -85,6 +79,7 @@ export function DeviceView({ device }: DeviceProps) {
                             "bg-green-600": Boolean(parseInt(bit)),
                             "bg-slate-200": !Boolean(parseInt(bit)),
                           })}
+                          key={key}
                         >
                           {bit}
                         </p>
@@ -118,7 +113,7 @@ export function DeviceView({ device }: DeviceProps) {
             ))}
             {/* Motors */}
             {view.motors.map((motor, key) => (
-              <AccordionItem value={`motor-${key}`}>
+              <AccordionItem value={`motor-${key}`} key={key}>
                 <AccordionTrigger className="flex hover:no-underline">
                   <div className="grow">
                     {motor.name.key}&nbsp;{motor.name.query?.id}
@@ -136,10 +131,31 @@ export function DeviceView({ device }: DeviceProps) {
                     </Badge>
                   )}
                 </AccordionTrigger>
-                <AccordionContent className="flex gap-1.5">
-                  {motor.io.map((bit, key) => (
-                    <Info bit={bit} color="green" key={key} />
-                  ))}
+                <AccordionContent className="flex flex-col gap-1.5">
+                  <div className="flex gap-1.5">
+                    {motor.io.map((bit, key) => (
+                      <Info bit={bit} color="green" key={key} />
+                    ))}
+                  </div>
+                  {/* <div className="flex gap-3">
+                    {motor.encoders !== undefined &&
+                      motor.encoders.map((encoder, key) => (
+                        <>
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">
+                              Position{" "}
+                            </span>
+                            <span>{encoder.position}</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">
+                              Destination{" "}
+                            </span>
+                            <span>{encoder.destination}</span>
+                          </div>
+                        </>
+                      ))}
+                  </div> */}
                 </AccordionContent>
               </AccordionItem>
             ))}

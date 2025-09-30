@@ -14,7 +14,7 @@ export default function Overview({ loaderData }: Route.ComponentProps) {
   console.log(loaderData);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 items-center">
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 items-center">
       {loaderData?.data.devices.flat(1).map((item, key) => (
         <Device device={item} key={key} />
       ))}
