@@ -15,7 +15,7 @@ interface DeviceMotionProps {
 export function DeviceMotion({ motor }: DeviceMotionProps) {
   return (
     <AccordionItem value={`motor-${motor.id}`}>
-      <AccordionTrigger className="flex hover:no-underline py-2">
+      <AccordionTrigger className="flex hover:no-underline py-3">
         <div className="grow">
           {motor.name.key}&nbsp;{motor.name.query?.id}
         </div>

@@ -14,7 +14,7 @@ export function DeviceDrive({ drive }: DeviceDriveProps) {
   // console.log(drive);
   return (
     <AccordionItem value={`drive-${drive.id}`}>
-      <AccordionTrigger className="flex hover:no-underline py-2">
+      <AccordionTrigger className="flex hover:no-underline py-3">
         <div
           className={clsx("grow", {
             "text-green-600": drive.enable.status,
