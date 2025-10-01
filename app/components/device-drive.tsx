@@ -37,8 +37,8 @@ export function DeviceDrive({ drive }: DeviceDriveProps) {
             (bit, key) => (
               <p
                 className={clsx("rounded-xs text-center", {
-                  "bg-green-600": Boolean(parseInt(bit)),
-                  "bg-slate-200": !Boolean(parseInt(bit)),
+                  "bg-green-200 text-green-600": Boolean(parseInt(bit)),
+                  "bg-slate-100 text-slate-600": !Boolean(parseInt(bit)),
                 })}
                 key={key}
               >
