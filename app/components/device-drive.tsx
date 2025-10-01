@@ -12,7 +12,7 @@ interface DeviceDriveProps {
 
 export function DeviceDrive({ drive }: DeviceDriveProps) {
   return (
-    <AccordionItem value={`drive-${drive.id}`} key={drive.id}>
+    <AccordionItem value={`drive-${drive.id}`}>
       <AccordionTrigger className="flex hover:no-underline">
         <div
           className={clsx("flex gap-3 grow uppercase", {
