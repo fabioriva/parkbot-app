@@ -19,7 +19,7 @@ export default function Overview({ loaderData }: Route.ComponentProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 items-center">
       {data.devices.flat(1).map((item, key) => (
-        <Device device={item} key={key} />
+        <Device device={item} enhanced={true} key={key} />
       ))}
     </div>
   );

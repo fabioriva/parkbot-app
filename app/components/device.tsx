@@ -16,9 +16,8 @@ interface DeviceProps {
   device: object;
 }
 
-export function Device({ device }: DeviceProps) {
+export function Device({ device, enhanced }: DeviceProps) {
   const [LS, LC, LA] = device.c;
-  const ADVANCED = true;
   return (
     <Card>
       <CardHeader>
@@ -78,7 +77,7 @@ export function Device({ device }: DeviceProps) {
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         <DeviceInfo />
-        {ADVANCED && <DeviceView device={device} />}
+        {enhanced && <DeviceView device={device} />}
       </CardContent>
       {/* <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="text-muted-foreground leading-none">

@@ -28,7 +28,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 items-center">
         {system.map((item, key) => (
-          <Device device={item} key={key} />
+          <Device device={item} enhanced={false} key={key} />
         ))}
         <CardWrapper
           title="Recent activity"
