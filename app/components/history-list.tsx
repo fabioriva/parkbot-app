@@ -32,7 +32,7 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-red-200 p-1.5 rounded-sm text-red-600"
         }
       >
-        <BellOff color="red" size={20} />
+        <BellOff size={20} />
       </div>
     )}
     {id === 2 && (
@@ -41,7 +41,7 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-green-200 p-1.5 rounded-sm text-green-600"
         }
       >
-        <Bell color="green" size={20} />
+        <Bell size={20} />
       </div>
     )}
     {id === 3 && (
@@ -50,7 +50,7 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-yellow-200 p-1.5 rounded-sm text-yellow-600"
         }
       >
-        <UserRoundCog color="yellow" size={20} />
+        <UserRoundCog size={20} />
       </div>
     )}
     {id === 4 && (
@@ -59,7 +59,7 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-yellow-200 p-1.5 rounded-sm text-yellow-600"
         }
       >
-        <Bell color="yellow" size={20} />
+        <Bell size={20} />
       </div>
     )}
     {id === 5 && (
@@ -68,7 +68,7 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-blue-200 p-1.5 rounded-sm text-blue-600"
         }
       >
-        <UserRoundPlus color="blue" size={20} />
+        <UserRoundPlus size={20} />
       </div>
     )}
     {id === 6 && (
@@ -77,7 +77,7 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-purple-200 p-1.5 rounded-sm text-purple-600"
         }
       >
-        <UserRoundMinus color="purple" size={20} />
+        <UserRoundMinus size={20} />
       </div>
     )}
     {id === 7 && (
@@ -86,7 +86,7 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-blue-200 p-1.5 rounded-sm text-blue-600"
         }
       >
-        <ArrowLeftRight color="blue" size={20} />
+        <ArrowLeftRight size={20} />
       </div>
     )}
     {id === 8 && (
@@ -95,7 +95,7 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-purple-200 p-1.5 rounded-sm text-purple-600"
         }
       >
-        <ArrowRightLeft color="purple" size={20} />
+        <ArrowRightLeft size={20} />
       </div>
     )}
     {id >= 9 && id <= 14 && (
