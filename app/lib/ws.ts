@@ -30,7 +30,6 @@ export function useData(url, options) {
 }
 
 export function useInfo(url) {
-  const ws = useRef(null);
   const [comm, setComm] = useState(false);
   const [diag, setDiag] = useState(0);
   const [expired, setExpired] = useState(false);
@@ -39,13 +38,14 @@ export function useInfo(url) {
   const [operations, setOperations] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
+  const ws = useRef(null);
+
   useEffect(() => {
     ws.current = new WebSocket(url);
     ws.current.onopen = () => console.log("ws opened");
     ws.current.onclose = () => console.log("ws closed");
-    const wsCurrent = ws.current;
     return () => {
-      wsCurrent.close();
+      ws.current.close();
     };
   }, [url]);
 
@@ -53,7 +53,6 @@ export function useInfo(url) {
     if (!ws.current) return;
     ws.current.onmessage = (e) => {
       const message = JSON.parse(e.data);
-      // console.log(e.data);
       Object.keys(message).forEach((key) => {
         if (key === "comm") {
           setComm(message[key]);
