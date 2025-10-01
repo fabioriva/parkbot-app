@@ -6,26 +6,11 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
+import { DigitalIO } from "~/components/digital-io-badge";
 
 interface DeviceMotionProps {
   motor: object;
 }
-
-const DigitalIO = ({ bit, color }) => {
-  const { label, status } = bit;
-  return (
-    <Badge
-      className={
-        status
-          ? `bg-${color}-200 text-${color}-600`
-          : "bg-slate-100 text-slate-600"
-      }
-      variant="default"
-    >
-      {label}
-    </Badge>
-  );
-};
 
 export function DeviceMotion({ motor }: DeviceMotionProps) {
   return (

@@ -10,7 +10,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { DeviceDrive as Drive } from "~/components/device-drive";
 import { DeviceMotion as Motion } from "~/components/device-motion";
-// import { DeviceInfo } from "~/components/device-info";
 
 interface DeviceProps {
   device: object;
