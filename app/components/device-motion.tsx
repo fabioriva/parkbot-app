@@ -11,7 +11,7 @@ interface DeviceMotionProps {
   motor: object;
 }
 
-const Info = ({ bit, color }) => {
+const DigitalIO = ({ bit, color }) => {
   const { label, status } = bit;
   return (
     <Badge
@@ -30,7 +30,7 @@ const Info = ({ bit, color }) => {
 export function DeviceMotion({ motor }: DeviceMotionProps) {
   return (
     <AccordionItem value={`motor-${motor.id}`}>
-      <AccordionTrigger className="flex hover:no-underline">
+      <AccordionTrigger className="flex hover:no-underline py-2">
         <div className="grow">
           {motor.name.key}&nbsp;{motor.name.query?.id}
         </div>
@@ -48,7 +48,7 @@ export function DeviceMotion({ motor }: DeviceMotionProps) {
         <p className="text-muted-foreground">PLC digital I/O</p>
         <div className="flex gap-1.5">
           {motor.io.map((bit, key) => (
-            <Info bit={bit} color="green" key={key} />
+            <DigitalIO bit={bit} color="green" key={key} />
           ))}
         </div>
         {/* <div className="flex gap-3">
