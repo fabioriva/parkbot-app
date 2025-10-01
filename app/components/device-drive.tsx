@@ -11,12 +11,12 @@ interface DeviceDriveProps {
 }
 
 export function DeviceDrive({ drive }: DeviceDriveProps) {
-  console.log(drive);
+  // console.log(drive);
   return (
     <AccordionItem value={`drive-${drive.id}`}>
       <AccordionTrigger className="flex hover:no-underline py-2">
         <div
-          className={clsx("flex gap-3 grow uppercase", {
+          className={clsx("grow", {
             "text-green-600": drive.enable.status,
             "text-red-600": !drive.enable.status,
           })}
