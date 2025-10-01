@@ -132,6 +132,7 @@ export function DeviceView({ device }: DeviceProps) {
                   )}
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-1.5">
+                  <p className="text-muted-foreground">PLC digital I/O</p>
                   <div className="flex gap-1.5">
                     {motor.io.map((bit, key) => (
                       <Info bit={bit} color="green" key={key} />
