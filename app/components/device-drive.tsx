@@ -1,0 +1,70 @@
+import clsx from "clsx";
+import {
+  // Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
+
+interface DeviceDriveProps {
+  drive: object;
+}
+
+export function DeviceDrive({ drive }: DeviceDriveProps) {
+  return (
+    <AccordionItem value={`drive-${drive.id}`} key={drive.id}>
+      <AccordionTrigger className="flex hover:no-underline">
+        <div
+          className={clsx("flex gap-3 grow uppercase", {
+            "text-green-600": drive.enable,
+            "text-red-600": !drive.enable,
+          })}
+        >
+          {drive.name}&nbsp;{drive.enable ? "ready" : "not ready"}
+        </div>
+        <div>{drive.speed}&nbsp;Hz</div>
+        <div>{drive.current}&nbsp;A</div>
+      </AccordionTrigger>
+      <AccordionContent className="flex flex-col gap-1.5">
+        <p className="flex justify-between text-muted-foreground">
+          <span>0</span>
+          <span>status word</span>
+          <span>15</span>
+        </p>
+        <div className="grid grid-cols-16 gap-0.5">
+          {[...(drive.status >>> 0).toString(2).padEnd(16, "0")].map(
+            (bit, key) => (
+              <p
+                className={clsx("rounded-xs text-center", {
+                  "bg-green-600": Boolean(parseInt(bit)),
+                  "bg-slate-200": !Boolean(parseInt(bit)),
+                })}
+                key={key}
+              >
+                {bit}
+              </p>
+            )
+          )}
+        </div>
+        <div className="grid grid-cols-4 gap-3">
+          <div className="flex flex-col">
+            <span className="text-muted-foreground">{"Speed"} </span>
+            <span>{drive.speed}&nbsp;Hz</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-muted-foreground">{"Current"} </span>
+            <span>{drive.current}&nbsp;A</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-muted-foreground">{"Load"} </span>
+            <span>{drive.load}&nbsp;%</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-muted-foreground">{"Last trip"} </span>
+            <span>{drive.trip}</span>
+          </div>
+        </div>
+      </AccordionContent>
+    </AccordionItem>
+  );
+}
