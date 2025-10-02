@@ -10,8 +10,6 @@ import {
   UserRoundMinus,
   X,
 } from "lucide-react";
-// import { Avatar, AvatarFallback } from "~/components/ui/avatar";
-// import { Separator } from "~/components/ui/separator";
 
 interface HistoryItem {
   name: string;
@@ -123,26 +121,23 @@ export function HistoryList({ history }: HistoryListProps) {
   return (
     <div className="grid gap-3">
       {history.map((item, key) => (
-        <>
-          <div className="flex items-center justify-between text-sm" key={key}>
-            <div className="flex items-center gap-4">
-              <Icon id={item.operation.id} />
-              <div className="flex flex-col gap-1">
-                <p className="leading-none font-medium">
-                  {item.device.key} - {item.mode.key}
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  {item.operation.key}
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col text-right text-muted-foreground text-sm">
-              <p>{item.date.slice(0, 10)}</p>
-              <p>{item.date.slice(11, 19)}</p>
+        <div className="flex items-center justify-between text-sm" key={key}>
+          <div className="flex items-center gap-4">
+            <Icon id={item.operation.id} />
+            <div className="flex flex-col gap-1">
+              <p className="leading-none font-medium">
+                {item.device.key} - {item.mode.key}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                {item.operation.key}
+              </p>
             </div>
           </div>
-          {/* <Separator /> */}
-        </>
+          <div className="flex flex-col text-right text-muted-foreground text-sm">
+            <p>{item.date.slice(0, 10)}</p>
+            <p>{item.date.slice(11, 19)}</p>
+          </div>
+        </div>
       ))}
     </div>
   );
