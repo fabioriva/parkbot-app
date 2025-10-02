@@ -31,7 +31,7 @@ export function DeviceMotion({ motor }: DeviceMotionProps) {
       </AccordionTrigger>
       <AccordionContent className="flex flex-col gap-1.5">
         <p className="text-muted-foreground">PLC digital I/O</p>
-        <div className="flex gap-1.5">
+        <div className="flex gap-1.5 overflow-auto">
           {motor.io.map((bit, key) => (
             <DigitalIO bit={bit} color="green" key={key} />
           ))}
