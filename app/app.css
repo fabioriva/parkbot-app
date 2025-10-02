@@ -55,6 +55,20 @@ body {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --animate-aurora: aurora 8s ease-in-out infinite alternate;
+  /* custom */
+  --color-alert: var(--alert);
+  --color-alert-foreground: var(--alert-foreground);
+  --color-op-entry: var(--op-entry);
+  --color-op-entry-foreground: var(--op-entry-foreground);
+  --color-op-exit: var(--op-exit);
+  --color-op-exit-foreground: var(--op-exit-foreground);
+  --color-op-swap: var(--op-swap);
+  --color-op-swap-foreground: var(--op-swap-foreground);
+  --color-ready: var(--ready);
+  --color-ready-foreground: var(--ready-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  /* magic ui */
   @keyframes aurora {
     0% {
       background-position: 0% 50%;
@@ -112,6 +126,19 @@ body {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* custom colors */
+  --alert: oklch(0.936 0.032 17.717);
+  --alert-foreground: oklch(0.577 0.245 27.325);
+  --op-entry: oklch(93.2% 0.032 255.585);
+  --op-entry-foreground: oklch(54.6% 0.245 262.881);
+  --op-exit: oklch(0.946 0.033 307.174);
+  --op-exit-foreground: oklch(0.558 0.288 302.321);
+  --op-swap: oklch(0.953 0.051 180.801);
+  --op-swap-foreground: oklch(0.6 0.118 184.704);
+  --ready: oklch(0.962 0.044 156.743);
+  --ready-foreground: oklch(0.627 0.194 149.214);
+  --warning: oklch(0.962 0.059 95.617);
+  --warning-foreground: oklch(0.681 0.162 75.834);
 }
 
 .dark,
@@ -147,6 +174,17 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  /* custom colors */
+  --op-entry: oklch(93.2% 0.032 255.585);
+  --op-entry-foreground: oklch(54.6% 0.245 262.881);
+  --op-exit: oklch(0.946 0.033 307.174);
+  --op-exit-foreground: oklch(0.558 0.288 302.321);
+  --op-swap: oklch(0.953 0.051 180.801);
+  --op-swap-foreground: oklch(0.6 0.118 184.704);
+  --ready: oklch(0.962 0.044 156.743);
+  --ready-foreground: oklch(0.627 0.194 149.214);
+  --warning: oklch(0.962 0.059 95.617);
+  --warning-foreground: oklch(0.681 0.162 75.834);
 }
 
 @layer base {
