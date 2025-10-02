@@ -29,73 +29,73 @@ const Icon = ({ id }) => (
     {id === 1 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-red-200 p-1.5 rounded-sm text-red-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-red-200 rounded-sm text-red-600"
         }
       >
-        <BellOff size={20} />
+        <BellOff size={24} />
       </div>
     )}
     {id === 2 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-green-200 p-1.5 rounded-sm text-green-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-green-200 rounded-sm text-green-600"
         }
       >
-        <Bell size={20} />
+        <Bell size={24} />
       </div>
     )}
     {id === 3 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-yellow-200 p-1.5 rounded-sm text-yellow-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-yellow-200 rounded-sm text-yellow-600"
         }
       >
-        <UserRoundCog size={20} />
+        <UserRoundCog size={24} />
       </div>
     )}
     {id === 4 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-yellow-200 p-1.5 rounded-sm text-yellow-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-yellow-200 rounded-sm text-yellow-600"
         }
       >
-        <Bell size={20} />
+        <Bell size={24} />
       </div>
     )}
     {id === 5 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-blue-200 p-1.5 rounded-sm text-blue-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-blue-200 rounded-sm text-blue-600"
         }
       >
-        <UserRoundPlus size={20} />
+        <UserRoundPlus size={24} />
       </div>
     )}
     {id === 6 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-purple-200 p-1.5 rounded-sm text-purple-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-purple-200 rounded-sm text-purple-600"
         }
       >
-        <UserRoundMinus size={20} />
+        <UserRoundMinus size={24} />
       </div>
     )}
     {id === 7 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-blue-200 p-1.5 rounded-sm text-blue-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-blue-200 rounded-sm text-blue-600"
         }
       >
-        <ArrowLeftRight size={20} />
+        <ArrowLeftRight size={24} />
       </div>
     )}
     {id === 8 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-purple-200 p-1.5 rounded-sm text-purple-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-purple-200 rounded-sm text-purple-600"
         }
       >
-        <ArrowRightLeft size={20} />
+        <ArrowRightLeft size={24} />
       </div>
     )}
     {id >= 9 && id <= 14 && (
@@ -104,16 +104,16 @@ const Icon = ({ id }) => (
           "flex items-center justify-center h-[36px] w-[36px] bg-amber-200 rounded-sm text-amber-600"
         }
       >
-        <Bookmark size={20} />
+        <Bookmark size={24} />
       </div>
     )}
     {id > 14 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-slate-200 p-1.5 rounded-sm text-slate-600"
+          "flex items-center justify-center h-[36px] w-[36px] bg-slate-200 rounded-sm text-slate-600"
         }
       >
-        <X size={20} />
+        <X size={24} />
       </div>
     )}
   </>

@@ -26,7 +26,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 items-center">
         {system.map((item, key) => (
           <Device device={item} enhanced={false} key={key} />
         ))}
