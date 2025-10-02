@@ -16,12 +16,13 @@ interface CardWrapperProps {
 }
 
 export function CardWrapper({
+  className,
   description,
   title,
   children,
 }: PropsWithChildren<CardWrapperProps>) {
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

@@ -45,6 +45,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
         <CardWrapper
           title="Bar Chart - Operations"
           description="Parking operations"
+          className="col-span-2"
         >
           <OperationsBarChart operations={operations[0].data} />
         </CardWrapper>
