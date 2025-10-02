@@ -1,13 +1,13 @@
 import { Device } from "~/components/device";
 import { useData } from "~/lib/ws";
+import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/overview";
 
 export async function loader({ params }: Route.LoaderArgs) {
   // console.log(params);
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/overview`;
-  const res = await fetch(url);
-  const data = await res.json();
+  const data = await fetcher(url);
   return { aps: params?.aps, data };
 }
 

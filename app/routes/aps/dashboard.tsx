@@ -6,14 +6,14 @@ import { HistoryList } from "~/components/history-list";
 import { ModeToggle } from "~/components/mode-toggle";
 import { OccupancyChart } from "~/components/occupancy-chart";
 import { OperationsBarChart } from "~/components/operations-bar-chart";
+import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/dashboard";
 
 export async function loader({ params }: Route.LoaderArgs) {
   // console.log(params);
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/dashboard`;
-  const res = await fetch(url);
-  const data = await res.json();
+  const data = await fetcher(url);
   return { data };
 }
 
