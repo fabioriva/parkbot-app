@@ -22,7 +22,7 @@ export function DeviceView({ device }: DeviceProps) {
         <TabsContent value={`tab-${key}`} key={key}>
           <Accordion
             type="multiple" // "single"
-            collapsible
+            collapsible="true"
             className="w-full"
             // defaultValue="item-0"
           >
