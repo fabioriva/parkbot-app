@@ -27,13 +27,13 @@ export function DeviceView({ device }: DeviceProps) {
             // defaultValue="item-0"
           >
             {view.drives.map((drive, key) => (
-              <AccordionItem value={`drive-${key}`}>
-                <Drive drive={drive} key={key} />
+              <AccordionItem value={`drive-${key}`} key={key}>
+                <Drive drive={drive} />
               </AccordionItem>
             ))}
             {view.motors.map((motor, key) => (
-              <AccordionItem value={`motor-${key}`}>
-                <Motion motor={motor} key={key} />
+              <AccordionItem value={`motor-${key}`} key={key}>
+                <Motion motor={motor} />
               </AccordionItem>
             ))}
           </Accordion>
