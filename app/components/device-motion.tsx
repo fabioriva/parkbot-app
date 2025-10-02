@@ -1,11 +1,7 @@
 import { CircleStop, RotateCw, RotateCcw } from "lucide-react";
-import {
-  // Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
+import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
+import { DevicePosition as Position } from "~/components/device-position";
 import { DigitalIO } from "~/components/digital-io-badge";
 
 interface DeviceMotionProps {
@@ -13,8 +9,9 @@ interface DeviceMotionProps {
 }
 
 export function DeviceMotion({ motor }: DeviceMotionProps) {
+  // console.log(motor);
   return (
-    <AccordionItem value={`motor-${motor.id}`}>
+    <>
       <AccordionTrigger className="flex hover:no-underline py-3">
         <div className="grow">
           {motor.name.key}&nbsp;{motor.name.query?.id}
@@ -29,33 +26,18 @@ export function DeviceMotion({ motor }: DeviceMotionProps) {
           </Badge>
         )}
       </AccordionTrigger>
-      <AccordionContent className="flex flex-col gap-1.5">
-        <p className="text-muted-foreground">PLC digital I/O</p>
+      <AccordionContent className="flex flex-col gap-6">
+        {/* <p className="text-muted-foreground">PLC digital I/O</p> */}
         <div className="flex gap-1.5 overflow-auto">
           {motor.io.map((bit, key) => (
             <DigitalIO bit={bit} color="green" key={key} />
           ))}
         </div>
-        {/* <div className="flex gap-3">
-                    {motor.encoders !== undefined &&
-                      motor.encoders.map((encoder, key) => (
-                        <>
-                          <div className="flex flex-col">
-                            <span className="text-muted-foreground">
-                              Position{" "}
-                            </span>
-                            <span>{encoder.position}</span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-muted-foreground">
-                              Destination{" "}
-                            </span>
-                            <span>{encoder.destination}</span>
-                          </div>
-                        </>
-                      ))}
-                  </div> */}
+        {motor.encoders !== undefined &&
+          motor.encoders.map((encoder, key) => (
+            <Position encoder={encoder} key={key} />
+          ))}
       </AccordionContent>
-    </AccordionItem>
+    </>
   );
 }

@@ -1,12 +1,4 @@
-// import clsx from "clsx";
-// import { CircleStop, RotateCw, RotateCcw } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
-// import { Badge } from "~/components/ui/badge";
+import { Accordion, AccordionItem } from "~/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { DeviceDrive as Drive } from "~/components/device-drive";
 import { DeviceMotion as Motion } from "~/components/device-motion";
@@ -34,13 +26,15 @@ export function DeviceView({ device }: DeviceProps) {
             className="w-full"
             // defaultValue="item-0"
           >
-            {/* Drives */}
             {view.drives.map((drive, key) => (
-              <Drive drive={drive} key={key} />
+              <AccordionItem value={`drive-${key}`}>
+                <Drive drive={drive} key={key} />
+              </AccordionItem>
             ))}
-            {/* Motors */}
             {view.motors.map((motor, key) => (
-              <Motion motor={motor} key={key} />
+              <AccordionItem value={`motor-${key}`}>
+                <Motion motor={motor} key={key} />
+              </AccordionItem>
             ))}
           </Accordion>
         </TabsContent>

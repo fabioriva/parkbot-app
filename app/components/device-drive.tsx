@@ -1,10 +1,5 @@
 import clsx from "clsx";
-import {
-  // Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
+import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
 
 interface DeviceDriveProps {
   drive: object;
@@ -13,7 +8,7 @@ interface DeviceDriveProps {
 export function DeviceDrive({ drive }: DeviceDriveProps) {
   // console.log(drive);
   return (
-    <AccordionItem value={`drive-${drive.id}`}>
+    <>
       <AccordionTrigger className="flex hover:no-underline py-3">
         <div
           className={clsx("grow", {
@@ -66,6 +61,6 @@ export function DeviceDrive({ drive }: DeviceDriveProps) {
           </div>
         </div>
       </AccordionContent>
-    </AccordionItem>
+    </>
   );
 }

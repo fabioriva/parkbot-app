@@ -17,6 +17,7 @@ interface DeviceProps {
 }
 
 export function Device({ device, enhanced }: DeviceProps) {
+  // console.log(device);
   const [LS, LC, LA] = device.c;
   return (
     <Card>
