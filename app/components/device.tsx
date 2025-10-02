@@ -73,14 +73,16 @@ export function Device({ device, enhanced }: DeviceProps) {
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <DeviceInfo />
+        <DeviceInfo device={device} />
         {enhanced && <DeviceView device={device} />}
       </CardContent>
-      <CardFooter className="flex gap-3">
-        <Button>Action 1</Button>
-        <Button>Action 2</Button>
-        <Button>Action 3</Button>
-      </CardFooter>
+      {enhanced && (
+        <CardFooter className="flex gap-3">
+          <Button>Action 1</Button>
+          <Button>Action 2</Button>
+          <Button>Action 3</Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }
