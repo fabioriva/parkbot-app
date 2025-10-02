@@ -29,7 +29,7 @@ const Icon = ({ id }) => (
     {id === 1 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-red-200 rounded-sm text-red-600"
+          "flex items-center justify-center p-2 bg-red-200 rounded-full text-red-600"
         }
       >
         <BellOff size={24} />
@@ -38,7 +38,7 @@ const Icon = ({ id }) => (
     {id === 2 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-green-200 rounded-sm text-green-600"
+          "flex items-center justify-center p-2 bg-green-200 rounded-full text-green-600"
         }
       >
         <Bell size={24} />
@@ -47,7 +47,7 @@ const Icon = ({ id }) => (
     {id === 3 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-yellow-200 rounded-sm text-yellow-600"
+          "flex items-center justify-center p-2 bg-yellow-200 rounded-full text-yellow-600"
         }
       >
         <UserRoundCog size={24} />
@@ -56,7 +56,7 @@ const Icon = ({ id }) => (
     {id === 4 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-yellow-200 rounded-sm text-yellow-600"
+          "flex items-center justify-center p-2 bg-yellow-200 rounded-full text-yellow-600"
         }
       >
         <Bell size={24} />
@@ -65,7 +65,7 @@ const Icon = ({ id }) => (
     {id === 5 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-blue-200 rounded-sm text-blue-600"
+          "flex items-center justify-center p-2 bg-blue-200 rounded-full text-blue-600"
         }
       >
         <UserRoundPlus size={24} />
@@ -74,7 +74,7 @@ const Icon = ({ id }) => (
     {id === 6 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-purple-200 rounded-sm text-purple-600"
+          "flex items-center justify-center p-2 bg-purple-200 rounded-full text-purple-600"
         }
       >
         <UserRoundMinus size={24} />
@@ -83,7 +83,7 @@ const Icon = ({ id }) => (
     {id === 7 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-blue-200 rounded-sm text-blue-600"
+          "flex items-center justify-center p-2 bg-blue-200 rounded-full text-blue-600"
         }
       >
         <ArrowLeftRight size={24} />
@@ -92,7 +92,7 @@ const Icon = ({ id }) => (
     {id === 8 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-purple-200 rounded-sm text-purple-600"
+          "flex items-center justify-center p-2 bg-purple-200 rounded-full text-purple-600"
         }
       >
         <ArrowRightLeft size={24} />
@@ -101,7 +101,7 @@ const Icon = ({ id }) => (
     {id >= 9 && id <= 14 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-amber-200 rounded-sm text-amber-600"
+          "flex items-center justify-center p-2 bg-amber-200 rounded-full text-amber-600"
         }
       >
         <Bookmark size={24} />
@@ -110,7 +110,7 @@ const Icon = ({ id }) => (
     {id > 14 && (
       <div
         className={
-          "flex items-center justify-center h-[36px] w-[36px] bg-slate-200 rounded-sm text-slate-600"
+          "flex items-center justify-center p-2 bg-slate-200 rounded-full text-slate-600"
         }
       >
         <X size={24} />
