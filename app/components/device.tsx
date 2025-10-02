@@ -1,11 +1,10 @@
-// import { Badge } from "~/components/ui/badge";
-// import { Button } from "~/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
-  // CardFooter,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
@@ -71,26 +70,17 @@ export function Device({ device, enhanced }: DeviceProps) {
             <circle cx="12" cy="12" r="10" />
             <path d="m9 12 2 2 4-4" />
           </svg>
-          {/* <Info color="red" label="LA" status={LA.status} />
-          <Info color="orange" label="LC" status={LC.status} />
-          <Info color="green" label="LS" status={LS.status} /> */}
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         <DeviceInfo />
         {enhanced && <DeviceView device={device} />}
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="text-muted-foreground leading-none">
-          Vacant {free.value}, occupied {busy.value} and locked {lock.value}.
-        </div>
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter> */}
+      <CardFooter className="flex gap-3">
+        <Button>Action 1</Button>
+        <Button>Action 2</Button>
+        <Button>Action 3</Button>
+      </CardFooter>
     </Card>
   );
 }
