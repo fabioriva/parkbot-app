@@ -60,8 +60,8 @@ export function DevicePosition({ encoder }: DevicePositionProps) {
       : dispatch({ type: "tick", position });
   }, [position]);
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex">
+    <div className="flex flex-col gap-0.5">
+      <div className="flex text-xs">
         <span className="grow">{encoder.name}</span>
         <span>
           {position}&nbsp;&rarr;&nbsp;{destination}

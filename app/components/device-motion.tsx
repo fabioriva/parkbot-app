@@ -26,17 +26,16 @@ export function DeviceMotion({ motor }: DeviceMotionProps) {
           </Badge>
         )}
       </AccordionTrigger>
-      <AccordionContent className="flex flex-col gap-6">
-        {/* <p className="text-muted-foreground">PLC digital I/O</p> */}
+      <AccordionContent className="flex flex-col gap-3 pt-3">
+        {motor.encoders !== undefined &&
+          motor.encoders.map((encoder, key) => (
+            <Position encoder={encoder} key={key} />
+          ))}
         <div className="flex gap-1.5 overflow-auto">
           {motor.io.map((bit, key) => (
             <DigitalIO bit={bit} color="green" key={key} />
           ))}
         </div>
-        {motor.encoders !== undefined &&
-          motor.encoders.map((encoder, key) => (
-            <Position encoder={encoder} key={key} />
-          ))}
       </AccordionContent>
     </>
   );
