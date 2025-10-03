@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useChangeLanguage } from "remix-i18next/react";
 import { CardWrapper } from "~/components/card-wrapper";
 import { Device } from "~/components/device";
+import { Error } from "~/components/error";
 import { HistoryList } from "~/components/history-list";
 import { ModeToggle } from "~/components/mode-toggle";
 import { OccupancyChart } from "~/components/occupancy-chart";
@@ -11,13 +12,14 @@ import fetcher from "~/lib/fetch.server";
 import type { Route } from "./+types/dashboard";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  // console.log(params);
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/dashboard`;
   const data = await fetcher(url);
   return { data };
 }
 
 export default function Dashboard({ loaderData }: Route.ComponentProps) {
+  if (!loaderData?.data) return <Error />;
+
   let { t } = useTranslation();
   useChangeLanguage("en");
 

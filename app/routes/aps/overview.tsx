@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { Device } from "~/components/device";
+import { Error } from "~/components/error";
 import { useData } from "~/lib/ws";
 import fetcher from "~/lib/fetch.server";
 
@@ -13,7 +14,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function Overview({ loaderData }: Route.ComponentProps) {
-  // console.log(loaderData);
+  if (!loaderData?.data) return <Error />;
+
   // ws
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps}/overview`;
   const { data } = useData(url, { initialData: loaderData?.data });
