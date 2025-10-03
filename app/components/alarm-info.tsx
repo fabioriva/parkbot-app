@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import { Bell } from "lucide-react";
 import {
   Tooltip,

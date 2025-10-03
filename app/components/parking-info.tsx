@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import { CircleParking } from "lucide-react";
 import {
   Tooltip,
@@ -22,13 +21,7 @@ export function OccupancyInfo({ occupancy }: OccupancyInfoProps) {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <CircleParking
-          className="ml-0.5"
-          // color={clsx({
-          //   orange: cars,
-          //   gray: !cars,
-          // })}
-        />
+        <CircleParking />
       </TooltipTrigger>
       <TooltipContent className="aspect-square w-[250px] h-[250px]">
         <p>System occupancy</p>

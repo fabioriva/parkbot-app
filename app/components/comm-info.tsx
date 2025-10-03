@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import { Wifi, WifiOff } from "lucide-react";
 import {
   Tooltip,
@@ -14,11 +13,7 @@ export function CommInfo({ status }: CommInfoProps) {
   return (
     <Tooltip>
       <TooltipTrigger>
-        {status ? (
-          <Wifi className="ml-0.5" color="green" />
-        ) : (
-          <WifiOff className="ml-0.5" color="red" />
-        )}
+        {status ? <Wifi color="green" /> : <WifiOff color="red" />}
       </TooltipTrigger>
       <TooltipContent>
         <p className="uppercase">{status ? "online" : "offline"}</p>

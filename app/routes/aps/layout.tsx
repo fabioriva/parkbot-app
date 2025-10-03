@@ -39,21 +39,23 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
     >
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-1 md:gap-2 px-4">
+        <header className="flex h-16 shrink-0 items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator
             orientation="vertical"
             className="mr-2 data-[orientation=vertical]:h-4"
           />
           <div className="grow-1">
-            <span className="capitalize">{loaderData?.aps?.ns}</span>
+            <span className="capitalize hidden sm:inline">
+              {"loaderData?.aps?.ns"}
+            </span>
           </div>
           <AlarmInfo active={diag || 0} />
           <CommInfo status={comm} />
           <OccupancyInfo occupancy={map} />
           <Separator
             orientation="vertical"
-            className="ml-2 data-[orientation=vertical]:h-4"
+            className="data-[orientation=vertical]:h-4"
           />
           <LocaleToggle locale={locale} setLocale={(lang) => setLocale(lang)} />
           <ModeToggle />
