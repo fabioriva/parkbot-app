@@ -33,7 +33,7 @@ export function DeviceMotion({ motor }: DeviceMotionProps) {
           ))}
         <div className="flex gap-1.5 overflow-auto">
           {motor.io.map((bit, key) => (
-            <DigitalIO bit={bit} color="green" key={key} />
+            <DigitalIO bit={bit} key={key} />
           ))}
         </div>
       </AccordionContent>

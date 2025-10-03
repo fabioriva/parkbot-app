@@ -19,7 +19,7 @@ export function DeviceInfo({ device }) {
 
   return (
     <Alert
-      className={clsx("bg-slate-600/10 text-card-foreground", {
+      className={clsx("bg-slate-500/10 text-slate-500", {
         "bg-op-entry/10 bg-op-entry/20 border-0 border-l-4 border-l-op-entry text-op-entry":
           ENTRY,
         "bg-op-exit/10 dark:bg-op-exit/20 border-0 border-l-4 border-l-op-exit text-op-exit":

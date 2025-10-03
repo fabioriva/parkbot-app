@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 
-export const DigitalIO = ({ bit, color }) => {
+export const DigitalIO = ({ bit }) => {
   const { label, status } = bit;
   return (
     <Tooltip>
@@ -13,8 +13,8 @@ export const DigitalIO = ({ bit, color }) => {
         <Badge
           className={
             status
-              ? `bg-${color}-200 text-${color}-600`
-              : "bg-slate-100 text-slate-600"
+              ? `bg-ready/10 dark:bg-ready/20 text-ready`
+              : "bg-slate-500/10 text-slate-500"
           }
           variant="default"
         >
