@@ -19,8 +19,8 @@ export function Device({ device, enhanced }: DeviceProps) {
   // console.log(device);
   const [LS, LC, LA] = device.c;
   return (
-    <Card>
-      <CardHeader>
+    <Card className="py-4">
+      <CardHeader className="px-4">
         <CardTitle>{device.name}</CardTitle>
         <CardDescription>{`Mode ${device.mode.id} - ${device.mode.key}`}</CardDescription>
         <CardAction className="flex gap-1.5">
@@ -84,7 +84,7 @@ export function Device({ device, enhanced }: DeviceProps) {
           </svg>
         </CardAction>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-col gap-3 px-4">
         <DeviceInfo device={device} />
         {enhanced && <DeviceView device={device} />}
       </CardContent>
