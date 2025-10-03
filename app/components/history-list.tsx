@@ -28,15 +28,16 @@ const Icon = ({ id }) => (
     className={clsx(
       "flex items-center justify-center h-[36px] w-[36px] border rounded-full",
       {
-        "bg-alert border-alert text-alert-foreground": id === 1,
-        "bg-ready border-op-ready text-ready-ready": id === 2,
-        "bg-warning border-warning text-warning-foreground":
-          id === 3 || id === 4,
-        "bg-op-entry border-op-entry text-op-entry-foreground": id === 5,
-        "bg-op-exit border-op-exit text-op-exit-foreground": id === 6,
-        "bg-op-swap border-op-swap text-op-swap-foreground":
+        "bg-alert/10 dark:bg-alert/20 border-0-alert text-alert": id === 1,
+        "bg-ready/10 dark:bg-ready/20 border-0-ready text-ready": id === 2,
+        "bg-warning/10 dark:bg-warning/20 border-0-warning text-warning":
+          id === 3 || id === 4 || (id >= 9 && id <= 14),
+        "bg-op-entry/10 dark:bg-op-entry/20 border-0-op-entry text-op-entry":
+          id === 5,
+        "bg-op-exit/10 dark:bg-op-exit/20 border-0-op-exit text-op-exit":
+          id === 6,
+        "bg-op-swap/10 dark:bg-op-swap/20 border-0-op-swap text-op-swap":
           id === 7 || id === 8,
-        "bg-amber-100 border-amber-200 text-amber-600": id >= 9 && id <= 14,
         "bg-slate-100 border-slate-200 text-slate-600": id > 14,
       }
     )}

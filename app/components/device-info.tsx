@@ -20,16 +20,16 @@ export function DeviceInfo({ device }) {
   return (
     <Alert
       className={clsx("text-slate-600", {
-        // "bg-blue-100 border-blue-200 text-blue-600": ENTRY,
-        // "bg-green-100 border-green-200 text-green-600": READY,
-        // "bg-purple-100 border-purple-200 text-purple-600": EXIT,
-        // "bg-teal-100 border-teal-200 text-teal-600": SWAP,
-        // "bg-yellow-100 border-yellow-200 text-yellow-600": WARNING,
-        "bg-op-entry border-op-entry text-op-entry-foreground": ENTRY,
-        "bg-op-exit border-op-exit text-op-exit-foreground": EXIT,
-        "bg-op-swap border-op-swap text-op-swap-foreground": SWAP,
-        "bg-ready border-ready text-ready-foreground": READY,
-        "bg-warning border-warning text-warning-foreground": WARNING,
+        "bg-op-entry/10 bg-op-entry/20 border-0 border-l-4 border-l-op-entry text-op-entry":
+          ENTRY,
+        "bg-op-exit/10 dark:bg-op-exit/20 border-0 border-l-4 border-l-op-exit text-op-exit":
+          EXIT,
+        "bg-op-swap/10 bg-op-swap/20 border-0 border-l-4 border-l-op-swap text-op-swap":
+          SWAP,
+        "bg-ready/10 dark:bg-ready/20 border-0 border-l-4 border-l-ready text-ready":
+          READY,
+        "bg-warning/10 dark:bg-warning/20 border-0 border-l-4 border-l-warning text-warning":
+          WARNING,
       })}
     >
       {ENTRY && <UserRoundPlus />}

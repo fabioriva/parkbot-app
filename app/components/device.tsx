@@ -29,12 +29,16 @@ export function Device({ device, enhanced }: DeviceProps) {
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill={LA.status ? "#fecaca" : "none"}
+            // fill={LA.status ? "#fecaca" : "none"}
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={LA.status ? "text-red-600" : "text-slate-300"}
+            className={
+              LA.status
+                ? "fill-alert/10 dark:fill-alert/20 text-alert"
+                : "fill-none text-slate-300"
+            }
           >
             <circle cx="12" cy="12" r="10" />
             <line x1="12" x2="12" y1="8" y2="12" />
@@ -45,12 +49,16 @@ export function Device({ device, enhanced }: DeviceProps) {
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill={LC.status ? "#fed7aa" : "none"}
+            // fill={LC.status ? "#fed7aa" : "none"}
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={LC.status ? "text-orange-600" : "text-slate-300"}
+            className={
+              LC.status
+                ? "fill-warning/10 dark:fill-warning/20 text-warning"
+                : "fill-none text-slate-300"
+            }
           >
             <circle cx="12" cy="12" r="10" />
             <circle cx="12" cy="12" r="1" />
@@ -60,12 +68,16 @@ export function Device({ device, enhanced }: DeviceProps) {
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill={LS.status ? "#bbf7d0" : "none"}
+            // fill={LS.status ? "fill-green-500" : "none"}
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={LS.status ? "text-green-600" : "text-slate-300"}
+            className={
+              LS.status
+                ? "fill-ready/10 dark:fill-ready/20 text-ready"
+                : "fill-none text-slate-300"
+            }
           >
             <circle cx="12" cy="12" r="10" />
             <path d="m9 12 2 2 4-4" />
