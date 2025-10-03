@@ -19,7 +19,7 @@ export function DeviceInfo({ device }) {
 
   return (
     <Alert
-      className={clsx("text-slate-600", {
+      className={clsx("bg-slate-600/10 text-card-foreground", {
         "bg-op-entry/10 bg-op-entry/20 border-0 border-l-4 border-l-op-entry text-op-entry":
           ENTRY,
         "bg-op-exit/10 dark:bg-op-exit/20 border-0 border-l-4 border-l-op-exit text-op-exit":
@@ -52,7 +52,15 @@ export function DeviceInfo({ device }) {
         {WARNING && "man"}
         {READY && <span>Waiting for operation request</span>}
       </AlertTitle>
-      {/* <AlertDescription>
+      {/* <AlertDescription
+        className={clsx("text-card-foreground", {
+          "text-op-entry": ENTRY,
+          "text-op-exit": EXIT,
+          "text-op-swap": SWAP,
+          "text-ready": READY,
+          "text-warning": WARNING,
+        })}
+      >
         This is an alert with icon, title and description.
       </AlertDescription> */}
     </Alert>
