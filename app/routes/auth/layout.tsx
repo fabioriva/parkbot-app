@@ -9,7 +9,7 @@ export default function Auth() {
           {/* <div className="flex size-12 items-center justify-center rounded-md">
             <img src="bot.svg" alt="Parkbot" />
           </div> */}
-          <h1 className="text-4xl font-bold tracking-tighter">
+          <h1 className="text-3xl font-bold tracking-tighter">
             <AuroraText>Parkbot</AuroraText> web service
           </h1>
         </a>
