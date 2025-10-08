@@ -2,6 +2,7 @@ import { Accordion, AccordionItem } from "~/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { DeviceDrive as Drive } from "~/components/device-drive";
 import { DeviceMotion as Motion } from "~/components/device-motion";
+import { DeviceSilomat as Silomat } from "~/components/device-silomat";
 
 interface DeviceProps {
   device: object;
@@ -26,6 +27,7 @@ export function DeviceView({ device }: DeviceProps) {
             className="w-full"
             // defaultValue="item-0"
           >
+            {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
             {view.drives.map((drive, key) => (
               <AccordionItem
                 value={`drive-${key}`}
