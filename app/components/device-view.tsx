@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { DeviceDrive as Drive } from "~/components/device-drive";
 import { DeviceMotion as Motion } from "~/components/device-motion";
 import { DeviceSilomat as Silomat } from "~/components/device-silomat";
+import { DeviceVg as Vg } from "~/components/device-vg";
 
 interface DeviceProps {
   device: object;
@@ -25,6 +26,7 @@ export function DeviceView({ device }: DeviceProps) {
           key={key}
           value={`tab-${key}`}
         >
+          {view.name === "view-garage" && <Vg sensors={view.sensors} />}
           {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
           <Accordion
             type="multiple" // "single"
