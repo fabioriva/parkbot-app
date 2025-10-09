@@ -5,8 +5,18 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 
-export const DigitalIO = ({ bit }) => {
-  const { label, status } = bit;
+type Bit = {
+  addr: string;
+  label: string;
+  status: number;
+};
+
+interface DigitalIOProps {
+  bit: Bit;
+}
+
+export const DigitalIO = ({ bit }: DigitalIOProps) => {
+  const { addr, label, status } = bit;
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -22,7 +32,14 @@ export const DigitalIO = ({ bit }) => {
         </Badge>
       </TooltipTrigger>
       <TooltipContent>
-        <p className="uppercase">{status ? "true" : "false"}</p>
+        <p className="uppercase">
+          {label} {addr}{" "}
+          {status ? (
+            <span className="text-ready">true</span>
+          ) : (
+            <span className="text-slate-500">false</span>
+          )}
+        </p>
       </TooltipContent>
     </Tooltip>
   );
