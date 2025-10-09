@@ -20,14 +20,18 @@ export function DeviceView({ device }: DeviceProps) {
         ))}
       </TabsList>
       {device.views.map((view, key) => (
-        <TabsContent value={`tab-${key}`} key={key}>
+        <TabsContent
+          className="flex flex-col gap-3"
+          key={key}
+          value={`tab-${key}`}
+        >
+          {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
           <Accordion
             type="multiple" // "single"
             collapsible="true"
             className="w-full"
             // defaultValue="item-0"
           >
-            {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
             {view.drives.map((drive, key) => (
               <AccordionItem
                 value={`drive-${key}`}

@@ -35,14 +35,12 @@ export function DeviceSilomat({ sensors }: SilomatProps) {
   // console.log(sensors);
   const [RMV, RMH, RES, REH, RCV, RAV, RAH, RCH] = sensors;
   return (
-    <div className="svg-container w-full h-auto">
+    <div className="svg-container w-full h-auto border p-1">
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        // width="100%" title sty
-        // height="100%"
-        viewBox="0 0 100 40"
+        viewBox="0 0 100 35"
       >
         <image width="100%" href="/silomat.png" />
         <Sensor x="40" y="8" sensor={RMV} />
