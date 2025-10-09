@@ -1,8 +1,24 @@
 import clsx from "clsx";
 import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
 
+type Bit = {
+  addr: string;
+  label: string;
+  status: number;
+};
+
+type Drive = {
+  enable: Bit;
+  current: number;
+  load: number;
+  name: string;
+  speed: number;
+  status: number;
+  trip: number;
+};
+
 interface DeviceDriveProps {
-  drive: object;
+  drive: Drive;
 }
 
 export function DeviceDrive({ drive }: DeviceDriveProps) {
