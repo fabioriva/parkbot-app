@@ -7,7 +7,8 @@ interface Sensor {
 }
 
 interface SensorProps {
-  className?: string;
+  x: string;
+  y: string;
   sensor: Sensor;
 }
 
@@ -15,7 +16,7 @@ interface SilomatProps {
   sensors: Sensor[];
 }
 
-const Sensor = ({ x, y, sensor }) => (
+const Sensor = ({ x, y, sensor }: SensorProps) => (
   <circle cx={x} cy={y} r="2" fill={sensor.status ? "green" : "gray"}>
     <title>{`${sensor.label} ${sensor.addr} ${sensor.status ? "ON" : "OFF"}`}</title>
   </circle>
