@@ -19,7 +19,7 @@ export function Device({ device, enhanced }: DeviceProps) {
   // console.log(device);
   const [LS, LC, LA] = device.c;
   return (
-    <Card className="max-w-sm py-4">
+    <Card className="py-4">
       <CardHeader className="px-4">
         <CardTitle>{device.name}</CardTitle>
         <CardDescription>{`Mode ${device.mode.id} - ${device.mode.key}`}</CardDescription>
