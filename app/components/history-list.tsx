@@ -23,35 +23,37 @@ interface HistoryListProps {
   operations: OperationsItem[];
 }
 
+const ICON_SIZE = 20;
+
 const Icon = ({ id }) => (
   <div
     className={clsx(
-      "flex items-center justify-center h-[36px] w-[36px] border rounded-full",
+      "flex items-center justify-center p-1.5 border-0 rounded-lg",
       {
-        "bg-alert/10 dark:bg-alert/20 border-0-alert text-alert": id === 1,
-        "bg-ready/10 dark:bg-ready/20 border-0-ready text-ready": id === 2,
-        "bg-warning/10 dark:bg-warning/20 border-0-warning text-warning":
+        "bg-alert/10 dark:bg-alert/20 border-alert text-alert": id === 1,
+        "bg-ready/10 dark:bg-ready/20 border-ready text-ready": id === 2,
+        "bg-warning/10 dark:bg-warning/20 border-warning text-warning":
           id === 3 || id === 4 || (id >= 9 && id <= 14),
-        "bg-op-entry/10 dark:bg-op-entry/20 border-0-op-entry text-op-entry":
+        "bg-op-entry/10 dark:bg-op-entry/20 border-op-entry text-op-entry":
           id === 5,
-        "bg-op-exit/10 dark:bg-op-exit/20 border-0-op-exit text-op-exit":
+        "bg-op-exit/10 dark:bg-op-exit/20 border-op-exit text-op-exit":
           id === 6,
-        "bg-op-swap/10 dark:bg-op-swap/20 border-0-op-swap text-op-swap":
+        "bg-op-swap/10 dark:bg-op-swap/20 border-op-swap text-op-swap":
           id === 7 || id === 8,
         "bg-slate-100 border-slate-200 text-slate-600": id > 14,
       }
     )}
   >
-    {id === 1 && <BellOff size={20} />}
-    {id === 2 && <Bell size={20} />}
-    {id === 3 && <UserRoundCog size={20} />}
-    {id === 4 && <Bell size={20} />}
-    {id === 5 && <UserRoundPlus size={20} />}
-    {id === 6 && <UserRoundMinus size={20} />}
-    {id === 7 && <ArrowLeftRight size={20} />}
-    {id === 8 && <ArrowRightLeft size={20} />}
-    {id >= 9 && id <= 14 && <Bookmark size={20} />}
-    {id > 14 && <X size={20} />}
+    {id === 1 && <BellOff size={ICON_SIZE} />}
+    {id === 2 && <Bell size={ICON_SIZE} />}
+    {id === 3 && <UserRoundCog size={ICON_SIZE} />}
+    {id === 4 && <Bell size={ICON_SIZE} />}
+    {id === 5 && <UserRoundPlus size={ICON_SIZE} />}
+    {id === 6 && <UserRoundMinus size={ICON_SIZE} />}
+    {id === 7 && <ArrowLeftRight size={ICON_SIZE} />}
+    {id === 8 && <ArrowRightLeft size={ICON_SIZE} />}
+    {id >= 9 && id <= 14 && <Bookmark size={ICON_SIZE} />}
+    {id > 14 && <X size={ICON_SIZE} />}
   </div>
 );
 
