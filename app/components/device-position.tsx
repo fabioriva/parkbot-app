@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Progress } from "~/components/ui/progress";
 
+import type { Encoder } from "~/routes/aps/types";
+
 interface DevicePositionProps {
-  position: object;
+  position: Encoder;
 }
 
 const initialState = {

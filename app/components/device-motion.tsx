@@ -4,8 +4,19 @@ import { Badge } from "~/components/ui/badge";
 import { DevicePosition as Position } from "~/components/device-position";
 import { DigitalIO } from "~/components/digital-io-badge";
 
+import type { Bit, Encoder } from "~/routes/aps/types";
+
+type Motor = {
+  encoders: Encoder[];
+  id: number;
+  io: Bit[];
+  message: string;
+  name: object; // {key:"", query:""}
+  run: Bit;
+};
+
 interface DeviceMotionProps {
-  motor: object;
+  motor: Motor;
 }
 
 export function DeviceMotion({ motor }: DeviceMotionProps) {

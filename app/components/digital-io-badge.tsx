@@ -5,11 +5,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 
-type Bit = {
-  addr: string;
-  label: string;
-  status: number;
-};
+import type { Bit } from "~/routes/aps/types";
 
 interface DigitalIOProps {
   bit: Bit;

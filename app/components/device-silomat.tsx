@@ -1,58 +1,33 @@
-import clsx from "clsx";
+import { Sensor } from "~/components/digital-io-svg";
 
-interface Sensor {
-  addr: string;
-  label: string;
-  status: number;
-}
-
-interface SensorProps {
-  x: string;
-  y: string;
-  sensor: Sensor;
-}
+import type { Bit } from "~/routes/aps/types";
 
 interface SilomatProps {
-  sensors: Sensor[];
+  sensors: Bit[];
 }
-
-const Sensor = ({ x, y, sensor }: SensorProps) => (
-  <circle
-    cx={x}
-    cy={y}
-    r="1.5"
-    stroke-width="0.1"
-    className={clsx({
-      "fill-green-500 stroke-slate-600": sensor.status,
-      "fill-slate-100 stroke-slate-600": !sensor.status,
-    })}
-  >
-    <title className="bg-yellow-100">{`${sensor.label} ${sensor.addr} ${sensor.status ? "ON" : "OFF"}`}</title>
-  </circle>
-);
 
 export function DeviceSilomat({ sensors }: SilomatProps) {
   // console.log(sensors);
   const [RMV, RMH, RES, REH, RCV, RAV, RAH, RCH] = sensors;
   return (
-    <div className="svg-container w-full h-auto border p-1">
+    <div className="svg-container border p-1">
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        viewBox="0 0 100 35"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        viewBox="0 0 100 50"
       >
-        <image width="100%" href="/silomat.png" />
-        <Sensor x="40" y="8" sensor={RMV} />
-        <Sensor x="45" y="8" sensor={RMH} />
-        <Sensor x="45" y="15" sensor={RES} />
-        <Sensor x="45" y="20" sensor={REH} />
-        <Sensor x="18.25" y="4" sensor={RAV} />
-        <Sensor x="18.25" y="17.5" sensor={RCV} />
-        <Sensor x="18.25" y="31" sensor={RAV} />
-        <Sensor x="69.25" y="4" sensor={RAH} />
-        <Sensor x="69.25" y="17.5" sensor={RCH} />
-        <Sensor x="69.25" y="31" sensor={RAH} />
+        <image width="100%" height="100%" href="/silomat.png" />
+        <Sensor x="40" y="16" sensor={RMV} />
+        <Sensor x="45" y="16" sensor={RMH} />
+        <Sensor x="45" y="23" sensor={RES} />
+        <Sensor x="45" y="27" sensor={REH} />
+        <Sensor x="18.5" y="10" sensor={RAV} />
+        <Sensor x="18.5" y="25" sensor={RCV} />
+        <Sensor x="18.5" y="40" sensor={RAV} />
+        <Sensor x="69.5" y="10" sensor={RAH} />
+        <Sensor x="69.5" y="25" sensor={RCH} />
+        <Sensor x="69.5" y="40" sensor={RAH} />
       </svg>
     </div>
   );
