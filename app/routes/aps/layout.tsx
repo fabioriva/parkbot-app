@@ -50,13 +50,15 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
               {"loaderData?.aps?.ns"}
             </span>
           </div>
-          <AlarmInfo active={diag || 0} />
-          <CommInfo status={comm} />
-          <OccupancyInfo occupancy={map} />
-          <Separator
-            orientation="vertical"
-            className="data-[orientation=vertical]:h-4"
-          />
+          <div className="flex gap-3">
+            <AlarmInfo active={diag || 0} />
+            <CommInfo status={comm} />
+            <OccupancyInfo occupancy={map} />
+            <Separator
+              orientation="vertical"
+              className="data-[orientation=vertical]:h-4"
+            />
+          </div>
           <LocaleToggle locale={locale} setLocale={(lang) => setLocale(lang)} />
           <ModeToggle />
         </header>
