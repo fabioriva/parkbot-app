@@ -3,6 +3,7 @@ import { useChangeLanguage } from "remix-i18next/react";
 import { CardWrapper } from "~/components/card-wrapper";
 import { Device } from "~/components/device";
 import { Error } from "~/components/error";
+import { ExitQueue } from "~/components/exit-queue";
 import { HistoryList } from "~/components/history-list";
 import { ModeToggle } from "~/components/mode-toggle";
 import { OccupancyChart } from "~/components/occupancy-chart";
@@ -34,6 +35,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
             {system.map((item, key) => (
               <Device device={item} enhanced={false} key={key} />
             ))}
+            <ExitQueue />
           </div>
         </div>
         <div className="col-span-2">
