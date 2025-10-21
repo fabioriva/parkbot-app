@@ -1,9 +1,5 @@
 import { PassThrough } from "node:stream";
-
-import type {
-  EntryContext,
-  unstable_RouterContextProvider,
-} from "react-router";
+import type { EntryContext, RouterContextProvider } from "react-router";
 import { createReadableStreamFromReadable } from "@react-router/node";
 import { ServerRouter } from "react-router";
 import { isbot } from "isbot";
@@ -20,7 +16,7 @@ export default function handleRequest(
   responseHeaders: Headers,
   // If you have middleware enabled:
   entryContext: EntryContext,
-  routerContext: unstable_RouterContextProvider
+  routerContext: RouterContextProvider
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
