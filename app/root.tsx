@@ -8,17 +8,14 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  // useLoaderData,
+  useLoaderData,
 } from "react-router";
-//
-// import { useChangeLanguage } from "remix-i18next/react";
 import {
   getLocale,
   i18nextMiddleware,
   localeCookie,
 } from "./middleware/i18next";
 import { useTranslation } from "react-i18next";
-//
 import {
   PreventFlashOnWrongTheme,
   ThemeProvider,
@@ -34,14 +31,12 @@ export const middleware = [i18nextMiddleware];
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { getTheme } = await themeSessionResolver(request);
   let theme = getTheme();
-  console.log(theme);
-
+  // console.log(theme);
   let locale = getLocale(context);
-  console.log(locale);
+  // console.log(locale);
 
   return data(
     { locale: locale, theme: theme },
-    // { locale },
     { headers: { "Set-Cookie": await localeCookie.serialize(locale) } }
   );
 }
@@ -83,10 +78,7 @@ export function App() {
   const data = useLoaderData();
   const [theme] = useTheme();
   let { i18n } = useTranslation();
-  console.log(theme);
-
-  // useChangeLanguage(loaderData.locale);
-  // useChangeLanguage(data.locale);
+  console.log(i18n.language, theme);
   // return <Outlet />;
   return (
     <html
@@ -123,7 +115,6 @@ export default function AppWithProviders({
   }, [locale, i18n]);
   //
   // const data = useLoaderData();
-  // console.log(data);
 
   return (
     <ThemeProvider
