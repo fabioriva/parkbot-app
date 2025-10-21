@@ -1,7 +1,5 @@
 import { Trash } from "lucide-react";
 import React, { useState } from "react";
-// import { Form } from "react-router";
-// import SubmitFormButton from "~/components/submit-form-button";
 import ExitCall from "~/components/exit-call";
 import { Button } from "~/components/ui/button";
 import {
