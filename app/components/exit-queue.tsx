@@ -33,8 +33,6 @@ import {
 
 interface ExitQueueProps {}
 
-// const Item = () => {};
-
 export function ExitQueue({ exit, queue }: ExitQueueProps) {
   // console.log(queue);
   const [queueItem, setQueueItem] = useState({ card: 0, index: 0 });
