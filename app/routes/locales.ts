@@ -5,12 +5,6 @@ import resources from "~/locales";
 import type { Route } from "./+types/locales";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  // const lng = z
-  //   .string()
-  //   .refine((lng): lng is keyof typeof resources =>
-  //     Object.keys(resources).includes(lng)
-  //   )
-  //   .safeParse(params.lng);
   const lng = z
     .enum(Object.keys(resources) as Array<keyof typeof resources>)
     .safeParse(params.lng);
@@ -19,12 +13,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 
   const namespaces = resources[lng.data];
 
-  // const ns = z
-  //   .string()
-  //   .refine((ns): ns is keyof typeof namespaces => {
-  //     return Object.keys(resources[lng.data]).includes(ns);
-  //   })
-  //   .safeParse(params.ns);
   const ns = z
     .enum(Object.keys(namespaces) as Array<keyof typeof namespaces>)
     .safeParse(params.ns);
