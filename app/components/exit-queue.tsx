@@ -35,75 +35,60 @@ interface ExitQueueProps {}
 
 // const Item = () => {};
 
-export function ExitQueue({ queue }: ExitQueueProps) {
+export function ExitQueue({ exit, queue }: ExitQueueProps) {
+  // console.log(queue);
   const [queueItem, setQueueItem] = useState({ card: 0, index: 0 });
   const handleConfirm = async () => {
     console.log(queueItem);
   };
   return (
-    <Card className="">
+    <Card>
       <CardHeader>
-        <CardTitle>Exit queuue</CardTitle>
-        <CardDescription>No waiting calls</CardDescription>
+        <CardTitle>Exit queue</CardTitle>
+        <CardDescription>
+          {queue.filter((item) => item.card === 0).length === 0
+            ? "No waiting exit calls"
+            : queue.length + " exit calls waiting"}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Dialog>
-          {/* queue.map((item, key) =>{ ... }) */}
-          <DialogTrigger asChild>
-            <Item size="sm" className="px-0 py-1">
-              {/* <ItemMedia>m</ItemMedia> */}
-              <ItemContent>
-                <ItemTitle>Next</ItemTitle>
-                <ItemDescription>Card 6, stall 67</ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="rounded-full"
-                  aria-label="Delete"
-                  onClick={() => setQueueItem({ card: 123, index: 1 })} // (item.card, key + 1)
-                >
-                  <Trash />
-                </Button>
-              </ItemActions>
-            </Item>
-            {/* <Item size="sm" className="px-0 py-1">
-          <ItemMedia>m</ItemMedia>
-          <ItemContent>
-            <ItemTitle>2° call</ItemTitle>
-            <ItemDescription>Card 123, stall 8</ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <Button
-              size="icon"
-              variant="outline"
-              className="rounded-full"
-              aria-label="Delete"
-            >
-              <Trash />
-            </Button>
-          </ItemActions>
-        </Item> */}
-          </DialogTrigger>
-          {/* )} // end map */}
+          {queue.map((item, key) => (
+            <DialogTrigger key={key} asChild>
+              <Item size="sm" className="px-0 py-0.5">
+                {/* <ItemMedia>m</ItemMedia> */}
+                <ItemContent>
+                  <ItemTitle>
+                    {key === 0 ? "Next" : key + 1 + "° call"}
+                  </ItemTitle>
+                  <ItemDescription>
+                    Card {item.card} parked in stall {item.stall}
+                  </ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="rounded-full"
+                    aria-label="Delete"
+                    onClick={() =>
+                      setQueueItem({ card: item.card, index: key + 1 })
+                    }
+                  >
+                    <Trash />
+                  </Button>
+                </ItemActions>
+              </Item>
+            </DialogTrigger>
+          ))}
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Delete exit call</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete card ... from the exit queue?
+                Are you sure you want to delete card {queueItem.card} from the
+                exit queue?
               </DialogDescription>
             </DialogHeader>
-            {/* <div className="grid gap-3">
-              <Label htmlFor="card">Card number</Label>
-              <Input
-                id="card"
-                name="card"
-                type="number"
-                value={card}
-                onChange={(e) => setCard(e.target.value)}
-              />
-            </div> */}
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
@@ -116,7 +101,7 @@ export function ExitQueue({ queue }: ExitQueueProps) {
         </Dialog>
       </CardContent>
       <CardFooter>
-        <ExitCall />
+        <ExitCall exit={exit} />
       </CardFooter>
     </Card>
   );

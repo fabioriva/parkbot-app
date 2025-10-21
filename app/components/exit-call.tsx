@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -15,15 +16,33 @@ import { Label } from "~/components/ui/label";
 
 interface ExitCallProps {}
 
-export default function ExitCall({}: ExitCallProps) {
-  const [card, setCard] = useState(0);
+export default function ExitCall({ exit }: ExitCallProps) {
+  // console.log(exit);
+  const { enable, max, min } = exit;
+  const [card, setCard] = useState(min);
+  const [error, setError] = useState(false);
+  const handleChange = (e) => {
+    // console.log(typeof e.target.value);
+    const schema = z.coerce.number().min(min).max(max);
+    const result = schema.safeParse(e.target.value);
+    // console.log(result);
+    if (!result.success) {
+      setError(true);
+      setCard(Number(e.target.value));
+    } else {
+      setError(false);
+      setCard(result.data);
+    }
+  };
   const handleConfirm = async () => {
     console.log(card);
   };
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full">Exit car</Button>
+        <Button className="w-full" disabled={!enable.status}>
+          Exit car
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -31,21 +50,30 @@ export default function ExitCall({}: ExitCallProps) {
           <DialogDescription>Enter card number and confirm.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-3 mb-3">
-          <Label htmlFor="card">Card number</Label>
+          <Label htmlFor="card">
+            Card number [{min}-{max}]
+          </Label>
           <Input
             id="card"
+            min={min}
+            max={max}
             name="card"
             type="number"
             value={card}
-            onChange={(e) => setCard(e.target.value)}
+            onChange={handleChange}
           />
+          {error && (
+            <p className="text-red-500 text-sm">Card number is not valid!</p>
+          )}
         </div>
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button onClick={handleConfirm}>Confirm</Button>
+            <Button onClick={handleConfirm} disabled={error}>
+              Confirm
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

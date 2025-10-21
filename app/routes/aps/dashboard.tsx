@@ -3,7 +3,7 @@ import { useChangeLanguage } from "remix-i18next/react";
 import { CardWrapper } from "~/components/card-wrapper";
 import { Device } from "~/components/device";
 import { Error } from "~/components/error";
-import { ExitQueue } from "~/components/exit-queue";
+// import { ExitQueue } from "~/components/exit-queue";
 import { HistoryList } from "~/components/history-list";
 import { ModeToggle } from "~/components/mode-toggle";
 import { OccupancyChart } from "~/components/occupancy-chart";
@@ -28,41 +28,40 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
   const [busy, free, lock] = occupancy;
 
   return (
-    <>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
-        <div className="col-span-2">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
-            {system.map((item, key) => (
-              <Device device={item} enhanced={false} key={key} />
-            ))}
-            <ExitQueue />
-          </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
+      <div className="col-span-2">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
+          {system.map((item, key) => (
+            <Device device={item} enhanced={false} key={key} />
+          ))}
+          {/* <ExitQueue /> */}
         </div>
-        <div className="col-span-2">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
-            <CardWrapper
-              title="Pie Chart - Occupancy"
-              description="Parking occupancy"
-            >
-              <OccupancyChart occupancy={occupancy} />
-            </CardWrapper>
-            <CardWrapper
-              title="Recent activity"
-              description={`Last ${activity.count} operations`}
-            >
-              <HistoryList history={activity.documents} />
-            </CardWrapper>
-            <CardWrapper
-              title="Bar Chart - Operations"
-              description="Parking operations"
-              className="lg:col-span-2"
-            >
-              <OperationsBarChart operations={operations[0].data} />
-            </CardWrapper>
-          </div>
+      </div>
+      <div className="col-span-2">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
+          <CardWrapper
+            title="Pie Chart - Occupancy"
+            description="Parking occupancy"
+          >
+            <OccupancyChart occupancy={occupancy} />
+          </CardWrapper>
+          <CardWrapper
+            title="Recent activity"
+            description={`Last ${activity.count} operations`}
+          >
+            <HistoryList history={activity.documents} />
+          </CardWrapper>
+          <CardWrapper
+            title="Bar Chart - Operations"
+            description="Parking operations"
+            className="lg:col-span-2"
+          >
+            <OperationsBarChart operations={operations[0].data} />
+          </CardWrapper>
         </div>
+      </div>
 
-        {/* {system.map((item, key) => (
+      {/* {system.map((item, key) => (
           <Device device={item} enhanced={false} key={key} />
         ))}
         <CardWrapper
@@ -84,7 +83,6 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
         >
           <OperationsBarChart operations={operations[0].data} />
         </CardWrapper> */}
-      </div>
-    </>
+    </div>
   );
 }

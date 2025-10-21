@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { Device } from "~/components/device";
 import { Error } from "~/components/error";
+import { ExitQueue } from "~/components/exit-queue";
 import { useData } from "~/lib/ws";
 import fetcher from "~/lib/fetch.server";
 
@@ -15,7 +16,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function Overview({ loaderData }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
-
   // ws
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps}/overview`;
   const { data } = useData(url, { initialData: loaderData?.data });
@@ -31,6 +31,10 @@ export default function Overview({ loaderData }: Route.ComponentProps) {
       {data.devices.flat(1).map((item, key) => (
         <Device device={item} enhanced={true} key={key} />
       ))}
+      <ExitQueue
+        exit={data.exitQueue.exitButton}
+        queue={data.exitQueue.queueList}
+      />
     </div>
   );
 }
