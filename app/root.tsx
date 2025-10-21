@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useEffect } from "react";
 import {
   data,
   isRouteErrorResponse,
@@ -7,34 +8,40 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
+  // useLoaderData,
 } from "react-router";
+//
+// import { useChangeLanguage } from "remix-i18next/react";
+import {
+  getLocale,
+  i18nextMiddleware,
+  localeCookie,
+} from "./middleware/i18next";
 import { useTranslation } from "react-i18next";
-import { useChangeLanguage } from "remix-i18next/react";
+//
 import {
   PreventFlashOnWrongTheme,
   ThemeProvider,
   useTheme,
 } from "remix-themes";
 import { themeSessionResolver } from "~/theme.server";
-import {
-  getLocale,
-  i18nextMiddleware,
-  localeCookie,
-} from "./middleware/i18next";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 
-export const unstable_middleware = [i18nextMiddleware];
+export const middleware = [i18nextMiddleware];
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { getTheme } = await themeSessionResolver(request);
   let theme = getTheme();
+  console.log(theme);
+
   let locale = getLocale(context);
+  console.log(locale);
+
   return data(
-    { theme },
-    { locale },
+    { locale: locale, theme: theme },
+    // { locale },
     { headers: { "Set-Cookie": await localeCookie.serialize(locale) } }
   );
 }
@@ -76,9 +83,10 @@ export function App() {
   const data = useLoaderData();
   const [theme] = useTheme();
   let { i18n } = useTranslation();
+  console.log(theme);
 
   // useChangeLanguage(loaderData.locale);
-  useChangeLanguage(data.locale);
+  // useChangeLanguage(data.locale);
   // return <Outlet />;
   return (
     <html
@@ -103,11 +111,23 @@ export function App() {
   );
 }
 
-export default function AppWithProviders({ loaderData }: Route.ComponentProps) {
-  const data = useLoaderData();
+export default function AppWithProviders({
+  loaderData: { locale, theme },
+}: Route.ComponentProps) {
+  let { i18n } = useTranslation();
+
+  console.log(i18n.language, locale, theme);
+
+  useEffect(() => {
+    if (i18n.language !== locale) i18n.changeLanguage(locale);
+  }, [locale, i18n]);
+  //
+  // const data = useLoaderData();
+  // console.log(data);
+
   return (
     <ThemeProvider
-      specifiedTheme={data.theme}
+      specifiedTheme={theme} // {data.theme}
       themeAction="/action/set-theme"
       disableTransitionOnThemeChange={true}
     >

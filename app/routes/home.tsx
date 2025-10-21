@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { data, Form, Link } from "react-router";
 import { Button } from "~/components/ui/button";
+import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/home";
 
@@ -9,6 +10,11 @@ export function meta({ data }: Route.MetaArgs) {
     { title: "Parkbot" },
     { name: "description", content: data?.description },
   ];
+}
+
+export async function loader({ context }: Route.LoaderArgs) {
+  let i18n = getInstance(context);
+  return data({ title: i18n.t("title"), description: i18n.t("description") });
 }
 
 export default function Home() {
