@@ -20,7 +20,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function Dashboard({ loaderData }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
-  console.log(loaderData?.data);
+  // console.log(loaderData?.data);
 
   let { t } = useTranslation();
   useChangeLanguage("en");
