@@ -66,41 +66,43 @@ export function ExitQueue({ exit, queue }: ExitQueueProps) {
       <CardHeader>
         <CardTitle>Exit queue</CardTitle>
         <CardDescription>
-          {queue.filter((item) => item.card === 0).length === 0
+          {queue.filter((item) => item.card !== 0).length === 0
             ? "No waiting exit calls"
             : queue.length + " exit calls waiting"}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Dialog>
-          {queue.map((item, key) => (
-            <DialogTrigger key={key} asChild>
-              {/* <ExitQueueItem item={item} index={key} key={key} /> */}
-              <Item size="sm" className="px-0 py-1 gap-6" key={key}>
-                <ItemContent className="">
-                  <ItemTitle>
-                    {key === 0 ? "Next" : key + 1 + "° call"}
-                  </ItemTitle>
-                  <ItemDescription>
-                    Card {item.card} parked in stall {item.stall}
-                  </ItemDescription>
-                </ItemContent>
-                <ItemActions>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className="rounded-full"
-                    aria-label="Delete"
-                    onClick={() =>
-                      setQueueItem({ card: item.card, index: key + 1 })
-                    }
-                  >
-                    <Trash />
-                  </Button>
-                </ItemActions>
-              </Item>
-            </DialogTrigger>
-          ))}
+          {queue
+            .filter((item) => item.card !== 0)
+            .map((item, key) => (
+              <DialogTrigger key={key} asChild>
+                {/* <ExitQueueItem item={item} index={key} key={key} /> */}
+                <Item size="sm" className="px-0 py-1 gap-6" key={key}>
+                  <ItemContent className="">
+                    <ItemTitle>
+                      {key === 0 ? "Next" : key + 1 + "° call"}
+                    </ItemTitle>
+                    <ItemDescription>
+                      Card {item.card} parked in stall {item.stall}
+                    </ItemDescription>
+                  </ItemContent>
+                  <ItemActions>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="rounded-full"
+                      aria-label="Delete"
+                      onClick={() =>
+                        setQueueItem({ card: item.card, index: key + 1 })
+                      }
+                    >
+                      <Trash />
+                    </Button>
+                  </ItemActions>
+                </Item>
+              </DialogTrigger>
+            ))}
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Delete exit call</DialogTitle>
