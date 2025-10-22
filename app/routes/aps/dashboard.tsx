@@ -3,7 +3,7 @@ import { useChangeLanguage } from "remix-i18next/react";
 import { CardWrapper } from "~/components/card-wrapper";
 import { Device } from "~/components/device";
 import { Error } from "~/components/error";
-// import { ExitQueue } from "~/components/exit-queue";
+import { ExitQueue } from "~/components/exit-queue";
 import { HistoryList } from "~/components/history-list";
 import { ModeToggle } from "~/components/mode-toggle";
 import { OccupancyChart } from "~/components/occupancy-chart";
@@ -20,11 +20,13 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function Dashboard({ loaderData }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
+  console.log(loaderData?.data);
 
   let { t } = useTranslation();
   useChangeLanguage("en");
 
-  const { activity, occupancy, operations, system } = loaderData?.data;
+  const { activity, exitQueue, occupancy, operations, system } =
+    loaderData?.data;
   const [busy, free, lock] = occupancy;
 
   return (
@@ -34,7 +36,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
           {system.map((item, key) => (
             <Device device={item} enhanced={false} key={key} />
           ))}
-          {/* <ExitQueue /> */}
+          <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} />
         </div>
       </div>
       <div className="col-span-2">
