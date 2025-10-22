@@ -82,10 +82,10 @@ export function App() {
   // return <Outlet />;
   return (
     <html
-      lang={i18n.language}
+      className={clsx(theme ?? "dark")}
+      data-theme={theme ?? "dark"}
       dir={i18n.dir(i18n.language)}
-      className={clsx(theme)}
-      data-theme={theme ?? ""}
+      lang={i18n.language}
     >
       <head>
         <meta charSet="utf-8" />
