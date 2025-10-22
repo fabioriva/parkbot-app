@@ -78,7 +78,7 @@ export function App() {
   const data = useLoaderData();
   const [theme] = useTheme();
   let { i18n } = useTranslation();
-  console.log(i18n.language, theme);
+  // console.log(i18n.language, theme);
   // return <Outlet />;
   return (
     <html
@@ -107,13 +107,11 @@ export default function AppWithProviders({
   loaderData: { locale, theme },
 }: Route.ComponentProps) {
   let { i18n } = useTranslation();
-
-  console.log(i18n.language, locale, theme);
-
   useEffect(() => {
     if (i18n.language !== locale) i18n.changeLanguage(locale);
   }, [locale, i18n]);
-  //
+
+  console.log(i18n.language, locale, theme);
   // const data = useLoaderData();
 
   return (
