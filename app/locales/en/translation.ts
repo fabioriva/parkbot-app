@@ -51,7 +51,7 @@ export default {
     auth: {
       cardTitle: "Two-factor authentication",
       cardDescription: "Enter the OTP code from your authenticator app",
-      codeLabel: "OTP code",
+      codeLabel: "Verification code",
       recoveryLink: "Use recovery code",
     },
     reset: {
@@ -63,7 +63,7 @@ export default {
     setup: {
       cardTitle: "Set up two-factor authentication",
       cardDescription: "Scan the QR code with your camera",
-      codeLabel: "OTP code",
+      codeLabel: "Verification code",
     },
   },
   verifyEmail: {

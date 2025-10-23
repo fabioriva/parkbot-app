@@ -9,8 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+// import { Label } from "~/components/ui/label";
 import { LoginSchema, validateForm } from "~/lib/form-validation.server";
 import { verifyPasswordHash } from "~/lib/password.server";
 import {
@@ -97,7 +104,43 @@ export default function Login({ actionData }: Route.ComponentProps) {
       </CardHeader>
       <CardContent>
         <Form method="post">
-          <div className="flex flex-col gap-6">
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                // type="email"
+                name="email"
+                id="email"
+                autoComplete="email"
+                placeholder="mail@example.com"
+              />
+            </Field>
+            <Field>
+              <div className="flex items-center">
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <a
+                  href="/forgot-password"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                >
+                  {t("login.forgotLink")}
+                </a>
+              </div>
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                autoComplete="current-password"
+                // required
+              />
+            </Field>
+            <Field>
+              <SubmitFormButton action="/login" title={t("submitButton")} />
+              {actionData ? (
+                <FieldError>{actionData.message}</FieldError>
+              ) : null}
+            </Field>
+          </FieldGroup>
+          {/* <div className="flex flex-col gap-6">
             <div className="grid gap-3">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -131,7 +174,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
-          </div>
+          </div> */}
         </Form>
       </CardContent>
       <CardFooter>

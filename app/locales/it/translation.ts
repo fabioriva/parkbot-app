@@ -51,7 +51,7 @@ export default {
     auth: {
       cardTitle: "Two-factor authentication",
       cardDescription: "Inserisci il codice OTP generato",
-      codeLabel: "Codice OTP",
+      codeLabel: "Codice di verifica",
       recoveryLink: "Utilizza il codice di recupero",
     },
     reset: {
@@ -63,7 +63,7 @@ export default {
     setup: {
       cardTitle: "Set up two-factor authentication",
       cardDescription: "Inquadra il codice QR con lo smartphone",
-      codeLabel: "Codice OTP",
+      codeLabel: "Codice di verifica",
     },
   },
   verifyEmail: {

@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { Field } from "~/components/ui/field";
 import {
   deleteSession,
   getSession,
@@ -54,9 +55,9 @@ export default function Logout() {
       </CardHeader>
       <CardContent>
         <Form method="post">
-          <div className="flex flex-col gap-6">
+          <Field>
             <SubmitFormButton action="/logout" title="Logout" />
-          </div>
+          </Field>
         </Form>
       </CardContent>
     </Card>
