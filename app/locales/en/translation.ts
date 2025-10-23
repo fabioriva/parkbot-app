@@ -42,6 +42,10 @@ export default {
       "You can use this recovery code if you lose access to your second factors (2FA)",
     nextLink: "Next",
   },
+  selectAps: {
+    cardTitle: "Select a system",
+    cardDescription: "Select a system to continue",
+  },
   signup: {
     cardTitle: "Create a Parkbot account",
     cardDescription: `Your username must be at least 3 characters long and your password must be at least 8 characters long.`,

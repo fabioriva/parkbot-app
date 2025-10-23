@@ -42,6 +42,10 @@ export default {
       "Utilizza il codice per recuperare l'accesso 2FA (secondo fattore di autenticazione)",
     nextLink: "Avanti",
   },
+  selectAps: {
+    cardTitle: "Seleziona un sistema",
+    cardDescription: "Seleziona un sistema per continuare",
+  },
   signup: {
     cardTitle: "Creare un account Parkbot",
     cardDescription: `Il tuo username deve essere lungo almeno 3 caratteri e la password almeno 8 caratteri.`,

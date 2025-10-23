@@ -69,7 +69,7 @@ export async function action({ context, request }: Route.ActionArgs) {
       return { message: i18n.t("auth.codeInvalid") };
     }
     await setSessionAs2FAVerified(session?.id);
-    return redirect("/aps/bugrashov/dashboard");
+    return redirect("/select-aps");
   }
 }
 

@@ -46,6 +46,17 @@ export async function createUser(
   return user;
 }
 
+export async function getUserApsFromEmail(
+  email: string
+): Promise<string[] | null> {
+  const users = db.collection(COLLECTION);
+  const user = await users.findOne({ email });
+  if (user === null) {
+    return null;
+  }
+  return user.aps;
+}
+
 export async function getUserFromEmail(email: string): Promise<User | null> {
   const users = db.collection(COLLECTION);
   const result = await users.findOne({ email });
