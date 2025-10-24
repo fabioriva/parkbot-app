@@ -77,4 +77,13 @@ export default {
     changeMailLink: "Change your email",
     resendButton: "Resend code",
   },
+  aps: {
+    sidebar: {
+      title: "Getting Started",
+      menu: {
+        dashboard: "Dashboard",
+        overview: "Devices overview",
+      },
+    },
+  },
 };

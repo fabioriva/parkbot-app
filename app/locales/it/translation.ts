@@ -77,4 +77,13 @@ export default {
     changeMailLink: "Cambia la tua email",
     resendButton: "Invia codice",
   },
+  aps: {
+    sidebar: {
+      title: "Inizia",
+      menu: {
+        dashboard: "Pannello di controllo",
+        overview: "Vista dispositivi",
+      },
+    },
+  },
 } satisfies typeof import("~/locales/en/translation").default;

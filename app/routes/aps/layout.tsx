@@ -47,6 +47,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
   let { i18n } = useTranslation();
+  const { aps } = loaderData;
   // ws
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps.ns}/info`;
   const { comm, diag, map } = useInfo(url);
@@ -59,7 +60,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
         } as React.CSSProperties
       }
     >
-      <AppSidebar />
+      <AppSidebar aps={aps} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
