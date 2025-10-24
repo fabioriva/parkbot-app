@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { data, Link, Outlet, redirect } from "react-router";
-import { useChangeLanguage } from "remix-i18next/react";
+import { useTranslation } from "react-i18next";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -36,19 +36,19 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   console.log("From aps layout:\n", aps, session, user);
 
   // need to get from collection aps form apsId to display aps name, etc...
-  // if (aps !== session.apsId) {
-  //   return redirect("/login"); // redirect or set error
-  // }
+  if (aps.ns !== session.apsId) {
+    return redirect("/login"); // redirect or set error
+  }
   // check user roles
   // ....
-  return { aps: aps.ns, locale };
+  return { aps, locale };
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
-  const [locale, setLocale] = useState(loaderData?.locale);
-  useChangeLanguage(locale);
+  console.log(loaderData);
+  let { i18n } = useTranslation();
   // ws
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps}/info`;
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps.ns}/info`;
   const { comm, diag, map } = useInfo(url);
 
   return (
@@ -69,7 +69,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
           />
           <div className="grow-1">
             <span className="capitalize hidden sm:inline">
-              {"loaderData?.aps?.ns"}
+              APS {loaderData?.aps?.name}
             </span>
           </div>
           <div className="flex gap-3">
@@ -81,7 +81,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
               className="data-[orientation=vertical]:h-4"
             />
           </div>
-          <LocaleToggle locale={locale} setLocale={(lang) => setLocale(lang)} />
+          <LocaleToggle />
           <ModeToggle />
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

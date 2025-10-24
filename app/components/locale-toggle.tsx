@@ -8,12 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-interface LocaleToggleProps {
-  locale: string;
-  setLocale: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export function LocaleToggle({ locale, setLocale }: LocaleToggleProps) {
+export function LocaleToggle() {
   const { i18n } = useTranslation();
   const languages = Object.keys(i18n.store.data);
 
@@ -21,12 +16,15 @@ export function LocaleToggle({ locale, setLocale }: LocaleToggleProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
-          <span className="uppercase">{locale}</span>
+          <span className="uppercase">{i18n.language}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {languages.map((lang) => (
-          <DropdownMenuItem onClick={() => setLocale(lang)} key={lang}>
+          <DropdownMenuItem
+            onClick={() => i18n.changeLanguage(lang)}
+            key={lang}
+          >
             <span>{lang}</span>
           </DropdownMenuItem>
         ))}

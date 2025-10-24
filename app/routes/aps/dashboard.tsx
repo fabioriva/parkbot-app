@@ -1,5 +1,3 @@
-import { useTranslation } from "react-i18next";
-import { useChangeLanguage } from "remix-i18next/react";
 import { CardWrapper } from "~/components/card-wrapper";
 import { Device } from "~/components/device";
 import { Error } from "~/components/error";
@@ -19,11 +17,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function Dashboard({ loaderData }: Route.ComponentProps) {
-  if (!loaderData?.data) return <Error />;
   // console.log(loaderData?.data);
-
-  let { t } = useTranslation();
-  useChangeLanguage("en");
+  if (!loaderData?.data) return <Error />;
 
   const { activity, exitQueue, occupancy, operations, system } =
     loaderData?.data;
