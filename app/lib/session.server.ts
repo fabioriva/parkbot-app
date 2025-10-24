@@ -7,6 +7,7 @@ import { createCookie } from "react-router";
 import { db } from "./db.server";
 
 import type { SerializeOptions as CookieSerializeOptions } from "cookie";
+import type { Aps } from "./aps.server";
 import type { User } from "./user.server";
 
 const COLLECTION = "sessions";
@@ -68,7 +69,7 @@ export async function getSession(
   const token = sessionCookie.token;
   console.log("sessionCookie:", sessionCookie, token);
   if (token === null) {
-    return { session: null, user: null };
+    return { aps: null, session: null, user: null };
   }
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const sessions = db.collection(COLLECTION);
@@ -78,28 +79,43 @@ export async function getSession(
       { $limit: 1 },
       {
         $lookup: {
-          from: "users", // The collection to join
-          localField: "userId", // Field in the 'sessions' collection
-          foreignField: "id", // Field in the 'users' collection
-          as: "user", // Alias for the joined data
+          from: "users", // Foreign collection to join
+          localField: "userId", // Field in the local 'sessions' collection
+          foreignField: "id", // Field in the foreign 'users' collection
+          as: "user", // Alias for the joined data, output array field
         },
+      },
+      {
+        $unwind: "$user", // Deconstructs the array to a single document
+      },
+      {
+        $lookup: {
+          from: "aps",
+          localField: "apsId",
+          foreignField: "ns",
+          as: "aps",
+        },
+      },
+      {
+        $unwind: { path: "$aps", preserveNullAndEmptyArrays: true },
       },
     ])
     .toArray();
+  console.log(result);
   if (result.length === 0) {
-    return { session: null, user: null };
+    return { aps: null, session: null, user: null };
   }
   const sessionValidationResult = result.shift();
-  const sessionValidationUser = sessionValidationResult?.user.shift();
-  console.log("Session validation result:", sessionValidationResult);
-  console.log("Session validation user:", sessionValidationUser);
   const session: Session = {
     id: sessionValidationResult?.id,
+    apsId: sessionValidationResult?.apsId,
     userId: sessionValidationResult?.userId,
     expiresAt: sessionValidationResult?.expiresAt,
     twoFactorVerified: sessionValidationResult?.twoFactorVerified,
   };
   console.log("session:", session);
+  const sessionValidationUser = sessionValidationResult?.user;
+  // console.log("Session validation user:", sessionValidationUser);
   const user: User = {
     id: sessionValidationUser?.id,
     email: sessionValidationUser?.email,
@@ -108,9 +124,19 @@ export async function getSession(
     registered2FA: sessionValidationUser?.totpKey ? true : false,
   };
   console.log("user:", user);
+  const sessionValidationAps = sessionValidationResult?.aps;
+  // console.log("Session validation aps:", sessionValidationAps);
+  const aps: Aps = {
+    id: sessionValidationAps?._id, // .toString(),
+    city: sessionValidationAps?.city,
+    country: sessionValidationAps?.country,
+    name: sessionValidationAps?.name,
+    ns: sessionValidationAps?.ns,
+  };
+  console.log("aps:", aps);
   if (Date.now() >= session.expiresAt.getTime()) {
     await deleteSession(session.id);
-    return { session: null, user: null };
+    return { aps: null, session: null, user: null };
   }
   if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
     session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
@@ -121,12 +147,17 @@ export async function getSession(
         { $set: { expiresAt: Math.floor(session.expiresAt.getTime() / 1000) } }
       );
   }
-  return { session, user };
+  return { aps, session, user };
 }
 
 export async function invalidateUserSessions(userId: string): Promise<void> {
   const requests = db.collection(COLLECTION);
   await requests.deleteMany({ userId });
+}
+
+export async function setSessionApsId(id: string, ns: string): Promise<void> {
+  const sessions = db.collection(COLLECTION);
+  await sessions.updateOne({ id }, { $set: { apsId: ns } });
 }
 
 export async function setSessionAs2FAVerified(id: string): Promise<void> {
@@ -140,8 +171,8 @@ export interface SessionFlags {
 }
 
 export interface Session extends SessionFlags {
-  // apsId: number,
   id: string;
+  apsId: string;
   userId: string;
   expiresAt: Date;
 }

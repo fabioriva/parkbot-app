@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { data, Link, Outlet } from "react-router";
+import { data, Link, Outlet, redirect } from "react-router";
 import { useChangeLanguage } from "remix-i18next/react";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
@@ -13,13 +13,35 @@ import { CommInfo } from "~/components/comm-info";
 import { LocaleToggle } from "~/components/locale-toggle";
 import { OccupancyInfo } from "~/components/parking-info";
 import { ModeToggle } from "~/components/mode-toggle";
+import { getSession } from "~/lib/session.server";
 import { useInfo } from "~/lib/ws";
 import { getLocale } from "~/middleware/i18next";
 
-export async function loader({ context, params }: Route.LoaderArgs) {
+export async function loader({ context, params, request }: Route.LoaderArgs) {
   let locale = getLocale(context);
-  let aps = params.aps;
-  return { aps, locale };
+  // let aps = params.aps;
+  const { aps, session, user } = await getSession(request);
+  if (session === null) {
+    return redirect("/login");
+  }
+  if (!user.emailVerified) {
+    return redirect("/verify-email");
+  }
+  if (!user.registered2FA) {
+    return redirect("/2fa/setup");
+  }
+  if (!session.twoFactorVerified) {
+    return redirect("/2fa/authentication");
+  }
+  console.log("From aps layout:\n", aps, session, user);
+
+  // need to get from collection aps form apsId to display aps name, etc...
+  // if (aps !== session.apsId) {
+  //   return redirect("/login"); // redirect or set error
+  // }
+  // check user roles
+  // ....
+  return { aps: aps.ns, locale };
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {

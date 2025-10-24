@@ -20,7 +20,7 @@ import {
 } from "~/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { getApsFromNs } from "~/lib/aps.server";
-import { getSession } from "~/lib/session.server";
+import { getSession, setSessionApsId } from "~/lib/session.server";
 import { getUserApsFromEmail } from "~/lib/user.server";
 
 import type { Route } from "./+types/logout";
@@ -39,16 +39,17 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (!session.twoFactorVerified) {
     return redirect("/2fa/authentication");
   }
-  const ns = await getUserApsFromEmail(user.email);
-  const aps = await getApsFromNs(ns);
-  return aps;
+  const nsList = await getUserApsFromEmail(user.email);
+  const apsList = await getApsFromNs(nsList);
+  return apsList;
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
-  // console.log(request);
   const formData = await request.formData();
   const ns = formData.get("ns");
-  console.log(formData, ns);
+  // console.log(formData, ns);
+  const { session, user } = await getSession(request);
+  await setSessionApsId(session?.id, ns);
   return redirect(`/aps/${ns}/dashboard`);
 }
 
