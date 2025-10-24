@@ -25,7 +25,7 @@ export function LocaleToggle() {
             onClick={() => i18n.changeLanguage(lang)}
             key={lang}
           >
-            <span>{lang}</span>
+            <span className="uppercase">{lang}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
