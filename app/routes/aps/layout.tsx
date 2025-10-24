@@ -33,10 +33,8 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   if (!session.twoFactorVerified) {
     return redirect("/2fa/authentication");
   }
-  console.log("From aps layout:\n", aps, session, user);
-
-  // need to get from collection aps form apsId to display aps name, etc...
-  if (aps.ns !== session.apsId) {
+  // console.log("From aps layout:\n", aps, session, user);
+  if (aps.ns !== params.aps) {
     return redirect("/login"); // redirect or set error
   }
   // check user roles

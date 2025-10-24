@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { CircleParking } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -42,11 +41,11 @@ export function AppSidebar({ aps }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="#">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <CircleParking className="size-4" />
+                <div className="flex aspect-square size-12 items-center justify-center rounded-lg mr-1">
+                  <img src="/bot.svg" alt="Parkbot" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">Parkbot web service</span>
+                  <span className="font-medium">Parkbot App</span>
                   <span className="text-xs">v1.0.0</span>
                 </div>
               </a>
