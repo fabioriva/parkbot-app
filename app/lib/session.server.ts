@@ -127,7 +127,7 @@ export async function getSession(
   const sessionValidationAps = sessionValidationResult?.aps;
   // console.log("Session validation aps:", sessionValidationAps);
   const aps: Aps = {
-    id: sessionValidationAps?._id, // .toString(),
+    id: sessionValidationAps?._id.toString(),
     city: sessionValidationAps?.city,
     country: sessionValidationAps?.country,
     name: sessionValidationAps?.name,

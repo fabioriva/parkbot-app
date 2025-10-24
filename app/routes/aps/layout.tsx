@@ -15,10 +15,10 @@ import { OccupancyInfo } from "~/components/parking-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { getSession } from "~/lib/session.server";
 import { useInfo } from "~/lib/ws";
-import { getLocale } from "~/middleware/i18next";
+// import { getLocale } from "~/middleware/i18next";
 
 export async function loader({ context, params, request }: Route.LoaderArgs) {
-  let locale = getLocale(context);
+  // let locale = getLocale(context);
   // let aps = params.aps;
   const { aps, session, user } = await getSession(request);
   if (session === null) {
@@ -41,11 +41,11 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   }
   // check user roles
   // ....
-  return { aps, locale };
+  return { aps, user /*locale*/ };
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
-  console.log(loaderData);
+  // console.log(loaderData);
   let { i18n } = useTranslation();
   // ws
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps.ns}/info`;
