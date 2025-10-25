@@ -117,7 +117,7 @@ export async function getSession(
   const sessionValidationUser = sessionValidationResult?.user;
   // console.log("Session validation user:", sessionValidationUser);
   const user: User = {
-    id: sessionValidationUser?.id,
+    id: sessionValidationUser?._id.toString(),
     email: sessionValidationUser?.email,
     username: sessionValidationUser?.username,
     emailVerified: sessionValidationUser?.emailVerified,
