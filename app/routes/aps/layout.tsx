@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { data, Link, Outlet, redirect } from "react-router";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -17,7 +17,10 @@ import { getSession } from "~/lib/session.server";
 import { useInfo } from "~/lib/ws";
 // import { getLocale } from "~/middleware/i18next";
 
-export async function loader({ context, params, request }: Route.LoaderArgs) {
+export async function loader({
+  /*context,*/ params,
+  request,
+}: Route.LoaderArgs) {
   // let locale = getLocale(context);
   // let aps = params.aps;
   const { aps, session, user } = await getSession(request);
@@ -44,7 +47,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
-  let { i18n } = useTranslation();
+  // let { i18n } = useTranslation();
   const { aps } = loaderData;
   // ws
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps.ns}/info`;
