@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { data, Link, Outlet, redirect } from "react-router";
-// import { useTranslation } from "react-i18next";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -15,14 +14,8 @@ import { OccupancyInfo } from "~/components/parking-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { getSession } from "~/lib/session.server";
 import { useInfo } from "~/lib/ws";
-// import { getLocale } from "~/middleware/i18next";
 
-export async function loader({
-  /*context,*/ params,
-  request,
-}: Route.LoaderArgs) {
-  // let locale = getLocale(context);
-  // let aps = params.aps;
+export async function loader({ params, request }: Route.LoaderArgs) {
   const { aps, session, user } = await getSession(request);
   if (session === null) {
     return redirect("/login");
@@ -36,21 +29,19 @@ export async function loader({
   if (!session.twoFactorVerified) {
     return redirect("/2fa/authentication");
   }
-  // console.log("From aps layout:\n", aps, session, user);
   if (aps.ns !== params.aps) {
-    return redirect("/login"); // redirect or set error
+    return redirect("/not-found");
   }
   // check user roles
   // ....
-  return { aps, user /*locale*/ };
+  return { aps, user };
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
-  // let { i18n } = useTranslation();
   const { aps } = loaderData;
   // ws
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps.ns}/info`;
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
   const { comm, diag, map } = useInfo(url);
 
   return (
@@ -70,9 +61,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             className="mr-2 data-[orientation=vertical]:h-4"
           />
           <div className="grow-1">
-            <span className="capitalize hidden sm:inline">
-              APS {loaderData?.aps?.name}
-            </span>
+            <span className="capitalize hidden sm:inline">APS {aps.name}</span>
           </div>
           <div className="flex gap-3">
             <AlarmInfo active={diag || 0} />
