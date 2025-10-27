@@ -1,4 +1,6 @@
 import { lazy, Fragment, Suspense } from "react";
+import { Error } from "~/components/error";
+import { useData } from "~/lib/ws";
 import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/map";
@@ -18,13 +20,15 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function Map({ loaderData, params }: Route.ComponentProps) {
-  // console.log(params);
+  if (!loaderData?.data) return <Error />;
+  // ws
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
+  const { data } = useData(url, { initialData: loaderData?.data });
   const DynamicComponent = components[params.aps];
   return (
     <Fragment>
-      <h1>Map</h1>
       <Suspense fallback={<span>Loading...</span>}>
-        <DynamicComponent />
+        <DynamicComponent data={data} />
       </Suspense>
     </Fragment>
   );
