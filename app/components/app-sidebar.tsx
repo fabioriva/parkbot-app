@@ -32,8 +32,12 @@ export function AppSidebar({
             url: `/aps/${aps.ns}/dashboard`,
           },
           {
-            title: t("aps.sidebar.menu.overview"),
+            title: t("aps.sidebar.menu.devices"),
             url: `/aps/${aps.ns}/devices`,
+          },
+          {
+            title: t("aps.sidebar.menu.map"),
+            url: `/aps/${aps.ns}/map`,
           },
         ],
       },

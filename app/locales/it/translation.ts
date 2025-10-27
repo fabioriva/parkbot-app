@@ -82,7 +82,8 @@ export default {
       title: "Inizia",
       menu: {
         dashboard: "Pannello di controllo",
-        overview: "Vista dispositivi",
+        devices: "Vista dispositivi",
+        map: "Posti auto",
       },
     },
   },

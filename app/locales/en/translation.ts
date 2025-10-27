@@ -82,7 +82,8 @@ export default {
       title: "Getting Started",
       menu: {
         dashboard: "Dashboard",
-        overview: "Devices overview",
+        devices: "Devices overview",
+        map: "Parking map",
       },
     },
   },
