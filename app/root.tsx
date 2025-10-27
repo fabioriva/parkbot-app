@@ -9,7 +9,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
+  // useLoaderData,
 } from "react-router";
 import {
   PreventFlashOnWrongTheme,
