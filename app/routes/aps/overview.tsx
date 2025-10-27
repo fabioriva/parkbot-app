@@ -11,13 +11,13 @@ export async function loader({ params }: Route.LoaderArgs) {
   // console.log(params);
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/overview`;
   const data = await fetcher(url);
-  return { aps: params?.aps, data };
+  return { data };
 }
 
-export default function Overview({ loaderData }: Route.ComponentProps) {
+export default function Overview({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
   // ws
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.aps}/overview`;
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/overview`;
   const { data } = useData(url, { initialData: loaderData?.data });
   const COLS = data.devices[0].length;
   return (
