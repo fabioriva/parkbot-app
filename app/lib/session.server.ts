@@ -124,15 +124,17 @@ export async function getSession(
     registered2FA: sessionValidationUser?.totpKey ? true : false,
   };
   console.log("user:", user);
-  const sessionValidationAps = sessionValidationResult?.aps;
+  const sessionValidationAps = sessionValidationResult.aps ?? null;
   // console.log("Session validation aps:", sessionValidationAps);
-  const aps: Aps = {
-    id: sessionValidationAps?._id.toString(),
-    city: sessionValidationAps?.city,
-    country: sessionValidationAps?.country,
-    name: sessionValidationAps?.name,
-    ns: sessionValidationAps?.ns,
-  };
+  const aps: Aps = sessionValidationAps
+    ? {
+        id: sessionValidationAps?._id.toString(),
+        city: sessionValidationAps?.city,
+        country: sessionValidationAps?.country,
+        name: sessionValidationAps?.name,
+        ns: sessionValidationAps?.ns,
+      }
+    : null;
   console.log("aps:", aps);
   if (Date.now() >= session.expiresAt.getTime()) {
     await deleteSession(session.id);
