@@ -33,7 +33,7 @@ export function AppSidebar({
           },
           {
             title: t("aps.sidebar.menu.overview"),
-            url: `/aps/${aps.ns}/overview`,
+            url: `/aps/${aps.ns}/devices`,
           },
         ],
       },
