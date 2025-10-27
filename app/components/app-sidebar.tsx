@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
   Sidebar,
@@ -14,6 +15,7 @@ import {
 } from "~/components/ui/sidebar";
 
 export function AppSidebar({ aps }: React.ComponentProps<typeof Sidebar>) {
+  const location = useLocation();
   const { t } = useTranslation();
   const data = {
     navMain: [
@@ -24,7 +26,6 @@ export function AppSidebar({ aps }: React.ComponentProps<typeof Sidebar>) {
           {
             title: t("aps.sidebar.menu.dashboard"),
             url: `/aps/${aps.ns}/dashboard`,
-            isActive: true,
           },
           {
             title: t("aps.sidebar.menu.overview"),
@@ -65,7 +66,10 @@ export function AppSidebar({ aps }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuSub className="ml-0 border-l-0 px-1.5">
                     {item.items.map((item) => (
                       <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={item?.isActive}>
+                        <SidebarMenuSubButton
+                          asChild
+                          isActive={item.url === location.pathname}
+                        >
                           <a href={item.url}>{item.title}</a>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
