@@ -29,23 +29,34 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (!session.twoFactorVerified) {
     return redirect("/2fa/authentication");
   }
+  //
   if (aps.ns !== params.aps) {
     return redirect("/not-found");
   }
   // check user roles
-  // ....
-  return { aps, user };
+  // ...
+  // get sidebar_state cookie
+  const cookieHeader = request.headers.get("Cookie");
+  const cookies = Object.fromEntries(
+    cookieHeader
+      ?.split("; ")
+      .map((cookie) => cookie.split("="))
+      .map(([key, value]) => [key, decodeURIComponent(value)]) || []
+  );
+  const sidebarState = cookies["sidebar_state"];
+  return { aps, sidebarState, user };
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
-  const { aps } = loaderData;
+  const { aps, sidebarState } = loaderData;
   // ws
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
   const { comm, diag, map } = useInfo(url);
 
   return (
     <SidebarProvider
+      defaultOpen={sidebarState === "true"}
       style={
         {
           "--sidebar-width": "19rem",
