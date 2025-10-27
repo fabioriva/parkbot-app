@@ -79,7 +79,8 @@ export function AppSidebar({
                             className={
                               !roles.some(
                                 (role) => role === item.url.split("/").pop()
-                              ) && "pointer-events-none"
+                              ) &&
+                              "pointer-events-none opacity-50 !text-current"
                             }
                           >
                             {item.title}
