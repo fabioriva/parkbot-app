@@ -14,7 +14,11 @@ import {
   SidebarMenuSubItem,
 } from "~/components/ui/sidebar";
 
-export function AppSidebar({ aps }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  aps,
+  roles,
+}: React.ComponentProps<typeof Sidebar>) {
+  // console.log(aps, roles);
   const location = useLocation();
   const { t } = useTranslation();
   const data = {
@@ -70,7 +74,16 @@ export function AppSidebar({ aps }: React.ComponentProps<typeof Sidebar>) {
                           asChild
                           isActive={item.url === location.pathname}
                         >
-                          <a href={item.url}>{item.title}</a>
+                          <a
+                            href={item.url}
+                            className={
+                              !roles.some(
+                                (role) => role === item.url.split("/").pop()
+                              ) && "pointer-events-none"
+                            }
+                          >
+                            {item.title}
+                          </a>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

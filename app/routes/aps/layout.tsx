@@ -13,6 +13,7 @@ import { LocaleToggle } from "~/components/locale-toggle";
 import { OccupancyInfo } from "~/components/parking-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { getSession } from "~/lib/session.server";
+import { getUserRoles } from "~/lib/user.server";
 import { useInfo } from "~/lib/ws";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
@@ -29,12 +30,16 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (!session.twoFactorVerified) {
     return redirect("/2fa/authentication");
   }
-  //
+  // check aps dynamic segment
   if (aps.ns !== params.aps) {
     return redirect("/not-found");
   }
   // check user roles
-  // ...
+  const url = new URL(request.url);
+  const roles = await getUserRoles(user.id);
+  if (!roles.some((role) => role === url.pathname.split("/").pop())) {
+    return redirect("/not-found");
+  }
   // get sidebar_state cookie
   const cookieHeader = request.headers.get("Cookie");
   const cookies = Object.fromEntries(
@@ -44,13 +49,12 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       .map(([key, value]) => [key, decodeURIComponent(value)]) || []
   );
   const sidebarState = cookies["sidebar_state"];
-  return { aps, sidebarState, user };
+  return { aps, roles, sidebarState };
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
-  const { aps, sidebarState } = loaderData;
-  // ws
+  const { aps, roles, sidebarState } = loaderData;
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
   const { comm, diag, map } = useInfo(url);
 
@@ -63,7 +67,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
         } as React.CSSProperties
       }
     >
-      <AppSidebar aps={aps} />
+      <AppSidebar aps={aps} roles={roles} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />

@@ -21,7 +21,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { getApsFromNs } from "~/lib/aps.server";
 import { getSession, setSessionApsId } from "~/lib/session.server";
-import { getUserApsFromEmail } from "~/lib/user.server";
+import { getUserAps } from "~/lib/user.server";
 
 import type { Route } from "./+types/logout";
 
@@ -39,8 +39,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (!session.twoFactorVerified) {
     return redirect("/2fa/authentication");
   }
-  const nsList = await getUserApsFromEmail(user.email);
-  const apsList = await getApsFromNs(nsList);
+  const userAps = await getUserAps(user.id); // _id.toString());
+  const apsList = await getApsFromNs(userAps);
   return apsList;
 }
 

@@ -112,7 +112,7 @@ export default function AppWithProviders({
     if (i18n.language !== locale) i18n.changeLanguage(locale);
   }, [locale, i18n]);
 
-  console.log(i18n.language, locale, theme);
+  // console.log(i18n.language, locale, theme);
   // const data = useLoaderData();
 
   return (

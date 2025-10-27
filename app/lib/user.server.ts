@@ -46,11 +46,9 @@ export async function createUser(
   return user;
 }
 
-export async function getUserApsFromEmail(
-  email: string
-): Promise<string[] | null> {
+export async function getUserAps(id: string): Promise<string[] | null> {
   const users = db.collection(COLLECTION);
-  const user = await users.findOne({ email });
+  const user = await users.findOne({ id });
   if (user === null) {
     return null;
   }
@@ -95,6 +93,15 @@ export async function getUserRecoveryCode(id: string): Promise<string> {
     throw new Error("Invalid user ID");
   }
   return decryptToString(new Uint8Array(user.recoveryCode.buffer)); // Convert Binary object to a Uint8Array
+}
+
+export async function getUserRoles(id: string): Promise<string[] | null> {
+  const users = db.collection(COLLECTION);
+  const user = await users.findOne({ id });
+  if (user === null) {
+    return null;
+  }
+  return user.roles;
 }
 
 export async function getUserTOTPKey(id: string): Promise<Uint8Array | null> {
