@@ -4,12 +4,9 @@ import "./wallstreet.css";
 const Stall = ({ stall, status }) => (
   <div
     className={clsx("absolute h-[30px] w-[40px] border text-center", {
-      "bg-alert/10 dark:bg-alert/20 border-alert text-alert":
-        stall.status !== 0,
-      "bg-ready/10 dark:bg-ready/20 border-ready text-ready":
-        stall.status === status.FREE,
-      "bg-op-exit/10 dark:bg-op-exit/20 border-op-exit text-op-exit":
-        stall.status === status.LOCK,
+      "bg-alert/20 text-alert": stall.status !== 0,
+      "bg-ready/20 text-ready": stall.status === status.FREE,
+      "bg-op-exit/20 text-op-exit": stall.status === status.LOCK,
       "bg-sky-500": stall.status === status.PAPA,
       "bg-yellow-500": stall.status === status.RSVD,
     })}
@@ -23,16 +20,24 @@ export default function Map({ data }) {
   // console.log(data);
   return (
     <>
-      <h1 className="test">Spire</h1>
-      {data?.levels.map((level) => (
+      {data?.levels.reverse().map((level) => (
         <div className="bg-card" key={level.nr}>
           <span className="text-sm">
             {level.label}: {level.min} - {level.max}
           </span>
-          <div
-            className="relative bg-transparent border border-dotted w-full l"
-            id={"l-" + level.nr}
-          >
+          <div className="l relative border border-dotted" id={"l-" + level.nr}>
+            {level.elevators &&
+              level.elevators.map((elevator) => (
+                <div
+                  className="absolute h-[30px] w-[40px] bg-slate-700/10 dark:bg-slate-700/20 text-center el"
+                  id={elevator.id}
+                  key={elevator.id}
+                >
+                  <span className="font-semibold text-xs">
+                    {elevator.label}
+                  </span>
+                </div>
+              ))}
             {level?.stalls.map((stall) => (
               <Stall
                 stall={stall}

@@ -1,6 +1,6 @@
 .l {
   height: 98px;
-  width: 784px;
+  width: 784px !important;
 }
 /* Level P1 */
 #s-1 {
