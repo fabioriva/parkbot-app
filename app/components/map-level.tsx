@@ -61,7 +61,10 @@ export function Level({ definitions, level, view }) {
   const handleConfirm = async ({ stall, status }) => {
     console.log(stall, status);
   };
-
+  const handleOpen = (stall) => {
+    setError(false);
+    setStall(stall);
+  };
   return (
     <div>
       <span className="text-sm">
@@ -105,7 +108,7 @@ export function Level({ definitions, level, view }) {
               >
                 <span
                   className="hover:cursor-pointer hover:font-bold no-underline text-xs"
-                  onClick={() => setStall(stall)}
+                  onClick={() => handleOpen(stall)}
                 >
                   {view === "view-1" && stall.status}
                   {view === "view-2" && stall.nr}
@@ -116,14 +119,14 @@ export function Level({ definitions, level, view }) {
           ))}
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Change stall status</DialogTitle>
+              <DialogTitle>Edit stall {stall.nr} status</DialogTitle>
               <DialogDescription>
-                Enter card number and confirm.
+                Edit stall {stall.nr} status and confirm.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-3 mb-3">
               <Label htmlFor="card">
-                Card number [{min}-{max}]
+                Card number range [{min}-{max}]
               </Label>
               <Input
                 min={min}
