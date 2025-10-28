@@ -37,10 +37,18 @@ export default function ExitCall({ exit }: ExitCallProps) {
   const handleConfirm = async () => {
     console.log(card);
   };
+  const handleOpen = () => {
+    setError(false);
+    setCard(min);
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full" disabled={!enable.status}>
+        <Button
+          className="w-full"
+          disabled={!enable.status}
+          onClick={handleOpen}
+        >
           Exit car
         </Button>
       </DialogTrigger>
