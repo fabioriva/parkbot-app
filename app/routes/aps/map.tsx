@@ -32,8 +32,7 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
     <Fragment>
       {/* <div className="border rounded-md p-3 max-w-xs"> */}
       <RadioGroup
-        className="flex items-center gap-4"
-        // defaultValue="2"
+        className="grid-flow-col max-w-xs"
         orientation="horizontal"
         value={view}
         onValueChange={(value) => setView(value)}

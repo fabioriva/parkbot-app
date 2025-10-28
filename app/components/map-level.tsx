@@ -1,25 +1,67 @@
 import clsx from "clsx";
+import { useState } from "react";
+import { z } from "zod";
+import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
-const Stall = ({ stall, status, view }) => (
-  <div
-    className={clsx("absolute h-[30px] w-[40px] border text-center", {
-      "bg-alert/20 text-alert": stall.status !== 0,
-      "bg-ready/20 text-ready": stall.status === status.FREE,
-      "bg-op-exit/20 text-op-exit": stall.status === status.LOCK,
-      "bg-sky-500": stall.status === status.PAPA,
-      "bg-yellow-500": stall.status === status.RSVD,
-    })}
-    id={"s-" + stall.nr}
-  >
-    <span className="font-semibold text-xs">
-      {view === "view-1" && stall.status}
-      {view === "view-2" && stall.nr}
-      {view === "view-3" && stall.size}
-    </span>
-  </div>
-);
+// export function Stall({ stall, status, view }) {
+//   return (
+//     <div
+//       className={clsx("absolute h-[30px] w-[40px] border text-center", {
+//         "bg-alert/20 text-alert": stall.status !== 0,
+//         "bg-ready/20 text-ready": stall.status === status.FREE,
+//         "bg-op-exit/20 text-op-exit": stall.status === status.LOCK,
+//         "bg-sky-500": stall.status === status.PAPA,
+//         "bg-yellow-500": stall.status === status.RSVD,
+//       })}
+//       id={"s-" + stall.nr}
+//     >
+//       <span className="font-semibold text-xs">
+//         {view === "view-1" && stall.status}
+//         {view === "view-2" && stall.nr}
+//         {view === "view-3" && stall.size}
+//       </span>
+//     </div>
+//   );
+// }
 
 export function Level({ definitions, level, view }) {
+  const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
+  const min = definitions.minCard !== undefined ? definitions.minCard : 1;
+  const max =
+    definitions.maxCard !== undefined ? definitions.maxCard : definitions.cards;
+  const [error, setError] = useState(false);
+  const [stall, setStall] = useState({});
+  // const [status, setStatus] = useState(min);
+  const handleChange = (e) => {
+    const schema = z.coerce.number().min(min).max(max);
+    const result = schema.safeParse(e.target.value);
+    // console.log(result);
+    if (!result.success) {
+      setError(true);
+      // setStatus(Number(e.target.value));
+      setStall((prev) => ({ ...prev, status: Number(e.target.value) }));
+    } else {
+      setError(false);
+      // setStatus(result.data);
+      setStall((prev) => ({ ...prev, status: result.data }));
+    }
+  };
+  const handleConfirm = async ({ stall, status }) => {
+    console.log(stall, status);
+  };
+
   return (
     <div>
       <span className="text-sm">
@@ -39,14 +81,99 @@ export function Level({ definitions, level, view }) {
               <span className="font-semibold text-xs">{elevator.label}</span>
             </div>
           ))}
-        {level?.stalls.map((stall) => (
-          <Stall
-            stall={stall}
-            status={definitions.stallStatus}
-            view={view}
-            key={stall.nr}
-          />
-        ))}
+        <Dialog>
+          {level?.stalls.map((stall) => (
+            <DialogTrigger key={stall.nr} asChild>
+              {/* <Stall
+                stall={stall}
+                status={definitions.stallStatus}
+                view={view}
+                onClick={() => console.log("clicked")}
+              /> */}
+              <div
+                className={clsx(
+                  "absolute h-[30px] w-[40px] border text-center",
+                  {
+                    "bg-alert/20 text-alert": stall.status !== 0,
+                    "bg-ready/20 text-ready": stall.status === FREE,
+                    "bg-op-exit/20 text-op-exit": stall.status === LOCK,
+                    "bg-sky-500": stall.status === PAPA,
+                    "bg-yellow-500": stall.status === RSVD,
+                  }
+                )}
+                id={"s-" + stall.nr}
+              >
+                <span
+                  className="hover:cursor-pointer hover:font-bold no-underline text-xs"
+                  onClick={() => setStall(stall)}
+                >
+                  {view === "view-1" && stall.status}
+                  {view === "view-2" && stall.nr}
+                  {view === "view-3" && stall.size}
+                </span>
+              </div>
+            </DialogTrigger>
+          ))}
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Change stall status</DialogTitle>
+              <DialogDescription>
+                Enter card number and confirm.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-3 mb-3">
+              <Label htmlFor="card">
+                Card number [{min}-{max}]
+              </Label>
+              <Input
+                min={min}
+                max={max}
+                name="status"
+                type="number"
+                value={stall.status}
+                onChange={handleChange}
+              />
+              {error && (
+                <p className="text-red-500 text-sm">
+                  Card number is not valid!
+                </p>
+              )}
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button
+                  onClick={() =>
+                    handleConfirm({ stall: stall.nr, status: stall.status })
+                  }
+                  disabled={error}
+                >
+                  Card
+                </Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button
+                  onClick={() =>
+                    handleConfirm({ stall: stall.nr, status: FREE })
+                  }
+                >
+                  Clear
+                </Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button
+                  onClick={() =>
+                    handleConfirm({ stall: stall.nr, status: LOCK })
+                  }
+                >
+                  Lock
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
