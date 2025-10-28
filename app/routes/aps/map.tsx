@@ -1,5 +1,7 @@
-import { lazy, Fragment, Suspense } from "react";
+import { lazy, Fragment, Suspense, useState } from "react";
 import { Error } from "~/components/error";
+import { Label } from "~/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { useData } from "~/lib/ws";
 import fetcher from "~/lib/fetch.server";
 
@@ -24,11 +26,34 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
   // ws
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
   const { data } = useData(url, { initialData: loaderData?.data });
+  const [view, setView] = useState("view-2");
   const DynamicComponent = components[params.aps];
   return (
     <Fragment>
+      {/* <div className="border rounded-md p-3 max-w-xs"> */}
+      <RadioGroup
+        className="flex items-center gap-4"
+        // defaultValue="2"
+        orientation="horizontal"
+        value={view}
+        onValueChange={(value) => setView(value)}
+      >
+        <div className="flex items-center gap-3">
+          <RadioGroupItem value="view-1" id="r1" />
+          <Label htmlFor="r1">Card</Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem value="view-2" id="r2" />
+          <Label htmlFor="r2">Stall</Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem value="view-3" id="r3" />
+          <Label htmlFor="r3">Size</Label>
+        </div>
+      </RadioGroup>
+      {/* </div> */}
       <Suspense fallback={<span>Loading...</span>}>
-        <DynamicComponent data={data} />
+        <DynamicComponent data={data} view={view} />
       </Suspense>
     </Fragment>
   );
