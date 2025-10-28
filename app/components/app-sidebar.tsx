@@ -1,9 +1,11 @@
 import * as React from "react";
 import { useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
+import { NavUser } from "~/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
@@ -17,11 +19,17 @@ import {
 export function AppSidebar({
   aps,
   roles,
+  user,
 }: React.ComponentProps<typeof Sidebar>) {
-  // console.log(aps, roles);
+  // console.log(aps, roles, user);
   const location = useLocation();
   const { t } = useTranslation();
   const data = {
+    user: {
+      // name: "shadcn",
+      // email: "m@example.com",
+      avatar: "/bot.svg",
+    },
     navMain: [
       {
         title: t("aps.sidebar.title"),
@@ -99,6 +107,10 @@ export function AppSidebar({
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser user={{ ...user, ...data.user }} />
+      </SidebarFooter>
     </Sidebar>
   );
 }
+//

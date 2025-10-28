@@ -49,12 +49,12 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       .map(([key, value]) => [key, decodeURIComponent(value)]) || []
   );
   const sidebarState = cookies["sidebar_state"];
-  return { aps, roles, sidebarState };
+  return { aps, roles, sidebarState, user };
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
-  const { aps, roles, sidebarState } = loaderData;
+  const { aps, roles, sidebarState, user } = loaderData;
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
   const { comm, diag, map } = useInfo(url);
 
@@ -67,7 +67,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
         } as React.CSSProperties
       }
     >
-      <AppSidebar aps={aps} roles={roles} />
+      <AppSidebar aps={aps} roles={roles} user={user} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
