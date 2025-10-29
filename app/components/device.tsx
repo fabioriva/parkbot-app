@@ -13,6 +13,7 @@ import { DeviceView } from "~/components/device-view";
 
 interface DeviceProps {
   device: object;
+  enhanced: boolean;
 }
 
 export function Device({ device, enhanced }: DeviceProps) {
