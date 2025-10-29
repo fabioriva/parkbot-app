@@ -28,13 +28,13 @@ export function NavUser({
   user,
 }: {
   user: {
-    name: string;
+    username: string;
     email: string;
     avatar: string;
   };
 }) {
   const { isMobile } = useSidebar();
-  console.log(user);
+  // console.log(user);
 
   return (
     <SidebarMenu>

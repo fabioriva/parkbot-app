@@ -16,11 +16,17 @@ import {
   SidebarMenuSubItem,
 } from "~/components/ui/sidebar";
 
-export function AppSidebar({
-  aps,
-  roles,
-  user,
-}: React.ComponentProps<typeof Sidebar>) {
+import type { Aps } from "~/lib/aps.server";
+import type { User } from "~/lib/user.server";
+
+interface SidebarProps {
+  aps: Aps;
+  roles: string[];
+  user: User;
+  // Sidebar: React.ComponentProps<typeof Sidebar>
+}
+
+export function AppSidebar({ aps, roles, user }: SidebarProps) {
   // console.log(aps, roles, user);
   const location = useLocation();
   const { t } = useTranslation();
@@ -89,10 +95,11 @@ export function AppSidebar({
                           <a
                             href={item.url}
                             className={
-                              !roles.some(
+                              (!roles.some(
                                 (role) => role === item.url.split("/").pop()
                               ) &&
-                              "pointer-events-none opacity-50 !text-current"
+                                "pointer-events-none opacity-50 !text-current") ||
+                              undefined
                             }
                           >
                             {item.title}
