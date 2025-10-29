@@ -1,3 +1,17 @@
-export default function Map() {
-  return <h1>Bugrashov</h1>;
+import { Level } from "~/components/map-level";
+import "./bugrashov.css";
+
+export default function Map({ data, view }) {
+  return (
+    <div className="space-y-3">
+      {data?.levels.map((level) => (
+        <Level
+          definitions={data?.definitions}
+          level={level}
+          view={view}
+          key={level.nr}
+        />
+      ))}
+    </div>
+  );
 }
