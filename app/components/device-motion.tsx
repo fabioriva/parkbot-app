@@ -4,16 +4,7 @@ import { Badge } from "~/components/ui/badge";
 import { DevicePosition as Position } from "~/components/device-position";
 import { DigitalIO } from "~/components/digital-io-badge";
 
-import type { Bit, Encoder } from "~/routes/aps/types";
-
-type Motor = {
-  encoders: Encoder[];
-  id: number;
-  io: Bit[];
-  message: string;
-  name: object; // {key:"", query:""}
-  run: Bit;
-};
+import type { Bit, Encoder, Motor } from "~/routes/aps/types";
 
 interface DeviceMotionProps {
   motor: Motor;
@@ -25,7 +16,8 @@ export function DeviceMotion({ motor }: DeviceMotionProps) {
     <>
       <AccordionTrigger className="flex hover:no-underline py-3">
         <div className="grow">
-          {motor.name.key}&nbsp;{motor.name.query?.id}
+          {motor.name.key}
+          {/* &nbsp;{motor.name.query?.id} */}
         </div>
         {motor.run.status ? (
           <Badge className="bg-yellow-200 text-yellow-600" variant="secondary">

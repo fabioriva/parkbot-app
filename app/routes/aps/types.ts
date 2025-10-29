@@ -10,3 +10,12 @@ export type Encoder = {
   name: string;
   position: number;
 };
+
+type Motor = {
+  encoders: Encoder[];
+  id: number;
+  io: Bit[];
+  message: string;
+  name: { key: string; query: any };
+  run: Bit;
+};
