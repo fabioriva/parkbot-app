@@ -11,7 +11,7 @@ export type Encoder = {
   position: number;
 };
 
-type Motor = {
+export type Motor = {
   encoders: Encoder[];
   id: number;
   io: Bit[];
