@@ -1,3 +1,18 @@
-export default function Map() {
-  return <h1>Menlo A</h1>;
+import { Level } from "~/components/map-level";
+import "./menloa.css";
+
+export default function Map({ data, view }) {
+  const levels = [...data.levels].reverse(); // Creates a copy and reverses it
+  return (
+    <div className="space-y-3">
+      {levels.map((level) => (
+        <Level
+          definitions={data?.definitions}
+          level={level}
+          view={view}
+          key={level.nr}
+        />
+      ))}
+    </div>
+  );
 }
