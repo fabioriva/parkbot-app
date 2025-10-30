@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 
-export function useData(url, options) {
+export function useData(url: string, options: any) {
   const { initialData } = options;
   const [data, setData] = useState(initialData);
   const [loading, setLoading] = useState(true);
-
   const ws = useRef(null);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ export function useData(url, options) {
   return { data, loading };
 }
 
-export function useInfo(url) {
+export function useInfo(url: string) {
   const [comm, setComm] = useState(false);
   const [diag, setDiag] = useState(0);
   const [expired, setExpired] = useState(false);

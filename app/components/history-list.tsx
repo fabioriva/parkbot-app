@@ -23,18 +23,11 @@ import {
   ItemTitle,
 } from "~/components/ui/item";
 
-type Log = {
-  card: number;
-  date: string;
-  device: { id: number; key: string };
-  mode: { id: number; key: string };
-  operation: { id: number; key: string };
-  size: number;
-  stall: number;
-};
+// import type { Log } from "~/routes/aps/types";
 
 interface HistoryItemProps {
-  item: Log;
+  // item: Log;
+  item: any;
 }
 
 interface HistoryListProps {
