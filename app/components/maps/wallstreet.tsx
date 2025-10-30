@@ -1,7 +1,7 @@
 import { Level } from "~/components/map-level";
 import "./wallstreet.css";
 
-export default function Map({ data, view }) {
+export default function Map({ data, view }: { data: any; view: any }) {
   // console.log(data);
   const levels = [...data.levels].reverse(); // Creates a copy and reverses it
   return (

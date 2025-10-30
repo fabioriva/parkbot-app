@@ -12,7 +12,7 @@ import { DeviceInfo } from "~/components/device-info";
 import { DeviceView } from "~/components/device-view";
 
 interface DeviceProps {
-  device: object;
+  device: any;
   enhanced: boolean;
 }
 

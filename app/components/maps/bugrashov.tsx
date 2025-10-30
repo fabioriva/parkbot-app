@@ -1,7 +1,7 @@
 import { Level } from "~/components/map-level";
 import "./bugrashov.css";
 
-export default function Map({ data, view }) {
+export default function Map({ data, view }: { data: any; view: any }) {
   return (
     <div className="space-y-3">
       {data?.levels.map((level) => (

@@ -15,36 +15,30 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
-// export function Stall({ stall, status, view }) {
-//   return (
-//     <div
-//       className={clsx("absolute h-[30px] w-[40px] border text-center", {
-//         "bg-alert/20 text-alert": stall.status !== 0,
-//         "bg-ready/20 text-ready": stall.status === status.FREE,
-//         "bg-op-exit/20 text-op-exit": stall.status === status.LOCK,
-//         "bg-sky-500": stall.status === status.PAPA,
-//         "bg-yellow-500": stall.status === status.RSVD,
-//       })}
-//       id={"s-" + stall.nr}
-//     >
-//       <span className="font-semibold text-xs">
-//         {view === "view-1" && stall.status}
-//         {view === "view-2" && stall.nr}
-//         {view === "view-3" && stall.size}
-//       </span>
-//     </div>
-//   );
-// }
+import type { Stall } from "~/routes/aps/types";
 
-export function Level({ definitions, level, view }) {
+interface MapLevelProps {
+  definitions: any;
+  level: any;
+  view: string;
+}
+
+export function Level({ definitions, level, view }: MapLevelProps) {
+  console.log(definitions, level, view);
+
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const min = definitions.minCard !== undefined ? definitions.minCard : 1;
   const max =
     definitions.maxCard !== undefined ? definitions.maxCard : definitions.cards;
-  const [error, setError] = useState(false);
-  const [stall, setStall] = useState({});
+  const [error, setError] = useState<boolean>(false);
+  const [stall, setStall] = useState<Stall>({
+    date: "",
+    nr: 0,
+    size: 0,
+    status: 0,
+  });
   // const [status, setStatus] = useState(min);
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const schema = z.coerce.number().min(min).max(max);
     const result = schema.safeParse(e.target.value);
     // console.log(result);
@@ -58,10 +52,16 @@ export function Level({ definitions, level, view }) {
       setStall((prev) => ({ ...prev, status: result.data }));
     }
   };
-  const handleConfirm = async ({ stall, status }) => {
+  const handleConfirm = async ({
+    stall,
+    status,
+  }: {
+    stall: number;
+    status: number;
+  }) => {
     console.log(stall, status);
   };
-  const handleOpen = (stall) => {
+  const handleOpen = (stall: Stall) => {
     setError(false);
     setStall(stall);
   };
@@ -75,7 +75,7 @@ export function Level({ definitions, level, view }) {
         id={"l-" + level.nr}
       >
         {level.elevators &&
-          level.elevators.map((elevator) => (
+          level.elevators.map((elevator: any) => (
             <div
               className="absolute h-[30px] w-[40px] bg-slate-700/10 dark:bg-slate-700/20 text-center el"
               id={elevator.id}
@@ -85,14 +85,8 @@ export function Level({ definitions, level, view }) {
             </div>
           ))}
         <Dialog>
-          {level?.stalls.map((stall) => (
+          {level?.stalls.map((stall: Stall) => (
             <DialogTrigger key={stall.nr} asChild>
-              {/* <Stall
-                stall={stall}
-                status={definitions.stallStatus}
-                view={view}
-                onClick={() => console.log("clicked")}
-              /> */}
               <div
                 className={clsx(
                   "absolute h-[30px] w-[40px] border text-center",

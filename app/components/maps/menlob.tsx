@@ -1,7 +1,7 @@
 import { Level } from "~/components/map-level";
 import "./menlob.css";
 
-export default function Map({ data, view }) {
+export default function Map({ data, view }: { data: any; view: any }) {
   const levels = [...data.levels].reverse(); // Creates a copy and reverses it
   return (
     <div className="space-y-3">

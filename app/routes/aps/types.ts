@@ -29,3 +29,10 @@ export type Motor = {
   name: { key: string; query: any };
   run: Bit;
 };
+
+export type Stall = {
+  date: string;
+  nr: number;
+  size: number;
+  status: number;
+};
