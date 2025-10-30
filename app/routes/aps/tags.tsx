@@ -15,7 +15,7 @@ import {
 import { useData } from "~/lib/ws";
 import fetcher from "~/lib/fetch.server";
 
-import type { Route } from "./+types/map";
+import type { Route } from "./+types/tags";
 
 export async function loader({ params }: Route.LoaderArgs) {
   // console.log(params);
