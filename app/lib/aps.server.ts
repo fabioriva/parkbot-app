@@ -2,7 +2,7 @@ import { db } from "./db.server";
 
 const COLLECTION = "aps";
 
-export async function getApsFromNs(nsList: string[]): Promise<string[] | null> {
+export async function getApsFromNs(nsList: string[]): Promise<Aps[] | null> {
   const aps = db.collection(COLLECTION);
   const apsList = await aps
     .find({ ns: { $in: nsList } }, { projection: { _id: 0 } })
