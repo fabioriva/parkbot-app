@@ -26,7 +26,8 @@ export default function Racks({ loaderData, params }: Route.ComponentProps) {
     <div className="flex flex-wrap gap-3">
       {data.map((item) => (
         <Item
-          className="min-w-xs"
+          // className="min-w-xs"
+          className={`w-64 ${item.online.status ? "bg-ready/20" : "bg-alert/20"}`}
           variant="outline"
           key={item.deviceNr}
           asChild
