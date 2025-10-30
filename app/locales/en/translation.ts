@@ -84,6 +84,7 @@ export default {
         dashboard: "Dashboard",
         devices: "Devices overview",
         map: "Parking map",
+        tags: "Tags",
       },
     },
   },

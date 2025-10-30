@@ -84,6 +84,7 @@ export default {
         dashboard: "Pannello di controllo",
         devices: "Vista dispositivi",
         map: "Posti auto",
+        tags: "Tags",
       },
     },
   },

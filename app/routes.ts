@@ -32,6 +32,7 @@ export default [
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
       route(":aps/devices", "routes/aps/overview.tsx"),
       route(":aps/map", "routes/aps/map.tsx"),
+      route(":aps/tags", "routes/aps/tags.tsx"),
     ]),
   ]),
   route("action/set-theme", "./routes/action.set-theme.ts"),
