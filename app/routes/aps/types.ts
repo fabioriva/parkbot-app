@@ -11,6 +11,16 @@ export type Encoder = {
   position: number;
 };
 
+export type Log = {
+  card: number;
+  date: string;
+  device: { id: number; key: string };
+  mode: { id: number; key: string };
+  operation: { id: number; key: string };
+  size: number;
+  stall: number;
+};
+
 export type Motor = {
   encoders: Encoder[];
   id: number;

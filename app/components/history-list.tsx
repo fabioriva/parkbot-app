@@ -23,15 +23,85 @@ import {
   ItemTitle,
 } from "~/components/ui/item";
 
-interface HistoryItem {
-  name: string;
-  entries: number;
-  exits: number;
-  total: number;
+type Log = {
+  card: number;
+  date: string;
+  device: { id: number; key: string };
+  mode: { id: number; key: string };
+  operation: { id: number; key: string };
+  size: number;
+  stall: number;
+};
+
+interface HistoryItemProps {
+  item: Log;
 }
 
 interface HistoryListProps {
-  operations: OperationsItem[];
+  history: HistoryItemProps[];
+}
+
+const HistoryListItem = ({ item }: HistoryItemProps) => (
+  <Item size="sm" className="px-0 py-1 gap-6">
+    {/* <ItemIcon id={item.operation.id} /> */}
+    <ItemMedia variant="icon">
+      {item.device.id !== 0 ? (
+        <span className={item.device.key.length > 2 ? "text-xs" : undefined}>
+          {item.device.key}
+        </span>
+      ) : (
+        <User />
+      )}
+    </ItemMedia>
+    <ItemContent className="gap-0.5">
+      <ItemTitle className="line-clamp-1">
+        {/* {item.device.key} -{" "}
+        <span className="text-muted-foreground">{item.mode.key}</span> */}
+        {item.mode.id} -{" "}
+        <span className="text-muted-foreground">{item.mode.key}</span>
+      </ItemTitle>
+      <ItemDescription>{item.operation.key}</ItemDescription>
+    </ItemContent>
+    <ItemContent className="flex-none text-right">
+      <ItemDescription className="flex flex-col">
+        <span>{item.date.slice(0, 10)}</span>
+        <span>{item.date.slice(11, 19)}</span>
+      </ItemDescription>
+    </ItemContent>
+  </Item>
+);
+
+export function HistoryList({ history }: HistoryListProps) {
+  // console.log(history);
+  return (
+    <>
+      {history.map((item, key) => (
+        <HistoryListItem item={item} key={key} />
+      ))}
+    </>
+    // <div className="grid gap-3">
+    //   {history.map((item, key) => (
+    //     <HistoryListItem item={item} key={key} />
+    //     <div className="flex items-center justify-between text-sm" key={key}>
+    //       <div className="flex items-center gap-4">
+    //         <Icon id={item.operation.id} />
+    //         <div className="flex flex-col gap-0.5">
+    //           <p className="leading-none font-medium">
+    //             {item.device.key} - {item.mode.key}
+    //           </p>
+    //           <p className="text-muted-foreground text-sm">
+    //             {item.operation.key}
+    //           </p>
+    //         </div>
+    //       </div>
+    //       <div className="flex flex-col text-right text-muted-foreground text-sm">
+    //         <span>{item.date.slice(0, 10)}</span>
+    //         <span>{item.date.slice(11, 19)}</span>
+    //       </div>
+    //     </div>
+    //   ))}
+    // </div>
+  );
 }
 
 // const ICON_SIZE = 24;
@@ -94,65 +164,3 @@ interface HistoryListProps {
 //     {id > 14 && <X />}
 //   </ItemMedia>
 // );
-
-const HistoryListItem = ({ item }) => (
-  <Item size="sm" className="px-0 py-1 gap-6">
-    {/* <ItemIcon id={item.operation.id} /> */}
-    <ItemMedia variant="icon">
-      {item.device.id !== 0 ? (
-        <span className={item.device.key.length > 2 ? "text-xs" : undefined}>
-          {item.device.key}
-        </span>
-      ) : (
-        <User />
-      )}
-    </ItemMedia>
-    <ItemContent className="gap-0.5">
-      <ItemTitle className="line-clamp-1">
-        {/* {item.device.key} -{" "}
-        <span className="text-muted-foreground">{item.mode.key}</span> */}
-        {item.mode.id} -{" "}
-        <span className="text-muted-foreground">{item.mode.key}</span>
-      </ItemTitle>
-      <ItemDescription>{item.operation.key}</ItemDescription>
-    </ItemContent>
-    <ItemContent className="flex-none text-right">
-      <ItemDescription className="flex flex-col">
-        <span>{item.date.slice(0, 10)}</span>
-        <span>{item.date.slice(11, 19)}</span>
-      </ItemDescription>
-    </ItemContent>
-  </Item>
-);
-
-export function HistoryList({ history }: HistoryListProps) {
-  return (
-    <>
-      {history.map((item, key) => (
-        <HistoryListItem item={item} key={key} />
-      ))}
-    </>
-    // <div className="grid gap-3">
-    //   {history.map((item, key) => (
-    //     <HistoryListItem item={item} key={key} />
-    //     <div className="flex items-center justify-between text-sm" key={key}>
-    //       <div className="flex items-center gap-4">
-    //         <Icon id={item.operation.id} />
-    //         <div className="flex flex-col gap-0.5">
-    //           <p className="leading-none font-medium">
-    //             {item.device.key} - {item.mode.key}
-    //           </p>
-    //           <p className="text-muted-foreground text-sm">
-    //             {item.operation.key}
-    //           </p>
-    //         </div>
-    //       </div>
-    //       <div className="flex flex-col text-right text-muted-foreground text-sm">
-    //         <span>{item.date.slice(0, 10)}</span>
-    //         <span>{item.date.slice(11, 19)}</span>
-    //       </div>
-    //     </div>
-    //   ))}
-    // </div>
-  );
-}
