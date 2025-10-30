@@ -14,18 +14,30 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
-interface ExitCallProps {}
+interface ExitCallProps {
+  exit: {
+    enable: { addr: string; status: number };
+    key: string;
+    max: number;
+    min: number;
+    // writeArea: {
+    //   area: number;
+    //   dbNumber: 505;
+    //   start: number;
+    //   amount: number;
+    //   wordLen: numer;
+    // }; // not necessary
+  };
+}
 
 export default function ExitCall({ exit }: ExitCallProps) {
-  // console.log(exit);
+  console.log(exit);
   const { enable, max, min } = exit;
   const [card, setCard] = useState(min);
   const [error, setError] = useState(false);
-  const handleChange = (e) => {
-    // console.log(typeof e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const schema = z.coerce.number().min(min).max(max);
     const result = schema.safeParse(e.target.value);
-    // console.log(result);
     if (!result.success) {
       setError(true);
       setCard(Number(e.target.value));
