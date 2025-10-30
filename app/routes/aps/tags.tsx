@@ -57,7 +57,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
       <div className="flex flex-wrap gap-3">
         {search.length === 0 &&
           data.map((item) => (
-            <Item className="min-w-xs" variant="outline" key={item.nr}>
+            <Item className="w-80" variant="outline" key={item.nr}>
               <ItemMedia
                 variant="icon"
                 className={
