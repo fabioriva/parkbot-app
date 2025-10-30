@@ -25,35 +25,13 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
-  // ItemGroup,
-  // ItemMedia,
-  // ItemSeparator,
   ItemTitle,
 } from "~/components/ui/item";
 
-interface ExitQueueProps {}
-
-// const ExitQueueItem = ({ item, index }) => (
-//   <Item size="sm" className="px-0 py-1">
-//     <ItemContent>
-//       <ItemTitle>{index === 0 ? "Next" : index + 1 + "° call"}</ItemTitle>
-//       <ItemDescription>
-//         Card {item.card} parked in stall {item.stall}
-//       </ItemDescription>
-//     </ItemContent>
-//     <ItemActions>
-//       <Button
-//         size="icon"
-//         variant="outline"
-//         className="rounded-full"
-//         aria-label="Delete"
-//         onClick={() => setQueueItem({ card: item.card, index: index + 1 })}
-//       >
-//         <Trash />
-//       </Button>
-//     </ItemActions>
-//   </Item>
-// );
+interface ExitQueueProps {
+  exit: any;
+  queue: any;
+}
 
 export function ExitQueue({ exit, queue }: ExitQueueProps) {
   // console.log(queue);
@@ -74,10 +52,9 @@ export function ExitQueue({ exit, queue }: ExitQueueProps) {
       <CardContent>
         <Dialog>
           {queue
-            .filter((item) => item.card !== 0)
-            .map((item, key) => (
+            .filter((item: any) => item.card !== 0)
+            .map((item: any, key: any) => (
               <DialogTrigger key={key} asChild>
-                {/* <ExitQueueItem item={item} index={key} key={key} /> */}
                 <Item size="sm" className="px-0 py-1 gap-6" key={key}>
                   <ItemContent className="">
                     <ItemTitle>

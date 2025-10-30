@@ -15,23 +15,24 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
 interface ExitCallProps {
-  exit: {
-    enable: { addr: string; status: number };
-    key: string;
-    max: number;
-    min: number;
-    // writeArea: {
-    //   area: number;
-    //   dbNumber: 505;
-    //   start: number;
-    //   amount: number;
-    //   wordLen: numer;
-    // }; // not necessary
-  };
+  exit: any;
+  // exit: {
+  //   enable: { addr: string; status: number };
+  //   key: string;
+  //   max: number;
+  //   min: number;
+  //   // writeArea: {
+  //   //   area: number;
+  //   //   dbNumber: 505;
+  //   //   start: number;
+  //   //   amount: number;
+  //   //   wordLen: numer;
+  //   // }; // not necessary
+  // };
 }
 
 export default function ExitCall({ exit }: ExitCallProps) {
-  console.log(exit);
+  // console.log(exit);
   const { enable, max, min } = exit;
   const [card, setCard] = useState(min);
   const [error, setError] = useState(false);
