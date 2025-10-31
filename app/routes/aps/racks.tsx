@@ -20,20 +20,21 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function Racks({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
-  console.log(loaderData?.data);
+  // console.log(loaderData?.data);
+  // fetch data every x ms
   const data = loaderData?.data;
   return (
     <div className="flex flex-wrap gap-3">
       {data.map((item) => (
         <Item
-          // className="min-w-xs"
-          className={`w-64 ${item.online.status ? "bg-ready/20" : "bg-alert/20"}`}
+          className="w-64"
+          // className={`w-64 ${item.online.status ? "bg-ready/20" : "bg-alert/20"}`}
           variant="outline"
           key={item.deviceNr}
           asChild
         >
           <a
-            href={`/${params?.aps}/rack/${item.rack.nr}?name=${item.deviceName}&nr=${item.deviceNr}`}
+            href={`/aps/${params?.aps}/racks/${item.rack.nr}?name=${item.deviceName}&nr=${item.deviceNr}`}
           >
             <ItemContent>
               <ItemTitle>{item.deviceName}</ItemTitle>

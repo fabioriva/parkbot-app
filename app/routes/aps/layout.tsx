@@ -37,7 +37,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   // check user roles
   const url = new URL(request.url);
   const roles = await getUserRoles(user.id);
-  if (!roles.some((role) => role === url.pathname.split("/").pop())) {
+  if (!roles.some((role) => role === url.pathname.split("/")[3])) {
+    // .pop())) {
     return redirect("/not-found");
   }
   // get sidebar_state cookie
