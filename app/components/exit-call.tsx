@@ -27,7 +27,7 @@ interface ExitCallProps {
 }
 
 export default function ExitCall({ exit }: ExitCallProps) {
-  console.log(exit);
+  // console.log(exit);
   const { enable, max, min } = exit;
   const [card, setCard] = useState(min);
   const [error, setError] = useState(false);
