@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useFetcher } from "react-router";
 import { CardWrapper } from "~/components/card-wrapper";
 import { Device } from "~/components/device";
 import { Error } from "~/components/error";
@@ -16,12 +18,29 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { data };
 }
 
-export default function Dashboard({ loaderData }: Route.ComponentProps) {
+export default function Dashboard({
+  loaderData,
+  params,
+}: Route.ComponentProps) {
   // console.log(loaderData?.data);
   if (!loaderData?.data) return <Error />;
+  const [data, setData] = useState(loaderData?.data);
+  const fetcher = useFetcher();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetcher.load(`/aps/${params.aps}/dashboard`);
+    }, 500);
 
-  const { activity, exitQueue, occupancy, operations, system } =
-    loaderData?.data;
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [fetcher]);
+  // console.log(fetcher.data);
+  useEffect(() => {
+    if (fetcher.data) {
+      setData(fetcher.data["data"]);
+    }
+  }, [fetcher.data]);
+
+  const { activity, exitQueue, occupancy, operations, system } = data;
   const [busy, free, lock] = occupancy;
 
   return (
