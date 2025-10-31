@@ -1,4 +1,4 @@
-import { lazy, Fragment, Suspense, useState } from "react";
+import { lazy, Fragment, Suspense } from "react";
 import { useSearchParams } from "react-router";
 import { Error } from "~/components/error";
 import { useData } from "~/lib/ws";
@@ -47,11 +47,12 @@ export default function Rack({ loaderData, params }: Route.ComponentProps) {
           {data.cards.map((item, key) => {
             const DynamicComponent = components[item.module];
             return (
-              <Fragment key={item.nr}>
-                {DynamicComponent !== undefined && (
-                  <DynamicComponent key={key} module={item} />
-                )}
-              </Fragment>
+              // <Fragment key={item.nr}>
+              //   {DynamicComponent !== undefined && (
+              //     <DynamicComponent key={key} module={item} />
+              //   )}
+              // </Fragment>
+              <DynamicComponent module={item} key={key} />
             );
           })}
         </Suspense>
