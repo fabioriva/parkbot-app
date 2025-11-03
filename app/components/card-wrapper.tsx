@@ -12,12 +12,14 @@ import {
 interface CardWrapperProps {
   className?: string;
   description: string;
+  link: string;
   title: string;
 }
 
 export function CardWrapper({
   className,
   description,
+  link,
   title,
   children,
 }: PropsWithChildren<CardWrapperProps>) {
@@ -27,7 +29,9 @@ export function CardWrapper({
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
         <CardAction>
-          <Button variant="link">More</Button>
+          <Button className="hover:cursor-pointer" variant="link" asChild>
+            <a href={link}>More</a>
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent>{children}</CardContent>

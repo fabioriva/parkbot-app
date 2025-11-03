@@ -58,18 +58,21 @@ export default function Dashboard({
           <CardWrapper
             title="Pie Chart - Occupancy"
             description="Parking occupancy"
+            link={`/aps/${params.aps}/map`}
           >
             <OccupancyChart occupancy={occupancy} />
           </CardWrapper>
           <CardWrapper
             title="Recent activity"
             description={`Last ${activity.count} operations`}
+            // link={`/aps/${params.aps}/history`}
           >
             <HistoryList history={activity.documents} />
           </CardWrapper>
           <CardWrapper
             title="Bar Chart - Operations"
             description="Parking operations"
+            // link={`/aps/${params.aps}/statistics`}
             className="lg:col-span-2"
           >
             <OperationsBarChart operations={operations[0].data} />
