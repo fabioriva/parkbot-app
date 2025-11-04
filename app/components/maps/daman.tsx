@@ -404,6 +404,358 @@ export default function Map({ data, view }: { data: any; view: any }) {
           top: 126px;
           left: 1109px;
         }
+        #s-89 {
+          top: 2px;
+          left: 2px;
+        }
+        #s-90 {
+          top: 33px;
+          left: 2px;
+        }
+        #s-91 {
+          top: 95px;
+          left: 2px;
+        }
+        #s-92 {
+          top: 126px;
+          left: 2px;
+        }
+        #s-93 {
+          top: 2px;
+          left: 43px;
+        }
+        #s-94 {
+          top: 33px;
+          left: 43px;
+        }
+        #s-95 {
+          top: 95px;
+          left: 43px;
+        }
+        #s-96 {
+          top: 126px;
+          left: 43px;
+        }
+        #s-97 {
+          top: 2px;
+          left: 84px;
+        }
+        #s-98 {
+          top: 33px;
+          left: 84px;
+        }
+        #s-99 {
+          top: 95px;
+          left: 84px;
+        }
+        #s-100 {
+          top: 126px;
+          left: 84px;
+        }
+        #s-101 {
+          top: 2px;
+          left: 125px;
+        }
+        #s-102 {
+          top: 33px;
+          left: 125px;
+        }
+        #s-103 {
+          top: 95px;
+          left: 125px;
+        }
+        #s-104 {
+          top: 126px;
+          left: 125px;
+        }
+        #s-105 {
+          top: 2px;
+          left: 166px;
+        }
+        #s-106 {
+          top: 33px;
+          left: 166px;
+        }
+        #s-107 {
+          top: 95px;
+          left: 166px;
+        }
+        #s-108 {
+          top: 126px;
+          left: 166px;
+        }
+        #s-109 {
+          top: 2px;
+          left: 207px;
+        }
+        #s-110 {
+          top: 33px;
+          left: 207px;
+        }
+        #s-111 {
+          top: 2px;
+          left: 248px;
+        }
+        #s-112 {
+          top: 33px;
+          left: 248px;
+        }
+        #s-113 {
+          top: 95px;
+          left: 248px;
+        }
+        #s-114 {
+          top: 126px;
+          left: 248px;
+        }
+        #s-115 {
+          top: 2px;
+          left: 289px;
+        }
+        #s-116 {
+          top: 33px;
+          left: 289px;
+        }
+        #s-117 {
+          top: 2px;
+          left: 330px;
+        }
+        #s-118 {
+          top: 33px;
+          left: 330px;
+        }
+        #s-119 {
+          top: 95px;
+          left: 330px;
+        }
+        #s-120 {
+          top: 126px;
+          left: 330px;
+        }
+        #s-121 {
+          top: 2px;
+          left: 371px;
+        }
+        #s-122 {
+          top: 33px;
+          left: 371px;
+        }
+        #s-123 {
+          top: 2px;
+          left: 412px;
+        }
+        #s-124 {
+          top: 33px;
+          left: 412px;
+        }
+        #s-125 {
+          top: 95px;
+          left: 412px;
+        }
+        #s-126 {
+          top: 126px;
+          left: 412px;
+        }
+        #s-127 {
+          top: 2px;
+          left: 453px;
+        }
+        #s-128 {
+          top: 33px;
+          left: 453px;
+        }
+        #s-129 {
+          top: 2px;
+          left: 494px;
+        }
+        #s-130 {
+          top: 33px;
+          left: 494px;
+        }
+        #s-131 {
+          top: 95px;
+          left: 494px;
+        }
+        #s-132 {
+          top: 126px;
+          left: 494px;
+        }
+        #s-133 {
+          top: 2px;
+          left: 535px;
+        }
+        #s-134 {
+          top: 33px;
+          left: 535px;
+        }
+        #s-135 {
+          top: 2px;
+          left: 576px;
+        }
+        #s-136 {
+          top: 33px;
+          left: 576px;
+        }
+        #s-137 {
+          top: 95px;
+          left: 576px;
+        }
+        #s-138 {
+          top: 126px;
+          left: 576px;
+        }
+        #s-139 {
+          top: 2px;
+          left: 617px;
+        }
+        #s-140 {
+          top: 33px;
+          left: 617px;
+        }
+        #s-141 {
+          top: 2px;
+          left: 658px;
+        }
+        #s-142 {
+          top: 33px;
+          left: 658px;
+        }
+        #s-143 {
+          top: 2px;
+          left: 699px;
+        }
+        #s-144 {
+          top: 33px;
+          left: 699px;
+        }
+        #s-145 {
+          top: 95px;
+          left: 699px;
+        }
+        #s-146 {
+          top: 2px;
+          left: 740px;
+        }
+        #s-147 {
+          top: 33px;
+          left: 740px;
+        }
+        #s-148 {
+          top: 95px;
+          left: 740px;
+        }
+        #s-149 {
+          top: 95px;
+          left: 781px;
+        }
+        #s-150 {
+          top: 2px;
+          left: 822px;
+        }
+        #s-151 {
+          top: 33px;
+          left: 822px;
+        }
+        #s-152 {
+          top: 95px;
+          left: 822px;
+        }
+        #s-153 {
+          top: 2px;
+          left: 863px;
+        }
+        #s-154 {
+          top: 33px;
+          left: 863px;
+        }
+        #s-155 {
+          top: 95px;
+          left: 863px;
+        }
+        #s-156 {
+          top: 95px;
+          left: 904px;
+        }
+        #s-157 {
+          top: 2px;
+          left: 945px;
+        }
+        #s-158 {
+          top: 33px;
+          left: 945px;
+        }
+        #s-159 {
+          top: 95px;
+          left: 945px;
+        }
+        #s-160 {
+          top: 126px;
+          left: 945px;
+        }
+        #s-161 {
+          top: 2px;
+          left: 986px;
+        }
+        #s-162 {
+          top: 33px;
+          left: 986px;
+        }
+        #s-163 {
+          top: 95px;
+          left: 986px;
+        }
+        #s-164 {
+          top: 126px;
+          left: 986px;
+        }
+        #s-165 {
+          top: 2px;
+          left: 1027px;
+        }
+        #s-166 {
+          top: 33px;
+          left: 1027px;
+        }
+        #s-167 {
+          top: 95px;
+          left: 1027px;
+        }
+        #s-168 {
+          top: 126px;
+          left: 1027px;
+        }
+        #s-169 {
+          top: 2px;
+          left: 1068px;
+        }
+        #s-170 {
+          top: 33px;
+          left: 1068px;
+        }
+        #s-171 {
+          top: 95px;
+          left: 1068px;
+        }
+        #s-172 {
+          top: 126px;
+          left: 1068px;
+        }
+        #s-173 {
+          top: 2px;
+          left: 1109px;
+        }
+        #s-174 {
+          top: 33px;
+          left: 1109px;
+        }
+        #s-175 {
+          top: 95px;
+          left: 1109px;
+        }
+        #s-176 {
+          top: 126px;
+          left: 1109px;
+        }
       `}</style>
     </div>
   );
