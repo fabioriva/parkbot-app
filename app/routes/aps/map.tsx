@@ -9,6 +9,7 @@ import type { Route } from "./+types/map";
 
 const components = {
   bugrashov: lazy(() => import("~/components/maps/bugrashov")),
+  daman: lazy(() => import("~/components/maps/daman")),
   menloa: lazy(() => import("~/components/maps/menloa")),
   menlob: lazy(() => import("~/components/maps/menlob")),
   wallstreet: lazy(() => import("~/components/maps/wallstreet")),
