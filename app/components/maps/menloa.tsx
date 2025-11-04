@@ -4,7 +4,7 @@ import "./menloa.css";
 export default function Map({ data, view }: { data: any; view: any }) {
   const levels = [...data.levels].reverse(); // Creates a copy and reverses it
   return (
-    <div className="space-y-3">
+    <div className="overflow-auto space-y-3">
       {levels.map((level) => (
         <Level
           definitions={data?.definitions}
