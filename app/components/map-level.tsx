@@ -93,8 +93,8 @@ export function Level({ definitions, level, view }: MapLevelProps) {
                     "bg-alert/20 text-alert": stall.status !== 0,
                     "bg-ready/20 text-ready": stall.status === FREE,
                     "bg-op-exit/20 text-op-exit": stall.status === LOCK,
-                    "bg-sky-500": stall.status === PAPA,
-                    "bg-yellow-500": stall.status === RSVD,
+                    "bg-sky-700/20 text-sky-700": stall.status === PAPA,
+                    "bg-yellow-700/20 text-yellow-700": stall.status === RSVD,
                   }
                 )}
                 id={"s-" + stall.nr}
