@@ -1108,6 +1108,266 @@ export default function Map({ data, view }: { data: any; view: any }) {
           top: 126px;
           left: 1109px;
         }
+        #s-265 {
+          top: 2px;
+          left: 2px;
+        }
+        #s-266 {
+          top: 33px;
+          left: 2px;
+        }
+        #s-267 {
+          top: 95px;
+          left: 2px;
+        }
+        #s-268 {
+          top: 126px;
+          left: 2px;
+        }
+        #s-269 {
+          top: 2px;
+          left: 43px;
+        }
+        #s-270 {
+          top: 33px;
+          left: 43px;
+        }
+        #s-271 {
+          top: 95px;
+          left: 43px;
+        }
+        #s-272 {
+          top: 126px;
+          left: 43px;
+        }
+        #s-273 {
+          top: 2px;
+          left: 84px;
+        }
+        #s-274 {
+          top: 33px;
+          left: 84px;
+        }
+        #s-275 {
+          top: 95px;
+          left: 84px;
+        }
+        #s-276 {
+          top: 126px;
+          left: 84px;
+        }
+        #s-277 {
+          top: 2px;
+          left: 125px;
+        }
+        #s-278 {
+          top: 33px;
+          left: 125px;
+        }
+        #s-279 {
+          top: 2px;
+          left: 166px;
+        }
+        #s-280 {
+          top: 33px;
+          left: 166px;
+        }
+        #s-281 {
+          top: 2px;
+          left: 207px;
+        }
+        #s-282 {
+          top: 33px;
+          left: 207px;
+        }
+        #s-283 {
+          top: 2px;
+          left: 248px;
+        }
+        #s-284 {
+          top: 33px;
+          left: 248px;
+        }
+        #s-285 {
+          top: 95px;
+          left: 248px;
+        }
+        #s-286 {
+          top: 126px;
+          left: 248px;
+        }
+        #s-287 {
+          top: 2px;
+          left: 289px;
+        }
+        #s-288 {
+          top: 33px;
+          left: 289px;
+        }
+        #s-289 {
+          top: 2px;
+          left: 330px;
+        }
+        #s-290 {
+          top: 33px;
+          left: 330px;
+        }
+        #s-291 {
+          top: 95px;
+          left: 330px;
+        }
+        #s-292 {
+          top: 126px;
+          left: 330px;
+        }
+        #s-293 {
+          top: 2px;
+          left: 371px;
+        }
+        #s-294 {
+          top: 33px;
+          left: 371px;
+        }
+        #s-295 {
+          top: 2px;
+          left: 412px;
+        }
+        #s-296 {
+          top: 33px;
+          left: 412px;
+        }
+        #s-297 {
+          top: 95px;
+          left: 412px;
+        }
+        #s-298 {
+          top: 126px;
+          left: 412px;
+        }
+        #s-299 {
+          top: 2px;
+          left: 453px;
+        }
+        #s-300 {
+          top: 33px;
+          left: 453px;
+        }
+        #s-301 {
+          top: 2px;
+          left: 494px;
+        }
+        #s-302 {
+          top: 33px;
+          left: 494px;
+        }
+        #s-303 {
+          top: 95px;
+          left: 494px;
+        }
+        #s-304 {
+          top: 126px;
+          left: 494px;
+        }
+        #s-305 {
+          top: 2px;
+          left: 535px;
+        }
+        #s-306 {
+          top: 33px;
+          left: 535px;
+        }
+        #s-307 {
+          top: 95px;
+          left: 535px;
+        }
+        #s-308 {
+          top: 126px;
+          left: 535px;
+        }
+        #s-309 {
+          top: 2px;
+          left: 576px;
+        }
+        #s-310 {
+          top: 33px;
+          left: 576px;
+        }
+        #s-311 {
+          top: 95px;
+          left: 576px;
+        }
+        #s-312 {
+          top: 2px;
+          left: 617px;
+        }
+        #s-313 {
+          top: 33px;
+          left: 617px;
+        }
+        #s-314 {
+          top: 2px;
+          left: 658px;
+        }
+        #s-315 {
+          top: 33px;
+          left: 658px;
+        }
+        #s-316 {
+          top: 2px;
+          left: 699px;
+        }
+        #s-317 {
+          top: 33px;
+          left: 699px;
+        }
+        #s-318 {
+          top: 95px;
+          left: 699px;
+        }
+        #s-319 {
+          top: 2px;
+          left: 740px;
+        }
+        #s-320 {
+          top: 33px;
+          left: 740px;
+        }
+        #s-321 {
+          top: 95px;
+          left: 740px;
+        }
+        #s-322 {
+          top: 95px;
+          left: 781px;
+        }
+        #s-323 {
+          top: 2px;
+          left: 822px;
+        }
+        #s-324 {
+          top: 33px;
+          left: 822px;
+        }
+        #s-325 {
+          top: 95px;
+          left: 822px;
+        }
+        #s-326 {
+          top: 2px;
+          left: 863px;
+        }
+        #s-327 {
+          top: 33px;
+          left: 863px;
+        }
+        #s-328 {
+          top: 95px;
+          left: 863px;
+        }
+        #s-329 {
+          top: 95px;
+          left: 904px;
+        }
       `}</style>
     </div>
   );
