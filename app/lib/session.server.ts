@@ -16,7 +16,7 @@ export const sessionCookieContainer = createCookie("__session", {
   httpOnly: true,
   path: "/",
   sameSite: "lax",
-  secure: true,
+  // secure: true,
   secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
 });
 
@@ -67,7 +67,7 @@ export async function getSession(
 ): Promise<SessionValidationResult> {
   const sessionCookie = await getSessionCookie(request);
   const token = sessionCookie.token;
-  console.log("sessionCookie:", sessionCookie, token);
+  // console.log("sessionCookie:", sessionCookie, token);
   if (token === null) {
     return { aps: null, session: null, user: null };
   }
@@ -101,7 +101,7 @@ export async function getSession(
       },
     ])
     .toArray();
-  console.log(result);
+  // console.log(result);
   if (result.length === 0) {
     return { aps: null, session: null, user: null };
   }
@@ -113,7 +113,7 @@ export async function getSession(
     expiresAt: sessionValidationResult?.expiresAt,
     twoFactorVerified: sessionValidationResult?.twoFactorVerified,
   };
-  console.log("session:", session);
+  // console.log("session:", session);
   const sessionValidationUser = sessionValidationResult?.user;
   // console.log("Session validation user:", sessionValidationUser);
   const user: User = {
@@ -123,7 +123,7 @@ export async function getSession(
     emailVerified: sessionValidationUser?.emailVerified,
     registered2FA: sessionValidationUser?.totpKey ? true : false,
   };
-  console.log("user:", user);
+  // console.log("user:", user);
   const sessionValidationAps = sessionValidationResult.aps ?? null;
   // console.log("Session validation aps:", sessionValidationAps);
   const aps: Aps = sessionValidationAps
@@ -135,7 +135,7 @@ export async function getSession(
         ns: sessionValidationAps?.ns,
       }
     : null;
-  console.log("aps:", aps);
+  // console.log("aps:", aps);
   if (Date.now() >= session.expiresAt.getTime()) {
     await deleteSession(session.id);
     return { aps: null, session: null, user: null };

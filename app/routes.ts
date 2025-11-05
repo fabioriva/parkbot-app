@@ -37,6 +37,7 @@ export default [
       route(":aps/tags", "routes/aps/tags.tsx"),
     ]),
   ]),
+  route("action/get-session", "./routes/action.get-session.ts"),
   route("action/set-theme", "./routes/action.set-theme.ts"),
   route("api/locales/:lng/:ns", "./routes/locales.ts"),
   route("*", "./routes/not-found.tsx"),
