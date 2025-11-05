@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { useParams } from "react-router";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -25,6 +26,7 @@ interface MapLevelProps {
 
 export function Level({ definitions, level, view }: MapLevelProps) {
   // console.log(definitions, level, view);
+  const params = useParams();
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const min = definitions.minCard !== undefined ? definitions.minCard : 1;
   const max =
@@ -58,7 +60,7 @@ export function Level({ definitions, level, view }: MapLevelProps) {
     stall: number;
     status: number;
   }) => {
-    console.log(stall, status);
+    console.log(stall, status, params);
   };
   const handleOpen = (stall: Stall) => {
     setError(false);
