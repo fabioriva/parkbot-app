@@ -5,21 +5,25 @@ import { db } from "~/lib/db.server";
 
 const COLLECTION = "sessions";
 
-export async function action({ request }) {
-  const authHeader = request.headers.get("Authorization");
-  console.log(authHeader);
+function exec_time(ping) {
+  const pong = process.hrtime(ping);
+  const time = (pong[0] * 1000000000 + pong[1]) / 1000000;
+  return time + "ms";
+}
 
-  if (authHeader !== null) {
+export async function action({ request }) {
+  let ping = process.hrtime();
+  const authHeader = request.headers.get("Authorization");
+  if (!authHeader) {
     return data(
-      { message: "Unauthorized" },
+      {},
       {
-        headers: { "X-Custom-Header": "unauthorized" },
+        headers: { "X-Processing-Time": exec_time(ping) },
         status: 401,
         statusText: "Authorization header missing",
       }
     );
   }
-  //
   const token = authHeader.split(" ")[1];
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const sessions = db.collection(COLLECTION);
@@ -53,11 +57,11 @@ export async function action({ request }) {
     .toArray();
   if (result.length === 0) {
     return data(
-      { message: "Unauthorized" },
+      {},
       {
-        headers: { "X-Custom-Header": "unauthorized" },
+        headers: { "X-Processing-Time": exec_time(ping) },
         status: 401,
-        statusText: "Authorization error",
+        statusText: "Authorization token not valid",
       }
     );
   }
@@ -66,6 +70,9 @@ export async function action({ request }) {
 
   return data(
     { aps, user }, // TODO: send only aps.ns and user rights/roles
-    { headers: { "X-Custom-Header": "value" }, status: 200 }
+    {
+      headers: { "X-Processing-Time": exec_time(ping) },
+      status: 200,
+    }
   );
 }

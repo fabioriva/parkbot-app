@@ -26,9 +26,7 @@ interface MapLevelProps {
 
 export function Level({ definitions, level, view }: MapLevelProps) {
   // console.log(definitions, level, view);
-  // const fetcher = useFetcher();
   const loaderData = useLoaderData<typeof loader>();
-  // console.log(loaderData);
   const params = useParams();
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const min = definitions.minCard !== undefined ? definitions.minCard : 1;
