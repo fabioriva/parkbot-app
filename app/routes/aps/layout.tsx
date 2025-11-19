@@ -38,7 +38,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const roles = await getUserRoles(user.id);
   if (!roles.some((role) => role === url.pathname.split("/")[3])) {
-    // .pop())) {
     return redirect("/not-found");
   }
   // get sidebar_state cookie
@@ -50,20 +49,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       .map(([key, value]) => [key, decodeURIComponent(value)]) || []
   );
   const sidebarState = cookies["sidebar_state"];
-
-  // test
-  // const sessionCookie = await getSessionCookie(request);
-  // const res = await fetch("http://192.168.20.99:5173/action/get-session", {
-  //   method: "POST",
-  //   headers: {
-  //     Authorization: "Bearer " + sessionCookie.token,
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // const data = await res.json();
-  // console.log(res);
-  // console.log(data);
-  // end test
   return { aps, roles, sidebarState, user };
 }
 

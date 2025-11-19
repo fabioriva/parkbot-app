@@ -7,7 +7,9 @@ const COLLECTION = "sessions";
 
 export async function action({ request }) {
   const authHeader = request.headers.get("Authorization");
-  if (authHeader === null) {
+  console.log(authHeader);
+
+  if (authHeader !== null) {
     return data(
       { message: "Unauthorized" },
       {
@@ -19,9 +21,7 @@ export async function action({ request }) {
   }
   //
   const token = authHeader.split(" ")[1];
-  // console.log(authHeader, token);
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  // console.log(sessionId);
   const sessions = db.collection(COLLECTION);
   const result = await sessions
     .aggregate([
@@ -51,7 +51,6 @@ export async function action({ request }) {
       },
     ])
     .toArray();
-  // console.log("/action/get-session", result);
   if (result.length === 0) {
     return data(
       { message: "Unauthorized" },
@@ -62,7 +61,6 @@ export async function action({ request }) {
       }
     );
   }
-
   const sessionValidationResult = result.shift();
   const { aps, user } = sessionValidationResult;
 
