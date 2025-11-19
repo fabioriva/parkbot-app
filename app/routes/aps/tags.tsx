@@ -12,22 +12,28 @@ import {
   ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
+import { getSessionCookie } from "~/lib/session.server";
 import { useData } from "~/lib/ws";
 import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/tags";
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   // console.log(params);
+    const { token } = await getSessionCookie(request);
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/cards`;
-  const data = await fetcher(url);
+  const data = await fetcher(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
   return { data };
 }
 
 export default function Tags({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
   // ws
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`;
   const { data } = useData(url, { initialData: loaderData?.data });
   // fuzzy search
   const [search, setSearch] = useState([]);

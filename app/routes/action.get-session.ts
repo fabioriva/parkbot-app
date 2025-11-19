@@ -6,12 +6,10 @@ import { db } from "~/lib/db.server";
 const COLLECTION = "sessions";
 
 export async function action({ request }) {
-  console.log("Hello !!!!!!!!!!!!!!!!!!!!!!!!", request);
-  let name = "Fabio";
   const authHeader = request.headers.get("Authorization");
   if (authHeader === null) {
     return data(
-      { message: `Hello, ${name}! you are not authorized` },
+      { message: "Unauthorized" },
       {
         headers: { "X-Custom-Header": "unauthorized" },
         status: 401,
@@ -21,11 +19,9 @@ export async function action({ request }) {
   }
   //
   const token = authHeader.split(" ")[1];
-  console.log(authHeader, token);
-
+  // console.log(authHeader, token);
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  console.log(sessionId);
-
+  // console.log(sessionId);
   const sessions = db.collection(COLLECTION);
   const result = await sessions
     .aggregate([
@@ -55,14 +51,14 @@ export async function action({ request }) {
       },
     ])
     .toArray();
-  console.log(result);
+  // console.log("/action/get-session", result);
   if (result.length === 0) {
     return data(
-      { message: `Hello, ${name}! you are not authorized` },
+      { message: "Unauthorized" },
       {
         headers: { "X-Custom-Header": "unauthorized" },
         status: 401,
-        statusText: "Authorization header missing 2",
+        statusText: "Authorization error",
       }
     );
   }
@@ -71,7 +67,7 @@ export async function action({ request }) {
   const { aps, user } = sessionValidationResult;
 
   return data(
-    { message: `Hello, ${name}!`, token, aps, user },
+    { aps, user }, // TODO: send only aps.ns and user rights/roles
     { headers: { "X-Custom-Header": "value" }, status: 200 }
   );
 }

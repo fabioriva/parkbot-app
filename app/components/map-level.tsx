@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -26,6 +26,9 @@ interface MapLevelProps {
 
 export function Level({ definitions, level, view }: MapLevelProps) {
   // console.log(definitions, level, view);
+  // const fetcher = useFetcher();
+  const loaderData = useLoaderData<typeof loader>();
+  // console.log(loaderData);
   const params = useParams();
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const min = definitions.minCard !== undefined ? definitions.minCard : 1;
@@ -60,7 +63,25 @@ export function Level({ definitions, level, view }: MapLevelProps) {
     stall: number;
     status: number;
   }) => {
-    console.log(stall, status, params);
+    // console.log(stall, status, params);
+    // const url = `/aps/${params?.aps}/map`;
+    // await fetch(url, {
+    //   method: "POST",
+    //   body: JSON.stringify({ stall, status }),
+    // });
+
+    // let token = "5ttltcrfjmcrtuh332jmf26kokbmw7ag";
+    const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/map/edit`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + loaderData?.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ stall, status }),
+    });
+    // console.log(res);
+    
   };
   const handleOpen = (stall: Stall) => {
     setError(false);

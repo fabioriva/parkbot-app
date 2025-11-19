@@ -12,7 +12,7 @@ import { CommInfo } from "~/components/comm-info";
 import { LocaleToggle } from "~/components/locale-toggle";
 import { OccupancyInfo } from "~/components/parking-info";
 import { ModeToggle } from "~/components/mode-toggle";
-import { getSession, getSessionCookie } from "~/lib/session.server";
+import { getSession } from "~/lib/session.server";
 import { getUserRoles } from "~/lib/user.server";
 import { useInfo } from "~/lib/ws";
 
@@ -52,17 +52,17 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const sidebarState = cookies["sidebar_state"];
 
   // test
-  const sessionCookie = await getSessionCookie(request);
-  const res = await fetch("http://localhost:5173/action/get-session", {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + sessionCookie.token,
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await res.json();
-  console.log(res);
-  console.log(data);
+  // const sessionCookie = await getSessionCookie(request);
+  // const res = await fetch("http://192.168.20.99:5173/action/get-session", {
+  //   method: "POST",
+  //   headers: {
+  //     Authorization: "Bearer " + sessionCookie.token,
+  //     "Content-Type": "application/json",
+  //   },
+  // });
+  // const data = await res.json();
+  // console.log(res);
+  // console.log(data);
   // end test
   return { aps, roles, sidebarState, user };
 }
