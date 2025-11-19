@@ -1,8 +1,19 @@
 import React, { useState } from "react";
 import Fuse from "fuse.js";
-import { Search, Tag } from "lucide-react";
+import { Search, Tag as TagIcon } from "lucide-react";
+import { z } from "zod";
 import { Error } from "~/components/error";
 import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import {
   Item,
@@ -12,6 +23,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
+import { Label } from "~/components/ui/label";
 import { getSessionCookie } from "~/lib/session.server";
 import { useData } from "~/lib/ws";
 import fetcher from "~/lib/fetch.server";
@@ -20,15 +32,41 @@ import type { Route } from "./+types/tags";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   // console.log(params);
-    const { token } = await getSessionCookie(request);
+  const { token } = await getSessionCookie(request);
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/cards`;
   const data = await fetcher(url, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-  return { data };
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return { data, token };
 }
+
+const Tag = ({ item, handleEdit }) => (
+  <Item className="w-80" variant="outline" key={item.nr}>
+    <ItemMedia
+      variant="icon"
+      className={item.status !== 0 && "bg-orange-700/20 text-orange-700"}
+    >
+      <TagIcon />
+    </ItemMedia>
+    <ItemContent>
+      <ItemTitle>
+        Tag {item.nr} {item.code !== "0" && `PIN ${item.code}`}
+      </ItemTitle>
+      <ItemDescription>
+        {item.status !== 0 ? `Parked in slot ${item.status}` : "Valid fo entry"}
+      </ItemDescription>
+    </ItemContent>
+    <ItemActions>
+      <DialogTrigger key={item.nr} asChild>
+        <Button variant="outline" size="sm" onClick={() => handleEdit(item)}>
+          Edit
+        </Button>
+      </DialogTrigger>
+    </ItemActions>
+  </Item>
+);
 
 export default function Tags({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
@@ -46,6 +84,40 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     console.log(result);
     setSearch(result);
   };
+  // pin
+  const [error, setError] = useState<boolean>(false);
+  const [tag, setTag] = useState({});
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(e.target.value);
+    let value = e.target.value;
+    const regexp = /^[a-fA-F0-9]{3}$/; // new RegExp('^[a-fA-F0-9]{3}$')
+    if (!regexp.test(value) || value.length !== 3) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+    setTag((prev) => ({ ...prev, code: e.target.value }));
+  };
+  const handleConfirm = async ({ nr, code }) => {
+    // console.log(nr, code);
+    const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/card/edit`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + loaderData?.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ nr, code }),
+    });
+    // console.log(res);
+  };
+  const handleEdit = (tag) => {
+    setTag(tag);
+    // if (user.rights.some((right) => right === "edit-card")) {
+    //   setIsOpenPin(true);
+    // }
+  };
+
   return (
     <React.Fragment>
       <div className="relative">
@@ -61,62 +133,102 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         />
       </div>
       <div className="flex flex-wrap gap-3">
-        {search.length === 0 &&
-          data.map((item) => (
-            <Item className="w-80" variant="outline" key={item.nr}>
-              <ItemMedia
-                variant="icon"
-                className={
-                  item.status !== 0 && "bg-orange-700/20 text-orange-700"
-                }
-              >
-                <Tag />
-              </ItemMedia>
-              <ItemContent>
-                <ItemTitle>
-                  Tag {item.nr} {item.code !== "0" && `PIN ${item.code}`}
-                </ItemTitle>
-                <ItemDescription>
-                  {item.status !== 0
-                    ? `Parked in slot ${item.status}`
-                    : "Valid fo entry"}
-                </ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Button variant="outline" size="sm">
-                  Edit
+        <Dialog>
+          {search.length === 0 &&
+            data.map((item) => (
+              <Tag handleEdit={handleEdit} item={item} key={item.nr} />
+              // <Item className="w-80" variant="outline" key={item.nr}>
+              //   <ItemMedia
+              //     variant="icon"
+              //     className={
+              //       item.status !== 0 && "bg-orange-700/20 text-orange-700"
+              //     }
+              //   >
+              //     <TagIcon />
+              //   </ItemMedia>
+              //   <ItemContent>
+              //     <ItemTitle>
+              //       Tag {item.nr} {item.code !== "0" && `PIN ${item.code}`}
+              //     </ItemTitle>
+              //     <ItemDescription>
+              //       {item.status !== 0
+              //         ? `Parked in slot ${item.status}`
+              //         : "Valid fo entry"}
+              //     </ItemDescription>
+              //   </ItemContent>
+              //   <ItemActions>
+              //     <Button variant="outline" size="sm">
+              //       Edit
+              //     </Button>
+              //   </ItemActions>
+              // </Item>
+            ))}
+          {search.length > 0 &&
+            search.map(({ item }) => (
+              <Tag handleEdit={handleEdit} item={item} key={item.nr} />
+              // <Item className="min-w-xs" variant="outline" key={item.nr}>
+              //   <ItemMedia
+              //     variant="icon"
+              //     className={
+              //       item.status !== 0 && "bg-orange-700/20 text-orange-700"
+              //     }
+              //   >
+              //     <TagIcon />
+              //   </ItemMedia>
+              //   <ItemContent>
+              //     <ItemTitle>
+              //       Tag {item.nr} {item.code !== "0" && `PIN ${item.code}`}
+              //     </ItemTitle>
+              //     <ItemDescription>
+              //       {item.status !== 0
+              //         ? `Parked in slot ${item.status}`
+              //         : "Valid for entry"}
+              //     </ItemDescription>
+              //   </ItemContent>
+              //   <ItemActions>
+              //     <Button variant="outline" size="sm">
+              //       Edit
+              //     </Button>
+              //   </ItemActions>
+              // </Item>
+            ))}
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Edit card {tag.nr} status</DialogTitle>
+              <DialogDescription>
+                Edit card {tag.nr} PIN code and confirm.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-3 mb-3">
+              <Label htmlFor="pin">
+                Card number range [{"min"}-{"max"}]
+              </Label>
+              <Input
+                className="uppercase"
+                // min={min}
+                // max={max}
+                maxLength="3"
+                name="pin"
+                // type="number"
+                value={tag.code}
+                onChange={handleChange}
+              />
+              {error && (
+                <p className="text-red-500 text-sm">PIN code is not valid!</p>
+              )}
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button onClick={() => handleConfirm(tag)} disabled={error}>
+                  Confirm
                 </Button>
-              </ItemActions>
-            </Item>
-          ))}
-        {search.length > 0 &&
-          search.map(({ item }) => (
-            <Item className="min-w-xs" variant="outline" key={item.nr}>
-              <ItemMedia
-                variant="icon"
-                className={
-                  item.status !== 0 && "bg-orange-700/20 text-orange-700"
-                }
-              >
-                <Tag />
-              </ItemMedia>
-              <ItemContent>
-                <ItemTitle>
-                  Tag {item.nr} {item.code !== "0" && `PIN ${item.code}`}
-                </ItemTitle>
-                <ItemDescription>
-                  {item.status !== 0
-                    ? `Parked in slot ${item.status}`
-                    : "Valid for entry"}
-                </ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Button variant="outline" size="sm">
-                  Edit
-                </Button>
-              </ItemActions>
-            </Item>
-          ))}
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </React.Fragment>
   );

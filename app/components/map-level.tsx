@@ -61,14 +61,6 @@ export function Level({ definitions, level, view }: MapLevelProps) {
     stall: number;
     status: number;
   }) => {
-    // console.log(stall, status, params);
-    // const url = `/aps/${params?.aps}/map`;
-    // await fetch(url, {
-    //   method: "POST",
-    //   body: JSON.stringify({ stall, status }),
-    // });
-
-    // let token = "5ttltcrfjmcrtuh332jmf26kokbmw7ag";
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/map/edit`;
     const res = await fetch(url, {
       method: "POST",

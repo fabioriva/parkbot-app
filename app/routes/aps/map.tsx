@@ -33,25 +33,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   return {data, token}
 }
 
-// export async function action({ params, request }: Route.ActionArgs) {
-//   const { token } = await getSessionCookie(request);
-//   console.log("Token:", token);
-//   const { stall, status } = await request.json(); // Parse JSON body
-//   console.log("Received JSON data:", stall, status);
-//   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/map/edit`;
-//   // const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/app/map/edit`;
-//   const res = await fetch(url, {
-//     method: "POST",
-//     headers: {
-//       Authorization: "Bearer " + token,
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ stall, status }),
-//   });
-//   const data = await res.json();
-//   console.log(data);
-// }
-
 export default function Map({ loaderData, params }: Route.ComponentProps) {
   // if (!loaderData?.data) return <Error error={loaderData?.error} />;
   if (!loaderData?.data) return <Error />;
