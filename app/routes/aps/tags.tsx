@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Fuse from "fuse.js";
 import { Search, Tag as TagIcon } from "lucide-react";
-import { z } from "zod";
+// import { z } from "zod";
 import { Error } from "~/components/error";
 import { Button } from "~/components/ui/button";
 import {
@@ -88,9 +88,8 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   const [error, setError] = useState<boolean>(false);
   const [tag, setTag] = useState({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
     let value = e.target.value;
-    const regexp = /^[a-fA-F0-9]{3}$/; // new RegExp('^[a-fA-F0-9]{3}$')
+    const regexp = /^[a-fA-F0-9]{3}$/;
     if (!regexp.test(value) || value.length !== 3) {
       setError(true);
     } else {
@@ -99,7 +98,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     setTag((prev) => ({ ...prev, code: e.target.value }));
   };
   const handleConfirm = async ({ nr, code }) => {
-    // console.log(nr, code);
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/card/edit`;
     const res = await fetch(url, {
       method: "POST",
@@ -112,6 +110,12 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     // console.log(res);
   };
   const handleEdit = (tag) => {
+    const regexp = /^[a-fA-F0-9]{3}$/;
+    if (!regexp.test(tag.code) || tag.code.length !== 3) {
+      setError(true);
+    } else {
+      setError(false);
+    }
     setTag(tag);
     // if (user.rights.some((right) => right === "edit-card")) {
     //   setIsOpenPin(true);
@@ -125,7 +129,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
           <Search className="size-4" />
         </div>
         <Input
-          // id={id}
           type="text"
           placeholder="Search tag by number or PIN ..."
           className="pl-9"
@@ -137,60 +140,10 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
           {search.length === 0 &&
             data.map((item) => (
               <Tag handleEdit={handleEdit} item={item} key={item.nr} />
-              // <Item className="w-80" variant="outline" key={item.nr}>
-              //   <ItemMedia
-              //     variant="icon"
-              //     className={
-              //       item.status !== 0 && "bg-orange-700/20 text-orange-700"
-              //     }
-              //   >
-              //     <TagIcon />
-              //   </ItemMedia>
-              //   <ItemContent>
-              //     <ItemTitle>
-              //       Tag {item.nr} {item.code !== "0" && `PIN ${item.code}`}
-              //     </ItemTitle>
-              //     <ItemDescription>
-              //       {item.status !== 0
-              //         ? `Parked in slot ${item.status}`
-              //         : "Valid fo entry"}
-              //     </ItemDescription>
-              //   </ItemContent>
-              //   <ItemActions>
-              //     <Button variant="outline" size="sm">
-              //       Edit
-              //     </Button>
-              //   </ItemActions>
-              // </Item>
             ))}
           {search.length > 0 &&
             search.map(({ item }) => (
               <Tag handleEdit={handleEdit} item={item} key={item.nr} />
-              // <Item className="min-w-xs" variant="outline" key={item.nr}>
-              //   <ItemMedia
-              //     variant="icon"
-              //     className={
-              //       item.status !== 0 && "bg-orange-700/20 text-orange-700"
-              //     }
-              //   >
-              //     <TagIcon />
-              //   </ItemMedia>
-              //   <ItemContent>
-              //     <ItemTitle>
-              //       Tag {item.nr} {item.code !== "0" && `PIN ${item.code}`}
-              //     </ItemTitle>
-              //     <ItemDescription>
-              //       {item.status !== 0
-              //         ? `Parked in slot ${item.status}`
-              //         : "Valid for entry"}
-              //     </ItemDescription>
-              //   </ItemContent>
-              //   <ItemActions>
-              //     <Button variant="outline" size="sm">
-              //       Edit
-              //     </Button>
-              //   </ItemActions>
-              // </Item>
             ))}
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
