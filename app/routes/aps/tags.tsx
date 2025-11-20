@@ -44,7 +44,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 const Tag = ({ item, handleEdit }: { item: Tag; handleEdit: Function }) => (
-  <Item className="w-80" variant="outline" key={item.nr}>
+  <Item className="w-72 hover:bg-muted" variant="outline" key={item.nr}>
     <ItemMedia
       variant="icon"
       className={item.status !== 0 ? "bg-blue-700/20 text-blue-700" : ""}
