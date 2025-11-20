@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Fuse from "fuse.js";
+// import Fuse from "fuse.js";
 import { Search, Tag as TagIcon } from "lucide-react";
-// import { z } from "zod";
+import { z } from "zod";
 import { Error } from "~/components/error";
 import { Button } from "~/components/ui/button";
 import {
@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  // DialogTrigger,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import {
@@ -29,6 +29,7 @@ import { useData } from "~/lib/ws";
 import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/tags";
+import type { Tag } from "~/routes/aps/types";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   // console.log(params);
@@ -42,11 +43,11 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   return { data, token };
 }
 
-const Tag = ({ item, handleEdit }) => (
+const Tag = ({ item, handleEdit }: { item: Tag; handleEdit: Function }) => (
   <Item className="w-80" variant="outline" key={item.nr}>
     <ItemMedia
       variant="icon"
-      className={item.status !== 0 && "bg-orange-700/20 text-orange-700"}
+      className={item.status !== 0 ? "bg-orange-700/20 text-orange-700" : ""}
     >
       <TagIcon />
     </ItemMedia>
@@ -59,11 +60,11 @@ const Tag = ({ item, handleEdit }) => (
       </ItemDescription>
     </ItemContent>
     <ItemActions>
-      <DialogTrigger key={item.nr} asChild>
-        <Button variant="outline" size="sm" onClick={() => handleEdit(item)}>
-          Edit
-        </Button>
-      </DialogTrigger>
+      {/* <DialogTrigger key={item.nr} asChild> */}
+      <Button variant="outline" size="sm" onClick={() => handleEdit(item)}>
+        Edit
+      </Button>
+      {/* </DialogTrigger> */}
     </ItemActions>
   </Item>
 );
@@ -74,30 +75,48 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`;
   const { data } = useData(url, { initialData: loaderData?.data });
   // fuzzy search
-  const [search, setSearch] = useState([]);
-  const handleSearch = async (e) => {
+  const [search, setSearch] = useState<Tag[]>([]);
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const Fuse = (await import("fuse.js")).default;
     const fuse = new Fuse(data, {
       keys: ["code", "nr", "type", "uid"],
     });
     const result = fuse.search(e.target.value);
-    console.log(result);
     setSearch(result);
   };
   // pin
   const [error, setError] = useState<boolean>(false);
-  const [tag, setTag] = useState({});
+  const [open, setOpen] = useState<boolean>(false);
+  const [tag, setTag] = useState<Tag>({
+    nr: 0,
+    code: "000",
+    from: "",
+    to: "",
+    status: 0,
+  });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-    const regexp = /^[a-fA-F0-9]{3}$/;
-    if (!regexp.test(value) || value.length !== 3) {
+    const schema = z.coerce
+      .string()
+      .length(3)
+      .regex(/^[a-fA-F0-9]{3}$/);
+    const result = schema.safeParse(e.target.value);
+    if (!result.success) {
       setError(true);
     } else {
       setError(false);
     }
-    setTag((prev) => ({ ...prev, code: e.target.value }));
+    setTag((prev: Tag) => ({ ...prev, code: e.target.value }));
+
+    // let value = e.target.value;
+    // const regexp = /^[a-fA-F0-9]{3}$/;
+    // if (!regexp.test(value) || value.length !== 3) {
+    //   setError(true);
+    // } else {
+    //   setError(false);
+    // }
+    // setTag((prev: Tag) => ({ ...prev, code: value }));
   };
-  const handleConfirm = async ({ nr, code }) => {
+  const handleConfirm = async ({ nr, code }: { nr: number; code: string }) => {
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/card/edit`;
     const res = await fetch(url, {
       method: "POST",
@@ -109,13 +128,8 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     });
     // console.log(res);
   };
-  const handleEdit = (tag) => {
-    const regexp = /^[a-fA-F0-9]{3}$/;
-    if (!regexp.test(tag.code) || tag.code.length !== 3) {
-      setError(true);
-    } else {
-      setError(false);
-    }
+  const handleEdit = (tag: Tag) => {
+    setOpen(true);
     setTag(tag);
     // if (user.rights.some((right) => right === "edit-card")) {
     //   setIsOpenPin(true);
@@ -136,9 +150,9 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         />
       </div>
       <div className="flex flex-wrap gap-3">
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           {search.length === 0 &&
-            data.map((item) => (
+            data.map((item: Tag) => (
               <Tag handleEdit={handleEdit} item={item} key={item.nr} />
             ))}
           {search.length > 0 &&
@@ -160,7 +174,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
                 className="uppercase"
                 // min={min}
                 // max={max}
-                maxLength="3"
+                maxLength={3}
                 name="pin"
                 // type="number"
                 value={tag.code}

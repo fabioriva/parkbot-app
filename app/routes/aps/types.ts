@@ -36,3 +36,11 @@ export type Stall = {
   size: number;
   status: number;
 };
+
+export type Tag = {
+  nr: number;
+  code: string;
+  from: string;
+  to: string;
+  status: number;
+};
