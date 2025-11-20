@@ -47,7 +47,7 @@ const Tag = ({ item, handleEdit }: { item: Tag; handleEdit: Function }) => (
   <Item className="w-80" variant="outline" key={item.nr}>
     <ItemMedia
       variant="icon"
-      className={item.status !== 0 ? "bg-orange-700/20 text-orange-700" : ""}
+      className={item.status !== 0 ? "bg-blue-700/20 text-blue-700" : ""}
     >
       <TagIcon />
     </ItemMedia>
@@ -60,11 +60,9 @@ const Tag = ({ item, handleEdit }: { item: Tag; handleEdit: Function }) => (
       </ItemDescription>
     </ItemContent>
     <ItemActions>
-      {/* <DialogTrigger key={item.nr} asChild> */}
       <Button variant="outline" size="sm" onClick={() => handleEdit(item)}>
         Edit
       </Button>
-      {/* </DialogTrigger> */}
     </ItemActions>
   </Item>
 );
@@ -150,53 +148,53 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         />
       </div>
       <div className="flex flex-wrap gap-3">
-        <Dialog open={open} onOpenChange={setOpen}>
-          {search.length === 0 &&
-            data.map((item: Tag) => (
-              <Tag handleEdit={handleEdit} item={item} key={item.nr} />
-            ))}
-          {search.length > 0 &&
-            search.map(({ item }) => (
-              <Tag handleEdit={handleEdit} item={item} key={item.nr} />
-            ))}
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Edit card {tag.nr} status</DialogTitle>
-              <DialogDescription>
-                Edit card {tag.nr} PIN code and confirm.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-3 mb-3">
-              <Label htmlFor="pin">
-                Card number range [{"min"}-{"max"}]
-              </Label>
-              <Input
-                className="uppercase"
-                // min={min}
-                // max={max}
-                maxLength={3}
-                name="pin"
-                // type="number"
-                value={tag.code}
-                onChange={handleChange}
-              />
-              {error && (
-                <p className="text-red-500 text-sm">PIN code is not valid!</p>
-              )}
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <DialogClose asChild>
-                <Button onClick={() => handleConfirm(tag)} disabled={error}>
-                  Confirm
-                </Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        {search.length === 0 &&
+          data.map((item: Tag) => (
+            <Tag handleEdit={handleEdit} item={item} key={item.nr} />
+          ))}
+        {search.length > 0 &&
+          search.map(({ item }) => (
+            <Tag handleEdit={handleEdit} item={item} key={item.nr} />
+          ))}
       </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit card {tag.nr} status</DialogTitle>
+            <DialogDescription>
+              Edit card {tag.nr} PIN code and confirm.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-3 mb-3">
+            <Label htmlFor="pin">
+              Card number range [{"min"}-{"max"}]
+            </Label>
+            <Input
+              className="uppercase"
+              // min={min}
+              // max={max}
+              maxLength={3}
+              name="pin"
+              // type="number"
+              value={tag.code}
+              onChange={handleChange}
+            />
+            {error && (
+              <p className="text-red-500 text-sm">PIN code is not valid!</p>
+            )}
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button onClick={() => handleConfirm(tag)} disabled={error}>
+                Confirm
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </React.Fragment>
   );
 }
