@@ -47,7 +47,7 @@ const Tag = ({ item, handleEdit }: { item: Tag; handleEdit: Function }) => (
   <Item className="w-72 hover:bg-muted" variant="outline" key={item.nr}>
     <ItemMedia
       variant="icon"
-      className={item.status !== 0 ? "bg-blue-700/20 text-blue-700" : ""}
+      className={item.status !== 0 ? "bg-blue-500/20 text-blue-500" : ""}
     >
       <TagIcon />
     </ItemMedia>
@@ -171,8 +171,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
             </Label>
             <Input
               className="uppercase"
-              // min={min}
-              // max={max}
+              minLength={3}
               maxLength={3}
               name="pin"
               // type="number"
