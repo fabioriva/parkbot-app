@@ -5,7 +5,7 @@ import { Device } from "~/components/device";
 import { Error } from "~/components/error";
 import { ExitQueue } from "~/components/exit-queue";
 import { HistoryList } from "~/components/history-list";
-import { ModeToggle } from "~/components/mode-toggle";
+// import { ModeToggle } from "~/components/mode-toggle";
 import { OccupancyChart } from "~/components/occupancy-chart";
 import { OperationsBarChart } from "~/components/operations-bar-chart";
 import fetcher from "~/lib/fetch.server";
@@ -29,7 +29,7 @@ export default function Dashboard({
   useEffect(() => {
     const interval = setInterval(() => {
       fetcher.load(`/aps/${params.aps}/dashboard`);
-    }, 500);
+    }, 1000);
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, [fetcher]);
