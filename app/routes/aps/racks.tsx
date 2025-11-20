@@ -24,7 +24,7 @@ export default function Racks({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
   // console.log(loaderData?.data);
   // const data = loaderData?.data;
-   // fetch data every x ms
+  // fetch data every x ms
   const [data, setData] = useState(loaderData?.data);
   const fetcher = useFetcher();
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function Racks({ loaderData, params }: Route.ComponentProps) {
       setData(fetcher.data["data"]);
     }
   }, [fetcher.data]);
-  
+
   return (
     <div className="flex flex-wrap gap-3">
       {data.map((item) => (
