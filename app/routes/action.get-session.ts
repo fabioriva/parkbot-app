@@ -3,16 +3,20 @@ import { sha256 } from "@oslojs/crypto/sha2";
 import { data } from "react-router";
 import { db } from "~/lib/db.server";
 
+import type { Route } from "./+types/action.get-session"
+
 const COLLECTION = "sessions";
 
-function exec_time(ping) {
-  const pong = process.hrtime(ping);
-  const time = (pong[0] * 1000000000 + pong[1]) / 1000000;
-  return time + "ms";
+function exec_time(ping: bigint) {
+  const pong = process.hrtime.bigint();
+  const nanoseconds = pong - ping;
+  const number = Number(nanoseconds);
+  const milliseconds = number / 1000000;
+  return milliseconds + "ms";
 }
 
-export async function action({ request }) {
-  let ping = process.hrtime();
+export async function action({ request }: Route.ActionArgs) {
+  let ping = process.hrtime.bigint();
   const authHeader = request.headers.get("Authorization");
   if (!authHeader) {
     return data(
