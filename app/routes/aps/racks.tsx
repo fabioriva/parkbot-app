@@ -1,11 +1,13 @@
-import { ChevronRightIcon, CircleCheck } from "lucide-react";
+import { CircleCheck, CircleX } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useFetcher } from "react-router";
 import { Error } from "~/components/error";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemMedia,
+  // ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
 import fetcher from "~/lib/fetch.server";
@@ -21,8 +23,22 @@ export async function loader({ params }: Route.LoaderArgs) {
 export default function Racks({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
   // console.log(loaderData?.data);
-  // fetch data every x ms
-  const data = loaderData?.data;
+  // const data = loaderData?.data;
+   // fetch data every x ms
+  const [data, setData] = useState(loaderData?.data);
+  const fetcher = useFetcher();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetcher.load(`/aps/${params.aps}/racks`);
+    }, 1000);
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [fetcher]);
+  useEffect(() => {
+    if (fetcher.data) {
+      setData(fetcher.data["data"]);
+    }
+  }, [fetcher.data]);
+  
   return (
     <div className="flex flex-wrap gap-3">
       {data.map((item) => (
@@ -42,10 +58,12 @@ export default function Racks({ loaderData, params }: Route.ComponentProps) {
                 {item.type} {item.key}
               </ItemDescription>
             </ItemContent>
-            <ItemActions
-              className={item.online.status ? "text-ready" : "text-alert"}
-            >
-              <CircleCheck />
+            <ItemActions>
+              {item.online.status ? (
+                <CircleCheck className="text-ready" />
+              ) : (
+                <CircleX className="text-alert" />
+              )}
             </ItemActions>
           </a>
         </Item>
