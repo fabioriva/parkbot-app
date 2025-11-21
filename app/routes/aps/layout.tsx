@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { data, Link, Outlet, redirect } from "react-router";
+import { toast } from "sonner";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -7,6 +8,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
+import { Toaster } from "~/components/ui/sonner";
 import { AlarmInfo } from "~/components/alarm-info";
 import { CommInfo } from "~/components/comm-info";
 import { LocaleToggle } from "~/components/locale-toggle";
@@ -56,8 +58,19 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
   const { aps, roles, sidebarState, user } = loaderData;
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
-  const { comm, diag, map } = useInfo(url);
-
+  const { comm, diag, map, message } = useInfo(url);
+  useEffect(() => {
+    console.log(message);
+    if (message) {
+      toast(message, {
+        description: "Sunday, December 03, 2023 at 9:00 AM",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
+    }
+  }, [message]);
   return (
     <SidebarProvider
       defaultOpen={sidebarState === "true"}
@@ -94,6 +107,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
           <Outlet />
         </div>
       </SidebarInset>
+      <Toaster />
     </SidebarProvider>
   );
 }
