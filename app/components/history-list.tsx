@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import {
   // ArrowLeftRight,
@@ -34,42 +35,70 @@ interface HistoryListProps {
   history: HistoryItemProps[];
 }
 
-const HistoryListItem = ({ item }: HistoryItemProps) => (
-  <Item size="sm" className="px-0 py-1 gap-6">
-    {/* <ItemIcon id={item.operation.id} /> */}
-    <ItemMedia variant="icon">
-      {item.device.id !== 0 ? (
-        <span className={item.device.key.length > 2 ? "text-xs" : undefined}>
-          {item.device.key}
-        </span>
-      ) : (
-        <User />
-      )}
-    </ItemMedia>
-    <ItemContent className="gap-0.5">
-      <ItemTitle className="line-clamp-1">
-        {/* {item.device.key} -{" "}
-        <span className="text-muted-foreground">{item.mode.key}</span> */}
-        {item.mode.id} -{" "}
-        <span className="text-muted-foreground">{item.mode.key}</span>
-      </ItemTitle>
-      <ItemDescription>{item.operation.key}</ItemDescription>
-    </ItemContent>
-    <ItemContent className="flex-none text-right">
-      <ItemDescription className="flex flex-col">
-        <span>{item.date.slice(0, 10)}</span>
-        <span>{item.date.slice(11, 19)}</span>
-      </ItemDescription>
-    </ItemContent>
-  </Item>
-);
+// const HistoryListItem = ({ item }: HistoryItemProps) => (
+//   <Item size="sm" className="px-0 py-1 gap-6">
+//     {/* <ItemIcon id={item.operation.id} /> */}
+//     <ItemMedia variant="icon">
+//       {item.device.id !== 0 ? (
+//         <span className={item.device.key.length > 2 ? "text-xs" : undefined}>
+//           {item.device.key}
+//         </span>
+//       ) : (
+//         <User />
+//       )}
+//     </ItemMedia>
+//     <ItemContent className="gap-0.5">
+//       <ItemTitle className="line-clamp-1">
+//         {/* {item.device.key} -{" "}
+//         <span className="text-muted-foreground">{item.mode.key}</span> */}
+//         {item.mode.id} - {item.mode.key}
+//       </ItemTitle>
+//       <ItemDescription>{item.operation.key}</ItemDescription>
+//     </ItemContent>
+//     <ItemContent className="flex-none text-right">
+//       <ItemDescription className="flex flex-col">
+//         <span>{item.date.slice(0, 10)}</span>
+//         <span>{item.date.slice(11, 19)}</span>
+//       </ItemDescription>
+//     </ItemContent>
+//   </Item>
+// );
 
 export function HistoryList({ history }: HistoryListProps) {
   // console.log(history);
+  const { t } = useTranslation();
   return (
     <>
       {history.map((item, key) => (
-        <HistoryListItem item={item} key={key} />
+        // <HistoryListItem item={item} key={key} />
+        <Item size="sm" className="px-0 py-1 gap-6">
+          {/* <ItemIcon id={item.operation.id} /> */}
+          <ItemMedia variant="icon">
+            {item.device.id !== 0 ? (
+              <span
+                className={item.device.key.length > 2 ? "text-xs" : undefined}
+              >
+                {item.device.key}
+              </span>
+            ) : (
+              <User />
+            )}
+          </ItemMedia>
+          <ItemContent className="gap-0.5">
+            <ItemTitle className="line-clamp-1">
+              {item.mode.id} - {item.mode.key}
+            </ItemTitle>
+            <ItemDescription>
+              {t("aps.history.table." + item.operation.key)}
+            </ItemDescription>
+          </ItemContent>
+          <ItemContent className="flex-none text-right">
+            <ItemDescription className="flex flex-col">
+              <span>{item.date.slice(0, 10)}</span>
+              <span>{item.date.slice(11, 19)}</span>
+            </ItemDescription>
+          </ItemContent>
+        </Item>
       ))}
     </>
     // <div className="grid gap-3">
