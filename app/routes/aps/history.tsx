@@ -1,6 +1,7 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { HistoryList } from "~/components/history-list";
+import { HistoryTable } from "~/components/history-table";
 import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/history";
@@ -19,11 +20,18 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function History({ loaderData, params }: Route.ComponentProps) {
-  console.log(loaderData?.data);
+  // console.log(loaderData?.data);
   if (!loaderData?.data) return <Error />;
 
   const { count, query } = loaderData?.data;
-  console.log(query);
   const isMobile = useIsMobile();
-  return <div>{isMobile ? <h1>mobile</h1> : <h1>desktop</h1>}</div>;
+  return (
+    <div>
+      {isMobile ? (
+        <HistoryList history={query} />
+      ) : (
+        <HistoryTable history={query} />
+      )}
+    </div>
+  );
 }
