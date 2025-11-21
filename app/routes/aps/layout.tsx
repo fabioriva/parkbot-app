@@ -60,14 +60,16 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
   const { comm, diag, map, message } = useInfo(url);
   useEffect(() => {
-    console.log(message);
     if (message) {
-      toast(message, {
-        description: "Sunday, December 03, 2023 at 9:00 AM",
+      toast(message.operation.key, {
+        description: "Date " + message.date,
         action: {
           label: "Undo",
           onClick: () => console.log("Undo"),
         },
+        // style: {
+        //   background: "red",
+        // },
       });
     }
   }, [message]);
@@ -107,7 +109,13 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
           <Outlet />
         </div>
       </SidebarInset>
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          classNames: {
+            description: "!text-muted-foreground !dark:text-muted",
+          },
+        }}
+      />
     </SidebarProvider>
   );
 }
