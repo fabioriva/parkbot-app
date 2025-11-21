@@ -1,3 +1,5 @@
+import fetcher from "~/lib/fetch.server";
+
 import type { Route } from "./+types/history";
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -6,10 +8,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { data };
 }
 
-export default function Dashboard({
-  loaderData,
-  params,
-}: Route.ComponentProps) {
+export default function History({ loaderData, params }: Route.ComponentProps) {
   // console.log(loaderData?.data);
   if (!loaderData?.data) return <Error />;
   return <h1>history</h1>;
