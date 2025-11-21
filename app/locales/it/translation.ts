@@ -83,6 +83,7 @@ export default {
       menu: {
         dashboard: "Pannello di controllo",
         devices: "Vista dispositivi",
+        history: "Storico delle operazioni",
         map: "Posti auto",
         racks: "PLC I/O",
         tags: "Tags",

@@ -83,6 +83,7 @@ export default {
       menu: {
         dashboard: "Dashboard",
         devices: "Devices overview",
+        history: "Operations history",
         map: "Parking map",
         racks: "PLC I/O",
         tags: "Tags",

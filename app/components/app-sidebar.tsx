@@ -50,6 +50,10 @@ export function AppSidebar({ aps, roles, user }: SidebarProps) {
             url: `/aps/${aps.ns}/devices`,
           },
           {
+            title: t("aps.sidebar.menu.history"),
+            url: `/aps/${aps.ns}/history`,
+          },
+          {
             title: t("aps.sidebar.menu.map"),
             url: `/aps/${aps.ns}/map`,
           },
