@@ -51,7 +51,12 @@ export function HistoryTable({ history }: HistoryListProps) {
                 : t("aps.history.table." + item.operation.key)}
             </TableCell>
             <TableCell>
-              {item.alarm !== undefined && `AL${item.alarm.id}`}
+              {item.operation.key === "op-alarm-on" && (
+                <span className="text-alert">AL{item.alarm.id}</span>
+              )}
+              {item.operation.key === "op-alarm-off" && (
+                <span className="text-ready">AL{item.alarm.id}</span>
+              )}
             </TableCell>
             <TableCell>{item.card}</TableCell>
             <TableCell>{item.stall}</TableCell>
