@@ -101,7 +101,7 @@ const TablePagination = ({
           <PaginationNext
             href="#"
             className={
-              currentPage >= pageNumbers.length
+              currentPage >= pages
                 ? "pointer-events-none cursor-not-allowed"
                 : ""
             }
