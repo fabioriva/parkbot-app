@@ -44,16 +44,18 @@ const TablePagination = ({
           <PaginationPrevious
             href="#"
             className={
-              currentPage <= 1
-                ? "pointer-events-none cursor-not-allowed text-muted"
-                : ""
+              currentPage <= 1 ? "pointer-events-none cursor-not-allowed" : ""
             }
             onClick={() => paginate(currentPage - 1)}
           />
         </PaginationItem>
         <PaginationItem>
           {pageNumbers.map((number) => (
-            <PaginationLink href="#" onClick={() => paginate(number)}>
+            <PaginationLink
+              href="#"
+              className={number === currentPage ? "bg-muted" : ""}
+              onClick={() => paginate(number)}
+            >
               {number}
             </PaginationLink>
           ))}
@@ -63,7 +65,7 @@ const TablePagination = ({
             href="#"
             className={
               currentPage >= pageNumbers.length
-                ? "pointer-events-none cursor-not-allowed text-muted"
+                ? "pointer-events-none cursor-not-allowed"
                 : ""
             }
             onClick={() => paginate(currentPage + 1)}
