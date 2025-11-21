@@ -25,6 +25,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
 
   const { count, query } = loaderData?.data;
   const isMobile = useIsMobile();
+
   return (
     <div>
       {isMobile ? (
