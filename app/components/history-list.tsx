@@ -35,6 +35,41 @@ interface HistoryListProps {
   history: HistoryItemProps[];
 }
 
+export function operation(item, t) {
+  const { alarm, card, operation, mode, stall, uid } = item;
+  switch (operation.id) {
+    case 1:
+    case 2:
+      return t("aps.alarms." + item.alarm.key, item.alarm.query)
+    case 3:
+      return t("aps.history.list.op-id-3", { id: mode.id });
+    case 4:
+      return t("aps.history.list.op-id-4", { card });
+    case 5:
+      return t("aps.history.list.op-id-5", { card, stall });
+    case 6:
+      return t("aps.history.list.op-id-6", { card, stall });
+    case 7:
+      return t("aps.history.list.op-id-7", { card, stall });
+    case 8:
+      return t("aps.history.list.op-id-8", { card, stall });
+    case 9:
+      return t("aps.history.list.op-id-9", { stall });
+    case 10:
+      return t("aps.history.list.op-id-10", { card });
+    case 11:
+      return t("aps.history.list.op-id-11", { card });
+    case 12:
+      return t("aps.history.list.op-id-12", { card });
+    case 13:
+      return t("aps.history.list.op-id-13", { card });
+    case 14:
+      return t("aps.history.list.op-id-14", { card });
+    default:
+      return `Operation ${operation.id}`;
+  }
+}
+
 // const HistoryListItem = ({ item }: HistoryItemProps) => (
 //   <Item size="sm" className="px-0 py-1 gap-6">
 //     {/* <ItemIcon id={item.operation.id} /> */}
@@ -71,9 +106,9 @@ export function HistoryList({ history }: HistoryListProps) {
     <>
       {history.map((item, key) => (
         // <HistoryListItem item={item} key={key} />
-        <Item size="sm" className="px-0 py-1 gap-6">
+        <Item size="sm" className="px-0 py-1 gap-6" key={key}>
           {/* <ItemIcon id={item.operation.id} /> */}
-          <ItemMedia variant="icon">
+          {/* <ItemMedia variant="icon">
             {item.device.id !== 0 ? (
               <span
                 className={item.device.key.length > 2 ? "text-xs" : undefined}
@@ -83,13 +118,14 @@ export function HistoryList({ history }: HistoryListProps) {
             ) : (
               <User />
             )}
-          </ItemMedia>
+          </ItemMedia> */}
           <ItemContent className="gap-0.5">
             <ItemTitle className="line-clamp-1">
-              {item.mode.id} - {item.mode.key}
+              {item.device.key} - {t("aps.mode." + item.mode.key)}
             </ItemTitle>
             <ItemDescription>
-              {t("aps.history.table." + item.operation.key)}
+              {/* {t("aps.history.table." + item.operation.key)} */}
+              {operation(item, t)}
             </ItemDescription>
           </ItemContent>
           <ItemContent className="flex-none text-right">

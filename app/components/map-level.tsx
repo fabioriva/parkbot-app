@@ -69,9 +69,7 @@ export function Level({ definitions, level, view }: MapLevelProps) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ stall, status }),
-    });
-    // console.log(res);
-    
+    });    
   };
   const handleOpen = (stall: Stall) => {
     setError(false);

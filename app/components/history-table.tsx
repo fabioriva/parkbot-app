@@ -108,8 +108,9 @@ export function HistoryTable({ history }: HistoryListProps) {
               <TableCell className="font-medium">
                 {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
               </TableCell>
+              <TableCell>{item.device.key}</TableCell>
               <TableCell>
-                {item.mode.id} {t("aps.history.table." + item.mode.key)}
+                {item.mode.id} - {t("aps.mode." + item.mode.key)}
               </TableCell>
               <TableCell>
                 {item.alarm !== undefined
