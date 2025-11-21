@@ -1,4 +1,14 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns";
+import { useTranslation } from "react-i18next";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { HistoryList } from "~/components/history-list";
 import { HistoryTable } from "~/components/history-table";
@@ -8,7 +18,7 @@ import type { Route } from "./+types/history";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const from = format(
-    subDays(startOfDay(new Date()), 1),
+    subDays(startOfDay(new Date()), 3),
     "yyyy-MM-dd HH:mm:ss"
   );
   const to = format(endOfDay(new Date()), "yyyy-MM-dd HH:mm:ss");
@@ -25,14 +35,38 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
 
   const { count, query } = loaderData?.data;
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
 
   return (
-    <div>
-      {isMobile ? (
-        <HistoryList history={query} />
-      ) : (
-        <HistoryTable history={query} />
-      )}
-    </div>
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>{t("aps.history.title")}</CardTitle>
+        <CardDescription>
+          {t("aps.history.description", {
+            from: loaderData?.data.dateFrom,
+            to: loaderData?.data.dateTo,
+            count,
+          })}
+        </CardDescription>
+        {/* <CardAction>
+          <Button variant="link">Sign Up</Button>
+        </CardAction> */}
+      </CardHeader>
+      <CardContent>
+        {isMobile ? (
+          <HistoryList history={query} />
+        ) : (
+          <HistoryTable history={query} />
+        )}
+      </CardContent>
+      {/* <CardFooter className="flex-col gap-2">
+        <Button type="submit" className="w-full">
+          Login
+        </Button>
+        <Button variant="outline" className="w-full">
+          Login with Google
+        </Button>
+      </CardFooter> */}
+    </Card>
   );
 }

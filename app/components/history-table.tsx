@@ -37,9 +37,8 @@ const TablePagination = ({
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
   }
-  // console.log(totalPosts, pageNumbers, pageNumbers.length);
   return (
-    <Pagination>
+    <Pagination className="mt-3">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -80,7 +79,7 @@ export function HistoryTable({ history }: HistoryListProps) {
   const { t } = useTranslation();
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 10;
+  const postsPerPage = 15;
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = history.slice(indexOfFirstPost, indexOfLastPost);

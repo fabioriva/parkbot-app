@@ -135,6 +135,8 @@ export default {
       "al-spba-fc": "Door EZA/EOA",
     },
     history: {
+      title: "Operations history",
+      description: "From {{from}} to {{to}}. Logs {{count}}.",
       table: {
         alarm: "Alarm Id",
         date: "Date",

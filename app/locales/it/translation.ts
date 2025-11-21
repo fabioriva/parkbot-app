@@ -135,6 +135,8 @@ export default {
       "al-spba-fc": "Porta EZA/EOA",
     },
     history: {
+      title: "Storico delle operazioni",
+      description: "Dal {{from}} al {{to}}. Registrazioni {{count}}.",
       table: {
         alarm: "Allarme",
         date: "Data",
