@@ -12,7 +12,7 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
+  // TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -27,18 +27,45 @@ interface HistoryListProps {
   history: HistoryItemProps[];
 }
 
+// utils/pagination.ts
+export const getPageNumbers = (
+  currentPage: number,
+  totalPages: number,
+  delta: number = 2
+): (number | string)[] => {
+  const range: (number | string)[] = [];
+  const left = Math.max(2, currentPage - delta);
+  const right = Math.min(totalPages - 1, currentPage + delta);
+
+  range.push(1);
+  if (left > 2) range.push("...");
+
+  for (let i = left; i <= right; i++) {
+    range.push(i);
+  }
+
+  if (right < totalPages - 1) range.push("...");
+  if (totalPages > 1) range.push(totalPages);
+
+  return range;
+};
+
 const TablePagination = ({
   currentPage,
   postsPerPage,
   totalPosts,
   paginate,
 }) => {
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
+  // const pageNumbers = [];
+  // for (let i = 1; i <= Math.ceil(pages); i++) {
+  //   pageNumbers.push(i);
+  // }
+  const pages = Math.ceil(totalPosts / postsPerPage);
+  const pageNumbers = getPageNumbers(currentPage, pages);
+  
+  console.log(pageNumbers);
   return (
-    <Pagination className="mt-3">
+    <Pagination className="mt-6">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -49,17 +76,27 @@ const TablePagination = ({
             onClick={() => paginate(currentPage - 1)}
           />
         </PaginationItem>
-        <PaginationItem>
-          {pageNumbers.map((number) => (
-            <PaginationLink
-              href="#"
-              className={number === currentPage ? "bg-muted" : ""}
-              onClick={() => paginate(number)}
-            >
-              {number}
-            </PaginationLink>
-          ))}
-        </PaginationItem>
+        {pageNumbers.map((number, key) => {
+          if (number === "...") {
+            return (
+              <PaginationItem key={key}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            );
+          } else {
+            return (
+              <PaginationItem key={key}>
+                <PaginationLink
+                  href="#"
+                  className={number === currentPage ? "bg-muted" : ""}
+                  onClick={() => paginate(number)}
+                >
+                  {number}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          }
+        })}
         <PaginationItem>
           <PaginationNext
             href="#"
@@ -86,10 +123,12 @@ export function HistoryTable({ history }: HistoryListProps) {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = history.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  console.log(indexOfFirstPost, indexOfLastPost);
+
   return (
     <>
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead>{t("aps.history.table.date")}</TableHead>
