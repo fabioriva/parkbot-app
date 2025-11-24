@@ -10,6 +10,15 @@ import {
   PaginationPrevious,
 } from "~/components/ui/pagination";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import {
   Table,
   TableBody,
   // TableCaption,
@@ -50,21 +59,16 @@ export const getPageNumbers = (
   return range;
 };
 
-const TablePagination = ({
-  currentPage,
-  postsPerPage,
-  totalPosts,
-  paginate,
-}) => {
+const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
   // const pageNumbers = [];
   // for (let i = 1; i <= Math.ceil(pages); i++) {
   //   pageNumbers.push(i);
   // }
-  const pages = Math.ceil(totalPosts / postsPerPage);
+  const pages = Math.ceil(totalRows / rowsPerPage);
   const pageNumbers = getPageNumbers(currentPage, pages);
   // console.log(pageNumbers);
   return (
-    <Pagination className="mt-6">
+    <Pagination className="justify-start">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -117,15 +121,15 @@ export function HistoryTable({ history }: HistoryListProps) {
   const { t } = useTranslation();
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 15;
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = history.slice(indexOfFirstPost, indexOfLastPost);
+  const [rowsPerPage, setRowsPerPages] = useState(15);
+  const indexOfLastPost = currentPage * rowsPerPage;
+  const indexOfFirstPost = indexOfLastPost - rowsPerPage;
+  const currentRows = history.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
-      <Table>
+      <Table className="border border-muted">
         {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
         <TableHeader>
           <TableRow>
@@ -140,7 +144,7 @@ export function HistoryTable({ history }: HistoryListProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentPosts.map((item, key) => (
+          {currentRows.map((item, key) => (
             <TableRow key={key}>
               <TableCell className="font-medium">
                 {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
@@ -172,12 +176,28 @@ export function HistoryTable({ history }: HistoryListProps) {
           ))}
         </TableBody>
       </Table>
-      <TablePagination
-        currentPage={currentPage}
-        postsPerPage={postsPerPage}
-        totalPosts={history.length}
-        paginate={paginate}
-      />
+      <div className="flex mt-6 border-l border-bg-muted">
+        <TablePagination
+          currentPage={currentPage}
+          rowsPerPage={rowsPerPage}
+          totalRows={history.length}
+          paginate={paginate}
+        />
+        <Select onValueChange={(rows) => setRowsPerPages(rows)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Rows per page" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Rows per page</SelectLabel>
+              <SelectItem value={15}>15</SelectItem>
+              <SelectItem value={30}>30</SelectItem>
+              <SelectItem value={50}>50</SelectItem>
+              <SelectItem value={100}>100</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
     </>
   );
 }

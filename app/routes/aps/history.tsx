@@ -5,7 +5,7 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
@@ -33,7 +33,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   // console.log(loaderData?.data);
   if (!loaderData?.data) return <Error />;
 
-  const { count, query } = loaderData?.data;
+  const { count, dateFrom, dateTo, query } = loaderData?.data;
   const isMobile = useIsMobile();
   const { t } = useTranslation();
 
@@ -43,8 +43,8 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
         <CardTitle>{t("aps.history.title")}</CardTitle>
         <CardDescription>
           {t("aps.history.description", {
-            from: loaderData?.data.dateFrom,
-            to: loaderData?.data.dateTo,
+            from: dateFrom,
+            to: dateTo,
             count,
           })}
         </CardDescription>
