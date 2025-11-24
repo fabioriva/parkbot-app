@@ -1,4 +1,5 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Card,
@@ -11,6 +12,7 @@ import {
 } from "~/components/ui/card";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { HistoryList } from "~/components/history-list";
+import { HistoryQuery } from "~/components/history-query";
 import { HistoryTable } from "~/components/history-table";
 import fetcher from "~/lib/fetch.server";
 
@@ -18,7 +20,7 @@ import type { Route } from "./+types/history";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const from = format(
-    subDays(startOfDay(new Date()), 3),
+    subDays(startOfDay(new Date()), 1),
     "yyyy-MM-dd HH:mm:ss"
   );
   const to = format(endOfDay(new Date()), "yyyy-MM-dd HH:mm:ss");
@@ -33,9 +35,29 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   // console.log(loaderData?.data);
   if (!loaderData?.data) return <Error />;
 
-  const { count, dateFrom, dateTo, query } = loaderData?.data;
+  const [history, setHistory] = useState(loaderData?.data);
+  const { count, dateFrom, dateTo, query } = history;
   const isMobile = useIsMobile();
   const { t } = useTranslation();
+
+  const handleQuery = async ({ from, to }) => {
+    const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss");
+    const strTo = format(endOfDay(to), "yyyy-MM-dd HH:mm:ss");
+    const query = `system=0&dateFrom=${strFrom}&dateTo=${strTo}&filter=a&device=0&number=0`;
+    const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}`;
+    console.log(url);
+    const res = await fetch(url, {
+      // method: "POST",
+      // headers: {
+      //   Authorization: "Bearer " + loaderData?.token,
+      //   "Content-Type": "application/json",
+      // },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      setHistory(json);
+    }
+  };
 
   return (
     <Card className="w-full">
@@ -48,9 +70,9 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
             count,
           })}
         </CardDescription>
-        {/* <CardAction>
-          <Button variant="link">Sign Up</Button>
-        </CardAction> */}
+        <CardAction>
+          <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+        </CardAction>
       </CardHeader>
       <CardContent>
         {isMobile ? (
