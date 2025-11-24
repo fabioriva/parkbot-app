@@ -11,7 +11,7 @@ export default function Map({ data, view }: { data: any; view: any }) {
           key={level.nr}
         />
       ))}
-      <style jsx>{`
+      <style jsx="true">{`
         .l {
           height: 160px;
           width: 1153px;
