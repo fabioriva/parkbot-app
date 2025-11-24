@@ -12,17 +12,6 @@ import {
 import { DeviceInfo } from "~/components/device-info";
 import { DeviceView } from "~/components/device-view";
 
-import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "~/components/ui/item";
-
 interface DeviceProps {
   device: any;
   enhanced: boolean;
