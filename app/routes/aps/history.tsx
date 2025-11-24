@@ -45,14 +45,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
     const strTo = format(endOfDay(to), "yyyy-MM-dd HH:mm:ss");
     const query = `system=0&dateFrom=${strFrom}&dateTo=${strTo}&filter=a&device=0&number=0`;
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}`;
-    console.log(url);
-    const res = await fetch(url, {
-      // method: "POST",
-      // headers: {
-      //   Authorization: "Bearer " + loaderData?.token,
-      //   "Content-Type": "application/json",
-      // },
-    });
+    const res = await fetch(url);
     if (res.ok) {
       const json = await res.json();
       setHistory(json);
@@ -81,14 +74,6 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
           <HistoryTable history={query} />
         )}
       </CardContent>
-      {/* <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
-          Login
-        </Button>
-        <Button variant="outline" className="w-full">
-          Login with Google
-        </Button>
-      </CardFooter> */}
     </Card>
   );
 }

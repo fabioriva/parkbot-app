@@ -1,17 +1,14 @@
 import * as React from "react";
-// import { type DateRange } from "react-day-picker";
 import { parse } from "date-fns";
-
 import { ChevronDownIcon } from "lucide-react";
-
 import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
-// import { Label } from "~/components/ui/label"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+import { type DateRange } from "react-day-picker";
 
 export function HistoryQuery({ from, to, handleQuery }) {
   // console.log(typeof from, from, parse(from, "yyyy-MM-dd HH:mm", new Date()));
@@ -22,15 +19,13 @@ export function HistoryQuery({ from, to, handleQuery }) {
   });
   const handleDateRange = (range) => {
     // console.log(range);
-    setDateRange(range);
     handleQuery(range);
+    setDateRange(range);
+    // setOpen(false);
   };
 
   return (
     <div className="flex flex-col gap-3">
-      {/* <Label htmlFor="date" className="px-1">
-        Date of birth
-      </Label> */}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
