@@ -49,6 +49,7 @@ export default function Dashboard({
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
           {system.map((item, key) => (
             <Device device={item} enhanced={false} key={key} />
+            // <DeviceMini device={item} enhanced={false} key={key} />
           ))}
           <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} />
         </div>

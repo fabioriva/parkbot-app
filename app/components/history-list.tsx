@@ -40,7 +40,7 @@ export function operation(item, t) {
   switch (operation.id) {
     case 1:
     case 2:
-      return t("aps.alarms." + item.alarm.key, item.alarm.query)
+      return t("aps.alarms." + item.alarm.key, item.alarm.query);
     case 3:
       return t("aps.history.list.op-id-3", { id: mode.id });
     case 4:
@@ -121,7 +121,14 @@ export function HistoryList({ history }: HistoryListProps) {
           </ItemMedia> */}
           <ItemContent className="gap-0.5">
             <ItemTitle className="line-clamp-1">
-              {item.device.key} - {t("aps.mode." + item.mode.key)}
+              {item.device.id === 0 && t("aps.history.list.operator")}
+              {item.device.id !== 0 && item.device.key}
+              {item.device.id !== 0 && (
+                <span className="lowercase">
+                  {" "}
+                  {t("aps.mode." + item.mode.key)}
+                </span>
+              )}
             </ItemTitle>
             <ItemDescription>
               {/* {t("aps.history.table." + item.operation.key)} */}

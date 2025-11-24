@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -11,6 +12,17 @@ import {
 import { DeviceInfo } from "~/components/device-info";
 import { DeviceView } from "~/components/device-view";
 
+import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "~/components/ui/item";
+
 interface DeviceProps {
   device: any;
   enhanced: boolean;
@@ -18,12 +30,15 @@ interface DeviceProps {
 
 export function Device({ device, enhanced }: DeviceProps) {
   // console.log(device);
+  const { t } = useTranslation();
   const [LS, LC, LA] = device.c;
   return (
-    <Card className="py-4">
+    <Card className="py-4 gap-3">
       <CardHeader className="px-4">
         <CardTitle>{device.name}</CardTitle>
-        <CardDescription>{`Mode ${device.mode.id} - ${device.mode.key}`}</CardDescription>
+        <CardDescription>
+          {device.mode.id} {t("aps.mode." + device.mode.key)}
+        </CardDescription>
         <CardAction className="flex gap-1.5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -87,6 +102,16 @@ export function Device({ device, enhanced }: DeviceProps) {
       </CardHeader>
       <CardContent className="flex flex-col gap-3 px-4">
         <DeviceInfo device={device} />
+        {device.alarms.length > 0 && (
+          <ul className="list-inside list-disc text-sm text-alert">
+            {device.alarms.map((item, key) => (
+              <li key={key}>
+                AL{item?.id}&#9;
+                {t("aps.alarms." + item?.key, item?.query)}
+              </li>
+            ))}
+          </ul>
+        )}
         {enhanced && <DeviceView device={device} />}
       </CardContent>
       {enhanced && (

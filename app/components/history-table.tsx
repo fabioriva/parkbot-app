@@ -62,8 +62,7 @@ const TablePagination = ({
   // }
   const pages = Math.ceil(totalPosts / postsPerPage);
   const pageNumbers = getPageNumbers(currentPage, pages);
-  
-  console.log(pageNumbers);
+  // console.log(pageNumbers);
   return (
     <Pagination className="mt-6">
       <PaginationContent>
@@ -123,7 +122,6 @@ export function HistoryTable({ history }: HistoryListProps) {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = history.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  console.log(indexOfFirstPost, indexOfLastPost);
 
   return (
     <>
@@ -147,7 +145,10 @@ export function HistoryTable({ history }: HistoryListProps) {
               <TableCell className="font-medium">
                 {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
               </TableCell>
-              <TableCell>{item.device.key}</TableCell>
+              <TableCell>
+                {item.device.id === 0 && t("aps.history.list.operator")}
+                {item.device.id !== 0 && item.device.key}
+              </TableCell>
               <TableCell>
                 {item.mode.id} - {t("aps.mode." + item.mode.key)}
               </TableCell>
