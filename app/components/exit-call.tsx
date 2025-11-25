@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -28,6 +29,7 @@ interface ExitCallProps {
 
 export default function ExitCall({ exit }: ExitCallProps) {
   // console.log(exit);
+  const { t } = useTranslation();
   const { enable, max, min } = exit;
   const [card, setCard] = useState(min);
   const [error, setError] = useState(false);
@@ -57,17 +59,19 @@ export default function ExitCall({ exit }: ExitCallProps) {
           disabled={!enable.status}
           onClick={handleOpen}
         >
-          Exit car
+          {t("aps.exit-call.button")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Exit call</DialogTitle>
-          <DialogDescription>Enter card number and confirm.</DialogDescription>
+          <DialogTitle>{t("aps.exit-call.dialog-title")}</DialogTitle>
+          <DialogDescription>
+            {t("aps.exit-call.dialog-description")}
+          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-3 mb-3">
           <Label htmlFor="card">
-            Card number [{min}-{max}]
+            {t("aps.exit-call.dialog-label", { min, max })}
           </Label>
           <Input
             id="card"
@@ -79,16 +83,18 @@ export default function ExitCall({ exit }: ExitCallProps) {
             onChange={handleChange}
           />
           {error && (
-            <p className="text-red-500 text-sm">Card number is not valid!</p>
+            <p className="text-red-500 text-sm">
+              {t("aps.exit-call.dialog-error")}
+            </p>
           )}
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t("aps.cancel")}</Button>
           </DialogClose>
           <DialogClose asChild>
             <Button onClick={handleConfirm} disabled={error}>
-              Confirm
+              {t("aps.confirm")}
             </Button>
           </DialogClose>
         </DialogFooter>

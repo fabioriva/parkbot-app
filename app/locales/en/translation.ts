@@ -161,6 +161,13 @@ export default {
       "mv-1": "Swapping card {{card}}.",
       "mv-2": "Swapping card {{card}} in stall {{stall}}.",
     },
+    "exit-call": {
+      button: "Car exit",
+      "dialog-description": "Enter card number and confirm.",
+      "dialog-error": "Card number is not valid!",
+      "dialog-label": "Card number [{{min}}-{{max}}]",
+      "dialog-title": "Exit call",
+    },
     history: {
       title: "Operations history",
       description: "From {{from}} to {{to}}. Logs {{count}}.",

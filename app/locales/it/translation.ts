@@ -142,9 +142,8 @@ export default {
       "activity-description": "Elenco delle operazioni più recenti",
       "occupancy-title": "Occupazione del parcheggio",
       "occupancy-description": "Grafico a torta che rappresenta l'occupazione",
-      "operations-title": "Operazioni di oggi",
-      "operations-description":
-        "Grafico a barre che rappresenta le operazioni del sistema",
+      "operations-title": "Movimenti di oggi",
+      "operations-description": "Grafico delle operazioni di sistema",
     },
     device: {
       "ce-0": "Entrata in corso.",
@@ -161,6 +160,13 @@ export default {
       "mv-0": "Spostamento vettura in corso.",
       "mv-1": "Spostamento tessera {{card}}",
       "mv-2": "Spostamento tessera {{card}}, stallo {{stall}}.",
+    },
+    "exit-call": {
+      button: "Uscita vettura",
+      "dialog-description": "Inserisci il numero di tessera e conferma.",
+      "dialog-error": "Numero di tessera non valido!",
+      "dialog-label": "Tessera numero [{{min}}-{{max}}]",
+      "dialog-title": "Richiesta di uscita",
     },
     history: {
       title: "Storico delle operazioni",
