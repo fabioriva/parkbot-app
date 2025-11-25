@@ -80,6 +80,7 @@ export default {
   aps: {
     cancel: "Annulla",
     confirm: "Conferma",
+    more: "Vai",
     alarms: {
       "al-fallback": "Nessuna descrizione",
       "al-fc": "Sensori {{fc1}} {{fc2}}",
@@ -137,10 +138,10 @@ export default {
       "al-spba-fc": "Porta EZA/EOA",
     },
     dashboard: {
-      "occupancy-title": "Occupazione del parcheggio",
-      "occupancy-description": "Grafico a torta che rappresenta l'occupazione",
       "activity-title": "Attività recente",
       "activity-description": "Elenco delle operazioni più recenti",
+      "occupancy-title": "Occupazione del parcheggio",
+      "occupancy-description": "Grafico a torta che rappresenta l'occupazione",
       "operations-title": "Operazioni di oggi",
       "operations-description":
         "Grafico a barre che rappresenta le operazioni del sistema",

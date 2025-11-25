@@ -80,6 +80,7 @@ export default {
   aps: {
     cancel: "Cancel",
     confirm: "Confirm",
+    more: "More",
     alarms: {
       "al-fallback": "No description",
       "al-fc": "Sensors {{fc1}} {{fc2}}",
@@ -137,10 +138,10 @@ export default {
       "al-spba-fc": "Door EZA/EOA",
     },
     dashboard: {
-      "occupancy-title": "Parking occupancy",
-      "occupancy-description": "Pie chart showing system occupancy",
       "activity-title": "Recent activity",
       "activity-description": "List of the most recent operations",
+      "occupancy-title": "Parking occupancy",
+      "occupancy-description": "Pie chart showing system occupancy",
       "operations-title": "Today's operations",
       "operations-description": "Bar chart showing system operations",
     },
