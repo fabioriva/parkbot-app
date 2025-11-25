@@ -31,11 +31,7 @@ export function CardWrapper({
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
         <CardAction>
-          <Button
-            className="hover:no-underline hover:text-blue-700"
-            variant="link"
-            asChild
-          >
+          <Button variant="link" asChild>
             <a href={link}>{t("aps.more")}</a>
           </Button>
         </CardAction>
