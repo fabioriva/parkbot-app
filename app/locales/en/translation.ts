@@ -168,6 +168,18 @@ export default {
       "dialog-label": "Card number [{{min}}-{{max}}]",
       "dialog-title": "Exit call",
     },
+    "exit-queue": {
+      "card-calls_one": "{{count}} call waiting",
+      "card-calls_other": "{{count}} calls waiting",
+      "card-no-calls": "Exit queue is empty",
+      "card-title": "Exit queue",
+      "dialog-description":
+        "Are you sure you want to delete card {{card}} from the exit queue?",
+      "dialog-title": "Delete exit call",
+      "item-description": "Card {{card}} exiting from stall {{stall}}",
+      "item-next": "Next",
+      "item-title": "{{key}}° call",
+    },
     history: {
       title: "Operations history",
       description: "From {{from}} to {{to}}. Logs {{count}}.",

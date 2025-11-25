@@ -168,6 +168,18 @@ export default {
       "dialog-label": "Tessera numero [{{min}}-{{max}}]",
       "dialog-title": "Richiesta di uscita",
     },
+    "exit-queue": {
+      "card-calls_one": "{{count}} chiamata in attesa",
+      "card-calls_other": "{{count}} chiamate in attesa",
+      "card-no-calls": "Nessuna chiamata in attesa",
+      "card-title": "Coda di uscita",
+      "dialog-description":
+        "Sei sicuro di voler eliminare la tessera {{card}} dalla coda?",
+      "dialog-title": "Cancella chiamata di uscita",
+      "item-description": "Tessera {{card}} in uscita da stallo {{stall}}",
+      "item-next": "Prossimo",
+      "item-title": "{{key}}° chiamata",
+    },
     history: {
       title: "Storico delle operazioni",
       description: "Dal {{from}} al {{to}}. Registrazioni {{count}}.",

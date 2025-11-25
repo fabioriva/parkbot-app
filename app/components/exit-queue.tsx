@@ -1,5 +1,6 @@
 import { Trash } from "lucide-react";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ExitCall from "~/components/exit-call";
 import { Button } from "~/components/ui/button";
 import {
@@ -35,6 +36,7 @@ interface ExitQueueProps {
 
 export function ExitQueue({ exit, queue }: ExitQueueProps) {
   // console.log(queue);
+  const { t } = useTranslation();
   const [queueItem, setQueueItem] = useState({ card: 0, index: 0 });
   const handleConfirm = async () => {
     console.log(queueItem);
@@ -42,11 +44,11 @@ export function ExitQueue({ exit, queue }: ExitQueueProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Exit queue</CardTitle>
+        <CardTitle>{t("aps.exit-queue.card-title")}</CardTitle>
         <CardDescription>
           {queue.filter((item) => item.card !== 0).length === 0
-            ? "No waiting exit calls"
-            : queue.length + " exit calls waiting"}
+            ? t("aps.exit-queue.card-no-calls")
+            : t("aps.exit-queue.card-calls", { count: queue.length })}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -58,10 +60,15 @@ export function ExitQueue({ exit, queue }: ExitQueueProps) {
                 <Item size="sm" className="px-0 py-1 gap-6" key={key}>
                   <ItemContent className="">
                     <ItemTitle>
-                      {key === 0 ? "Next" : key + 1 + "° call"}
+                      {key === 0
+                        ? t("aps.exit-queue.item-next")
+                        : t("aps.exit-queue.item-title", { key: key + 1 })}
                     </ItemTitle>
                     <ItemDescription>
-                      Card {item.card} parked in stall {item.stall}
+                      {t("aps.exit-queue.item-description", {
+                        card: item.card,
+                        stall: item.stall,
+                      })}
                     </ItemDescription>
                   </ItemContent>
                   <ItemActions>
@@ -82,18 +89,20 @@ export function ExitQueue({ exit, queue }: ExitQueueProps) {
             ))}
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Delete exit call</DialogTitle>
+              <DialogTitle>{t("aps.exit-queue.dialog-title")}</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete card {queueItem.card} from the
-                exit queue?
+                {t("aps.exit-queue.dialog-description", {
+                  card: queueItem.card,
+                })}
               </DialogDescription>
             </DialogHeader>
+            <div className="mb-1.5" />
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline"> {t("aps.cancel")}</Button>
               </DialogClose>
               <DialogClose asChild>
-                <Button onClick={handleConfirm}>Confirm</Button>
+                <Button onClick={handleConfirm}> {t("aps.confirm")}</Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
