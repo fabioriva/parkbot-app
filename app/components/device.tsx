@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Loader } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -29,6 +30,7 @@ export function Device({ device, enhanced }: DeviceProps) {
           {device.mode.id} {t("aps.mode." + device.mode.key)}
         </CardDescription>
         <CardAction className="flex gap-1.5">
+          {device.operation !== 0 && <Loader className="animate-spin" />}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
