@@ -78,6 +78,8 @@ export default {
     resendButton: "Invia codice",
   },
   aps: {
+    cancel: "Annulla",
+    confirm: "Conferma",
     alarms: {
       "al-fallback": "Nessuna descrizione",
       "al-fc": "Sensori {{fc1}} {{fc2}}",
@@ -218,6 +220,15 @@ export default {
         racks: "PLC I/O",
         tags: "Tags",
       },
+    },
+    tags: {
+      "edit-description": "Modifica la tessera {{nr}} e conferma.",
+      "edit-error": "Codice PIN non valido!www",
+      "edit-label": "Inserisci un codice PIN pattern: 3 digits, [a-fA-F0-9]",
+      "edit-title": "Modifica la tessera {{nr}}",
+      "tag-parked": "Parcheggiata nel posto {{status}}",
+      "tag-not-parked": "Valido per l'entrata",
+      "search-placeholder": "Cerca tag per numero o PIN...",
     },
   },
 } satisfies typeof import("~/locales/en/translation").default;

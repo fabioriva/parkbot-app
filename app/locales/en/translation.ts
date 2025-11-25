@@ -78,6 +78,8 @@ export default {
     resendButton: "Resend code",
   },
   aps: {
+    cancel: "Cancel",
+    confirm: "Confirm",
     alarms: {
       "al-fallback": "No description",
       "al-fc": "Sensors {{fc1}} {{fc2}}",
@@ -218,6 +220,15 @@ export default {
         racks: "PLC I/O",
         tags: "Tags",
       },
+    },
+    tags: {
+      "edit-description": "Edit card {{nr}} PIN code and confirm.",
+      "edit-error": "PIN code is not valid!",
+      "edit-label": "Enter a PIN code, pattern: 3 digits, [a-fA-F0-9]",
+      "edit-title": "Edit card {{nr}} ",
+      "tag-parked": "Parked in slot {{status}}",
+      "tag-not-parked": "Valid fo entry",
+      "search-placeholder": "Search tag by PIN or number...",
     },
   },
 };

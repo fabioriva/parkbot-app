@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import Fuse from "fuse.js";
+import { useTranslation } from "react-i18next";
 import { Search, Tag as TagIcon } from "lucide-react";
 import { z } from "zod";
 import { Error } from "~/components/error";
@@ -43,29 +43,35 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   return { data, token };
 }
 
-const Tag = ({ item, handleEdit }: { item: Tag; handleEdit: Function }) => (
-  <Item className="w-72 hover:bg-muted" variant="outline" key={item.nr}>
-    <ItemMedia
-      variant="icon"
-      className={item.status !== 0 ? "bg-blue-500/20 text-blue-500" : ""}
-    >
-      <TagIcon />
-    </ItemMedia>
-    <ItemContent>
-      <ItemTitle>
-        Tag {item.nr} {item.code !== "0" && `PIN ${item.code}`}
-      </ItemTitle>
-      <ItemDescription>
-        {item.status !== 0 ? `Parked in slot ${item.status}` : "Valid fo entry"}
-      </ItemDescription>
-    </ItemContent>
-    <ItemActions>
-      <Button variant="outline" size="sm" onClick={() => handleEdit(item)}>
-        Edit
-      </Button>
-    </ItemActions>
-  </Item>
-);
+const Tag = ({ item, handleEdit }: { item: Tag; handleEdit: Function }) => {
+  const { t } = useTranslation();
+  const { code, nr, status } = item;
+  return (
+    <Item className="w-72 hover:bg-muted" variant="outline" key={nr}>
+      <ItemMedia
+        variant="icon"
+        className={status !== 0 ? "bg-blue-500/20 text-blue-500" : ""}
+      >
+        <TagIcon />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle>
+          Tag {nr} {code !== "0" && `PIN ${code}`}
+        </ItemTitle>
+        <ItemDescription>
+          {status !== 0
+            ? t("aps.tags.tag-parked", { status })
+            : t("aps.tags.tag-not-parked")}
+        </ItemDescription>
+      </ItemContent>
+      <ItemActions>
+        <Button variant="outline" size="sm" onClick={() => handleEdit(item)}>
+          Edit
+        </Button>
+      </ItemActions>
+    </Item>
+  );
+};
 
 export default function Tags({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData?.data) return <Error />;
@@ -104,15 +110,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
       setError(false);
     }
     setTag((prev: Tag) => ({ ...prev, code: e.target.value }));
-
-    // let value = e.target.value;
-    // const regexp = /^[a-fA-F0-9]{3}$/;
-    // if (!regexp.test(value) || value.length !== 3) {
-    //   setError(true);
-    // } else {
-    //   setError(false);
-    // }
-    // setTag((prev: Tag) => ({ ...prev, code: value }));
   };
   const handleConfirm = async ({ nr, code }: { nr: number; code: string }) => {
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/card/edit`;
@@ -133,6 +130,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     //   setIsOpenPin(true);
     // }
   };
+  const { t } = useTranslation();
 
   return (
     <React.Fragment>
@@ -142,7 +140,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         </div>
         <Input
           type="text"
-          placeholder="Search tag by number or PIN ..."
+          placeholder={t("aps.tags.search-placeholder")}
           className="pl-9"
           onChange={handleSearch}
         />
@@ -160,15 +158,15 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit card {tag.nr} status</DialogTitle>
+            <DialogTitle>
+              {t("aps.tags.edit-title", { nr: tag.nr })}
+            </DialogTitle>
             <DialogDescription>
-              Edit card {tag.nr} PIN code and confirm.
+              {t("aps.tags.edit-description", { nr: tag.nr })}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-3 mb-3">
-            <Label htmlFor="pin">
-              Card number range [{"min"}-{"max"}]
-            </Label>
+            <Label htmlFor="pin">{t("aps.tags.edit-label")}</Label>
             <Input
               className="uppercase"
               minLength={3}
@@ -179,16 +177,16 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
               onChange={handleChange}
             />
             {error && (
-              <p className="text-red-500 text-sm">PIN code is not valid!</p>
+              <p className="text-red-500 text-sm">{t("aps.tags.edit-error")}</p>
             )}
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("aps.cancel")}</Button>
             </DialogClose>
             <DialogClose asChild>
               <Button onClick={() => handleConfirm(tag)} disabled={error}>
-                Confirm
+                {t("aps.confirm")}
               </Button>
             </DialogClose>
           </DialogFooter>
