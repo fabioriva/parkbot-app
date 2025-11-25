@@ -136,6 +136,14 @@ export default {
       "al-spba-to": "Door U time out",
       "al-spba-fc": "Door EZA/EOA",
     },
+    dashboard: {
+      "occupancy-title": "Parking occupancy",
+      "occupancy-description": "Pie chart showing system occupancy",
+      "activity-title": "Recent activity",
+      "activity-description": "List of the most recent operations",
+      "operations-title": "Today's operations",
+      "operations-description": "Bar chart showing system operations",
+    },
     device: {
       "ce-0": "Entry in progress.",
       "ce-1": "Entering card {{card}}.",

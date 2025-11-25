@@ -136,6 +136,15 @@ export default {
       "al-spba-to": "Time out porta U",
       "al-spba-fc": "Porta EZA/EOA",
     },
+    dashboard: {
+      "occupancy-title": "Occupazione del parcheggio",
+      "occupancy-description": "Grafico a torta che rappresenta l'occupazione",
+      "activity-title": "Attività recente",
+      "activity-description": "Elenco delle operazioni più recenti",
+      "operations-title": "Operazioni di oggi",
+      "operations-description":
+        "Grafico a barre che rappresenta le operazioni del sistema",
+    },
     device: {
       "ce-0": "Entrata in corso.",
       "ce-1": "Tessera {{card}} in entrata.",
