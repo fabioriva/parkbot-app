@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Device } from "~/components/device";
 import { Error } from "~/components/error";
 import { ExitQueue } from "~/components/exit-queue";
-import { useData } from "~/lib/ws";
+import { useData } from "~/hooks/use-ws";
 import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/overview";

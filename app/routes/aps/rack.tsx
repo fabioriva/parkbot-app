@@ -1,7 +1,7 @@
 import { lazy, Fragment, Suspense } from "react";
 import { useSearchParams } from "react-router";
 import { Error } from "~/components/error";
-import { useData } from "~/lib/ws";
+import { useData } from "~/hooks/use-ws";
 import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/rack";

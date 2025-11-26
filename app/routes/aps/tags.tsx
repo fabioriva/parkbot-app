@@ -25,7 +25,7 @@ import {
 } from "~/components/ui/item";
 import { Label } from "~/components/ui/label";
 import { getSessionCookie } from "~/lib/session.server";
-import { useData } from "~/lib/ws";
+import { useData } from "~/hooks/use-ws";
 import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/tags";

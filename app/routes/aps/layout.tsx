@@ -15,7 +15,7 @@ import { OccupancyInfo } from "~/components/parking-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { getSession } from "~/lib/session.server";
 import { getUserRoles } from "~/lib/user.server";
-import { useInfo } from "~/lib/ws";
+import { useInfo } from "~/hooks/use-ws";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const { aps, session, user } = await getSession(request);

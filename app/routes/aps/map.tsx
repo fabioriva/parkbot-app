@@ -3,7 +3,7 @@ import { Error } from "~/components/error";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { getSessionCookie } from "~/lib/session.server";
-import { useData } from "~/lib/ws";
+import { useData } from "~/hooks/use-ws";
 import fetcher from "~/lib/fetch.server";
 
 import type { Route } from "./+types/map";
