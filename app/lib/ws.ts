@@ -34,9 +34,7 @@ export function useData(url: string, options: any) {
 export function useInfo(url: string) {
   const [comm, setComm] = useState(false);
   const [diag, setDiag] = useState(0);
-  // const [expired, setExpired] = useState(false);
   const [map, setMap] = useState([]);
-  // const [message, setMessage] = useState(undefined);
   const [operations, setOperations] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
@@ -63,15 +61,11 @@ export function useInfo(url: string) {
         if (key === "diag") {
           setDiag(message[key]);
         }
-        // if (key === "expired") {
-        //   setExpired(Boolean(message[key]));
-        // }
         if (key === "map") {
           setMap(message[key]);
         }
         if (key === "notification") {
           // console.log(message[key])
-          // setMessage(message[key]);
           toast(getTranslation(message[key], t), {
             description: "Date " + message[key].date,
             action: {
@@ -81,7 +75,7 @@ export function useInfo(url: string) {
             // style: {
             //   background: "red",
             // },
-          })
+          });
         }
         if (key === "operations") {
           setOperations(message[key]);
@@ -91,5 +85,5 @@ export function useInfo(url: string) {
     };
   }, []);
 
-  return { comm, diag, /*expired,*/ map, /*message,*/ operations, loading };
+  return { comm, diag, map, operations, loading };
 }
