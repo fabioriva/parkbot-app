@@ -1,5 +1,4 @@
-import { useTranslation } from "react-i18next";
-import clsx from "clsx";
+// import clsx from "clsx";
 // import {
 //   ArrowLeftRight,
 //   ArrowRightLeft,
@@ -23,6 +22,8 @@ import {
   // ItemSeparator,
   ItemTitle,
 } from "~/components/ui/item";
+import { getTranslation } from "~/lib/translation";
+import { useTranslation } from "react-i18next";
 
 // import type { Log } from "~/routes/aps/types";
 
@@ -35,77 +36,12 @@ interface HistoryListProps {
   history: HistoryItemProps[];
 }
 
-export function operation(item, t) {
-  const { alarm, card, operation, mode, stall, uid } = item;
-  switch (operation.id) {
-    case 1:
-    case 2:
-      return t("aps.alarms." + item.alarm.key, item.alarm.query);
-    case 3:
-      return t("aps.history.list.op-id-3", { id: mode.id });
-    case 4:
-      return t("aps.history.list.op-id-4", { card });
-    case 5:
-      return t("aps.history.list.op-id-5", { card, stall });
-    case 6:
-      return t("aps.history.list.op-id-6", { card, stall });
-    case 7:
-      return t("aps.history.list.op-id-7", { card, stall });
-    case 8:
-      return t("aps.history.list.op-id-8", { card, stall });
-    case 9:
-      return t("aps.history.list.op-id-9", { stall });
-    case 10:
-      return t("aps.history.list.op-id-10", { card });
-    case 11:
-      return t("aps.history.list.op-id-11", { card });
-    case 12:
-      return t("aps.history.list.op-id-12", { card });
-    case 13:
-      return t("aps.history.list.op-id-13", { card });
-    case 14:
-      return t("aps.history.list.op-id-14", { card });
-    default:
-      return `Operation ${operation.id}`;
-  }
-}
-
-// const HistoryListItem = ({ item }: HistoryItemProps) => (
-//   <Item size="sm" className="px-0 py-1 gap-6">
-//     {/* <ItemIcon id={item.operation.id} /> */}
-//     <ItemMedia variant="icon">
-//       {item.device.id !== 0 ? (
-//         <span className={item.device.key.length > 2 ? "text-xs" : undefined}>
-//           {item.device.key}
-//         </span>
-//       ) : (
-//         <User />
-//       )}
-//     </ItemMedia>
-//     <ItemContent className="gap-0.5">
-//       <ItemTitle className="line-clamp-1">
-//         {/* {item.device.key} -{" "}
-//         <span className="text-muted-foreground">{item.mode.key}</span> */}
-//         {item.mode.id} - {item.mode.key}
-//       </ItemTitle>
-//       <ItemDescription>{item.operation.key}</ItemDescription>
-//     </ItemContent>
-//     <ItemContent className="flex-none text-right">
-//       <ItemDescription className="flex flex-col">
-//         <span>{item.date.slice(0, 10)}</span>
-//         <span>{item.date.slice(11, 19)}</span>
-//       </ItemDescription>
-//     </ItemContent>
-//   </Item>
-// );
-
 export function HistoryList({ history }: HistoryListProps) {
   // console.log(history);
   const { t } = useTranslation();
   return (
     <>
       {history.map((item, key) => (
-        // <HistoryListItem item={item} key={key} />
         <Item size="sm" className="px-0 py-1 gap-6" key={key}>
           {/* <ItemIcon id={item.operation.id} /> */}
           {/* <ItemMedia variant="icon">
@@ -121,7 +57,7 @@ export function HistoryList({ history }: HistoryListProps) {
           </ItemMedia> */}
           <ItemContent className="gap-0.5">
             <ItemTitle className="line-clamp-1">
-              {item.device.id === 0 && t("aps.history.list.operator")}
+              {item.device.id === 0 && t("aps.history.log.operator")}
               {item.device.id !== 0 && item.device.key}
               {item.device.id !== 0 && (
                 <span className="lowercase">
@@ -130,10 +66,7 @@ export function HistoryList({ history }: HistoryListProps) {
                 </span>
               )}
             </ItemTitle>
-            <ItemDescription>
-              {/* {t("aps.history.table." + item.operation.key)} */}
-              {operation(item, t)}
-            </ItemDescription>
+            <ItemDescription>{getTranslation(item)}</ItemDescription>
           </ItemContent>
           <ItemContent className="flex-none text-right">
             <ItemDescription className="flex flex-col">

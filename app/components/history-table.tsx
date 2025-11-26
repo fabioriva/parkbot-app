@@ -150,7 +150,7 @@ export function HistoryTable({ history }: HistoryListProps) {
                 {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
               </TableCell>
               <TableCell>
-                {item.device.id === 0 && t("aps.history.list.operator")}
+                {item.device.id === 0 && t("aps.history.log.operator")}
                 {item.device.id !== 0 && item.device.key}
               </TableCell>
               <TableCell>

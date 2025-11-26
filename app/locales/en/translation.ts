@@ -183,7 +183,7 @@ export default {
     history: {
       title: "Operations history",
       description: "From {{from}} to {{to}}. Logs {{count}}.",
-      list: {
+      log: {
         "op-id-1": "Alarm {{id}} active",
         "op-id-2": "Alarm {{id}} cleared",
         "op-id-3": "Switch to function mode {{id}}",

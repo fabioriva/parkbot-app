@@ -17,6 +17,8 @@ import { ModeToggle } from "~/components/mode-toggle";
 import { getSession } from "~/lib/session.server";
 import { getUserRoles } from "~/lib/user.server";
 import { useInfo } from "~/lib/ws";
+import { getTranslation } from "~/lib/translation";
+import { useTranslation } from "react-i18next";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const { aps, session, user } = await getSession(request);
@@ -59,9 +61,10 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   const { aps, roles, sidebarState, user } = loaderData;
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
   const { comm, diag, map, message } = useInfo(url);
+  const { t } = useTranslation();
   useEffect(() => {
     if (message) {
-      toast(message.operation.key, {
+      toast(getTranslation(message), {
         description: "Date " + message.date,
         action: {
           label: "Undo",
