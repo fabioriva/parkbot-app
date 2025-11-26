@@ -32,10 +32,16 @@ export function useData(url: string, options: any) {
 }
 
 export function useInfo(url: string) {
-  const [comm, setComm] = useState(false);
-  const [diag, setDiag] = useState(0);
-  const [map, setMap] = useState([]);
-  const [operations, setOperations] = useState(undefined);
+  const [info, setInfo] = useState({
+    comm: false,
+    diag: 0,
+    map: [
+      { id: "busy", value: 0 },
+      { id: "free", value: 0 },
+      { id: "lock", value: 0 },
+    ],
+    // operations: {}
+  });
   const [loading, setLoading] = useState(true);
 
   const ws = useRef(null);
@@ -55,35 +61,26 @@ export function useInfo(url: string) {
     ws.current.onmessage = (e) => {
       const message = JSON.parse(e.data);
       Object.keys(message).forEach((key) => {
-        if (key === "comm") {
-          setComm(message[key]);
-        }
-        if (key === "diag") {
-          setDiag(message[key]);
-        }
-        if (key === "map") {
-          setMap(message[key]);
-        }
         if (key === "notification") {
           // console.log(message[key])
           toast(getTranslation(message[key], t), {
             description: "Date " + message[key].date,
-            action: {
-              label: "Undo",
-              onClick: () => console.log("Undo"),
-            },
+            // action: {
+            //   label: "Undo",
+            //   onClick: () => console.log("Undo"),
+            // },
             // style: {
             //   background: "red",
             // },
           });
-        }
-        if (key === "operations") {
-          setOperations(message[key]);
+        } else {
+          // console.log(e.data);
+          setInfo(message);
         }
       });
       setLoading(false);
     };
   }, []);
 
-  return { comm, diag, map, operations, loading };
+  return { info, loading };
 }

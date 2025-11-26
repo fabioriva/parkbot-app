@@ -56,9 +56,12 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
   const { aps, roles, sidebarState, user } = loaderData;
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
-  const { comm, diag, map /*, message*/ } = useInfo(url);
-
+  // const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
+  // const { comm, diag, map, info /*, message*/ } = useInfo(url);
+  // console.log(info);
+  const {
+    info: { comm, diag, map },
+  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`);
   return (
     <SidebarProvider
       defaultOpen={sidebarState === "true"}
