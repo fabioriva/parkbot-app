@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { Loader } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
@@ -10,8 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { DeviceInfo } from "~/components/device-info";
 import { DeviceView } from "~/components/device-view";
+import { getDeviceInfo } from "~/lib/translation";
+import { useTranslation } from "react-i18next";
 
 interface DeviceProps {
   device: any;
@@ -92,7 +92,8 @@ export function Device({ device, enhanced }: DeviceProps) {
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-3 px-4">
-        <DeviceInfo device={device} />
+        {/* <DeviceInfo device={device} /> */}
+        <span>{getDeviceInfo(device)}</span>
         {device.alarms.length > 0 && (
           <ul className="list-inside list-disc text-sm text-alert">
             {device.alarms.map((item, key) => (
