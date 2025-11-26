@@ -27,10 +27,10 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       Authorization: "Bearer " + token,
       // "Content-Type": "application/json",
     },
-  }); 
+  });
   // console.log('/map loader error', error);
   // return { error, data };
-  return {data, token}
+  return { data, token };
 }
 
 export default function Map({ loaderData, params }: Route.ComponentProps) {
