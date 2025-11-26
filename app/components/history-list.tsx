@@ -18,7 +18,7 @@ import {
   ItemContent,
   ItemDescription,
   // ItemGroup,
-  ItemMedia,
+  // ItemMedia,
   // ItemSeparator,
   ItemTitle,
 } from "~/components/ui/item";
@@ -66,7 +66,7 @@ export function HistoryList({ history }: HistoryListProps) {
                 </span>
               )}
             </ItemTitle>
-            <ItemDescription>{getTranslation(item)}</ItemDescription>
+            <ItemDescription>{getTranslation(item, t)}</ItemDescription>
           </ItemContent>
           <ItemContent className="flex-none text-right">
             <ItemDescription className="flex flex-col">

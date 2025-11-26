@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { data, Link, Outlet, redirect } from "react-router";
-import { toast } from "sonner";
+// import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { /*data, Link,*/ Outlet, redirect } from "react-router";
+// import { toast } from "sonner";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -17,8 +18,7 @@ import { ModeToggle } from "~/components/mode-toggle";
 import { getSession } from "~/lib/session.server";
 import { getUserRoles } from "~/lib/user.server";
 import { useInfo } from "~/lib/ws";
-import { getTranslation } from "~/lib/translation";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const { aps, session, user } = await getSession(request);
@@ -59,23 +59,26 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   // console.log(loaderData);
   const { aps, roles, sidebarState, user } = loaderData;
+
+  // const { t } = useTranslation();
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps.ns}/info`;
-  const { comm, diag, map, message } = useInfo(url);
-  const { t } = useTranslation();
-  useEffect(() => {
-    if (message) {
-      toast(getTranslation(message), {
-        description: "Date " + message.date,
-        action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
-        },
-        // style: {
-        //   background: "red",
-        // },
-      });
-    }
-  }, [message]);
+  const { comm, diag, map/*, message*/ } = useInfo(url);
+  // const { t } = useTranslation();
+  // useEffect(() => {
+  //   if (message) {        
+  //     console.log(message, typeof window);
+  //     // toast(getTranslation(message), {
+  //     //   description: "Date " + message.date,
+  //     //   action: {
+  //     //     label: "Undo",
+  //     //     onClick: () => console.log("Undo"),
+  //     //   },
+  //     //   // style: {
+  //     //   //   background: "red",
+  //     //   // },
+  //     // });
+  //   }
+  // }, [message]);
   return (
     <SidebarProvider
       defaultOpen={sidebarState === "true"}

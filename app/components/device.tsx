@@ -93,7 +93,7 @@ export function Device({ device, enhanced }: DeviceProps) {
       </CardHeader>
       <CardContent className="flex flex-col gap-3 px-4">
         {/* <DeviceInfo device={device} /> */}
-        <span>{getDeviceInfo(device)}</span>
+        <span>{getDeviceInfo(device, t)}</span>
         {device.alarms.length > 0 && (
           <ul className="list-inside list-disc text-sm text-alert">
             {device.alarms.map((item, key) => (

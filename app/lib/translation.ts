@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 
-export function getDeviceInfo(device) {
-  const { t } = useTranslation();
+export function getDeviceInfo(device, t) {
+  // const { t } = useTranslation();  
   const { card, mode, operation, stall } = device;
   const ce = (card, stall) => {
     if (card === 0 && stall === 0) return t("aps.device.ce-0");
@@ -44,8 +44,8 @@ export function getDeviceInfo(device) {
   }
 }
 
-export function getTranslation(message) {
-  const { t } = useTranslation();
+export function getTranslation(message, t) {
+  // const { t } = useTranslation();
   const { alarm, card, operation, mode, stall, uid } = message;
   switch (operation.id) {
     case 1:
