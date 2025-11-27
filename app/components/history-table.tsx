@@ -68,7 +68,7 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
   const pageNumbers = getPageNumbers(currentPage, pages);
   // console.log(pageNumbers);
   return (
-    <Pagination className="justify-start">
+    <Pagination className="border border-bg-muted rounded-sm justify-end">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -176,7 +176,7 @@ export function HistoryTable({ history }: HistoryListProps) {
           ))}
         </TableBody>
       </Table>
-      <div className="flex mt-6 border-l border-bg-muted">
+      <div className="flex flex-row-reverse gap-3 mt-6">
         <TablePagination
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}
