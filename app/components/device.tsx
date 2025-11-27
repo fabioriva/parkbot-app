@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Loader } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
@@ -23,7 +24,11 @@ export function Device({ device, enhanced }: DeviceProps) {
   const { t } = useTranslation();
   const [LS, LC, LA] = device.c;
   return (
-    <Card className="py-4 gap-3">
+    <Card
+      className={clsx("py-4 gap-3", {
+        "bg-warning/10": device.mode.id !== 8,
+      })}
+    >
       <CardHeader className="px-4">
         <CardTitle>{device.name}</CardTitle>
         <CardDescription>
