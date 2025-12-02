@@ -16,6 +16,11 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
+import {
   Item,
   ItemActions,
   ItemContent,
@@ -134,17 +139,16 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <React.Fragment>
-      <div className="relative">
-        <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50">
-          <Search className="size-4" />
-        </div>
-        <Input
-          type="text"
+      <InputGroup>
+        <InputGroupInput
           placeholder={t("aps.tags.search-placeholder")}
-          className="pl-9"
           onChange={handleSearch}
         />
-      </div>
+        <InputGroupAddon>
+          <Search />
+        </InputGroupAddon>
+        <InputGroupAddon align="inline-end">{search.length}</InputGroupAddon>
+      </InputGroup>
       <div className="flex flex-wrap gap-3">
         {search.length === 0 &&
           data.map((item: Tag) => (
@@ -172,7 +176,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
               minLength={3}
               maxLength={3}
               name="pin"
-              // type="number"
               value={tag.code}
               onChange={handleChange}
             />
