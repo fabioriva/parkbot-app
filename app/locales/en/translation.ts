@@ -257,6 +257,8 @@ export default {
       "tag-parked": "Parked in slot {{status}}",
       "tag-not-parked": "Valid fo entry",
       "search-placeholder": "Search tag by PIN or number...",
+      "search-results_one": "{{count}} result",
+      "search-results_other": "{{count}} results",
     },
   },
 };

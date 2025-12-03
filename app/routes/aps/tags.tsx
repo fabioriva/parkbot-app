@@ -147,7 +147,9 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         <InputGroupAddon>
           <Search />
         </InputGroupAddon>
-        <InputGroupAddon align="inline-end">{search.length}</InputGroupAddon>
+        <InputGroupAddon align="inline-end">
+          {t("aps.tags.search-results", { count: search.length })}
+        </InputGroupAddon>
       </InputGroup>
       <div className="flex flex-wrap gap-3">
         {search.length === 0 &&

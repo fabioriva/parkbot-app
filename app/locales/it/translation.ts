@@ -257,6 +257,8 @@ export default {
       "tag-parked": "Parcheggiata in {{status}}",
       "tag-not-parked": "Valida per l'ingresso",
       "search-placeholder": "Cerca tag per numero o PIN...",
+      "search-results_one": "{{count}} trovato",
+      "search-results_other": "{{count}} trovati",
     },
   },
 } satisfies typeof import("~/locales/en/translation").default;
