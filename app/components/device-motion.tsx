@@ -1,4 +1,6 @@
-import { CircleStop, RotateCw /*, RotateCcw*/ } from "lucide-react";
+import { useTranslation } from "react-i18next";
+// import { CircleStop, RotateCw /*, RotateCcw*/ } from "lucide-react";
+import { Loader } from "lucide-react";
 import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
 import { DevicePosition as Position } from "~/components/device-position";
@@ -12,22 +14,23 @@ interface DeviceMotionProps {
 
 export function DeviceMotion({ motor }: DeviceMotionProps) {
   // console.log(motor);
+  const { t } = useTranslation();
+  const id = motor.name.query?.id !== 0 ? motor.name.query?.id : "";
+  const isRunning = motor.run.status;
   return (
     <>
       <AccordionTrigger className="flex hover:no-underline py-3">
         <div className="grow">
-          {motor.name.key}
-          {/* &nbsp;{motor.name.query?.id} */}
+          {t("aps.device.motion." + motor.name.key, { id })}
         </div>
-        {motor.run.status ? (
-          <Badge className="bg-yellow-200 text-yellow-600" variant="secondary">
-            <RotateCw className="animate-spin" /> {motor.message}
-          </Badge>
-        ) : (
-          <Badge variant="secondary">
-            <CircleStop /> {motor.message}
-          </Badge>
-        )}
+        <Badge
+          className={isRunning ? "bg-warning/10 dark:bg-warning/20" : ""}
+          variant="secondary"
+        >
+          {/* {isRunning ? <RotateCw className="animate-spin" /> : <CircleStop />}{" "} */}
+          {isRunning !== 0 && <Loader className="animate-spin" />}
+          {t("aps.device.motion." + motor.message)}
+        </Badge>
       </AccordionTrigger>
       <AccordionContent className="flex flex-col gap-3 pt-3">
         {motor.encoders !== undefined &&
