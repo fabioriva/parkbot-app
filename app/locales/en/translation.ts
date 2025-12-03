@@ -146,6 +146,14 @@ export default {
       "operations-description": "Bar chart showing system operations",
     },
     device: {
+      drive: {
+        current: "Current",
+        load: "Load",
+        "not-ready": "not ready",
+        ready: "ready",
+        speed: "Speed",
+        trip: "Last trip",
+      },
       info: {
         "ce-0": "Entry in progress.",
         "ce-1": "Entering card {{card}}.",

@@ -146,6 +146,14 @@ export default {
       "operations-description": "Grafico delle operazioni di sistema",
     },
     device: {
+      drive: {
+        current: "Corrente",
+        load: "Carico",
+        "not-ready": "non pronto",
+        ready: "pronto",
+        speed: "Velocità",
+        trip: "Last trip",
+      },
       info: {
         "ce-0": "Entrata in corso.",
         "ce-1": "Tessera {{card}} in entrata.",

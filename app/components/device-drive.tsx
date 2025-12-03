@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
 
 type Bit = {
@@ -23,6 +24,7 @@ interface DeviceDriveProps {
 
 export function DeviceDrive({ drive }: DeviceDriveProps) {
   // console.log(drive);
+  const { t } = useTranslation();
   return (
     <>
       <AccordionTrigger className="flex hover:no-underline py-3">
@@ -32,7 +34,10 @@ export function DeviceDrive({ drive }: DeviceDriveProps) {
             "text-red-600": !drive.enable.status,
           })}
         >
-          {drive.name}&nbsp;{drive.enable.status ? "ready" : "not ready"}
+          {drive.name}&nbsp;
+          {drive.enable.status
+            ? t("aps.device.drive.ready")
+            : t("aps.device.drive.not-ready")}
         </div>
         <div>{drive.speed}&nbsp;Hz</div>
         <div>{drive.current}&nbsp;A</div>
@@ -62,20 +67,26 @@ export function DeviceDrive({ drive }: DeviceDriveProps) {
         </div>
         <div className="grid grid-cols-4 gap-3">
           <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">Speed</span>
+            <span className="text-muted-foreground text-xs">
+              {t("aps.device.drive.speed")}
+            </span>
             <span>{drive.speed}&nbsp;Hz</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">Current</span>
+            <span className="text-muted-foreground text-xs">
+              {t("aps.device.drive.current")}
+            </span>
             <span>{drive.current}&nbsp;A</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">Load</span>
+            <span className="text-muted-foreground text-xs">
+              {t("aps.device.drive.load")}
+            </span>
             <span>{drive.load}&nbsp;%</span>
           </div>
           <div className="flex flex-col">
             <span className="text-muted-foreground text-xs">
-              {"Last trip"}{" "}
+              {t("aps.device.drive.trip")}
             </span>
             <span>{drive.trip}</span>
           </div>
