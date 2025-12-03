@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Accordion, AccordionItem } from "~/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { DeviceDrive as Drive } from "~/components/device-drive";
@@ -11,12 +12,13 @@ interface DeviceProps {
 
 export function DeviceView({ device }: DeviceProps) {
   // console.log(device);
+  const { t } = useTranslation();
   return (
     <Tabs defaultValue="tab-0">
       <TabsList className="w-full">
         {device.views.map((item, key) => (
           <TabsTrigger value={`tab-${key}`} key={key}>
-            {item.name}
+            {t("aps.device.view." + item.name)}
           </TabsTrigger>
         ))}
       </TabsList>

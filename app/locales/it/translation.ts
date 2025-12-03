@@ -170,6 +170,12 @@ export default {
         "mv-1": "Spostamento tessera {{card}}",
         "mv-2": "Spostamento tessera {{card}}, stallo {{stall}}.",
       },
+      view: {
+        "view-garage": "Garage",
+        "view-main": "Principale",
+        // "view-panel": "Pannello",
+        "view-sil": "Silomat",
+      },
     },
     "exit-call": {
       button: "Uscita vettura",

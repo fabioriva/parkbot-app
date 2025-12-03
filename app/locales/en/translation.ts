@@ -170,6 +170,12 @@ export default {
         "mv-1": "Swapping card {{card}}.",
         "mv-2": "Swapping card {{card}} in stall {{stall}}.",
       },
+      view: {
+        "view-garage": "Garage",
+        "view-main": "Main",
+        // "view-panel": "Light panel",
+        "view-sil": "Silomat",
+      },
     },
     "exit-call": {
       button: "Car exit",
