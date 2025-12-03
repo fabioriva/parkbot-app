@@ -4,41 +4,41 @@ export function getDeviceInfo(device, t) {
   // const { t } = useTranslation();
   const { card, mode, operation, stall } = device;
   const ce = (card, stall) => {
-    if (card === 0 && stall === 0) return t("aps.device.ce-0");
-    if (stall === 0) return t("aps.device.ce-1", { card });
-    return t("aps.device.ce-2", { card, stall });
+    if (card === 0 && stall === 0) return t("aps.device.info.ce-0");
+    if (stall === 0) return t("aps.device.info.ce-1", { card });
+    return t("aps.device.info.ce-2", { card, stall });
   };
   const cu = (card, stall) => {
-    if (card === 0 && stall === 0) return t("aps.device.cu-0");
-    if (stall === 0) return t("aps.device.cu-1", { card });
-    return t("aps.device.cu-2", { card, stall });
+    if (card === 0 && stall === 0) return t("aps.device.info.cu-0");
+    if (stall === 0) return t("aps.device.info.cu-1", { card });
+    return t("aps.device.info.cu-2", { card, stall });
   };
   const mv = (card, stall) => {
-    if (card === 0 && stall === 0) return t("aps.device.mv-0");
-    if (stall === 0) return t("aps.device.mv-1", { card });
-    return t("aps.device.mv-2", { card, stall });
+    if (card === 0 && stall === 0) return t("aps.device.info.mv-0");
+    if (stall === 0) return t("aps.device.info.mv-1", { card });
+    return t("aps.device.info.mv-2", { card, stall });
   };
   const pp = (stall) => {
-    if (stall === 0) return t("aps.device.pp-0");
-    return t("aps.device-pp-1", { stall });
+    if (stall === 0) return t("aps.device.info.pp-0");
+    return t("aps.device.info-pp-1", { stall });
   };
 
   if (!device.c[0].status) {
-    return t("aps.device.off");
+    return t("aps.device.info.off");
   } else if (mode.id === 0) {
     return t("aps.mode.mode-no");
   } else if (mode.id === 6) {
-    return t("aps.device.off");
+    return t("aps.device.info.off");
   } else if (mode.id === 8 && operation === 1) {
     return ce(card, stall);
   } else if (mode.id === 8 && operation === 2) {
     return cu(card, stall);
   } else if (mode.id === 8 && operation === 3) {
-    return t("aps.device.idle-0");
+    return t("aps.device.info.idle-0");
   } else if (mode.id === 8 && operation === 4) {
     return mv(card, stall);
   } else if (mode.id === 8) {
-    return t("aps.device.ready");
+    return t("aps.device.info.ready");
   } else {
     return t("aps.mode.mode-man");
   }
