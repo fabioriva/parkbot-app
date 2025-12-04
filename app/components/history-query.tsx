@@ -45,7 +45,7 @@ export function HistoryQuery({ from, to, handleQuery }) {
             defaultMonth={dateRange?.from}
             selected={dateRange}
             onSelect={handleDateRange}
-            numberOfMonths={2}
+            numberOfMonths={1}
             className="rounded-lg border shadow-sm"
           />
         </PopoverContent>

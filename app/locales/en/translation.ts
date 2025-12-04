@@ -238,7 +238,7 @@ export default {
     },
     history: {
       title: "Operations history",
-      description: "From {{from}} to {{to}}. Logs {{count}}.",
+      description: "History rom {{from}} to {{to}}. Total logs {{count}}.",
       log: {
         "op-id-1": "Alarm {{id}} active",
         "op-id-2": "Alarm {{id}} cleared",

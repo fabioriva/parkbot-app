@@ -21,8 +21,9 @@ import {
 import {
   Table,
   TableBody,
-  // TableCaption,
+  TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -68,7 +69,7 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
   const pageNumbers = getPageNumbers(currentPage, pages);
   // console.log(pageNumbers);
   return (
-    <Pagination className="border border-bg-muted rounded-sm justify-end">
+    <Pagination className="justify-end">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -116,21 +117,29 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
   );
 };
 
-export function HistoryTable({ history }: HistoryListProps) {
-  // console.log(history);
+export function HistoryTable({
+  history: { count, dateFrom, dateTo, query },
+}: HistoryListProps) {
+  // console.log(dateFrom, dateTo, query);
   const { t } = useTranslation();
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPages] = useState(15);
   const indexOfLastPost = currentPage * rowsPerPage;
   const indexOfFirstPost = indexOfLastPost - rowsPerPage;
-  const currentRows = history.slice(indexOfFirstPost, indexOfLastPost);
+  const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
       <Table className="border border-muted">
-        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+        <TableCaption>
+          {t("aps.history.description", {
+            from: dateFrom,
+            to: dateTo,
+            count,
+          })}
+        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>{t("aps.history.table.date")}</TableHead>
@@ -176,11 +185,11 @@ export function HistoryTable({ history }: HistoryListProps) {
           ))}
         </TableBody>
       </Table>
-      <div className="flex flex-row-reverse gap-3 mt-6">
+      <div className="flex flex-row-reverse gap-3 mt-3">
         <TablePagination
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}
-          totalRows={history.length}
+          totalRows={count}
           paginate={paginate}
         />
         <Select onValueChange={(rows) => setRowsPerPages(rows)}>
