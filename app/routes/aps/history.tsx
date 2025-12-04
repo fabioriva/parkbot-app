@@ -1,15 +1,6 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-// import {
-//   Card,
-//   CardAction,
-//   CardContent,
-//   CardDescription,
-//   // CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "~/components/ui/card";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { HistoryList } from "~/components/history-list";
 import { HistoryQuery } from "~/components/history-query";
@@ -80,29 +71,4 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
       )}
     </React.Fragment>
   );
-
-  // return (
-  //   <Card className="w-full">
-  //     <CardHeader>
-  //       <CardTitle>{t("aps.history.title")}</CardTitle>
-  //       <CardDescription>
-  //         {t("aps.history.description", {
-  //           from: dateFrom,
-  //           to: dateTo,
-  //           count,
-  //         })}
-  //       </CardDescription>
-  //       <CardAction>
-  //         <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
-  //       </CardAction>
-  //     </CardHeader>
-  //     <CardContent>
-  //       {isMobile ? (
-  //         <HistoryList history={query} />
-  //       ) : (
-  //         <HistoryTable history={query} />
-  //       )}
-  //     </CardContent>
-  //   </Card>
-  // );
 }
