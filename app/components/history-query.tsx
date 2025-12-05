@@ -11,7 +11,6 @@ import {
 import { type DateRange } from "react-day-picker";
 
 export function HistoryQuery({ from, to, handleQuery }) {
-  // console.log(typeof from, from, parse(from, "yyyy-MM-dd HH:mm", new Date()));
   const [open, setOpen] = React.useState(false);
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
     from: parse(from, "yyyy-MM-dd HH:mm", new Date()), // new Date(2025, 5, 12),
@@ -25,13 +24,13 @@ export function HistoryQuery({ from, to, handleQuery }) {
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             id="date"
-            className="w-64 justify-between font-normal"
+            className="w-full justify-between font-normal"
           >
             {dateRange
               ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
@@ -46,7 +45,7 @@ export function HistoryQuery({ from, to, handleQuery }) {
             selected={dateRange}
             onSelect={handleDateRange}
             numberOfMonths={1}
-            className="rounded-lg border shadow-sm"
+            className="rounded-lg border"
           />
         </PopoverContent>
       </Popover>
