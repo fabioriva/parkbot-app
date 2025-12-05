@@ -393,7 +393,7 @@ export default {
       FDR: "Rilevamento larghezza destra",
       FDRx: "Rilevamento larghezza destra {nr, plural, =0 {} other {#}}",
       FE: "Fusibile 24VDC",
-      FEx: "Fusibile {nr, plural, =0 {} other {#}} 24VDC",
+      FEx: "Fusibile {{nr}} 24VDC",
       FLA: "Rilevamento lunghezza anteriore",
       FLAx: "Rilevamento lunghezza anteriore {nr, plural, =0 {} other {#}}",
       FLP: "Rilevamento lunghezza posteriore",

@@ -392,7 +392,7 @@ export default {
       FDR: "Right width detection",
       FDRx: "Right width {nr, plural, =0 {} other {#}} detection",
       FE: "Fuse 24VDC",
-      FEx: "Fuse {nr, plural, =0 {} other {#}} 24VDC",
+      FEx: "Fuse {{nr}} 24VDC",
       FLA: "Front length detection",
       FLAx: "Front length {nr, plural, =0 {} other {#}} detection",
       FLP: "Back length detection",
