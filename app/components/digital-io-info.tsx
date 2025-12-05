@@ -70,11 +70,9 @@ export function DigitalIoInfo({
 }: PropsWithChildren<DeviceInfoProps>) {
   const { t } = useTranslation();
   const { key, query } = get(io?.label);
-  // console.log(key, query);
-
   return (
     <Tooltip>
-      <TooltipTrigger>{children}</TooltipTrigger>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent>
         <ul className="text-sm">
           <li>{io?.addr}</li>
