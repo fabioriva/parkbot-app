@@ -52,7 +52,7 @@ const Tag = ({ item, handleEdit }: { item: Tag; handleEdit: Function }) => {
   const { t } = useTranslation();
   const { code, nr, status } = item;
   return (
-    <Item className="w-72 hover:bg-muted" variant="outline" key={nr}>
+    <Item className="w-full md:w-80 hover:bg-muted" variant="outline" key={nr}>
       <ItemMedia
         variant="icon"
         className={status !== 0 ? "bg-blue-500/20 text-blue-500" : ""}
