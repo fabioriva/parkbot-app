@@ -4,7 +4,7 @@ import { Loader } from "lucide-react";
 import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
 import { DevicePosition as Position } from "~/components/device-position";
-import { DigitalIO } from "~/components/digital-io-badge";
+import { DigitalIoInfo } from "~/components/digital-io-info";
 
 import type { Bit, Encoder, Motor } from "~/routes/aps/types";
 
@@ -38,8 +38,19 @@ export function DeviceMotion({ motor }: DeviceMotionProps) {
             <Position encoder={encoder} key={key} />
           ))}
         <div className="flex gap-1.5 overflow-auto">
-          {motor.io.map((bit, key) => (
-            <DigitalIO bit={bit} key={key} />
+          {motor.io.map((item, key) => (
+            <DigitalIoInfo io={item} key={key}>
+              <Badge
+                className={
+                  item.status
+                    ? `bg-ready/10 dark:bg-ready/20 text-ready`
+                    : "bg-slate-500/10 text-slate-500"
+                }
+                variant="default"
+              >
+                {item.label}
+              </Badge>
+            </DigitalIoInfo>
           ))}
         </div>
       </AccordionContent>

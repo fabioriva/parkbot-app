@@ -6,7 +6,7 @@ import {
 } from "~/components/ui/tooltip";
 
 interface DeviceInfoProps {
-  output: any;
+  io: any;
 }
 
 function get(label) {
