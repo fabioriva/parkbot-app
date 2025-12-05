@@ -1,4 +1,6 @@
+import { Loader } from "lucide-react";
 import { lazy, Fragment, Suspense, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Error } from "~/components/error";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -18,14 +20,12 @@ const components = {
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   // console.log(params);
-  // let token = "5ttltcrfjmcrtuh332jmf26kokbmw7ag";
   const { token } = await getSessionCookie(request);
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/map`;
   // const { error, data } = await fetcher(url, {
   const data = await fetcher(url, {
     headers: {
       Authorization: "Bearer " + token,
-      // "Content-Type": "application/json",
     },
   });
   // console.log('/map loader error', error);
@@ -36,17 +36,15 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 export default function Map({ loaderData, params }: Route.ComponentProps) {
   // if (!loaderData?.data) return <Error error={loaderData?.error} />;
   if (!loaderData?.data) return <Error />;
-
-  // ws
+  const { t } = useTranslation();
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
-
   const { data } = useData(url, { initialData: loaderData?.data });
   const [view, setView] = useState("view-2");
   const DynamicComponent = components[params.aps];
   return (
     <Fragment>
       <div className="flex justify-start gap-3 py-1.5">
-        <span>Select a view:</span>
+        <span>{t("aps.map.select-view")}:</span>
         <RadioGroup
           className="grid-flow-col"
           orientation="horizontal"
@@ -55,19 +53,30 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
         >
           <div className="flex items-center gap-3">
             <RadioGroupItem value="view-1" id="r1" />
-            <Label htmlFor="r1">Card</Label>
+            <Label htmlFor="r1">{t("aps.map.radio-card")}</Label>
           </div>
           <div className="flex items-center gap-3">
             <RadioGroupItem value="view-2" id="r2" />
-            <Label htmlFor="r2">Stall</Label>
+            <Label htmlFor="r2">{t("aps.map.radio-slot")}</Label>
           </div>
           <div className="flex items-center gap-3">
             <RadioGroupItem value="view-3" id="r3" />
-            <Label htmlFor="r3">Size</Label>
+            <Label htmlFor="r3">{t("aps.map.radio-size")}</Label>
           </div>
         </RadioGroup>
       </div>
-      <Suspense fallback={<span>Loading...</span>}>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-screen">
+            <Loader
+              role="status"
+              aria-label="Loading"
+              className="animate-spin size-8 mr-3"
+            />
+            Loading
+          </div>
+        }
+      >
         <DynamicComponent data={data} view={view} />
       </Suspense>
     </Fragment>

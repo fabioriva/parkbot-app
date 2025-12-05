@@ -549,6 +549,12 @@ export default {
       TRB: "Silomat BWD",
       UC: "Pulsante di conferma comando",
     },
+    map: {
+      "radio-card": "tessera",
+      "radio-size": "dimensione",
+      "radio-slot": "stallo",
+      "select-view": "Seleziona vista",
+    },
     mode: {
       "mode-data-edit": "Salva dati",
       "mode-data-read": "Lettura dati",

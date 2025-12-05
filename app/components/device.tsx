@@ -36,7 +36,13 @@ export function Device({ device, enhanced }: DeviceProps) {
           {device.mode.id} {t("aps.mode." + device.mode.key)}
         </CardDescription>
         <CardAction className="flex gap-1.5">
-          {device.operation !== 0 && <Loader className="animate-spin" />}
+          {device.operation !== 0 && (
+            <Loader
+              role="status"
+              aria-label="Loading"
+              className="animate-spin"
+            />
+          )}
           <DigitalIoInfo io={LA}>
             <svg
               xmlns="http://www.w3.org/2000/svg"

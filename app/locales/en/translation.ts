@@ -548,6 +548,12 @@ export default {
       TRB: "Silomat BWD",
       UC: "Control confirmation push-button",
     },
+    map: {
+      "radio-card": "card",
+      "radio-size": "size",
+      "radio-slot": "stall",
+      "select-view": "Select view",
+    },
     mode: {
       "mode-data-edit": "Data edit",
       "mode-data-read": "Data read",
