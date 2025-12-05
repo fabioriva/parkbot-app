@@ -67,7 +67,7 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
       </div>
       <Suspense
         fallback={
-          <div className="flex items-center justify-center h-screen">
+          <div className="flex items-center justify-center">
             <Loader
               role="status"
               aria-label="Loading"
