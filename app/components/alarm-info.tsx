@@ -15,7 +15,7 @@ export function AlarmInfo({ active }: AlarmInfoProps) {
       {active > 0 && (
         <Tooltip>
           <TooltipTrigger>
-            <Bell color="red" />
+            <Bell color="red" className="animate-pulse" />
           </TooltipTrigger>
           <TooltipContent>
             <p>Active alarms {active}</p>
