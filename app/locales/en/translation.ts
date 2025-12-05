@@ -553,6 +553,9 @@ export default {
       "radio-size": "size",
       "radio-slot": "stall",
       "select-view": "Select view",
+      "stall-busy": "Slot {{nr}} is occupied by card {{status}} since {{date}}",
+      "stall-free": "Slot {{nr}} is free since {{date}}",
+      "stall-lock": "Slot {{nr}} is locked since {{date}}",
     },
     mode: {
       "mode-data-edit": "Data edit",

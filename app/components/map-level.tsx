@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLoaderData, useParams } from "react-router";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
@@ -15,6 +16,11 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 
 import type { Stall } from "~/routes/aps/types";
 
@@ -24,15 +30,55 @@ interface MapLevelProps {
   view: string;
 }
 
+const Stall = ({ handleOpen, stall, stallStatus, view }) => {
+  const { FREE, LOCK, PAPA, RSVD } = stallStatus;
+  const { date, nr, size, status } = stall;
+  const { t } = useTranslation();
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          className={clsx("absolute h-[30px] w-[40px] border text-center", {
+            "bg-alert/20 text-alert": status !== 0,
+            "bg-ready/20 text-ready": status === FREE,
+            "bg-op-exit/20 text-op-exit": status === LOCK,
+            "bg-sky-700/20 text-sky-700": status === PAPA,
+            "bg-yellow-700/20 text-yellow-700": status === RSVD,
+          })}
+          id={"s-" + nr}
+        >
+          <span
+            className="hover:cursor-pointer hover:font-bold no-underline text-xs"
+            onClick={() => handleOpen(stall)}
+          >
+            {view === "view-1" && status}
+            {view === "view-2" && nr}
+            {view === "view-3" && size}
+          </span>
+        </button>
+      </TooltipTrigger>
+      <TooltipContent className="text-center text-sm">
+        {status === 0
+          ? t("aps.map.stall-free", { date, nr })
+          : status === LOCK
+            ? t("aps.map.stall-lock", { date, nr })
+            : t("aps.map.stall-busy", { date, nr, status })}
+      </TooltipContent>
+    </Tooltip>
+  );
+};
+
 export function Level({ definitions, level, view }: MapLevelProps) {
   // console.log(definitions, level, view);
   const loaderData = useLoaderData<typeof loader>();
   const params = useParams();
+  const { t } = useTranslation();
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const min = definitions.minCard !== undefined ? definitions.minCard : 1;
   const max =
     definitions.maxCard !== undefined ? definitions.maxCard : definitions.cards;
   const [error, setError] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [stall, setStall] = useState<Stall>({
     date: "",
     nr: 0,
@@ -69,10 +115,11 @@ export function Level({ definitions, level, view }: MapLevelProps) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ stall, status }),
-    });    
+    });
   };
   const handleOpen = (stall: Stall) => {
     setError(false);
+    setOpen(true);
     setStall(stall);
   };
   return (
@@ -94,33 +141,41 @@ export function Level({ definitions, level, view }: MapLevelProps) {
               <span className="font-semibold text-xs">{elevator.label}</span>
             </div>
           ))}
-        <Dialog>
-          {level?.stalls.map((stall: Stall) => (
-            <DialogTrigger key={stall.nr} asChild>
-              <div
-                className={clsx(
-                  "absolute h-[30px] w-[40px] border text-center",
-                  {
-                    "bg-alert/20 text-alert": stall.status !== 0,
-                    "bg-ready/20 text-ready": stall.status === FREE,
-                    "bg-op-exit/20 text-op-exit": stall.status === LOCK,
-                    "bg-sky-700/20 text-sky-700": stall.status === PAPA,
-                    "bg-yellow-700/20 text-yellow-700": stall.status === RSVD,
-                  }
-                )}
-                id={"s-" + stall.nr}
-              >
-                <span
-                  className="hover:cursor-pointer hover:font-bold no-underline text-xs"
-                  onClick={() => handleOpen(stall)}
-                >
-                  {view === "view-1" && stall.status}
-                  {view === "view-2" && stall.nr}
-                  {view === "view-3" && stall.size}
-                </span>
-              </div>
-            </DialogTrigger>
-          ))}
+        {/* <Dialog> */}
+        {level?.stalls.map((stall: Stall) => (
+          <Stall
+            handleOpen={handleOpen}
+            stall={stall}
+            stallStatus={definitions.stallStatus}
+            view={view}
+            key={stall.nr}
+          />
+          // <DialogTrigger key={stall.nr} asChild>
+          //   <div
+          //     className={clsx(
+          //       "absolute h-[30px] w-[40px] border text-center",
+          //       {
+          //         "bg-alert/20 text-alert": stall.status !== 0,
+          //         "bg-ready/20 text-ready": stall.status === FREE,
+          //         "bg-op-exit/20 text-op-exit": stall.status === LOCK,
+          //         "bg-sky-700/20 text-sky-700": stall.status === PAPA,
+          //         "bg-yellow-700/20 text-yellow-700": stall.status === RSVD,
+          //       }
+          //     )}
+          //     id={"s-" + stall.nr}
+          //   >
+          //     <span
+          //       className="hover:cursor-pointer hover:font-bold no-underline text-xs"
+          //       onClick={() => handleOpen(stall)}
+          //     >
+          //       {view === "view-1" && stall.status}
+          //       {view === "view-2" && stall.nr}
+          //       {view === "view-3" && stall.size}
+          //     </span>
+          //   </div>
+          // </DialogTrigger>
+        ))}
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Edit stall {stall.nr} status</DialogTitle>

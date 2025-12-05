@@ -554,6 +554,10 @@ export default {
       "radio-size": "dimensione",
       "radio-slot": "stallo",
       "select-view": "Seleziona vista",
+      "stall-busy":
+        "Stallo {{nr}} é occupato dalla tessera {{status}} dal {{date}}",
+      "stall-free": "Stallo {{nr}} é libero dal {{date}}",
+      "stall-lock": "Stallo {{nr}} é bloccato dal {{date}}",
     },
     mode: {
       "mode-data-edit": "Salva dati",
