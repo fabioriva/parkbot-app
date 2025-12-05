@@ -76,7 +76,7 @@ export function DigitalIoInfo({
     <Tooltip>
       <TooltipTrigger>{children}</TooltipTrigger>
       <TooltipContent>
-        <ul className="font-semiboldtext-sm">
+        <ul className="text-sm">
           <li>{io?.addr}</li>
           <li>{io?.label}</li>
           <li className={io?.status ? "text-ready" : "text-muted-foreground"}>
