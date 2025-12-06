@@ -1,5 +1,5 @@
 export default {
-  title: "parkbot-app (en)",
+  title: "Parkbot Web Service",
   description: "The robotic parking monitoring tool",
   submitButton: "Submit",
   auth: {
@@ -550,7 +550,6 @@ export default {
     },
     map: {
       "dialog-description": "Edit stall {{nr}} status and confirm.",
-                  Card number is not valid!
       "dialog-error": "Card number is not valid!",
       "dialog-label": "Card number range [{{min}}-{{max}}]",
       "dialog-title": "Edit stall {{nr}} status",

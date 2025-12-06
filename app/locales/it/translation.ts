@@ -1,5 +1,5 @@
 export default {
-  title: "parkbot-app (it)",
+  title: "Parkbot Web Service",
   description: "Supervisione dei sistemi di parcheggio automatizzati",
   submitButton: "Invia",
   auth: {
