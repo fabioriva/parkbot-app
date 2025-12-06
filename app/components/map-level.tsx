@@ -178,14 +178,16 @@ export function Level({ definitions, level, view }: MapLevelProps) {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Edit stall {stall.nr} status</DialogTitle>
+              <DialogTitle>
+                {t("aps.map.dialog-title", { stall: stall.nr })}
+              </DialogTitle>
               <DialogDescription>
-                Edit stall {stall.nr} status and confirm.
+                {t("aps.map.dialog-description", { stall: stall.nr })}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-3 mb-3">
               <Label htmlFor="card">
-                Card number range [{min}-{max}]
+                {t("aps.map.dialog-label", { min, max })}
               </Label>
               <Input
                 min={min}
@@ -197,13 +199,13 @@ export function Level({ definitions, level, view }: MapLevelProps) {
               />
               {error && (
                 <p className="text-red-500 text-sm">
-                  Card number is not valid!
+                  {t("aps.map.dialog-error")}
                 </p>
               )}
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">{t("aps.cancel")}</Button>
               </DialogClose>
               <DialogClose asChild>
                 <Button
@@ -212,7 +214,7 @@ export function Level({ definitions, level, view }: MapLevelProps) {
                   }
                   disabled={error}
                 >
-                  Card
+                  {t("aps.map.dialog-card")}
                 </Button>
               </DialogClose>
               <DialogClose asChild>
@@ -221,7 +223,7 @@ export function Level({ definitions, level, view }: MapLevelProps) {
                     handleConfirm({ stall: stall.nr, status: FREE })
                   }
                 >
-                  Clear
+                  {t("aps.map.dialog-clear")}
                 </Button>
               </DialogClose>
               <DialogClose asChild>
@@ -230,7 +232,7 @@ export function Level({ definitions, level, view }: MapLevelProps) {
                     handleConfirm({ stall: stall.nr, status: LOCK })
                   }
                 >
-                  Lock
+                  {t("aps.map.dialog-lock")}
                 </Button>
               </DialogClose>
             </DialogFooter>

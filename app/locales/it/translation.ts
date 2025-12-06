@@ -550,6 +550,13 @@ export default {
       UC: "Pulsante di conferma comando",
     },
     map: {
+      "dialog-description": "",
+      "dialog-error": "",
+      "dialog-label": "",
+      "dialog-title": "",
+      "dialog-card": "",
+      "dialog-free": "",
+      "dialog-lock": "",
       "radio-card": "tessera",
       "radio-size": "dimensione",
       "radio-slot": "stallo",

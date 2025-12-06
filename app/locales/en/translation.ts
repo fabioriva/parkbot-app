@@ -549,6 +549,14 @@ export default {
       UC: "Control confirmation push-button",
     },
     map: {
+      "dialog-description": "Edit stall {{nr}} status and confirm.",
+                  Card number is not valid!
+      "dialog-error": "Card number is not valid!",
+      "dialog-label": "Card number range [{{min}}-{{max}}]",
+      "dialog-title": "Edit stall {{nr}} status",
+      "dialog-card": "Card",
+      "dialog-free": "Clear",
+      "dialog-lock": "Lock",
       "radio-card": "card",
       "radio-size": "size",
       "radio-slot": "stall",
