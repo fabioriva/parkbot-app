@@ -3,7 +3,7 @@ import { data, Form, Link } from "react-router";
 import { AuroraText } from "~/components/magicui/aurora-text";
 import { Button } from "~/components/ui/button";
 import { ModeToggle } from "~/components/mode-toggle";
-import { getInstance } from "~/middleware/i18next";
+// import { getInstance } from "~/middleware/i18next";
 
 import type { Route } from "./+types/home";
 
@@ -14,10 +14,10 @@ export function meta({ data }: Route.MetaArgs) {
   ];
 }
 
-export async function loader({ context }: Route.LoaderArgs) {
-  let i18n = getInstance(context);
-  return data({ title: i18n.t("title"), description: i18n.t("description") });
-}
+// export async function loader({ context }: Route.LoaderArgs) {
+//   let i18n = getInstance(context);
+//   return data({ title: i18n.t("title"), description: i18n.t("description") });
+// }
 
 export default function Home() {
   let { t } = useTranslation();
