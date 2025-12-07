@@ -23,24 +23,26 @@ export default function Home() {
   let { t } = useTranslation();
   return (
     <div className="flex items-center justify-center h-screen px-3">
-      <div className="flex flex-col gap-6 text-center">
-        <h1 className="text-7xl font-extrabold tracking-tight">
+      <div className="flex flex-col gap-6 items-center">
+        <h1 className="text-7xl font-extrabold md:tracking-tight">
           <AuroraText>Parkbot</AuroraText>
           <span className="hidden md:inline"> Web Service</span>
         </h1>
         <h2 className="text-xl md:text-3xl">{t("description")}</h2>
-        <Link className="underline hover:text-blue-500" to="/login">
-          Login to Parkbot
-        </Link>
-        <Form className="space-x-6">
-          <Button type="submit" name="lng" value="en" variant="icon">
-            EN
+        <div className="mt-6 space-y-3">
+          <Button className="w-48" size="lg" variant="outline" asChild>
+            <Link to="/login">Login to Parkbot</Link>
           </Button>
-          <Button type="submit" name="lng" value="it" variant="icon">
-            IT
-          </Button>
-          <ModeToggle />
-        </Form>
+          <Form className="space-x-6">
+            <Button type="submit" name="lng" value="en" variant="icon">
+              EN
+            </Button>
+            <Button type="submit" name="lng" value="it" variant="icon">
+              IT
+            </Button>
+            <ModeToggle />
+          </Form>
+        </div>
       </div>
     </div>
   );
