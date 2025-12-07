@@ -23,7 +23,7 @@ export default function Home() {
   let { t } = useTranslation();
   return (
     <div className="flex items-center justify-center h-screen px-3">
-      <div className="flex flex-col gap-6 items-center">
+      <div className="flex flex-col gap-3 items-center text-center">
         <h1 className="text-7xl font-extrabold md:tracking-tight">
           <AuroraText>Parkbot</AuroraText>
           <span className="hidden md:inline"> Web Service</span>
@@ -33,7 +33,7 @@ export default function Home() {
           <Button className="w-48" size="lg" variant="outline" asChild>
             <Link to="/login">Login to Parkbot</Link>
           </Button>
-          <Form className="space-x-6">
+          <Form className="flex justify-center items-center gap-6">
             <Button type="submit" name="lng" value="en" variant="icon">
               EN
             </Button>
@@ -43,6 +43,16 @@ export default function Home() {
             <ModeToggle />
           </Form>
         </div>
+        <footer className="text-xs md:text-sm">
+          {"Parkbot © "}
+          {new Date().getFullYear()}{" "}
+          <Link
+            className="hover:underline hover:text-blue-500"
+            to="https://www.sotefin.com/"
+          >
+            Sotefin SA
+          </Link>
+        </footer>
       </div>
     </div>
   );
