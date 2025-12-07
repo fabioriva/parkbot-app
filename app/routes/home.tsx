@@ -24,8 +24,9 @@ export default function Home() {
   return (
     <div className="flex items-center justify-center h-screen px-3">
       <div className="flex flex-col gap-3 items-center text-center">
-        <h1 className="text-7xl font-extrabold md:tracking-tight">
+        <h1 className="text-7xl font-extrabold tracking-tight">
           <AuroraText>Parkbot</AuroraText>
+          <span className="inline md:hidden"> App</span>
           <span className="hidden md:inline"> Web Service</span>
         </h1>
         <h2 className="text-xl md:text-3xl">{t("description")}</h2>
