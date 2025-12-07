@@ -24,11 +24,12 @@ export default function Home() {
   return (
     <div className="flex items-center justify-center h-screen px-3">
       <div className="flex flex-col gap-6 text-center">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-          <AuroraText>Parkbot</AuroraText> Web Service
+        <h1 className="text-7xl font-extrabold tracking-tight">
+          <AuroraText>Parkbot</AuroraText>
+          <span className="hidden md:inline"> Web Service</span>
         </h1>
-        <h2 className="text-xl">{t("description")}</h2>
-        <Link className="underline" to="/login">
+        <h2 className="text-xl md:text-3xl">{t("description")}</h2>
+        <Link className="underline hover:text-blue-500" to="/login">
           Login to Parkbot
         </Link>
         <Form className="space-x-6">
