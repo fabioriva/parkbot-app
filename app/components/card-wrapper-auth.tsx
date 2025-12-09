@@ -1,9 +1,9 @@
 // import { CircleQuestionMark } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { Button } from "~/components/ui/button";
+// import { useTranslation } from "react-i18next";
+// import { Button } from "~/components/ui/button";
 import {
   Card,
-  CardAction,
+  // CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -25,7 +25,7 @@ export function CardWrapper({
   title,
   children,
 }: PropsWithChildren<CardWrapperProps>) {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   return (
     <Card className={className}>
       <CardHeader>
