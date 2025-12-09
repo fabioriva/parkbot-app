@@ -137,8 +137,8 @@ export default function ResetPassword2FA({
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("twoFA.auth.cardTitle")}</CardTitle>
+      <CardHeader>
+        <CardTitle>{t("twoFA.auth.cardTitle")}</CardTitle>
         <CardDescription>{t("twoFA.auth.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">

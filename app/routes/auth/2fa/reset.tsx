@@ -57,8 +57,8 @@ export default function TwoFAReset({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("twoFA.reset.cardTitle")}</CardTitle>
+      <CardHeader>
+        <CardTitle>{t("twoFA.reset.cardTitle")}</CardTitle>
         <CardDescription>{t("twoFA.reset.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>

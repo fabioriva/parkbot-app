@@ -81,8 +81,8 @@ export default function TwoFactorAuthentication({
   // const buttonRef = useRef<HTMLFormElement>(null);
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("twoFA.auth.cardTitle")}</CardTitle>
+      <CardHeader>
+        <CardTitle>{t("twoFA.auth.cardTitle")}</CardTitle>
         <CardDescription>{t("twoFA.auth.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>

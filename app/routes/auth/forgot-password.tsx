@@ -66,10 +66,8 @@ export default function ForgotPassword({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">
-          {t("forgotPassword.cardTitle")}
-        </CardTitle>
+      <CardHeader>
+        <CardTitle>{t("forgotPassword.cardTitle")}</CardTitle>
         <CardDescription>{t("forgotPassword.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>

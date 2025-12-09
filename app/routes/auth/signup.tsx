@@ -101,11 +101,9 @@ export default function Signup({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("signup.cardTitle")}</CardTitle>
-        <CardDescription>
-          <p>{t("signup.cardDescription")}</p>
-        </CardDescription>
+      <CardHeader>
+        <CardTitle>{t("signup.cardTitle")}</CardTitle>
+        <CardDescription>{t("signup.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form method="post">

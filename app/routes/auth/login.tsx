@@ -45,7 +45,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     if (!session.twoFactorVerified) {
       return redirect("/2fa/authentication");
     }
-    return redirect("/");
+    // return redirect("/");
   }
 }
 
@@ -98,7 +98,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
+      <CardHeader>
         <CardTitle className="text-lg">{t("login.cardTitle")}</CardTitle>
         <CardDescription>{t("login.cardDescription")}</CardDescription>
       </CardHeader>

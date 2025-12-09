@@ -76,8 +76,8 @@ export default function TwoFASetup({
   const qrcode = renderSVG(loaderData.keyURI);
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("twoFA.setup.cardTitle")}</CardTitle>
+      <CardHeader>
+        <CardTitle>{t("twoFA.setup.cardTitle")}</CardTitle>
         <CardDescription>{t("twoFA.setup.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">

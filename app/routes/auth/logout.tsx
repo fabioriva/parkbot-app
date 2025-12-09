@@ -49,8 +49,8 @@ export default function Logout() {
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("logout.cardTitle")}</CardTitle>
+      <CardHeader>
+        <CardTitle>{t("logout.cardTitle")}</CardTitle>
         <CardDescription>{t("logout.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>

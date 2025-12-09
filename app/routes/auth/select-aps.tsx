@@ -58,7 +58,7 @@ export default function SelectAps({ loaderData }: Route.LoaderArgs) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">{t("selectAps.cardTitle")}</CardTitle>
+        <CardTitle>{t("selectAps.cardTitle")}</CardTitle>
         <CardDescription>{t("selectAps.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>

@@ -42,8 +42,8 @@ export default function RecoveryCode({
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("recoveryCode.cardTitle")}</CardTitle>
+      <CardHeader>
+        <CardTitle>{t("recoveryCode.cardTitle")}</CardTitle>
         <CardDescription>{t("recoveryCode.cardDescription")} </CardDescription>
       </CardHeader>
       <CardContent>

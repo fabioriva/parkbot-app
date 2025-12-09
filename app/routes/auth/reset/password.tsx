@@ -153,8 +153,8 @@ export default function ResetPassword({ actionData }) {
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("login.cardTitle")}</CardTitle>
+      <CardHeader>
+        <CardTitle>{t("login.cardTitle")}</CardTitle>
         <CardDescription>{t("login.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>

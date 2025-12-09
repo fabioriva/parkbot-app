@@ -69,8 +69,8 @@ export default function ResetPasswordVerifyEmail({
   let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("verifyEmail.cardTitle")}</CardTitle>
+      <CardHeader>
+        <CardTitle>{t("verifyEmail.cardTitle")}</CardTitle>
         <CardDescription>
           {t("verifyEmail.cardDescription")}{" "}
           <span className="underline underline-offset-4">
