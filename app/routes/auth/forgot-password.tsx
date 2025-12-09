@@ -1,16 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import {
   ForgotPasswordSchema,
   validateForm,
@@ -65,14 +64,32 @@ export async function action({ context, request }: Route.ActionArgs) {
 export default function ForgotPassword({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("forgotPassword.cardTitle")}</CardTitle>
-        <CardDescription>{t("forgotPassword.cardDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form method="post">
-          <div className="flex flex-col gap-6">
+    <CardWrapper
+      title={t("forgotPassword.cardTitle")}
+      description={t("forgotPassword.cardDescription")}
+    >
+      <Form method="post">
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <Input
+              // type="email"
+              name="email"
+              id="email"
+              autoComplete="email"
+              placeholder="mail@example.com"
+            />
+          </Field>
+          <Field>
+            <SubmitFormButton
+              action="/forgot-password"
+              title={t("forgotPassword.sendButton")}
+            />
+            {actionData ? <FieldError>{actionData.message}</FieldError> : null}
+          </Field>
+        </FieldGroup>
+
+        {/* <div className="flex flex-col gap-6">
             <div className="grid gap-3">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -91,17 +108,14 @@ export default function ForgotPassword({ actionData }: Route.ComponentProps) {
             {actionData ? (
               <p className="text-sm text-red-500">{actionData.message}</p>
             ) : null}
-          </div>
-        </Form>
-      </CardContent>
-      <CardFooter>
-        <div className="text-center text-sm">
-          {t("forgotPassword.loginLink")}{" "}
-          <a href="/login" className="underline underline-offset-4">
-            Login
-          </a>
-        </div>
-      </CardFooter>
-    </Card>
+          </div> */}
+      </Form>
+      <div className="mt-6 text-sm">
+        {t("forgotPassword.loginLink")}{" "}
+        <a href="/login" className="underline underline-offset-4">
+          Login
+        </a>
+      </div>
+    </CardWrapper>
   );
 }

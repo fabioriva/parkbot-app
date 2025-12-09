@@ -1,16 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import {
   createEmailVerificationRequest,
   deleteUserEmailVerificationRequest,
@@ -62,7 +61,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   }
   // redirect
   if (verificationRequest === null && user.emailVerified) {
-    return redirect("/aps/test/dashboard");
+    return redirect("/select-aps");
   }
 }
 
@@ -113,61 +112,88 @@ export default function VerifyEmail({
   loaderData,
 }: Route.ComponentProps) {
   let { t } = useTranslation();
+  const { email } =
+    loaderData?.emailVerificationRequest?.email ?? "mail@example.com";
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-lg">{t("verifyEmail.cardTitle")}</CardTitle>
-        <CardDescription>
-          {t("verifyEmail.cardDescription")}{" "}
-          <span className="underline underline-offset-4">
-            {loaderData?.emailVerificationRequest?.email}
-          </span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <Form method="post">
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
-              <Input
-                type="text"
-                name="code"
-                id="code"
-                // required
-              />
-            </div>
+    <CardWrapper
+      title={t("verifyEmail.cardTitle")}
+      description={t("verifyEmail.cardDescription")} //, { email })}
+    >
+      <Form method="post">
+        <FieldGroup>
+          <Field>
             <input type="hidden" name="intent" value="submit" />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="code">{t("verifyEmail.codeLabel")}</FieldLabel>
+            <Input type="text" name="code" id="code" />
+          </Field>
+          <Field>
             <SubmitFormButton
               action="/verify-email"
               title={t("submitButton")}
             />
-            {actionData ? (
-              <p className="text-sm text-red-500">{actionData.message}</p>
-            ) : null}
-          </div>
-        </Form>
-        {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-          <span className="bg-card text-muted-foreground relative z-10 px-3">
-            Or
-          </span>
-        </div>
-        <Form method="post">
-          <div className="flex flex-col gap-6">
-            <input type="hidden" name="intent" value="resend-code" />
-            <SubmitFormButton
-              action="/verify-email"
-              title={t("verifyEmail.resendButton")}
-            />
-          </div>
-        </Form> */}
-      </CardContent>
-      <CardFooter>
-        <div className="text-sm">
-          <Link className="underline underline-offset-4" to="/settings">
-            {t("verifyEmail.changeMailLink")}
-          </Link>
-        </div>
-      </CardFooter>
-    </Card>
+            {actionData ? <FieldError>{actionData.message}</FieldError> : null}
+          </Field>
+        </FieldGroup>
+      </Form>
+    </CardWrapper>
   );
+  // return (
+  //   <Card>
+  //     <CardHeader className="text-center">
+  //       <CardTitle className="text-lg">{t("verifyEmail.cardTitle")}</CardTitle>
+  //       <CardDescription>
+  //         {t("verifyEmail.cardDescription")}{" "}
+  //         <span className="underline underline-offset-4">
+  //           {loaderData?.emailVerificationRequest?.email}
+  //         </span>
+  //       </CardDescription>
+  //     </CardHeader>
+  //     <CardContent className="space-y-3">
+  //       <Form method="post">
+  //         <div className="flex flex-col gap-6">
+  //           <div className="grid gap-3">
+  //             <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
+  //             <Input
+  //               type="text"
+  //               name="code"
+  //               id="code"
+  //               // required
+  //             />
+  //           </div>
+  //           <input type="hidden" name="intent" value="submit" />
+  //           <SubmitFormButton
+  //             action="/verify-email"
+  //             title={t("submitButton")}
+  //           />
+  //           {actionData ? (
+  //             <p className="text-sm text-red-500">{actionData.message}</p>
+  //           ) : null}
+  //         </div>
+  //       </Form>
+  //       {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+  //         <span className="bg-card text-muted-foreground relative z-10 px-3">
+  //           Or
+  //         </span>
+  //       </div>
+  //       <Form method="post">
+  //         <div className="flex flex-col gap-6">
+  //           <input type="hidden" name="intent" value="resend-code" />
+  //           <SubmitFormButton
+  //             action="/verify-email"
+  //             title={t("verifyEmail.resendButton")}
+  //           />
+  //         </div>
+  //       </Form> */}
+  //     </CardContent>
+  //     <CardFooter>
+  //       <div className="text-sm">
+  //         <Link className="underline underline-offset-4" to="/settings">
+  //           {t("verifyEmail.changeMailLink")}
+  //         </Link>
+  //       </div>
+  //     </CardFooter>
+  //   </Card>
+  // );
 }

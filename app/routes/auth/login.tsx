@@ -1,23 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-// import { Label } from "~/components/ui/label";
 import { LoginSchema, validateForm } from "~/lib/form-validation.server";
 import { verifyPasswordHash } from "~/lib/password.server";
 import {
@@ -45,7 +36,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     if (!session.twoFactorVerified) {
       return redirect("/2fa/authentication");
     }
-    // return redirect("/");
+    return redirect("/select-aps");
   }
 }
 
@@ -96,95 +87,54 @@ export async function action({ context, request }: Route.ActionArgs) {
 
 export default function Login({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">{t("login.cardTitle")}</CardTitle>
-        <CardDescription>{t("login.cardDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form method="post">
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input
-                // type="email"
-                name="email"
-                id="email"
-                autoComplete="email"
-                placeholder="mail@example.com"
-              />
-            </Field>
-            <Field>
-              <div className="flex items-center">
-                <FieldLabel htmlFor="password">Password</FieldLabel>
-                <a
-                  href="/forgot-password"
-                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                >
-                  {t("login.forgotLink")}
-                </a>
-              </div>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="current-password"
-                // required
-              />
-            </Field>
-            <Field>
-              <SubmitFormButton action="/login" title={t("submitButton")} />
-              {actionData ? (
-                <FieldError>{actionData.message}</FieldError>
-              ) : null}
-            </Field>
-          </FieldGroup>
-          {/* <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                // type="email"
-                name="email"
-                id="email"
-                autoComplete="email"
-                placeholder="mail@example.com"
-                // required
-              />
+    <CardWrapper
+      title={t("login.cardTitle")}
+      description={t("login.cardDescription")}
+    >
+      <Form method="post">
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <Input
+              // type="email"
+              name="email"
+              id="email"
+              autoComplete="email"
+              placeholder="mail@example.com"
+            />
+          </Field>
+          <Field>
+            <div className="flex items-center">
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <a
+                href="/forgot-password"
+                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+              >
+                {t("login.forgotLink")}
+              </a>
             </div>
-            <div className="grid gap-3">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <a
-                  href="/forgot-password"
-                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                >
-                  {t("login.forgotLink")}
-                </a>
-              </div>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="current-password"
-                // required
-              />
-            </div>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              autoComplete="current-password"
+              // required
+            />
+          </Field>
+          <Field>
             <SubmitFormButton action="/login" title={t("submitButton")} />
-            {actionData ? (
-              <p className="text-sm text-red-500">{actionData.message}</p>
-            ) : null}
-          </div> */}
-        </Form>
-      </CardContent>
-      <CardFooter>
-        <div className="text-center text-sm">
-          {t("login.signup")}{" "}
-          <a href="/signup" className="underline underline-offset-4">
-            {t("login.signupLink")}
-          </a>
-        </div>
-      </CardFooter>
-    </Card>
+            {actionData ? <FieldError>{actionData.message}</FieldError> : null}
+          </Field>
+        </FieldGroup>
+      </Form>
+      <div className="mt-6 text-sm">
+        {t("login.signup")}{" "}
+        <a href="/signup" className="underline underline-offset-4">
+          {t("login.signupLink")}
+        </a>
+      </div>
+    </CardWrapper>
   );
 }

@@ -1,17 +1,24 @@
 import { encodeBase64, decodeBase64 } from "@oslojs/encoding";
 import { createTOTPKeyURI, verifyTOTP } from "@oslojs/otp";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
 import { renderSVG } from "uqr";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "~/components/ui/input-otp";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { TotpCodeSchema, validateForm } from "~/lib/form-validation.server";
@@ -73,47 +80,58 @@ export default function TwoFASetup({
   loaderData,
 }: Route.ComponentProps) {
   let { t } = useTranslation();
+  const formRef = useRef<HTMLFormElement>(null);
   const qrcode = renderSVG(loaderData.keyURI);
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("twoFA.setup.cardTitle")}</CardTitle>
-        <CardDescription>{t("twoFA.setup.cardDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="flex justify-center">
-          <div
-            className="h-[200px] w-[200px]"
-            dangerouslySetInnerHTML={{
-              __html: qrcode,
-            }}
-          />
-        </div>
-        <Form method="post">
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-              <input
-                id="key"
-                name="key"
-                value={loaderData?.encodedTOTPKey}
-                hidden
-                readOnly
-              />
-              <Label htmlFor="code">{t("twoFA.setup.codeLabel")}</Label>
-              <Input
-                type="text"
-                name="code"
-                id="code"
-                // required
-              />
-            </div>
-            <SubmitFormButton action="/2fa/setup" title={t("submitButton")} />
-            {actionData ? (
-              <p className="text-sm text-red-500">{actionData.message}</p>
-            ) : null}
-          </div>
-        </Form>
-      </CardContent>
-    </Card>
+    <CardWrapper
+      title={t("twoFA.setup.cardTitle")}
+      description={t("twoFA.setup.cardDescription")}
+    >
+      <div className="mb-6">
+        <div
+          className="h-[200px] w-[200px]"
+          dangerouslySetInnerHTML={{
+            __html: qrcode,
+          }}
+        />
+      </div>
+      <Form method="post" ref={formRef}>
+        <FieldGroup>
+          <Field>
+            <input
+              id="key"
+              name="key"
+              value={loaderData?.encodedTOTPKey}
+              hidden
+              readOnly
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="otp">{t("twoFA.setup.codeLabel")}</FieldLabel>
+            <InputOTP
+              maxLength={6}
+              id="otp"
+              name="code"
+              // inputMode="numeric"
+              pattern={REGEXP_ONLY_DIGITS}
+              onComplete={() => formRef.current?.submit()}
+              // onComplete={() => buttonRef.current?.focus()}
+              autoFocus
+            >
+              <InputOTPGroup className="gap-2.5 *:data-[slot=input-otp-slot]:rounded-md *:data-[slot=input-otp-slot]:border">
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
+            <FieldDescription>Enter the 6-digit OTP code.</FieldDescription>
+            {actionData ? <FieldError>{actionData.message}</FieldError> : null}
+          </Field>
+        </FieldGroup>
+      </Form>
+    </CardWrapper>
   );
 }

@@ -1,13 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
 import { Field } from "~/components/ui/field";
 import {
   deleteSession,
@@ -48,18 +42,15 @@ export async function action({ request }: Route.ActionArgs) {
 export default function Logout() {
   let { t } = useTranslation();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("logout.cardTitle")}</CardTitle>
-        <CardDescription>{t("logout.cardDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form method="post">
-          <Field>
-            <SubmitFormButton action="/logout" title="Logout" />
-          </Field>
-        </Form>
-      </CardContent>
-    </Card>
+    <CardWrapper
+      title={t("logout.cardTitle")}
+      description={t("logout.cardDescription")}
+    >
+      <Form method="post">
+        <Field>
+          <SubmitFormButton action="/logout" title="Logout" />
+        </Field>
+      </Form>
+    </CardWrapper>
   );
 }

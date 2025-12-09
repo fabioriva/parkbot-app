@@ -1,21 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
 import {
   Field,
   FieldContent,
   FieldDescription,
-  // FieldError,
   FieldGroup,
   FieldLabel,
-  // FieldSet,
   FieldTitle,
 } from "~/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -56,35 +48,32 @@ export async function action({ context, request }: Route.ActionArgs) {
 export default function SelectAps({ loaderData }: Route.LoaderArgs) {
   let { t } = useTranslation();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("selectAps.cardTitle")}</CardTitle>
-        <CardDescription>{t("selectAps.cardDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form method="post">
-          <FieldGroup>
-            <RadioGroup defaultValue={loaderData[0].ns} name="ns">
-              {loaderData.map(({ city, country, name, ns }, key) => (
-                <FieldLabel htmlFor={ns} key={key}>
-                  <Field orientation="horizontal">
-                    <FieldContent>
-                      <FieldTitle className="capitalize">{name}</FieldTitle>
-                      <FieldDescription>
-                        Located in {city}, {country}.
-                      </FieldDescription>
-                    </FieldContent>
-                    <RadioGroupItem value={ns} id={ns} />
-                  </Field>
-                </FieldLabel>
-              ))}
-              <Field>
-                <SubmitFormButton action="/select-aps" title="Confirm Aps" />
-              </Field>
-            </RadioGroup>
-          </FieldGroup>
-        </Form>
-      </CardContent>
-    </Card>
+    <CardWrapper
+      title={t("selectAps.cardTitle")}
+      description={t("selectAps.cardDescription")}
+    >
+      <Form method="post">
+        <FieldGroup>
+          <RadioGroup defaultValue={loaderData[0].ns} name="ns">
+            {loaderData.map(({ city, country, name, ns }, key) => (
+              <FieldLabel htmlFor={ns} key={key}>
+                <Field orientation="horizontal">
+                  <FieldContent>
+                    <FieldTitle className="capitalize">{name}</FieldTitle>
+                    <FieldDescription>
+                      Located in {city}, {country}.
+                    </FieldDescription>
+                  </FieldContent>
+                  <RadioGroupItem value={ns} id={ns} />
+                </Field>
+              </FieldLabel>
+            ))}
+            <Field>
+              <SubmitFormButton action="/select-aps" title="Confirm Aps" />
+            </Field>
+          </RadioGroup>
+        </FieldGroup>
+      </Form>
+    </CardWrapper>
   );
 }

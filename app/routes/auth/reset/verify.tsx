@@ -1,16 +1,24 @@
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardFooter,
+//   CardHeader,
+//   CardTitle,
+// } from "~/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  Field,
+  // FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+// import { Label } from "~/components/ui/label";
 import { VerifyMailSchema, validateForm } from "~/lib/form-validation.server";
 import {
   getPasswordResetSession,
@@ -67,39 +75,66 @@ export default function ResetPasswordVerifyEmail({
   loaderData,
 }: Route.ComponentProps) {
   let { t } = useTranslation();
+  const { email } = loaderData?.email;
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("verifyEmail.cardTitle")}</CardTitle>
-        <CardDescription>
-          {t("verifyEmail.cardDescription")}{" "}
-          <span className="underline underline-offset-4">
-            {loaderData?.email}
-          </span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <Form method="post">
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
-              <Input
-                type="text"
-                name="code"
-                id="code"
-                // required
-              />
-            </div>
+    <CardWrapper
+      title={t("verifyEmail.cardTitle")}
+      description={t("verifyEmail.cardDescription", { email })}
+    >
+      <Form method="post">
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="code">{t("verifyEmail.codeLabel")}</FieldLabel>
+            <Input
+              type="text"
+              name="code"
+              id="code"
+              // required
+            />
+          </Field>
+          <Field>
             <SubmitFormButton
               action="/reset-password/verify-email"
               title={t("submitButton")}
             />
-            {actionData ? (
-              <p className="text-sm text-red-500">{actionData.message}</p>
-            ) : null}
-          </div>
-        </Form>
-      </CardContent>
-    </Card>
+            {actionData ? <FieldError>{actionData.message}</FieldError> : null}
+          </Field>
+        </FieldGroup>
+      </Form>
+    </CardWrapper>
+
+    // <Card>
+    //   <CardHeader>
+    //     <CardTitle>{t("verifyEmail.cardTitle")}</CardTitle>
+    //     <CardDescription>
+    //       {t("verifyEmail.cardDescription")}{" "}
+    //       <span className="underline underline-offset-4">
+    //         {loaderData?.email}
+    //       </span>
+    //     </CardDescription>
+    //   </CardHeader>
+    //   <CardContent className="space-y-3">
+    //     <Form method="post">
+    //       <div className="flex flex-col gap-6">
+    //         <div className="grid gap-3">
+    //           <Label htmlFor="code">{t("verifyEmail.codeLabel")}</Label>
+    //           <Input
+    //             type="text"
+    //             name="code"
+    //             id="code"
+    //             // required
+    //           />
+    //         </div>
+    //         <SubmitFormButton
+    //           action="/reset-password/verify-email"
+    //           title={t("submitButton")}
+    //         />
+    //         {actionData ? (
+    //           <p className="text-sm text-red-500">{actionData.message}</p>
+    //         ) : null}
+    //       </div>
+    //     </Form>
+    //   </CardContent>
+    // </Card>
   );
 }

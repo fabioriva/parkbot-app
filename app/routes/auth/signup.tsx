@@ -1,15 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import { checkEmailAvailability } from "~/lib/email.server";
 import {
   createEmailVerificationRequest,
@@ -22,7 +22,7 @@ import { verifyPasswordStrength } from "~/lib/password.server";
 import {
   createSession,
   generateSessionToken,
-  getSession,
+  // getSession,
   getSessionCookie,
   setSessionCookie,
 } from "~/lib/session.server";
@@ -32,10 +32,10 @@ import { getInstance } from "~/middleware/i18next";
 import type { SessionFlags } from "~/lib/session.server";
 import type { Route } from "./+types/signup";
 
-export async function loader({ context, request }: Route.LoaderArgs) {
-  const { session, user } = await getSession(request);
-  // ...
-}
+// export async function loader({ context, request }: Route.LoaderArgs) {
+//   const { session, user } = await getSession(request);
+//   // ...
+// }
 
 export async function action({ context, request }: Route.ActionArgs) {
   let i18n = getInstance(context);
@@ -100,67 +100,57 @@ export async function action({ context, request }: Route.ActionArgs) {
 export default function Signup({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("signup.cardTitle")}</CardTitle>
-        <CardDescription>{t("signup.cardDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form method="post">
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                type="text"
-                name="username"
-                id="username"
-                autoComplete="username"
-                // minLength={4}
-                // maxLength={31}
-                // placeholder="Username"
-                // required
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                name="email"
-                id="email"
-                autoComplete="email"
-                placeholder="mail@example.com"
-                // required
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="current-password"
-                // placeholder="Enter password"
-                // required
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="confirm">{t("signup.confirmLabel")}</Label>
-              <Input
-                type="password"
-                name="confirm"
-                id="confirm"
-                autoComplete="current-password"
-                // placeholder="Confirm password"
-                // required
-              />
-            </div>
+    <CardWrapper
+      title={t("signup.cardTitle")}
+      description={t("signup.cardDescription")}
+    >
+      <Form method="post">
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="username">Username</FieldLabel>
+            <Input
+              // type="text"
+              name="username"
+              id="username"
+              autoComplete="username"
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <Input
+              // type="email"
+              name="email"
+              id="email"
+              autoComplete="email"
+              placeholder="mail@example.com"
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="password">Password</FieldLabel>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              autoComplete="current-password"
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="confirm">
+              {t("signup.confirmLabel")}
+            </FieldLabel>
+            <Input
+              type="password"
+              name="confirm"
+              id="confirm"
+              autoComplete="current-password"
+            />
+          </Field>
+          <Field>
             <SubmitFormButton action="/signup" title={t("submitButton")} />
-            {actionData ? (
-              <p className="text-sm text-red-500">{actionData.message}</p>
-            ) : null}
-          </div>
-        </Form>
-      </CardContent>
-    </Card>
+            {actionData ? <FieldError>{actionData.message}</FieldError> : null}
+          </Field>
+        </FieldGroup>
+      </Form>
+    </CardWrapper>
   );
 }

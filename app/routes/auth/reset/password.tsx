@@ -1,15 +1,23 @@
 import { useTranslation } from "react-i18next";
 import { Form, Link, redirect } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "~/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+// import { Label } from "~/components/ui/label";
 import {
   ResetPasswordSchema,
   validateForm,
@@ -152,42 +160,76 @@ export async function action({ context, request }: Route.ActionArgs) {
 export default function ResetPassword({ actionData }) {
   let { t } = useTranslation();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("login.cardTitle")}</CardTitle>
-        <CardDescription>{t("login.cardDescription")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form method="post">
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="password">New password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                autoComplete="new-password"
-                // required
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="confirm">{t("signup.confirmLabel")}</Label>
-              <Input
-                type="password"
-                name="confirm"
-                id="confirm"
-                autoComplete="current-password"
-                // placeholder="Confirm password"
-                // required
-              />
-            </div>
-            <SubmitFormButton action="/login" title={t("submitButton")} />
-            {actionData ? (
-              <p className="text-sm text-red-500">{actionData.message}</p>
-            ) : null}
-          </div>
-        </Form>
-      </CardContent>
-    </Card>
+    <CardWrapper
+      title="Cambia password" // {t("login.cardTitle")}
+      description="Inserire la nuova password" // {t("login.cardDescription")}
+    >
+      <Form method="post">
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="password">New password</FieldLabel>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              autoComplete="current-password"
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="confirm">
+              {t("signup.confirmLabel")}
+            </FieldLabel>
+            <Input
+              type="password"
+              name="confirm"
+              id="confirm"
+              autoComplete="current-password"
+            />
+          </Field>
+          <Field>
+            <SubmitFormButton action="/signup" title={t("submitButton")} />
+            {actionData ? <FieldError>{actionData.message}</FieldError> : null}
+          </Field>
+        </FieldGroup>
+      </Form>
+    </CardWrapper>
+
+    // <Card>
+    //   <CardHeader>
+    //     <CardTitle>{t("login.cardTitle")}</CardTitle>
+    //     <CardDescription>{t("login.cardDescription")}</CardDescription>
+    //   </CardHeader>
+    //   <CardContent>
+    //     <Form method="post">
+    //       <div className="flex flex-col gap-6">
+    //         <div className="grid gap-3">
+    //           <Label htmlFor="password">New password</Label>
+    //           <Input
+    //             type="password"
+    //             name="password"
+    //             id="password"
+    //             autoComplete="new-password"
+    //             // required
+    //           />
+    //         </div>
+    //         <div className="grid gap-3">
+    //           <Label htmlFor="confirm">{t("signup.confirmLabel")}</Label>
+    //           <Input
+    //             type="password"
+    //             name="confirm"
+    //             id="confirm"
+    //             autoComplete="current-password"
+    //             // placeholder="Confirm password"
+    //             // required
+    //           />
+    //         </div>
+    //         <SubmitFormButton action="/login" title={t("submitButton")} />
+    //         {actionData ? (
+    //           <p className="text-sm text-red-500">{actionData.message}</p>
+    //         ) : null}
+    //       </div>
+    //     </Form>
+    //   </CardContent>
+    // </Card>
   );
 }
