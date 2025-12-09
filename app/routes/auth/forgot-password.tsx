@@ -88,27 +88,6 @@ export default function ForgotPassword({ actionData }: Route.ComponentProps) {
             {actionData ? <FieldError>{actionData.message}</FieldError> : null}
           </Field>
         </FieldGroup>
-
-        {/* <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                // type="email"
-                name="email"
-                id="email"
-                autoComplete="email"
-                placeholder="mail@example.com"
-                // required
-              />
-            </div>
-            <SubmitFormButton
-              action="/forgot-password"
-              title={t("forgotPassword.sendButton")}
-            />
-            {actionData ? (
-              <p className="text-sm text-red-500">{actionData.message}</p>
-            ) : null}
-          </div> */}
       </Form>
       <div className="mt-6 text-sm">
         {t("forgotPassword.loginLink")}{" "}
