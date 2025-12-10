@@ -160,6 +160,9 @@ export default function ResetPassword2FA({
       <Form method="post" ref={formRef}>
         <FieldGroup>
           <Field>
+            <input type="hidden" name="intent" value="otp" />
+          </Field>
+          <Field>
             <FieldLabel htmlFor="otp">{t("twoFA.auth.codeLabel")}</FieldLabel>
             <InputOTP
               maxLength={6}
@@ -198,7 +201,7 @@ export default function ResetPassword2FA({
           </Field>
           <Field>
             <SubmitFormButton
-              action="/reset-password/verify-email"
+              action="/reset-password/2fa"
               title={t("submitButton")}
             />
             {actionData ? <FieldError>{actionData.message}</FieldError> : null}

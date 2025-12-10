@@ -47,9 +47,6 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   if (session === null) {
     return redirect("/forgot-password");
   }
-  if (session === null) {
-    return redirect("/forgot-password");
-  }
   if (!session.emailVerified) {
     return redirect("/reset-password/verify-email");
   }
@@ -77,14 +74,16 @@ export async function action({ context, request }: Route.ActionArgs) {
     }
     const { session: passwordResetSession, user } =
       await getPasswordResetSession(request);
-    await invalidateUserPasswordResetSessions(passwordResetSession.userId);
-    await invalidateUserSessions(passwordResetSession.userId);
-    await updateUserPassword(passwordResetSession.userId, password);
+    await invalidateUserPasswordResetSessions(passwordResetSession?.userId);
+    await invalidateUserSessions(passwordResetSession?.userId);
+    await updateUserPassword(passwordResetSession?.userId, password);
     const passwordResetSessionCookie =
       await getPasswordResetSessionCookie(request);
-    await setPasswordResetSessionCookie(passwordResetSessionCookie, {
-      maxAge: 0,
-    });
+
+    // await setPasswordResetSessionCookie(passwordResetSessionCookie, {
+    //   maxAge: 0,
+    // });
+
     const sessionToken = generateSessionToken();
     const sessionFlags: SessionFlags = {
       twoFactorVerified: passwordResetSession.twoFactorVerified,
@@ -92,11 +91,29 @@ export async function action({ context, request }: Route.ActionArgs) {
     const session = await createSession(sessionToken, user.id, sessionFlags);
     const sessionCookie = await getSessionCookie(request);
     sessionCookie.token = sessionToken;
-    const cookie = await setSessionCookie(sessionCookie, {
-      expires: session?.expiresAt,
-    });
-    return redirect("/aps/test/dashboard", {
-      headers: { "Set-Cookie": cookie },
+
+    // const cookie = await setSessionCookie(sessionCookie, {
+    //   expires: session?.expiresAt,
+    // });
+    // return redirect("/select-aps", {
+    //   headers: { "Set-Cookie": cookie },
+    // });
+
+    return redirect("/select-aps", {
+      headers: [
+        [
+          "Set-Cookie",
+          await setPasswordResetSessionCookie(passwordResetSessionCookie, {
+            maxAge: 0,
+          }),
+        ],
+        [
+          "Set-Cookie",
+          await setSessionCookie(sessionCookie, {
+            expires: session?.expiresAt,
+          }),
+        ],
+      ],
     });
   }
 
@@ -172,7 +189,7 @@ export default function ResetPassword({ actionData }) {
               type="password"
               name="password"
               id="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
             />
           </Field>
           <Field>
@@ -187,7 +204,10 @@ export default function ResetPassword({ actionData }) {
             />
           </Field>
           <Field>
-            <SubmitFormButton action="/signup" title={t("submitButton")} />
+            <SubmitFormButton
+              action="/reset-password/password"
+              title={t("submitButton")}
+            />
             {actionData ? <FieldError>{actionData.message}</FieldError> : null}
           </Field>
         </FieldGroup>

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Form, Link, redirect } from "react-router";
+import { data, Form, Link, redirect } from "react-router";
 import { CardWrapper } from "~/components/card-wrapper-auth";
 import SubmitFormButton from "~/components/submit-form-button";
 import {
@@ -27,12 +27,11 @@ import type { Route } from "./+types/verify-email";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { user } = await getSession(request);
+  console.log("From verify-email loader:", user);
   if (user === null) {
     return redirect("/login");
   }
-
   const verificationRequest = await getEmailVerificationRequest(request);
-  console.log("From verify-email loader:", verificationRequest);
   if (verificationRequest === null && user.emailVerified) {
     return redirect("/select-aps");
   }
