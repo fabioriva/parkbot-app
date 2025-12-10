@@ -27,7 +27,6 @@ import type { Route } from "./+types/verify-email";
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { user } = await getSession(request);
-  console.log("From verify-email loader:", user);
   if (user === null) {
     return redirect("/login");
   }
@@ -70,15 +69,17 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 
 export async function action({ context, request }: Route.ActionArgs) {
   const { user } = await getSession(request);
-  const verificationRequest = await getEmailVerificationRequest(request);
-  if (verificationRequest === null) {
-    return {
-      message: "Not authenticated",
-    };
-  }
+  // const verificationRequest = await getEmailVerificationRequest(request);
+  // if (verificationRequest === null) {
+  //   return {
+  //     message: "Not authenticated",
+  //   };
+  // }
   let i18n = getInstance(context);
   const formData = await request.formData();
   const intent = formData.get("intent");
+  console.log("verify-email action =", intent);
+
   if (intent === "resend") {
     const emailVerificationRequest = await createEmailVerificationRequest(
       user.id,
@@ -107,10 +108,6 @@ export async function action({ context, request }: Route.ActionArgs) {
         },
       }
     );
-    // return data({
-    //   intent,
-    //   message: "A new verification code was sent to your inbox.",
-    // });
   }
   //
   const result = validateForm(formData, VerifyMailSchema);
@@ -120,6 +117,12 @@ export async function action({ context, request }: Route.ActionArgs) {
   } else {
     const code = formData.get("code");
     // ...
+    const verificationRequest = await getEmailVerificationRequest(request);
+    if (verificationRequest === null) {
+      return {
+        message: "Not authenticated",
+      };
+    }
     if (verificationRequest.code !== code) {
       return {
         intent,
