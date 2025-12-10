@@ -53,7 +53,6 @@ export async function createEmailVerificationRequest(
     expiresAt,
   };
   await requests.insertOne(request);
-  console.log(request);
   return request;
 }
 
@@ -88,12 +87,10 @@ export async function getEmailVerificationRequest(
   }
   const emailVerificationCookie = await getEmailVerificationCookie(request);
   const id = emailVerificationCookie.id;
-  console.log("emailVerificationCookie:", emailVerificationCookie, id);
   if (id === null) {
     return null;
   }
   const emailVerificationRequest = await getEmailVerification(user.id, id);
-  console.log(emailVerificationRequest);
   if (emailVerificationRequest === null) {
     await setEmailVerificationCookie(emailVerificationCookie, {
       maxAge: 0,

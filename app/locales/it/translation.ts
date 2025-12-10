@@ -76,6 +76,7 @@ export default {
     codeLabel: "Codice di verifica",
     changeMailLink: "Cambia la tua email",
     resendButton: "Invia codice",
+    resent: "E' stato inviato un nuovo codice di verifica.",
   },
   aps: {
     cancel: "Annulla",

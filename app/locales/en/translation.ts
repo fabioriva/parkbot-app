@@ -76,6 +76,7 @@ export default {
     codeLabel: "Verification code",
     changeMailLink: "Change your email",
     resendButton: "Resend code",
+    resent: "A new verification code was sent to your inbox.",
   },
   aps: {
     cancel: "Cancel",
