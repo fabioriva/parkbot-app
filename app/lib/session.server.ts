@@ -16,7 +16,7 @@ export const sessionCookieContainer = createCookie("__session", {
   httpOnly: true,
   path: "/",
   sameSite: "lax",
-  // secure: true,
+  secure: true,
   secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
 });
 
