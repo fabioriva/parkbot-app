@@ -75,11 +75,10 @@ export default function ResetPasswordVerifyEmail({
   loaderData,
 }: Route.ComponentProps) {
   let { t } = useTranslation();
-  const { email } = loaderData?.email;
   return (
     <CardWrapper
       title={t("verifyEmail.cardTitle")}
-      description={t("verifyEmail.cardDescription", { email })}
+      description={t("verifyEmail.cardDescription") + `: ${loaderData?.email}`}
     >
       <Form method="post">
         <FieldGroup>

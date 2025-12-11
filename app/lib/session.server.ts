@@ -12,12 +12,15 @@ import type { User } from "./user.server";
 
 const COLLECTION = "sessions";
 
-export const sessionCookieContainer = createCookie("__session", {
+export const sessionCookieContainer = createCookie("__pb_session", {
   httpOnly: true,
   path: "/",
   sameSite: "lax",
-  secure: true,
+  // secure: true,
   secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
+  ...(import.meta.env.PROD
+    ? { domain: "sotefinservice.com", secure: true }
+    : {}),
 });
 
 export async function getSessionCookie(request: Request): Promise<any> {

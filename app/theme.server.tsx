@@ -3,19 +3,21 @@ import { createThemeSessionResolver } from "remix-themes";
 
 // You can default to 'development' if process.env.NODE_ENV is not set
 // const isProduction = process.env.NODE_ENV === "production";
+const isProduction = import.meta.env.PROD;
+console.log({
+  ...(isProduction ? { domain: "sotefinservice.com", secure: true } : {}),
+});
 
 const sessionStorage = createCookieSessionStorage({
   cookie: {
-    name: "__parkbot_themes",
+    name: "__pb_themes",
     path: "/",
     httpOnly: true,
     sameSite: "lax",
-    secrets: ["abcdefghilmnopqrstuvwz"],
-    secure: true,
+    secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
+    // secure: true,
     // Set domain and secure only if in production
-    // ...(isProduction
-    //   ? { domain: "your-production-domain.com", secure: true }
-    //   : {}),
+    ...(isProduction ? { domain: "sotefinservice.com", secure: true } : {}),
   },
 });
 

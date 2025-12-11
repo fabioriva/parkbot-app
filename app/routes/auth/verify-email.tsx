@@ -64,7 +64,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   //   );
   // }
 
-  return { user };
+  return { email: user.email };
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -153,9 +153,7 @@ export default function VerifyEmail({
   return (
     <CardWrapper
       title={t("verifyEmail.cardTitle")}
-      description={
-        t("verifyEmail.cardDescription") + " " + loaderData?.user.email
-      } //, { email })}
+      description={t("verifyEmail.cardDescription") + `: ${loaderData?.email}`}
     >
       <Form method="post">
         <FieldGroup>

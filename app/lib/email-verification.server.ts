@@ -10,13 +10,16 @@ import type { SerializeOptions as CookieSerializeOptions } from "cookie";
 const COLLECTION = "email_verification_requests";
 
 export const emailVerificationCookieContainer = createCookie(
-  "__email_verification",
+  "__pb_email_verification",
   {
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    secure: true,
+    // secure: true,
     secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
+    ...(import.meta.env.PROD
+      ? { domain: "sotefinservice.com", secure: true }
+      : {}),
   }
 );
 

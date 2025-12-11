@@ -11,13 +11,16 @@ import type { User } from "./user.server";
 const COLLECTION = "password_reset_sessions";
 
 export const passwordResetSessionCookieContainer = createCookie(
-  "__password_reset_session",
+  "__pb_reset_session",
   {
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    secure: true,
+    // secure: true,
     secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
+    ...(import.meta.env.PROD
+      ? { domain: "sotefinservice.com", secure: true }
+      : {}),
   }
 );
 
