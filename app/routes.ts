@@ -39,6 +39,7 @@ export default [
     ]),
   ]),
   route("action/get-session", "./routes/action.get-session.ts"),
+  route("action/set-locale", "./routes/action.set-locale.ts"),
   route("action/set-theme", "./routes/action.set-theme.ts"),
   route("api/locales/:lng/:ns", "./routes/locales.ts"),
   route("*", "./routes/not-found.tsx"),

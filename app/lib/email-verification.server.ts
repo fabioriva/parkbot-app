@@ -15,11 +15,10 @@ export const emailVerificationCookieContainer = createCookie(
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    // secure: true,
     secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
-    ...(import.meta.env.PROD
-      ? { domain: "sotefinservice.com", secure: true }
-      : {}),
+    // ...(import.meta.env.PROD
+    //   ? { domain: "sotefinservice.com", secure: true }
+    //   : {}),
   }
 );
 

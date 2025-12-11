@@ -12,9 +12,8 @@ const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     sameSite: "lax",
     secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
-    // secure: true,
     // Set domain and secure only if in production
-    ...(isProduction ? { domain: "sotefinservice.com", secure: true } : {}),
+    // ...(isProduction ? { domain: "sotefinservice.com", secure: true } : {}),
   },
 });
 

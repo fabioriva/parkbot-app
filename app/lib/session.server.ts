@@ -16,11 +16,10 @@ export const sessionCookieContainer = createCookie("__pb_session", {
   httpOnly: true,
   path: "/",
   sameSite: "lax",
-  // secure: true,
   secrets: [import.meta.env.VITE_COOKIE_SIGNATURE],
-  ...(import.meta.env.PROD
-    ? { domain: "sotefinservice.com", secure: true }
-    : {}),
+  // ...(import.meta.env.PROD
+  //   ? { domain: "sotefinservice.com", secure: true }
+  //   : {}),
 });
 
 export async function getSessionCookie(request: Request): Promise<any> {
