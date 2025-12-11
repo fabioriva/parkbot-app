@@ -11,10 +11,12 @@ export const localeCookie = createCookie("__pb_lng", {
   httpOnly: true,
 });
 
+export const supportedLanguages = ["it", "en"] as const;
+
 export const [i18nextMiddleware, getLocale, getInstance] =
   createI18nextMiddleware({
     detection: {
-      supportedLanguages: ["it", "en"], // supported languages, the fallback should be last
+      supportedLanguages, // supported languages, the fallback should be last
       fallbackLanguage: "en",
       cookie: localeCookie, // The cookie to store the user preference
     },

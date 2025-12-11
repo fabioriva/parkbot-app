@@ -1,31 +1,26 @@
 import { useState, useEffect, useRef } from "react";
 import { Form } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Button } from "./ui/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Input } from "./ui/input";
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
 
 export function LocaleToggle() {
   const { i18n } = useTranslation();
-  const languages = ["it", "fr", "en"]; // Object.keys(i18n.store.data);
-
+  const languages = i18n.options.supportedLanguages || [];
   const [selected, setSelected] = useState<string>(i18n.language);
   const formRef = useRef<HTMLFormElement>(null);
   useEffect(() => {
-    // console.log(selected);
     // Automatically submit the form after selection
     formRef.current?.requestSubmit();
   }, [selected]);
-
-  const handleSelect = (value: string) => {
-    // console.log(value);
-    setSelected(value);
-  };
 
   return (
     <Form
@@ -41,9 +36,11 @@ export function LocaleToggle() {
             <span className="uppercase">{i18n.language}</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="center">
+          <DropdownMenuLabel>Language</DropdownMenuLabel>
+          <DropdownMenuSeparator />
           {languages.map((lng) => (
-            <DropdownMenuItem onClick={() => handleSelect(lng)} key={lng}>
+            <DropdownMenuItem onClick={() => setSelected(lng)} key={lng}>
               <span className="uppercase">{lng}</span>
             </DropdownMenuItem>
           ))}

@@ -5,6 +5,7 @@ import { hydrateRoot } from "react-dom/client";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { HydratedRouter } from "react-router/dom";
 import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
+import { localeCookie, supportedLanguages } from "~/middleware/i18next";
 
 async function main() {
   await i18next
@@ -12,6 +13,7 @@ async function main() {
     .use(Fetch)
     .use(I18nextBrowserLanguageDetector)
     .init({
+      supportedLanguages,
       fallbackLng: "en",
       detection: { order: ["htmlTag"], caches: [] },
       backend: { loadPath: "/api/locales/{{lng}}/{{ns}}" },
