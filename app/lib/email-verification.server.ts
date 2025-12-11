@@ -106,21 +106,21 @@ export async function sendVerificationEmail(
   code: string
 ): Promise<void> {
   console.log(`To ${email}: Your verification code is ${code}`);
-  // const msg = {
-  //   to: email,
-  //   from: import.meta.env.VITE_SENDGRID_SENDER,
-  //   subject: "Parkbot web service email verification code",
-  //   text: `To ${email}: Your verification code is ${code}`,
-  //   html: `To ${email}: Your verification code is <strong>${code}</strong>`,
-  // };
-  // try {
-  //   await sgMail.send(msg);
-  // } catch (error) {
-  //   console.error(error);
-  //   // if (error.response) {
-  //   //   console.error(error.response.body);
-  //   // }
-  // }
+  const msg = {
+    to: email,
+    from: import.meta.env.VITE_SENDGRID_SENDER,
+    subject: "Parkbot web service email verification code",
+    text: `To ${email}: Your verification code is ${code}`,
+    html: `To ${email}: Your verification code is <strong>${code}</strong>`,
+  };
+  try {
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error(error);
+    // if (error.response) {
+    //   console.error(error.response.body);
+    // }
+  }
 }
 
 export interface EmailVerificationRequest {
