@@ -586,6 +586,7 @@ export default {
         history: "Storico delle operazioni",
         map: "Posti auto",
         racks: "PLC I/O",
+        statistics: "Statistiche",
         tags: "Tags",
       },
     },

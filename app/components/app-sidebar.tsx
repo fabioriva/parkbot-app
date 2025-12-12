@@ -62,6 +62,10 @@ export function AppSidebar({ aps, roles, user }: SidebarProps) {
             url: `/aps/${aps.ns}/racks`,
           },
           {
+            title: t("aps.sidebar.menu.statistics"),
+            url: `/aps/${aps.ns}/statistics`,
+          },
+          {
             title: t("aps.sidebar.menu.tags"),
             url: `/aps/${aps.ns}/tags`,
           },

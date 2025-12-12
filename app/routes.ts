@@ -35,6 +35,7 @@ export default [
       route(":aps/map", "routes/aps/map.tsx"),
       route(":aps/racks/:nr", "routes/aps/rack.tsx"),
       route(":aps/racks", "routes/aps/racks.tsx"),
+      route(":aps/statistics", "routes/aps/statistics.tsx"),
       route(":aps/tags", "routes/aps/tags.tsx"),
     ]),
   ]),

@@ -584,6 +584,7 @@ export default {
         history: "Operations history",
         map: "Parking map",
         racks: "PLC I/O",
+        statistics: "Statistics",
         tags: "Tags",
       },
     },
