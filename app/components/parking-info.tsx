@@ -1,4 +1,4 @@
-import { CircleParking } from "lucide-react";
+import { SquareParking } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -21,7 +21,7 @@ export function OccupancyInfo({ occupancy }: OccupancyInfoProps) {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <CircleParking />
+        <SquareParking />
       </TooltipTrigger>
       <TooltipContent className="aspect-square w-[250px] h-[250px]">
         <p>System occupancy</p>
