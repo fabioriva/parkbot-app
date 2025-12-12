@@ -72,31 +72,6 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
           </div>
         </React.Fragment>
       }
-      {/* {isMobile ? (
-        <React.Fragment>
-          <div className="flex flex-col gap-3">
-            <h1 className="text-lg">{t("aps.history.title")}</h1>
-            <HistoryQuery
-              from={dateFrom}
-              to={dateTo}
-              handleQuery={handleQuery}
-            />
-          </div>
-          <HistoryList history={query} />
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <div className="flex items-center">
-            <h1 className="grow text-lg">{t("aps.history.title")}</h1>
-            <HistoryQuery
-              from={dateFrom}
-              to={dateTo}
-              handleQuery={handleQuery}
-            />
-          </div>
-          <HistoryTable history={history} />
-        </React.Fragment>
-      )} */}
     </React.Fragment>
   );
 }
