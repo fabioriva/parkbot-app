@@ -2,6 +2,7 @@ import { format, endOfDay, startOfDay, subDays } from "date-fns";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 // import { useIsMobile } from "~/hooks/use-mobile";
+import { Error } from "~/components/error";
 import { HistoryList } from "~/components/history-list";
 import { HistoryQuery } from "~/components/history-query";
 import { HistoryTable } from "~/components/history-table";
@@ -47,7 +48,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
       {
         <React.Fragment>
           <div className="block lg:hidden">
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 mb-3">
               <h1 className="text-lg">{t("aps.history.title")}</h1>
               <HistoryQuery
                 from={dateFrom}
@@ -59,7 +60,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
           </div>
 
           <div className="hidden lg:block">
-            <div className="flex items-center">
+            <div className="flex items-center mb-3">
               <h1 className="grow text-lg">{t("aps.history.title")}</h1>
               <HistoryQuery
                 from={dateFrom}
