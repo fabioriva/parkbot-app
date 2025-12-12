@@ -110,7 +110,9 @@ export function Device({ device, enhanced }: DeviceProps) {
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-3 px-4">
-        <span>{getDeviceInfo(device, t)}</span>
+        <span className={device.operation === 0 ? "text-muted-foreground" : ""}>
+          {getDeviceInfo(device, t)}
+        </span>
         {device.alarms.length > 0 && (
           <ul className="list-inside list-disc text-sm text-alert">
             {device.alarms.map((item, key) => (
@@ -123,13 +125,13 @@ export function Device({ device, enhanced }: DeviceProps) {
         )}
         {enhanced && <DeviceView device={device} />}
       </CardContent>
-      {enhanced && (
+      {/* {enhanced && (
         <CardFooter className="flex gap-3">
           <Button>Action 1</Button>
           <Button>Action 2</Button>
           <Button>Action 3</Button>
         </CardFooter>
-      )}
+      )} */}
     </Card>
   );
 }
