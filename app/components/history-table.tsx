@@ -21,9 +21,9 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
+  // TableCaption,
   TableCell,
-  TableFooter,
+  // TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -133,13 +133,13 @@ export function HistoryTable({
   return (
     <>
       <Table className="border border-muted">
-        <TableCaption>
+        {/* <TableCaption>
           {t("aps.history.description", {
             from: dateFrom,
             to: dateTo,
             count,
           })}
-        </TableCaption>
+        </TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead>{t("aps.history.table.date")}</TableHead>

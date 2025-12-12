@@ -2,6 +2,14 @@ import { format, endOfDay, startOfDay, subDays } from "date-fns";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 // import { useIsMobile } from "~/hooks/use-mobile";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Error } from "~/components/error";
 import { HistoryList } from "~/components/history-list";
 import { HistoryQuery } from "~/components/history-query";
@@ -60,7 +68,29 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
           </div>
 
           <div className="hidden lg:block">
-            <div className="flex items-center mb-3">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("aps.history.title")}</CardTitle>
+                <CardDescription>
+                  {t("aps.history.description", {
+                    from: dateFrom,
+                    to: dateTo,
+                    count,
+                  })}
+                </CardDescription>
+                <CardAction>
+                  <HistoryQuery
+                    from={dateFrom}
+                    to={dateTo}
+                    handleQuery={handleQuery}
+                  />
+                </CardAction>
+              </CardHeader>
+              <CardContent>
+                <HistoryTable history={history} />
+              </CardContent>
+            </Card>
+            {/* <div className="flex items-center mb-3">
               <h1 className="grow text-lg">{t("aps.history.title")}</h1>
               <HistoryQuery
                 from={dateFrom}
@@ -68,7 +98,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
                 handleQuery={handleQuery}
               />
             </div>
-            <HistoryTable history={history} />
+            <HistoryTable history={history} /> */}
           </div>
         </React.Fragment>
       }

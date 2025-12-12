@@ -239,8 +239,7 @@ export default {
     },
     history: {
       title: "Storico delle operazioni",
-      description:
-        "Storico dal {{from}} al {{to}}. Totale registrazioni {{count}}.",
+      description: "Dal {{from}} al {{to}}. Totale registrazioni {{count}}.",
       log: {
         "op-id-1": "Allarme {{id}} attivo",
         "op-id-2": "Allarme {{id}} annullato",
