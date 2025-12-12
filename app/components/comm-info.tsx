@@ -13,7 +13,7 @@ export function CommInfo({ status }: CommInfoProps) {
   return (
     <Tooltip>
       <TooltipTrigger>
-        {status ? <Wifi color="green" /> : <WifiOff color="red" />}
+        {status ? <Wifi color="lime" /> : <WifiOff color="red" />}
       </TooltipTrigger>
       <TooltipContent>
         <p className="uppercase">{status ? "online" : "offline"}</p>
