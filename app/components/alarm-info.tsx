@@ -1,4 +1,4 @@
-import { Bell } from "lucide-react";
+import { BellRing } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -15,7 +15,7 @@ export function AlarmInfo({ active }: AlarmInfoProps) {
       {active > 0 && (
         <Tooltip>
           <TooltipTrigger>
-            <Bell color="red" className="animate-pulse" size="20" />
+            <BellRing className="animate-pulse fill-red-500 text-red-500" size="20" />
           </TooltipTrigger>
           <TooltipContent>
             <p>Active alarms {active}</p>
