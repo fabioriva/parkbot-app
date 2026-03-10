@@ -3,21 +3,14 @@ import { data, Form, Link } from "react-router";
 import { AuroraText } from "~/components/magicui/aurora-text";
 import { Button } from "~/components/ui/button";
 import { ModeToggle } from "~/components/mode-toggle";
-// import { getInstance } from "~/middleware/i18next";
-
 import type { Route } from "./+types/home";
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Parkbot" },
-    { name: "description", content: data?.description },
+    { title: "Parkbot App" },
+    { name: "Parkbot", content: "Parkbot Web Service" },
   ];
 }
-
-// export async function loader({ context }: Route.LoaderArgs) {
-//   let i18n = getInstance(context);
-//   return data({ title: i18n.t("title"), description: i18n.t("description") });
-// }
 
 export default function Home() {
   let { t } = useTranslation();
@@ -29,10 +22,12 @@ export default function Home() {
           <span className="inline md:hidden"> App</span>
           <span className="hidden md:inline"> Web Service</span>
         </h1>
-        <h2 className="text-xl md:text-3xl">{t("description")}</h2>
+        <h2 className="text-xl md:text-3xl">
+          {t("home.description")}
+        </h2>
         <div className="mt-6 space-y-3">
           <Button className="w-48" size="lg" variant="outline" asChild>
-            <Link to="/login">Login to Parkbot</Link>
+            <Link to="/signin">Signin to Parkbot</Link>
           </Button>
           <Form className="flex justify-center items-center gap-6">
             <Button type="submit" name="lng" value="en" variant="icon">

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { getTranslation } from "~/lib/translation";
-import { toast } from "sonner";
+// import { getTranslation } from "~/lib/translation";
+// import { toast } from "sonner";
 
 export function useData(url: string, options: any) {
   const { initialData } = options;
@@ -63,16 +63,16 @@ export function useInfo(url: string) {
       Object.keys(message).forEach((key) => {
         if (key === "notification") {
           // console.log(message[key])
-          toast(getTranslation(message[key], t), {
-            description: "Date " + message[key].date,
-            // action: {
-            //   label: "Undo",
-            //   onClick: () => console.log("Undo"),
-            // },
-            // style: {
-            //   background: "red",
-            // },
-          });
+          // toast(getTranslation(message[key], t), {
+          //   description: "Date " + message[key].date,
+          //   // action: {
+          //   //   label: "Undo",
+          //   //   onClick: () => console.log("Undo"),
+          //   // },
+          //   // style: {
+          //   //   background: "red",
+          //   // },
+          // });
         } else {
           // console.log(e.data);
           setInfo(message);

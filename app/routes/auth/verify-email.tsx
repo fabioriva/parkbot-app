@@ -1,148 +1,22 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { data, Form, Link, redirect } from "react-router";
-import { CardWrapper } from "~/components/card-wrapper-auth";
-import SubmitFormButton from "~/components/submit-form-button";
+import { Button } from "~/components/ui/button";
 import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import {
-  createEmailVerificationRequest,
-  deleteUserEmailVerificationRequest,
-  getEmailVerificationRequest,
-  sendVerificationEmail,
-  getEmailVerificationCookie,
-  setEmailVerificationCookie,
-} from "~/lib/email-verification.server";
-import { VerifyMailSchema, validateForm } from "~/lib/form-validation.server";
-import { invalidateUserPasswordResetSessions } from "~/lib/password-reset.server";
-import { getSession } from "~/lib/session.server";
-import { updateUserEmailAndSetEmailAsVerified } from "~/lib/user.server";
-import { getInstance } from "~/middleware/i18next";
-
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { Field, FieldError, FieldGroup } from "~/components/ui/field";
+import { authClient } from "~/lib/auth.client";
 import type { Route } from "./+types/verify-email";
 
-export async function loader({ context, request }: Route.LoaderArgs) {
-  const { user } = await getSession(request);
-  if (user === null) {
-    return redirect("/login");
-  }
-  const verificationRequest = await getEmailVerificationRequest(request);
-  if (verificationRequest === null && user.emailVerified) {
-    return redirect("/select-aps");
-  }
-
-  // TODO: Ideally we'd sent a new verification email automatically if the previous one is expired,
-  // but we can't set cookies inside server components.
-  // create email verification request
-  // if (verificationRequest === null && !user.emailVerified) {
-  //   const emailVerificationRequest = await createEmailVerificationRequest(
-  //     user.id,
-  //     user.email
-  //   );
-  //   sendVerificationEmail(
-  //     emailVerificationRequest.email,
-  //     emailVerificationRequest.code
-  //   );
-  //   const emailVerificationCookie = await getEmailVerificationCookie(request);
-  //   emailVerificationCookie.id = emailVerificationRequest.id;
-  //   return data(
-  //     { user },
-  //     {
-  //       headers: {
-  //         "Set-Cookie": await setEmailVerificationCookie(
-  //           emailVerificationCookie,
-  //           {
-  //             expires: emailVerificationRequest.expiresAt,
-  //           }
-  //         ),
-  //       },
-  //     }
-  //   );
-  // }
-
-  return { email: user.email };
-}
-
-export async function action({ context, request }: Route.ActionArgs) {
-  const { user } = await getSession(request);
-  // const verificationRequest = await getEmailVerificationRequest(request);
-  // if (verificationRequest === null) {
-  //   return {
-  //     message: "Not authenticated",
-  //   };
-  // }
-  let i18n = getInstance(context);
-  const formData = await request.formData();
-  const intent = formData.get("intent");
-  console.log("verify-email action =", intent);
-
-  if (intent === "resend") {
-    const emailVerificationRequest = await createEmailVerificationRequest(
-      user.id,
-      user.email
-    );
-    sendVerificationEmail(
-      emailVerificationRequest.email,
-      emailVerificationRequest.code
-    );
-    const emailVerificationCookie = await getEmailVerificationCookie(request);
-    emailVerificationCookie.id = emailVerificationRequest.id;
-    return data(
-      {
-        intent,
-        message: i18n.t("verifyEmail.resent"),
-        user,
-      },
-      {
-        headers: {
-          "Set-Cookie": await setEmailVerificationCookie(
-            emailVerificationCookie,
-            {
-              expires: emailVerificationRequest.expiresAt,
-            }
-          ),
-        },
-      }
-    );
-  }
-  //
-  const result = validateForm(formData, VerifyMailSchema);
-  if (!result.success) {
-    const error = result.error.issues.shift().message;
-    return { intent, message: i18n.t(error) };
-  } else {
-    const code = formData.get("code");
-    // ...
-    const verificationRequest = await getEmailVerificationRequest(request);
-    if (verificationRequest === null) {
-      return {
-        message: "Not authenticated",
-      };
-    }
-    if (verificationRequest.code !== code) {
-      return {
-        intent,
-        message: i18n.t("auth.codeInvalid"),
-      };
-    }
-    await deleteUserEmailVerificationRequest(user?.id);
-    await invalidateUserPasswordResetSessions(user?.id);
-    await updateUserEmailAndSetEmailAsVerified(user?.id, user?.email);
-    const emailVerificationCookie = await getEmailVerificationCookie(request);
-    const cookie = await setEmailVerificationCookie(emailVerificationCookie, {
-      maxAge: 0,
-    });
-    if (!user?.registered2FA) {
-      return redirect("/2fa/setup", { headers: { "Set-Cookie": cookie } });
-    }
-    return redirect("/2fa/authentication", {
-      headers: { "Set-Cookie": cookie },
-    });
-  }
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+  const email = searchParams.get("email");
+  return { email };
 }
 
 export default function VerifyEmail({
@@ -150,57 +24,41 @@ export default function VerifyEmail({
   loaderData,
 }: Route.ComponentProps) {
   let { t } = useTranslation();
+  const [emailSent, setEmailSent] = useState(false);
+  const resendEmail = async () => {
+    const { data, error } = await authClient.sendVerificationEmail({
+      email: loaderData.email,
+      callbackURL: "/aps-select", // The redirect URL after verification
+    });
+    console.log(data, error);
+    setEmailSent(data?.status);
+  };
   return (
-    <CardWrapper
-      title={t("verifyEmail.cardTitle")}
-      description={t("verifyEmail.cardDescription") + `: ${loaderData?.email}`}
-    >
-      <Form method="post">
+    <Card>
+      <CardHeader>
+        <CardTitle>{t("verifyEmail.cardTitle")}</CardTitle>
+        <CardDescription>
+          {t("verifyEmail.cardDescription")}{" "}
+          <span className="text-blue-500">
+            {loaderData?.email ? loaderData.email : "mail@example.com"}
+          </span>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
         <FieldGroup>
           <Field>
-            <input type="hidden" name="intent" value="submit" />
+            <p>
+              {t("verifyEmail.cardContent")}
+            </p>
           </Field>
           <Field>
-            <FieldLabel htmlFor="code">{t("verifyEmail.codeLabel")}</FieldLabel>
-            <Input type="text" name="code" id="code" />
-          </Field>
-          <Field>
-            <SubmitFormButton
-              action="/verify-email"
-              title={t("submitButton")}
-            />
-            {actionData && actionData?.intent === "submit" ? (
-              <FieldError>{actionData.message}</FieldError>
+            <Button onClick={resendEmail}>{t("verifyEmail.resendButton")}</Button>
+            {emailSent ? (
+              <FieldError>{"We have sent you an email"}</FieldError>
             ) : null}
           </Field>
         </FieldGroup>
-      </Form>
-      <div className="mt-6 after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-        <span className="bg-card text-muted-foreground relative z-10 px-3">
-          Or
-        </span>
-      </div>
-      <Form method="post">
-        <FieldGroup>
-          <Field>
-            <input type="hidden" name="intent" value="resend" />
-          </Field>
-          <Field>
-            <SubmitFormButton
-              action="/verify-email"
-              title={t("verifyEmail.resendButton")}
-            />
-            {actionData && actionData?.intent === "resend" ? (
-              <FieldError>{actionData.message}</FieldError>
-            ) : null}
-          </Field>
-        </FieldGroup>
-      </Form>
-      <div className="mt-6 text-sm">
-        <Link className="underline underline-offset-4" to="/settings">
-          {t("verifyEmail.changeMailLink")}
-        </Link>
-      </div>
-    </CardWrapper>
+      </CardContent>
+    </Card>
   );
 }

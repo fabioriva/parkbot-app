@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import {
   data,
   isRouteErrorResponse,
@@ -9,37 +8,26 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  // useLoaderData,
+  useLoaderData,
 } from "react-router";
 import {
   PreventFlashOnWrongTheme,
   ThemeProvider,
   useTheme,
 } from "remix-themes";
+import { themeSessionResolver } from "~/lib/theme.server";
+// i18n
+import { useTranslation } from "react-i18next";
 import {
   getLocale,
   i18nextMiddleware,
   localeCookie,
 } from "./middleware/i18next";
-import { themeSessionResolver } from "~/theme.server";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 
 export const middleware = [i18nextMiddleware];
-
-export async function loader({ context, request }: Route.LoaderArgs) {
-  const { getTheme } = await themeSessionResolver(request);
-  let theme = getTheme();
-  // console.log(theme);
-  let locale = getLocale(context);
-  // console.log(locale);
-
-  return data(
-    { locale: locale, theme: theme },
-    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } }
-  );
-}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -54,11 +42,70 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-// export function Layout({ children }: { children: React.ReactNode }) {
-//   let { i18n } = useTranslation();
+// Return the theme from the session storage using the loader
+export async function loader({ context, request }: LoaderFunctionArgs) {
+  const locale = getLocale(context);
+  const { getTheme } = await themeSessionResolver(request);
+  return data(
+    {
+      locale,
+      theme: getTheme(),
+    },
+    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
+  );
+}
 
+// Wrap your app with ThemeProvider.
+// `specifiedTheme` is the stored theme in the session storage.
+// `themeAction` is the action name that's used to change the theme in the session storage.
+export default function AppWithProviders({
+  loaderData: { locale, theme },
+}: Route.ComponentProps) {
+  // const data = useLoaderData<typeof loader>();
+  return (
+    <ThemeProvider
+      specifiedTheme={theme ?? "dark"}
+      themeAction="/action/set-theme"
+    >
+      <App locale={locale} />
+    </ThemeProvider>
+  );
+}
+
+export function App({ locale }) {
+  const data = useLoaderData<typeof loader>();
+  const [theme] = useTheme();
+
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    if (i18n.language !== locale) i18n.changeLanguage(locale);
+  }, [locale, i18n]);
+
+  return (
+    <html
+      className={clsx(theme)}
+      dir={i18n.dir(i18n.language)}
+      lang={i18n.language}
+    >
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
+        <Links />
+      </head>
+      <body>
+        <Outlet />
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+// export function Layout({ children }: { children: React.ReactNode }) {
 //   return (
-//     <html lang={i18n.language} dir={i18n.dir(i18n.language)} className="dark">
+//     <html lang="en">
 //       <head>
 //         <meta charSet="utf-8" />
 //         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -74,57 +121,9 @@ export const links: Route.LinksFunction = () => [
 //   );
 // }
 
-export function App() {
-  // const data = useLoaderData();
-  const [theme] = useTheme();
-  // console.log(data.theme, theme);
-  let { i18n } = useTranslation();
-  // console.log(i18n.language, theme);
-  // return <Outlet />;
-  return (
-    <html
-      className={clsx(theme ?? "dark")}
-      data-theme={theme ?? "dark"}
-      dir={i18n.dir(i18n.language)}
-      lang={i18n.language}
-    >
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <PreventFlashOnWrongTheme ssrTheme={Boolean(theme ?? "dark")} />
-        <Links />
-      </head>
-      <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
-export default function AppWithProviders({
-  loaderData: { locale, theme },
-}: Route.ComponentProps) {
-  let { i18n } = useTranslation();
-  useEffect(() => {
-    if (i18n.language !== locale) i18n.changeLanguage(locale);
-  }, [locale, i18n]);
-
-  // console.log(i18n.language, locale, theme);
-  // const data = useLoaderData();
-
-  return (
-    <ThemeProvider
-      specifiedTheme={theme} // {data.theme}
-      themeAction="/action/set-theme"
-      disableTransitionOnThemeChange={true}
-    >
-      <App />
-    </ThemeProvider>
-  );
-}
+// export default function App() {
+//   return <Outlet />;
+// }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";

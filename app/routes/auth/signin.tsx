@@ -17,8 +17,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
-import { findSubscription } from "~/lib/db.server";
-import type { Route } from "./+types/signup";
+import type { Route } from "./+types/signin";
 
 export async function action({ request }: Route.ActionArgs) {
   try {
@@ -26,49 +25,40 @@ export async function action({ request }: Route.ActionArgs) {
     const name = formData.get("name");
     const email = formData.get("email");
     const password = formData.get("password");
-    const confirm = formData.get("confirm");
-    //
-    const subscription = await findSubscription(email);
-    if (subscription === null) {
-      return { message: "You are not authorised to register!" };
-    }
-    if (password && password !== confirm) {
-      return { message: "Password doesn't match" }; // i18n.t("auth.passwordDiff") };
-    }
-    const { headers, response } = await auth.api.signUpEmail({
-      // asResponse: true,
+    const { headers, response } = await auth.api.signInEmail({
+      // asResponse: true, // returns a response object instead of data
       returnHeaders: true,
       body: {
-        name,
         email,
         password,
-        role: subscription.role, // ["dashboard", "map", "racks", "tags"],
-        image: "https://github.com/fabioriva.png", // optional
-        callbackURL: "/aps-select", // optional
+        rememberMe: false,
+        callbackURL: "/aps-select",
       },
+      headers: await request.headers,
     });
-    return redirect(`/verify-email?email=${email}`, { headers });
+    console.log(headers);
+    console.log(response);
+    if ("twoFactorRedirect" in response) {
+      return redirect("/2fa-verify", { headers });
+    }
+    return redirect(response?.url || "/dashboard", { headers });
   } catch (error) {
-    console.log("signUpEmail error:\n", error);
+    console.log("signInEmail error:\n", error);
     return { message: error?.body?.message };
   }
 }
 
-export default function Signup({ actionData }: Route.ComponentProps) {
+export default function Signin({ actionData }: Route.ComponentProps) {
   let { t } = useTranslation();
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("signup.cardTitle")}</CardTitle>
-        <CardDescription>{t("signup.cardDescription")}</CardDescription>
+        <CardTitle>{t("signin.cardTitle")}</CardTitle>
+        <CardDescription>{t("signin.cardDescription")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form method="post">
           <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="name">{t("signup.nameLabel")}</FieldLabel>
-              <Input type="text" name="name" placeholder="John Doe" />
-            </Field>
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
               <Input
@@ -76,34 +66,41 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 name="email"
                 autoComplete="email"
                 placeholder="mail@example.com"
+                required
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <div className="flex items-center">
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <a
+                  href="/password-forgot"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                >
+                  {t("signin.forgotLink")}
+                </a>
+              </div>
               <Input
                 type="password"
                 name="password"
                 autoComplete="current-password"
+                required
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="confirm">
-                {t("signup.confirmLabel")}
-              </FieldLabel>
-              <Input
-                type="password"
-                name="confirm"
-                autoComplete="current-password"
-              />
-            </Field>
-            <Field>
-              <Submit action="/signup" title={t("signup.submit")} />
+              <Submit action="/signin" title={t("signin.submit")} />
+              {/* <Button type="submit">{t("signin.submit")}</Button> */}
               {actionData ? (
                 <FieldError>{actionData.message}</FieldError>
               ) : null}
             </Field>
           </FieldGroup>
         </Form>
+        <div className="mt-6 text-sm">
+          {t("signin.signup")}{" "}
+          <a href="/signup" className="underline underline-offset-4">
+            {t("signin.signupLink")}
+          </a>
+        </div>
       </CardContent>
     </Card>
   );

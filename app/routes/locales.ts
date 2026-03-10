@@ -32,7 +32,7 @@ export async function loader({ params }: Route.LoaderArgs) {
         staleWhileRevalidate: "7d",
         // Serve stale content if there's an error for 7 days
         staleIfError: "7d",
-      })
+      }),
     );
   }
 

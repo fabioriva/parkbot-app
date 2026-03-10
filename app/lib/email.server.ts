@@ -1,18 +1,21 @@
 import sgMail from "@sendgrid/mail";
-import { db } from "./db.server";
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const COLLECTION = "users";
-
-export function verifyEmailInput(email: string): boolean {
-  return /^.+@.+\..+$/.test(email) && email.length < 256;
+export async function sendEmail({ to, subject, text, html }): Promise<void> {
+  try {
+    const msg = {
+      to,
+      from: process.env.SENDGRID_SENDER,
+      subject,
+      text,
+      html,
+    };
+    console.log(msg);
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error(error);
+    if (error.response) {
+      console.error(error.response.body);
+    }
+  }
 }
-
-export async function checkEmailAvailability(email: string): Promise<boolean> {
-  const users = db.collection(COLLECTION);
-  const user = await users.findOne({ email });
-  return user === null ? true : false;
-}
-
-sgMail.setApiKey(import.meta.env.VITE_SENDGRID_API_KEY);
-
-export { sgMail };

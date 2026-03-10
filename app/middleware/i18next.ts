@@ -4,7 +4,7 @@ import { createI18nextMiddleware } from "remix-i18next/middleware";
 import resources from "~/locales";
 import "i18next";
 
-export const localeCookie = createCookie("__pb_lng", {
+export const localeCookie = createCookie("parkbot.lng", {
   path: "/",
   sameSite: "lax",
   // secure: process.env.NODE_ENV === "production",

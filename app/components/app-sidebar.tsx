@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
-import { NavUser } from "~/components/nav-user";
+import { NavUser } from "~/components/user-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -21,53 +21,46 @@ import type { User } from "~/lib/user.server";
 
 interface SidebarProps {
   aps: Aps;
-  roles: string[];
   user: User;
   // Sidebar: React.ComponentProps<typeof Sidebar>
 }
 
-export function AppSidebar({ aps, roles, user }: SidebarProps) {
-  // console.log(aps, roles, user);
+export function AppSidebar({ user }: SidebarProps) {
   const location = useLocation();
   const { t } = useTranslation();
   const data = {
-    user: {
-      // name: "shadcn",
-      // email: "m@example.com",
-      avatar: "/bot.svg",
-    },
     navMain: [
       {
-        title: t("aps.sidebar.title"),
+        title: t("sidebar.title"),
         url: "#",
         items: [
           {
-            title: t("aps.sidebar.menu.dashboard"),
-            url: `/aps/${aps.ns}/dashboard`,
+            title: t("sidebar.menu.dashboard"),
+            url: `/aps/${user.aps}/dashboard`,
           },
           {
-            title: t("aps.sidebar.menu.devices"),
-            url: `/aps/${aps.ns}/devices`,
+            title: t("sidebar.menu.devices"),
+            url: `/aps/${user.aps}/devices`,
           },
           {
-            title: t("aps.sidebar.menu.history"),
-            url: `/aps/${aps.ns}/history`,
+            title: t("sidebar.menu.history"),
+            url: `/aps/${user.aps}/history`,
           },
           {
-            title: t("aps.sidebar.menu.map"),
-            url: `/aps/${aps.ns}/map`,
+            title: t("sidebar.menu.map"),
+            url: `/aps/${user.aps}/map`,
           },
           {
-            title: t("aps.sidebar.menu.racks"),
-            url: `/aps/${aps.ns}/racks`,
+            title: t("sidebar.menu.racks"),
+            url: `/aps/${user.aps}/racks`,
           },
           {
-            title: t("aps.sidebar.menu.statistics"),
-            url: `/aps/${aps.ns}/statistics`,
+            title: t("sidebar.menu.statistics"),
+            url: `/aps/${user.aps}/statistics`,
           },
           {
-            title: t("aps.sidebar.menu.tags"),
-            url: `/aps/${aps.ns}/tags`,
+            title: t("sidebar.menu.tags"),
+            url: `/aps/${user.aps}/tags`,
           },
         ],
       },
@@ -80,11 +73,11 @@ export function AppSidebar({ aps, roles, user }: SidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="#">
-                <div className="flex aspect-square size-12 items-center justify-center rounded-lg mr-1">
+                <div className="flex aspect-square size-10 items-center justify-center rounded-lg mr-1">
                   <img src="/bot.svg" alt="Parkbot" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">Parkbot App</span>
+                  <span className="font-bold">Parkbot App</span>
                   <span className="text-xs">v1.0.0</span>
                 </div>
               </a>
@@ -111,12 +104,16 @@ export function AppSidebar({ aps, roles, user }: SidebarProps) {
                           <a
                             href={item.url}
                             className={
-                              (!roles.some(
-                                (role) => role === item.url.split("/").pop()
-                              ) &&
-                                "pointer-events-none opacity-50 !text-current") ||
-                              undefined
+                              user.role !== "admin" &&
+                              "pointer-events-none opacity-50 !text-current"
                             }
+                            // className={
+                            //   (!user.role.some(
+                            //     (role) => role === item.url.split("/").pop(),
+                            //   ) &&
+                            //     "pointer-events-none opacity-50 !text-current") ||
+                            //   undefined
+                            // }
                           >
                             {item.title}
                           </a>
@@ -131,7 +128,7 @@ export function AppSidebar({ aps, roles, user }: SidebarProps) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{ ...user, ...data.user }} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );

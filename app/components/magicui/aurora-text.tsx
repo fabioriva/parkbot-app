@@ -35,7 +35,7 @@ export const AuroraText = React.memo(
         </span>
       </span>
     );
-  }
+  },
 );
 
 AuroraText.displayName = "AuroraText";

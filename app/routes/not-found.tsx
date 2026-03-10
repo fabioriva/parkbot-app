@@ -12,16 +12,16 @@ export default function Component() {
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="flex flex-col gap-6 text-center">
-        <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <p className="text-sm">{t("description")}</p>
+        <h1 className="text-3xl font-bold">{t("title")}</h1>
+        <p className="text-md">{t("description")}</p>
         <Link
-          className="underline"
+          className="underline hover:text-blue-700"
           onClick={(e) => {
             e.preventDefault();
             navigate(-1);
           }}
         >
-          {t("backToHome")}
+          {t("backLink")}
         </Link>
       </div>
     </div>
