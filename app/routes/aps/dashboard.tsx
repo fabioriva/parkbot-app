@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
+import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
 import type { Route } from "./+types/dashboard";
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
+  const token = getCookie(request, "parkbot.session_token");
+  console.log(token);
+  
   const url = `${process.env.VITE_BACKEND_URL}/${params?.aps}/dashboard`;
   return await fetcher(url);
 }

@@ -15,6 +15,7 @@ import { LocaleToggle } from "~/components/locale-toggle";
 import { ParkInfo } from "~/components/park-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { auth } from "~/lib/auth.server";
+import { getCookie } from "~/lib/cookie.server";
 import { useInfo } from "~/hooks/use-ws";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
@@ -22,6 +23,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const data = await auth.api.getSession({
       headers: await request.headers,
     });
+    console.log(data);
     if (!data) {
       return redirect("/");
     }
@@ -29,14 +31,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     if (!user.twoFactorEnabled) {
       return redirect("/2fa-setup");
     }
-    const cookieHeader = request.headers.get("Cookie");
-    const cookies = Object.fromEntries(
-      cookieHeader
-        ?.split("; ")
-        .map((cookie) => cookie.split("="))
-        .map(([key, value]) => [key, decodeURIComponent(value)]) || [],
-    );
-    const sidebarState = cookies["sidebar_state"];
+    const sidebarState = getCookie(request, "sidebar_state");
     return {
       sidebarState,
       user,
