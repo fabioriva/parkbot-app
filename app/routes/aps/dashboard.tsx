@@ -7,19 +7,21 @@ import type { Route } from "./+types/dashboard";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getCookie(request, "parkbot.session_token");
-  console.log(token);
-  
   const url = `${process.env.VITE_BACKEND_URL}/${params?.aps}/dashboard`;
-  return await fetcher(url);
+  const data = await fetcher(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return { data, token };
 }
 
 export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
-  // console.log(loaderData);
-  if (!loaderData) return <h1>No data available</h1>;
-  const [data, setData] = useState(loaderData);
+  if (!loaderData.data) return <h1>No data available</h1>;
+  const [data, setData] = useState(loaderData.data);
   const fetcher = useFetcher();
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,9 +34,9 @@ export default function Dashboard({
       setData(fetcher.data);
     }
   }, [fetcher.data]);
-  const { activity, exitQueue, occupancy, operations, system } = data;
-  const [busy, free, lock] = occupancy;
-  const { t } = useTranslation();
+  // const { activity, exitQueue, occupancy, operations, system } = data;
+  // const [busy, free, lock] = occupancy;
+  // const { t } = useTranslation();
 
   return <h1>Dashboard</h1>;
 }
