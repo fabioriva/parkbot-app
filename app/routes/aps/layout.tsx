@@ -23,7 +23,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const data = await auth.api.getSession({
       headers: await request.headers,
     });
-    console.log(data);
     if (!data) {
       return redirect("/");
     }
