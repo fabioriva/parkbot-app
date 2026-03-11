@@ -2,12 +2,11 @@ export default async function fetcher(...args) {
   try {
     const res = await fetch(...args);
     if (res.ok) {
-      const data = await res.json();
-      return data;
-    } else {
-      throw new Error(res.statusText);
+      return await res.json();
     }
+    throw new Error(res)
   } catch (error) {
-    return false
+    // console.error("Fetch error:", error);
+    return null;
   }
 }
