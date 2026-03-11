@@ -6,7 +6,6 @@ export function getCookie(request, name) {
       .map((cookie) => cookie.split("="))
       .map(([key, value]) => [key, decodeURIComponent(value)]) || [],
   );
-  console.log(cookies);
   return cookies[name] || null;  
 }
 
@@ -18,6 +17,5 @@ export function getCookies(request) {
       .map((cookie) => cookie.split("="))
       .map(([key, value]) => [key, decodeURIComponent(value)]) || [],
   );
-  console.log(cookies);
   return cookies;  
 }
