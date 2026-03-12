@@ -20,7 +20,17 @@ export function ParkInfo({ occupancy }: OccupancyInfoProps) {
   return (
     <Tooltip>
       <TooltipTrigger>
-        {cars ? <SquareParking className="fill-blue-200 dark:fill-blue-600" size="20" /> : <SquareParkingOff size="20" />}
+        {cars ? (
+          <SquareParking
+            className="fill-blue-200 dark:fill-blue-600"
+            size="20"
+          />
+        ) : (
+          <SquareParkingOff
+            className="fill-blue-200 dark:fill-blue-600"
+            size="20"
+          />
+        )}
       </TooltipTrigger>
       <TooltipContent>
         <p>Parking occupancy</p>
