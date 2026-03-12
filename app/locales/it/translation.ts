@@ -11,6 +11,7 @@ export default {
   passwordForgot: {
     cardDescription: "Inserisci la tua email per ricevere un link per reimpostare la password",
     cardTitle: "Hai dimenticato la password?",
+    signinLink: "Ritorna alla pagina di",
     submit: "Invia link di reset",
   },
   passwordReset: {

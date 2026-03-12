@@ -68,6 +68,12 @@ export default function PasswordForgot({ actionData }: Route.ComponentProps) {
             </Field>
           </FieldGroup>
         </Form>
+        <div className="mt-6 text-sm">
+          {t("passwordForgot.signinLink")}{" "}
+          <a href="/signin" className="underline underline-offset-4">
+            Login
+          </a>
+        </div>
       </CardContent>
     </Card>
   );

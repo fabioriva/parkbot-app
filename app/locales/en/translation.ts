@@ -11,6 +11,7 @@ export default {
   passwordForgot: {
     cardDescription: "Enter your email to receive a password reset link",
     cardTitle: "Forgot your password?",
+    signinLink: "Back to",
     submit: "Send reset link",
   },
   passwordReset: {
