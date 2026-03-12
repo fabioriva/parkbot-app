@@ -18,7 +18,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
-import { findApsSubscription, findSubscription } from "~/lib/db.server";
+import { findSubscribedApsList, findSubscription } from "~/lib/db.server";
 import type { Route } from "./+types/aps-select";
 
 export async function action({ request }: Route.ActionArgs) {
@@ -51,7 +51,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       return redirect("/2fa-setup");
     }
     const subscription = await findSubscription(user?.email);
-    const aps = await findApsSubscription(subscription?.aps);
+    const aps = await findSubscribedApsList(subscription?.aps);
     return aps;
   } catch (error) {
     console.log("getSession error:", error);

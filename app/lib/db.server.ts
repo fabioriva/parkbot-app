@@ -22,7 +22,7 @@ export async function findAps(ns: string): Promise<Aps | null> {
   return result;
 }
 
-export async function findApsSubscription(
+export async function findSubscribedApsList(
   nsList: string[],
 ): Promise<Aps[] | null> {
   const aps = db.collection("aps");
