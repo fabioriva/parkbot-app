@@ -30,6 +30,10 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     if (!user.twoFactorEnabled) {
       return redirect("/2fa-setup");
     }
+    if (user.aps !== params.aps) {
+      return redirect("/not-found");
+    }
+    // TODO check roles
     const sidebarState = getCookie(request, "sidebar_state");
     return {
       sidebarState,
