@@ -62,7 +62,7 @@ export function useInfo(url: string) {
       const message = JSON.parse(e.data);
       Object.keys(message).forEach((key) => {
         if (key === "notification") {
-          // console.log(message[key])
+          console.log(message[key])
           // toast(getTranslation(message[key], t), {
           //   description: "Date " + message[key].date,
           //   // action: {

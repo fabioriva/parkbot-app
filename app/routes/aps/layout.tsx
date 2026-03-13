@@ -7,7 +7,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
-// import { Toaster } from "~/components/ui/sonner";
+import { Toaster } from "~/components/ui/sonner";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { AlarmInfo } from "~/components/alarm-info";
 import { CommInfo } from "~/components/comm-info";
@@ -90,13 +90,13 @@ export default function ApsLayout({
             <Outlet context={user} />
           </div>
         </SidebarInset>
-        {/* <Toaster
-        toastOptions={{
-          classNames: {
-            description: "!text-muted-foreground !dark:text-muted",
-          },
-        }}
-      /> */}
+        <Toaster
+          toastOptions={{
+            classNames: {
+              description: "!text-muted-foreground !dark:text-muted",
+            },
+          }}
+        />
       </SidebarProvider>
     </TooltipProvider>
   );
