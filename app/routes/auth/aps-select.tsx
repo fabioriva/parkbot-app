@@ -58,7 +58,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 
-export default function ApsSelect({ loaderData }: Route.LoaderArgs) { 
+export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
   let { t } = useTranslation();
   return (
     <Card>
@@ -83,10 +83,10 @@ export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
                   </Field>
                 </FieldLabel>
               ))}
-              <Field>
-                <Submit action="/aps-select" title={t("apsSelect.submit")} />
-              </Field>
             </RadioGroup>
+            <Field>
+              <Submit action="/aps-select" title={t("apsSelect.submit")} />
+            </Field>
           </FieldGroup>
         </Form>
       </CardContent>
