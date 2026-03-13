@@ -76,7 +76,7 @@ export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
                     <FieldContent>
                       <FieldTitle className="capitalize">{name}</FieldTitle>
                       <FieldDescription>
-                        Located in {city}, {country}.
+                        {t("apsSelect.locatedIn", { city, country })}
                       </FieldDescription>
                     </FieldContent>
                     <RadioGroupItem value={ns} id={ns} />

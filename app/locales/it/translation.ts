@@ -2,6 +2,7 @@ export default {
   apsSelect: {
     cardDescription: "Seleziona il sistema che vuoi monitorare.",
     cardTitle: "Seleziona Aps",
+    locatedIn: "Situato a {{city}} {{country}}.",
     submit: "Conferma selezione",
   },
   home: {
