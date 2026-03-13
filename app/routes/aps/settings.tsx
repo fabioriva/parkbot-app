@@ -14,7 +14,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
-import { authClient } from "~/lib/auth.client";
+import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/settings";
 
 export default function Settings() {

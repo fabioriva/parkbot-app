@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Field, FieldError, FieldGroup } from "~/components/ui/field";
-import { authClient } from "~/lib/auth.client";
+import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/verify-email";
 
 export async function loader({ request }: Route.LoaderArgs) {
