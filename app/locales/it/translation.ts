@@ -53,8 +53,8 @@ export default {
     submit: "Esci",
   },
   signup: {
-    cardTitle: "Registra il tuo account",
     cardDescription: "Inserisci i tuoi dati per attivare l'account",
+    cardTitle: "Registra il tuo account",
     confirmLabel: "Conferma Password",
     firstLabel: "Nome",
     lastLabel: "Cognome",
