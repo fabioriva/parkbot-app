@@ -58,10 +58,11 @@ export const auth = betterAuth({
       return {
         aps,
         // roles,
-        user: {
-          ...user,
-          newField: "newField",
-        },
+        // user: {
+        //   ...user,
+        //   newField: "newField",
+        // },
+        user,
         session,
       };
     }),

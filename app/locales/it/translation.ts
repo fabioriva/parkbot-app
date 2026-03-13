@@ -9,7 +9,8 @@ export default {
     title: "Parkbot Web Service",
   },
   passwordForgot: {
-    cardDescription: "Inserisci la tua email per ricevere un link per reimpostare la password",
+    cardDescription:
+      "Inserisci la tua email per ricevere un link per reimpostare la password",
     cardTitle: "Hai dimenticato la password?",
     signinLink: "Ritorna alla pagina di",
     submit: "Invia link di reset",
@@ -52,9 +53,12 @@ export default {
   },
   signup: {
     cardTitle: "Registra il tuo account",
-    cardDescription: `La password deve essere lunga almeno 8 caratteri.`,
-    confirmLabel: "Conferma password",
-    nameLabel: "Nome utente",
+    cardDescription: "Inserisci i tuoi dati per attivare l'account",
+    confirmLabel: "Conferma Password",
+    firstLabel: "Nome",
+    lastLabel: "Cognome",
+    nameLabel: "Nome Utente",
+    passwordDescription: "La password deve essere di almeno 8 caratteri.",
     submit: "Iscriviti",
   },
   twoFA: {

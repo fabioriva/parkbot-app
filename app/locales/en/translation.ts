@@ -51,10 +51,13 @@ export default {
     submit: "Signout",
   },
   signup: {
-    cardDescription: `Your password must be at least 8 characters long.`,
+    cardDescription: `Enter your details to activate your account`,
     cardTitle: "Create a Parkbot account",
     confirmLabel: "Confirm password",
-    nameLabel: "Full name",
+    firstLabel: "First Name",
+    lastLabel: "Last Name",
+    nameLabel: "Full Name",
+    passwordDescription: "Your password must be at least 8 characters long.",
     submit: "Signup",
   },
   twoFA: {

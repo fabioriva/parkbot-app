@@ -10,6 +10,7 @@ import {
 } from "~/components/ui/card";
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -23,7 +24,9 @@ import type { Route } from "./+types/signup";
 export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    const name = formData.get("name");
+    const firstName = formData.get("first-name");
+    const lastName = formData.get("last-name");
+    // const name = formData.get("name");
     const email = formData.get("email");
     const password = formData.get("password");
     const confirm = formData.get("confirm");
@@ -39,7 +42,7 @@ export async function action({ request }: Route.ActionArgs) {
       // asResponse: true,
       returnHeaders: true,
       body: {
-        name,
+        name: `${firstName} ${lastName}`, // name || email.split("@")[0],
         email,
         password,
         role: subscription.role, // ["dashboard", "map", "racks", "tags"],
@@ -65,17 +68,27 @@ export default function Signup({ actionData }: Route.ComponentProps) {
       <CardContent>
         <Form method="post">
           <FieldGroup>
+            <FieldGroup className="grid max-w-sm grid-cols-2">
             <Field>
+              <FieldLabel htmlFor="first-name">{t("signup.firstLabel")}</FieldLabel>
+              <Input name="first-name" placeholder="John" />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="last-name">{t("signup.lastLabel")}</FieldLabel>
+              <Input name="last-name" placeholder="Doe" />
+            </Field>
+          </FieldGroup>
+            {/* <Field>
               <FieldLabel htmlFor="name">{t("signup.nameLabel")}</FieldLabel>
               <Input type="text" name="name" placeholder="John Doe" />
-            </Field>
+            </Field> */}
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
               <Input
                 type="email"
                 name="email"
                 autoComplete="email"
-                placeholder="mail@example.com"
+                placeholder="john.doe@example.com"
               />
             </Field>
             <Field>
@@ -85,6 +98,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 name="password"
                 autoComplete="current-password"
               />
+              <FieldDescription>{t("signup.passwordDescription")}</FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="confirm">
