@@ -7,15 +7,12 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "~/components/ui/sidebar";
-
 import type { Aps } from "~/lib/aps.server";
 import type { User } from "~/lib/user.server";
 
@@ -28,41 +25,36 @@ interface SidebarProps {
 export function AppSidebar({ user }: SidebarProps) {
   const location = useLocation();
   const { t } = useTranslation();
-  const data = {
-    navMain: [
+  const navMain = {
+    title: t("sidebar.title"),
+    items: [
       {
-        title: t("sidebar.title"),
-        url: "#",
-        items: [
-          {
-            title: t("sidebar.menu.dashboard"),
-            url: `/aps/${user.aps}/dashboard`,
-          },
-          {
-            title: t("sidebar.menu.devices"),
-            url: `/aps/${user.aps}/devices`,
-          },
-          {
-            title: t("sidebar.menu.history"),
-            url: `/aps/${user.aps}/history`,
-          },
-          {
-            title: t("sidebar.menu.map"),
-            url: `/aps/${user.aps}/map`,
-          },
-          {
-            title: t("sidebar.menu.racks"),
-            url: `/aps/${user.aps}/racks`,
-          },
-          {
-            title: t("sidebar.menu.statistics"),
-            url: `/aps/${user.aps}/statistics`,
-          },
-          {
-            title: t("sidebar.menu.tags"),
-            url: `/aps/${user.aps}/tags`,
-          },
-        ],
+        title: t("sidebar.menu.dashboard"),
+        url: `/aps/${user.aps}/dashboard`,
+      },
+      {
+        title: t("sidebar.menu.devices"),
+        url: `/aps/${user.aps}/devices`,
+      },
+      {
+        title: t("sidebar.menu.history"),
+        url: `/aps/${user.aps}/history`,
+      },
+      {
+        title: t("sidebar.menu.map"),
+        url: `/aps/${user.aps}/map`,
+      },
+      {
+        title: t("sidebar.menu.racks"),
+        url: `/aps/${user.aps}/racks`,
+      },
+      {
+        title: t("sidebar.menu.statistics"),
+        url: `/aps/${user.aps}/statistics`,
+      },
+      {
+        title: t("sidebar.menu.tags"),
+        url: `/aps/${user.aps}/tags`,
       },
     ],
   };
@@ -72,7 +64,7 @@ export function AppSidebar({ user }: SidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <a href={`/aps/${user.aps}/dashboard`}>
                 <div className="flex aspect-square size-10 items-center justify-center rounded-lg mr-1">
                   <img src="/bot.svg" alt="Parkbot" />
                 </div>
@@ -87,41 +79,31 @@ export function AppSidebar({ user }: SidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu className="gap-2">
-            {data.navMain.map((item) => (
+          <SidebarGroupLabel>{navMain.title}</SidebarGroupLabel>
+          <SidebarMenu className="gap-0">
+            {navMain.items.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <span className="font-medium">{item.title}</span>
+                <SidebarMenuButton
+                  asChild
+                  isActive={item.url === location.pathname}
+                >
+                  <a
+                    href={item.url}
+                    className={
+                      user.role !== "admin" &&
+                      "pointer-events-none opacity-50 !text-current"
+                    }
+                    // className={
+                    //   (!user.role.some(
+                    //     (role) => role === item.url.split("/").pop(),
+                    //   ) &&
+                    //     "pointer-events-none opacity-50 !text-current") ||
+                    //   undefined
+                    // }
+                  >
+                    {item.title}
+                  </a>
                 </SidebarMenuButton>
-                {item.items?.length ? (
-                  <SidebarMenuSub className="ml-0 border-l-0 px-1.5">
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton
-                          asChild
-                          isActive={item.url === location.pathname}
-                        >
-                          <a
-                            href={item.url}
-                            className={
-                              user.role !== "admin" &&
-                              "pointer-events-none opacity-50 !text-current"
-                            }
-                            // className={
-                            //   (!user.role.some(
-                            //     (role) => role === item.url.split("/").pop(),
-                            //   ) &&
-                            //     "pointer-events-none opacity-50 !text-current") ||
-                            //   undefined
-                            // }
-                          >
-                            {item.title}
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
