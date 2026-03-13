@@ -80,7 +80,7 @@ export function AppSidebar({ user }: SidebarProps) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>{navMain.title}</SidebarGroupLabel>
-          <SidebarMenu className="gap-0">
+          <SidebarMenu className="gap-0.5">
             {navMain.items.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
