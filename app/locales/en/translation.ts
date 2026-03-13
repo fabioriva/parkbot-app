@@ -58,6 +58,8 @@ export default {
     lastLabel: "Last Name",
     nameLabel: "Full Name",
     passwordDescription: "Your password must be at least 8 characters long.",
+    signin: "Already registered?",
+    signinLink: "Sign in",
     submit: "Signup",
   },
   twoFA: {

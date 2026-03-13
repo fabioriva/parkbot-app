@@ -59,6 +59,8 @@ export default {
     lastLabel: "Cognome",
     nameLabel: "Nome Utente",
     passwordDescription: "La password deve essere di almeno 8 caratteri.",
+    signin: "Hai già un account?",
+    signinLink: "Accedi",
     submit: "Iscriviti",
   },
   twoFA: {

@@ -118,6 +118,12 @@ export default function Signup({ actionData }: Route.ComponentProps) {
             </Field>
           </FieldGroup>
         </Form>
+        <div className="mt-6 text-sm">
+          {t("signup.signin")}{" "}
+          <a href="/signin" className="underline underline-offset-4">
+            {t("signup.signinLink")}
+          </a>
+        </div>
       </CardContent>
     </Card>
   );
