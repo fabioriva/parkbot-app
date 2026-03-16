@@ -61,6 +61,7 @@ export default {
     "mode-data-read": "Lettura dati",
     "mode-eme-1": "Emergenza 1",
     "mode-eme-2": "Emergenza 2",
+    "mode-eme-3": "Emergenza 3",
     "mode-no": "---",
     "mode-step": "Passo Passo",
     "mode-preset": "Preset",
