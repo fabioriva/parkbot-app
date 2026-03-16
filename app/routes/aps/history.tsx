@@ -51,14 +51,25 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   };
   return (
     <>
-      <div className="block lg:hidden">
+      <div className="block md:hidden">
         <div className="flex flex-col gap-3 mb-3">
           <h1 className="text-lg">{t("history.title")}</h1>
           <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
         </div>
         <HistoryList history={query} />
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden md:block xl:hidden">
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{t("history.title")}</ItemTitle>
+            <ItemDescription>
+              {t("history.description", { from: dateFrom, to: dateTo, count })}
+            </ItemDescription>
+          <HistoryList history={query} />
+          </ItemContent>
+        </Item>
+      </div>
+      <div className="hidden xl:block">
         <Item variant="outline">
           <ItemContent>
             <ItemTitle>{t("history.title")}</ItemTitle>
