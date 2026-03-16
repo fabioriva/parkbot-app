@@ -56,6 +56,17 @@ export default {
     description: "The robotic parking monitoring tool",
     title: "Parkbot Web Service",
   },
+  mode: {
+    "mode-data-edit": "Data edit",
+    "mode-data-read": "Data read",
+    "mode-eme-1": "Emergency 1",
+    "mode-eme-2": "Emergency 2",
+    "mode-no": "---",
+    "mode-step": "Step by Step",
+    "mode-preset": "Preset",
+    "mode-auto": "Automatic",
+    "mode-man": "Manual mode",
+  },
   passwordForgot: {
     cardDescription: "Enter your email to receive a password reset link",
     cardTitle: "Forgot your password?",

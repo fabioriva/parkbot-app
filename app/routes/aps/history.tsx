@@ -1,7 +1,7 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-// import { HistoryList } from "~/components/history-list";
+import { HistoryList } from "~/components/history-list";
 import { HistoryQuery } from "~/components/history-query";
 // import { HistoryTable } from "~/components/history-table";
 import { getCookie } from "~/lib/cookie.server";
@@ -29,7 +29,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData) return <h1>No data available</h1>;
   const [data, setData] = useState(loaderData);
   const { count, dateFrom, dateTo, query } = data;
-  console.log(data);
+  // console.log(data);
   const { t } = useTranslation();
   const handleQuery = async ({ from, to }) => {
     const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss");
@@ -43,12 +43,13 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
     }
   };
   return (
-    <div className="block lg:hidden">
+    // <div className="block lg:hidden">
+    <div className="block">
       <div className="flex flex-col gap-3 mb-3">
         <h1 className="text-lg">{t("history.title")}</h1>
         <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
       </div>
-      {/* <HistoryList history={query} /> */}
+      <HistoryList history={query} />
     </div>
   );
 }

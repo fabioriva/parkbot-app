@@ -56,6 +56,17 @@ export default {
     description: "Supervisione dei sistemi di parcheggio automatizzati",
     title: "Parkbot Web Service",
   },
+  mode: {
+    "mode-data-edit": "Modifica dati",
+    "mode-data-read": "Lettura dati",
+    "mode-eme-1": "Emergenza 1",
+    "mode-eme-2": "Emergenza 2",
+    "mode-no": "---",
+    "mode-step": "Passo Passo",
+    "mode-preset": "Preset",
+    "mode-auto": "Automatico",
+    "mode-man": "Manuale",
+  },
   passwordForgot: {
     cardDescription:
       "Inserisci la tua email per ricevere un link per reimpostare la password",
