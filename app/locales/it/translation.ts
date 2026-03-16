@@ -50,7 +50,7 @@ export default {
       "op-req-repark": "Re-park iniziato",
       "op-card-issued": "Card emessa",
     },
-    title: "Cronologia operazioni",
+    title: "Cronologia delle operazioni",
   },
   home: {
     description: "Supervisione dei sistemi di parcheggio automatizzati",
