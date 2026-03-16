@@ -1,9 +1,16 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "~/components/ui/item";
 import { HistoryList } from "~/components/history-list";
 import { HistoryQuery } from "~/components/history-query";
-// import { HistoryTable } from "~/components/history-table";
+import { HistoryTable } from "~/components/history-table";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
 import type { Route } from "./+types/history";
@@ -27,9 +34,9 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
 export default function History({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData) return <h1>No data available</h1>;
-  const [data, setData] = useState(loaderData);
-  const { count, dateFrom, dateTo, query } = data;
-  // console.log(data);
+  const [history, setHistory] = useState(loaderData);
+  const { count, dateFrom, dateTo, query } = history;
+  // console.log(history);
   const { t } = useTranslation();
   const handleQuery = async ({ from, to }) => {
     const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss");
@@ -43,13 +50,32 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
     }
   };
   return (
-    // <div className="block lg:hidden">
-    <div className="block">
-      <div className="flex flex-col gap-3 mb-3">
-        <h1 className="text-lg">{t("history.title")}</h1>
-        <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+    <>
+      <div className="block lg:hidden">
+        <div className="flex flex-col gap-3 mb-3">
+          <h1 className="text-lg">{t("history.title")}</h1>
+          <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+        </div>
+        <HistoryList history={query} />
       </div>
-      <HistoryList history={query} />
-    </div>
+      <div className="hidden lg:block">
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{t("history.title")}</ItemTitle>
+            <ItemDescription>
+              {t("history.description", { from: dateFrom, to: dateTo, count })}
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <HistoryQuery
+              from={dateFrom}
+              to={dateTo}
+              handleQuery={handleQuery}
+            />
+          </ItemActions>
+          <HistoryTable history={history} />
+        </Item>
+      </div>
+    </>
   );
 }
