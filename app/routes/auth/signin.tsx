@@ -36,8 +36,6 @@ export async function action({ request }: Route.ActionArgs) {
       },
       headers: await request.headers,
     });
-    console.log(headers);
-    console.log(response);
     if ("twoFactorRedirect" in response) {
       return redirect("/2fa-verify", { headers });
     }
