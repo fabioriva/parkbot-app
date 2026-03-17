@@ -54,6 +54,7 @@ export default {
   },
   home: {
     description: "The robotic parking monitoring tool",
+    loginButton: "Login to Parkbot",
     title: "Parkbot Web Service",
   },
   mode: {

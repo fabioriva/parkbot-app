@@ -27,7 +27,7 @@ export default function Home() {
         </h2>
         <div className="mt-6 space-y-3">
           <Button className="w-48" size="lg" variant="outline" asChild>
-            <Link to="/signin">Signin to Parkbot</Link>
+            <Link to="/signin">{t("home.loginButton")}</Link>
           </Button>
           <Form className="flex justify-center items-center gap-6">
             <Button type="submit" name="lng" value="en" variant="icon">

@@ -54,6 +54,7 @@ export default {
   },
   home: {
     description: "Supervisione dei sistemi di parcheggio automatizzati",
+    loginButton: "Accedi a Parkbot",
     title: "Parkbot Web Service",
   },
   mode: {
