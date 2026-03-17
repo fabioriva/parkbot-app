@@ -116,6 +116,8 @@ export default {
     cardDescription: "Inserisci i tuoi dati per attivare l'account",
     cardTitle: "Registra il tuo account",
     confirmLabel: "Conferma Password",
+    errorOne: "Non sei autorizzato a registrarti",
+    errorTwo: "La password non corrisponde",
     firstLabel: "Nome",
     lastLabel: "Cognome",
     nameLabel: "Nome Utente",

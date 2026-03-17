@@ -19,9 +19,10 @@ import { Input } from "~/components/ui/input";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
 import { findSubscription } from "~/lib/db.server";
+import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/signup";
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     const firstName = formData.get("first-name");
@@ -30,13 +31,13 @@ export async function action({ request }: Route.ActionArgs) {
     const email = formData.get("email");
     const password = formData.get("password");
     const confirm = formData.get("confirm");
-    //
     const subscription = await findSubscription(email);
+    const i18next = getInstance(context)
     if (subscription === null) {
-      return { message: "You are not authorised to register!" };
+      return { error: i18next.t("signup.errorOne") };
     }
     if (password && password !== confirm) {
-      return { message: "Password doesn't match" }; // i18n.t("auth.passwordDiff") };
+      return { error: i18next.t("signup.errorTwo") };
     }
     const { headers, response } = await auth.api.signUpEmail({
       // asResponse: true,
@@ -53,7 +54,7 @@ export async function action({ request }: Route.ActionArgs) {
     return redirect(`/verify-email?email=${email}`, { headers });
   } catch (error) {
     console.log("signUpEmail error:\n", error);
-    return { message: error?.body?.message };
+    return { error: error?.body?.message };
   }
 }
 
@@ -113,7 +114,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
             <Field>
               <Submit action="/signup" title={t("signup.submit")} />
               {actionData ? (
-                <FieldError>{actionData.message}</FieldError>
+                <FieldError>{actionData.error}</FieldError>
               ) : null}
             </Field>
           </FieldGroup>

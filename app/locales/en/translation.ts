@@ -115,6 +115,8 @@ export default {
     cardDescription: `Enter your details to activate your account`,
     cardTitle: "Create a Parkbot account",
     confirmLabel: "Confirm password",
+    errorOne: "You are not subscribed",
+    errorTwo: "The password doesn't match",
     firstLabel: "First Name",
     lastLabel: "Last Name",
     nameLabel: "Full Name",
