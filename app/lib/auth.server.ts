@@ -79,8 +79,8 @@ export const auth = betterAuth({
         required: false, // set to false because selected after signin/up
       },
       role: {
-        type: "string",
-        defaultValue: "service", // ["dashboard", "map", "racks"],
+        type: ["admin", "service", "valet"],
+        defaultValue: "service",
         input: true,
         required: true,
       },
