@@ -1,6 +1,14 @@
 import * as React from "react";
 import { Outlet, redirect, useLocation } from "react-router";
 import { AppSidebar } from "~/components/app-sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "~/components/ui/breadcrumb";
 import { Separator } from "~/components/ui/separator";
 import {
   SidebarInset,
@@ -66,7 +74,21 @@ export default function ApsLayout({
               className="mr-2 data-[orientation=vertical]:h-4"
             />
             <div className="grow-1">
-              <span className="capitalize hidden sm:inline">{aps.name}</span>
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href={`/aps/${user.aps}/dashboard`}>
+                      {aps.name}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="capitalize">
+                      {location.pathname.split("/").pop()}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
             </div>
             <div className="flex gap-3">
               <AlarmInfo active={diag || 1} />
@@ -84,14 +106,14 @@ export default function ApsLayout({
             <Outlet context={user} />
           </div>
         </SidebarInset>
-        <Toaster
-          toastOptions={{
-            classNames: {
-              description: "!text-muted-foreground !dark:text-muted",
-            },
-          }}
-        />
       </SidebarProvider>
+      <Toaster
+        toastOptions={{
+          classNames: {
+            description: "!text-muted-foreground !dark:text-muted",
+          },
+        }}
+      />
     </TooltipProvider>
   );
 }
