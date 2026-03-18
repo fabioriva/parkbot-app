@@ -55,7 +55,7 @@ export default function ApsLayout({
 }: Route.ComponentProps) {
   const {
     info: { comm, diag, map },
-  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/infos`);
+  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`);
   const location = useLocation();
   const { t } = useTranslation();
   return (
