@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { Field, FieldLabel } from "~/components/ui/field";
 import {
   Pagination,
   PaginationContent,
@@ -21,7 +22,9 @@ import {
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -59,7 +62,7 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
   const pageNumbers = getPageNumbers(currentPage, pages);
   // console.log(pageNumbers);
   return (
-    <Pagination className="justify-end">
+    <Pagination className="justify-end w-full">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -119,75 +122,91 @@ export function HistoryTable({
   const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <>
-      <Table className="border border-muted">
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("history.table.date")}</TableHead>
-            <TableHead>{t("history.table.device")}</TableHead>
-            <TableHead>{t("history.table.mode")}</TableHead>
-            <TableHead>{t("history.table.operation")}</TableHead>
-            <TableHead>{t("history.table.alarm")}</TableHead>
-            <TableHead>{t("history.table.card")}</TableHead>
-            <TableHead>{t("history.table.stall")}</TableHead>
-            <TableHead>{t("history.table.size")}</TableHead>
+    <Table className="border border-muted">
+      <TableCaption>
+        {t("history.description", { from: dateFrom, to: dateTo, count })}
+      </TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{t("history.table.date")}</TableHead>
+          <TableHead>{t("history.table.device")}</TableHead>
+          <TableHead>{t("history.table.mode")}</TableHead>
+          <TableHead>{t("history.table.operation")}</TableHead>
+          <TableHead>{t("history.table.alarm")}</TableHead>
+          <TableHead>{t("history.table.card")}</TableHead>
+          <TableHead>{t("history.table.stall")}</TableHead>
+          <TableHead>{t("history.table.size")}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {currentRows.map((item, key) => (
+          <TableRow key={key}>
+            <TableCell className="font-medium">
+              {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
+            </TableCell>
+            <TableCell>
+              {item.device.id === 0 && t("history.log.operator")}
+              {item.device.id !== 0 && item.device.key}
+            </TableCell>
+            <TableCell>
+              {item.mode.id} - {t("mode." + item.mode.key)}
+            </TableCell>
+            <TableCell>
+              {item.alarm !== undefined
+                ? t("alarms." + item.alarm.key, item.alarm.query)
+                : t("history.table." + item.operation.key)}
+            </TableCell>
+            <TableCell>
+              {item.operation.key === "op-alarm-on" && (
+                <span className="text-alert">AL{item.alarm.id}</span>
+              )}
+              {item.operation.key === "op-alarm-off" && (
+                <span className="text-ready">AL{item.alarm.id}</span>
+              )}
+            </TableCell>
+            <TableCell>{item.card}</TableCell>
+            <TableCell>{item.stall}</TableCell>
+            <TableCell>{item.size}</TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {currentRows.map((item, key) => (
-            <TableRow key={key}>
-              <TableCell className="font-medium">
-                {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
-              </TableCell>
-              <TableCell>
-                {item.device.id === 0 && t("history.log.operator")}
-                {item.device.id !== 0 && item.device.key}
-              </TableCell>
-              <TableCell>
-                {item.mode.id} - {t("mode." + item.mode.key)}
-              </TableCell>
-              <TableCell>
-                {item.alarm !== undefined
-                  ? t("alarms." + item.alarm.key, item.alarm.query)
-                  : t("history.table." + item.operation.key)}
-              </TableCell>
-              <TableCell>
-                {item.operation.key === "op-alarm-on" && (
-                  <span className="text-alert">AL{item.alarm.id}</span>
-                )}
-                {item.operation.key === "op-alarm-off" && (
-                  <span className="text-ready">AL{item.alarm.id}</span>
-                )}
-              </TableCell>
-              <TableCell>{item.card}</TableCell>
-              <TableCell>{item.stall}</TableCell>
-              <TableCell>{item.size}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className="flex flex-row-reverse gap-3 mt-3">
-        <TablePagination
-          currentPage={currentPage}
-          rowsPerPage={rowsPerPage}
-          totalRows={count}
-          paginate={paginate}
-        />
-        <Select className="grow-0" onValueChange={(rows) => setRowsPerPages(rows)}>
-          <SelectTrigger className="grow-0">
-            <SelectValue placeholder="Rows per page" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Rows per page</SelectLabel>
-              <SelectItem value={15}>15</SelectItem>
-              <SelectItem value={30}>30</SelectItem>
-              <SelectItem value={50}>50</SelectItem>
-              <SelectItem value={100}>100</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-    </>
+        ))}
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={4}>
+            <Field orientation="horizontal" className="w-fit">
+              <FieldLabel htmlFor="select-rows-per-page">
+                Rows per page
+              </FieldLabel>
+              <Select
+                className="grow-0"
+                defaultValue={rowsPerPage}
+                onValueChange={(rows) => setRowsPerPages(rows)}
+              >
+                <SelectTrigger className="grow-0">
+                  <SelectValue placeholder=""/>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Rows per page</SelectLabel>
+                    <SelectItem value={15}>15</SelectItem>
+                    <SelectItem value={30}>30</SelectItem>
+                    <SelectItem value={50}>50</SelectItem>
+                    <SelectItem value={100}>100</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+          </TableCell>
+          <TableCell className="text-right" colSpan={4}>
+            <TablePagination
+              currentPage={currentPage}
+              rowsPerPage={rowsPerPage}
+              totalRows={count}
+              paginate={paginate}
+            />
+          </TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
   );
 }

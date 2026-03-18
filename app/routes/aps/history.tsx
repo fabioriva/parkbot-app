@@ -36,7 +36,6 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData) return <h1>No data available</h1>;
   const [history, setHistory] = useState(loaderData);
   const { count, dateFrom, dateTo, query } = history;
-  // console.log(history);
   const { t } = useTranslation();
   const handleQuery = async ({ from, to }) => {
     const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss");
@@ -51,41 +50,24 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   };
   return (
     <>
+      <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
       <div className="block xl:hidden">
-        <div className="flex flex-col gap-1.5 mb-3">
-          <Item variant="outline">
-            <ItemContent>
-              <ItemTitle>{t("history.title")}</ItemTitle>
-              <ItemDescription>
-                {t("history.description", {
-                  from: dateFrom,
-                  to: dateTo,
-                  count,
-                })}
-              </ItemDescription>
-            </ItemContent>
-          </Item>
-          <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
-        </div>
-        <HistoryList history={query} />
-      </div>
-      <div className="hidden xl:block">
-        <Item variant="default">
+        <Item className="mb-3" variant="outline">
           <ItemContent>
             <ItemTitle>{t("history.title")}</ItemTitle>
             <ItemDescription>
-              {t("history.description", { from: dateFrom, to: dateTo, count })}
+              {t("history.description", {
+                from: dateFrom,
+                to: dateTo,
+                count,
+              })}
             </ItemDescription>
           </ItemContent>
-          <ItemActions>
-            <HistoryQuery
-              from={dateFrom}
-              to={dateTo}
-              handleQuery={handleQuery}
-            />
-          </ItemActions>
-          <HistoryTable history={history} />
         </Item>
+        <HistoryList history={query} />
+      </div>
+      <div className="hidden xl:block">
+        <HistoryTable history={history} />
       </div>
     </>
   );
