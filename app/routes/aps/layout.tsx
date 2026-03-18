@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Outlet, redirect, useLocation } from "react-router";
 import { AppSidebar } from "~/components/app-sidebar";
 import {
@@ -55,6 +56,7 @@ export default function ApsLayout({
     info: { comm, diag, map },
   } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`);
   const location = useLocation();
+  const { t } = useTranslation();
   return (
     <TooltipProvider>
       <SidebarProvider
@@ -84,7 +86,7 @@ export default function ApsLayout({
                   <BreadcrumbSeparator className="hidden md:block" />
                   <BreadcrumbItem>
                     <BreadcrumbPage className="capitalize">
-                      {location.pathname.split("/").pop()}
+                      {t(`sidebar.menu.${location.pathname.split("/").pop()}`)}
                     </BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
