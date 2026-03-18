@@ -38,5 +38,5 @@ export default function Dashboard({
   // const [busy, free, lock] = occupancy;
   // const { t } = useTranslation();
 
-  return <h1>Dashboard</h1>;
+  return <></>;
 }
