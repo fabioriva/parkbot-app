@@ -13,13 +13,13 @@ import {
 } from "~/components/ui/sidebar";
 import type { Aps } from "~/lib/aps.server";
 import type { User } from "~/lib/user.server";
+import { roles } from "~/lib/roles";
 
 interface SidebarProps {
   aps: Aps;
   user: User;
   // Sidebar: React.ComponentProps<typeof Sidebar>
 }
-
 export function AppSidebar({ pathname, user }: SidebarProps) {
   const { t } = useTranslation();
   const navMain = {
@@ -66,8 +66,12 @@ export function AppSidebar({ pathname, user }: SidebarProps) {
                   <img src="/bot.svg" alt="Parkbot" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-bold">{import.meta.env.VITE_APP_NAME}</span>
-                  <span className="text-xs">v{import.meta.env.VITE_APP_VERSION}</span>
+                  <span className="font-bold">
+                    {import.meta.env.VITE_APP_NAME}
+                  </span>
+                  <span className="text-xs">
+                    v{import.meta.env.VITE_APP_VERSION}
+                  </span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -87,16 +91,12 @@ export function AppSidebar({ pathname, user }: SidebarProps) {
                   <a
                     href={item.pathname}
                     className={
-                      user.role !== "admin" &&
-                      "pointer-events-none opacity-50 !text-current"
+                      !roles[user.role]?.some(
+                        (role) => role === item.pathname.split("/").pop(),
+                      )
+                        ? "pointer-events-none opacity-50 !text-current"
+                        : undefined
                     }
-                    // className={
-                    //   (!user.role.some(
-                    //     (role) => role === item.url.split("/").pop(),
-                    //   ) &&
-                    //     "pointer-events-none opacity-50 !text-current") ||
-                    //   undefined
-                    // }
                   >
                     {item.title}
                   </a>

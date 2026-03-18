@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Outlet, redirect, useLocation } from "react-router";
+import { data, Outlet, redirect, useLocation } from "react-router";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -26,27 +26,31 @@ import { ParkInfo } from "~/components/park-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { auth } from "~/lib/auth.server";
 import { getCookie } from "~/lib/cookie.server";
+import { roles } from "~/lib/roles";
 import { useInfo } from "~/hooks/use-ws";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const data = await auth.api.getSession({
+  const session = await auth.api.getSession({
     headers: await request.headers,
   });
-  if (!data) {
-    return redirect("/");
+  if (!session) {
+    throw data("Unauthorized", { status: 401 });
   }
-  if (!data.user.twoFactorEnabled) {
+  if (session.user.aps !== params.aps) {
+    throw data("Forbidden", { status: 403 });
+  }
+  const path = new URL(request.url).pathname.split("/").pop() || "";
+  if (!roles[session.user.role]?.some((role) => role === path)) {
+    throw data("Forbidden", { status: 403 });
+  }
+  if (!session.user.twoFactorEnabled) {
     return redirect("/2fa-setup");
   }
-  if (data.user.aps !== params.aps) {
-    return redirect("/not-found");
-  }
-  // TODO check roles
   const sidebarState = getCookie(request, "sidebar_state");
   return {
     sidebarState,
-    user: data.user,
-    aps: data.aps,
+    user: session.user,
+    aps: session.aps,
   };
 }
 
