@@ -90,7 +90,7 @@ export default {
       map: "Mappa",
       racks: "Plc I/O",
       statistics: "Statistiche",
-      tags: "Tag",
+      tags: "Tags",
     },
     title: "Menu principale",
     user: {
