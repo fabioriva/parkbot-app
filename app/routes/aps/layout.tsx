@@ -2,6 +2,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet, redirect, useLocation } from "react-router";
 import { AppSidebar } from "~/components/app-sidebar";
+import { Badge } from "~/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -54,7 +55,7 @@ export default function ApsLayout({
 }: Route.ComponentProps) {
   const {
     info: { comm, diag, map },
-  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`);
+  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/infos`);
   const location = useLocation();
   const { t } = useTranslation();
   return (
@@ -93,9 +94,18 @@ export default function ApsLayout({
               </Breadcrumb>
             </div>
             <div className="flex gap-3">
-              <AlarmInfo active={diag || 1} />
-              <CommInfo status={comm} />
-              <ParkInfo occupancy={map} />
+              {!comm ? (
+                <React.Fragment>
+                  <Badge variant="destructive">Data not available!</Badge>
+                  <CommInfo status={comm} />
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <AlarmInfo active={diag || 0} />
+                  <CommInfo status={comm} />
+                  <ParkInfo occupancy={map} />
+                </React.Fragment>
+              )}
               <Separator
                 orientation="vertical"
                 className="data-[orientation=vertical]:h-4"
