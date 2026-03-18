@@ -76,12 +76,12 @@ export default function ApsLayout({
             <div className="grow-1">
               <Breadcrumb>
                 <BreadcrumbList>
-                  <BreadcrumbItem>
+                  <BreadcrumbItem className="hidden md:block">
                     <BreadcrumbLink href={`/aps/${user.aps}/dashboard`}>
                       {aps.name}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator />
+                  <BreadcrumbSeparator className="hidden md:block" />
                   <BreadcrumbItem>
                     <BreadcrumbPage className="capitalize">
                       {location.pathname.split("/").pop()}
