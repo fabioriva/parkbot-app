@@ -95,15 +95,12 @@ export default function ApsLayout({
             </div>
             <div className="flex gap-3">
               {!comm ? (
-                <React.Fragment>
-                  <Badge variant="destructive">Data not available!</Badge>
-                  <CommInfo status={comm} />
-                </React.Fragment>
+                <Badge variant="destructive">Data not available!</Badge>
               ) : (
                 <React.Fragment>
                   <AlarmInfo active={diag || 0} />
-                  <CommInfo status={comm} />
                   <ParkInfo occupancy={map} />
+                  <CommInfo status={comm} />
                 </React.Fragment>
               )}
               <Separator
