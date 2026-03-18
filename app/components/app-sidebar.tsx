@@ -67,8 +67,8 @@ export function AppSidebar({ pathname, user }: SidebarProps) {
                   <img src="/bot.svg" alt="Parkbot" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-bold">Parkbot App</span>
-                  <span className="text-xs">v1.0.0</span>
+                  <span className="font-bold">{import.meta.env.VITE_APP_NAME}</span>
+                  <span className="text-xs">v{import.meta.env.VITE_APP_VERSION}</span>
                 </div>
               </a>
             </SidebarMenuButton>
