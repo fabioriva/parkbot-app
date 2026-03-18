@@ -88,6 +88,7 @@ export default {
       history: "History",
       map: "Map",
       racks: "Racks",
+      settings: "Settings",
       statistics: "Statistics",
       tags: "Tags",
     },

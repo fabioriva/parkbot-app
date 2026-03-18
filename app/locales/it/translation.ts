@@ -89,6 +89,7 @@ export default {
       history: "Cronologia",
       map: "Mappa",
       racks: "Plc I/O",
+      settings: "Impostazioni",
       statistics: "Statistiche",
       tags: "Tags",
     },
