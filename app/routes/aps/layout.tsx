@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Outlet, redirect } from "react-router";
+import { Outlet, redirect, useLocation } from "react-router";
 import { AppSidebar } from "~/components/app-sidebar";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -19,30 +19,25 @@ import { getCookie } from "~/lib/cookie.server";
 import { useInfo } from "~/hooks/use-ws";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  try {
-    const data = await auth.api.getSession({
-      headers: await request.headers,
-    });
-    if (!data) {
-      return redirect("/");
-    }
-    const { session, user, aps } = data;
-    if (!user.twoFactorEnabled) {
-      return redirect("/2fa-setup");
-    }
-    if (user.aps !== params.aps) {
-      return redirect("/not-found");
-    }
-    // TODO check roles
-    const sidebarState = getCookie(request, "sidebar_state");
-    return {
-      sidebarState,
-      user,
-      aps,
-    };
-  } catch (error) {
-    console.log("getSession error:", error);
+  const data = await auth.api.getSession({
+    headers: await request.headers,
+  });
+  if (!data) {
+    return redirect("/");
   }
+  if (!data.user.twoFactorEnabled) {
+    return redirect("/2fa-setup");
+  }
+  if (data.user.aps !== params.aps) {
+    return redirect("/not-found");
+  }
+  // TODO check roles
+  const sidebarState = getCookie(request, "sidebar_state");
+  return {
+    sidebarState,
+    user: data.user,
+    aps: data.aps,
+  };
 }
 
 export default function ApsLayout({
@@ -51,6 +46,7 @@ export default function ApsLayout({
   const {
     info: { comm, diag, map },
   } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`);
+  const location = useLocation();
   return (
     <TooltipProvider>
       <SidebarProvider
@@ -61,7 +57,7 @@ export default function ApsLayout({
           } as React.CSSProperties
         }
       >
-        <AppSidebar user={user} />
+        <AppSidebar pathname={location.pathname} user={user} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
@@ -70,9 +66,7 @@ export default function ApsLayout({
               className="mr-2 data-[orientation=vertical]:h-4"
             />
             <div className="grow-1">
-              <span className="capitalize hidden sm:inline">
-                APS {aps.name}
-              </span>
+              <span className="capitalize hidden sm:inline">{aps.name}</span>
             </div>
             <div className="flex gap-3">
               <AlarmInfo active={diag || 1} />

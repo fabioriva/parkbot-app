@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { NavUser } from "~/components/user-menu";
 import {
@@ -22,39 +21,38 @@ interface SidebarProps {
   // Sidebar: React.ComponentProps<typeof Sidebar>
 }
 
-export function AppSidebar({ user }: SidebarProps) {
-  const location = useLocation();
+export function AppSidebar({ pathname, user }: SidebarProps) {
   const { t } = useTranslation();
   const navMain = {
     title: t("sidebar.title"),
     items: [
       {
+        pathname: `/aps/${user.aps}/dashboard`,
         title: t("sidebar.menu.dashboard"),
-        url: `/aps/${user.aps}/dashboard`,
       },
       {
+        pathname: `/aps/${user.aps}/devices`,
         title: t("sidebar.menu.devices"),
-        url: `/aps/${user.aps}/devices`,
       },
       {
+        pathname: `/aps/${user.aps}/history`,
         title: t("sidebar.menu.history"),
-        url: `/aps/${user.aps}/history`,
       },
       {
+        pathname: `/aps/${user.aps}/map`,
         title: t("sidebar.menu.map"),
-        url: `/aps/${user.aps}/map`,
       },
       {
+        pathname: `/aps/${user.aps}/racks`,
         title: t("sidebar.menu.racks"),
-        url: `/aps/${user.aps}/racks`,
       },
       {
+        pathname: `/aps/${user.aps}/statistics`,
         title: t("sidebar.menu.statistics"),
-        url: `/aps/${user.aps}/statistics`,
       },
       {
+        pathname: `/aps/${user.aps}/tags`,
         title: t("sidebar.menu.tags"),
-        url: `/aps/${user.aps}/tags`,
       },
     ],
   };
@@ -85,10 +83,10 @@ export function AppSidebar({ user }: SidebarProps) {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
-                  isActive={item.url === location.pathname}
+                  isActive={item.pathname === pathname}
                 >
                   <a
-                    href={item.url}
+                    href={item.pathname}
                     className={
                       user.role !== "admin" &&
                       "pointer-events-none opacity-50 !text-current"
