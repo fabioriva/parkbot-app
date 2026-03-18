@@ -32,7 +32,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export default function History({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData) return <h1>No data available</h1>;
+  if (!loaderData) return <h1 className="text-lg dark:text-red-500 font-semibold">Data not available!</h1>;
   const [history, setHistory] = useState(loaderData);
   const { count, dateFrom, dateTo, query } = history;
   const { t } = useTranslation();

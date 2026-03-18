@@ -19,7 +19,7 @@ export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
-  if (!loaderData) return <h1>No data available</h1>;
+  if (!loaderData) return <h1 className="text-lg dark:text-red-500 font-semibold">Data not available!</h1>;
   const [data, setData] = useState(loaderData);
   const fetcher = useFetcher();
   useEffect(() => {
