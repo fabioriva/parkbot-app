@@ -40,7 +40,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     throw data("Forbidden", { status: 403 });
   }
   const path = new URL(request.url).pathname.split("/").pop() || "";
-  if (!roles[session.user.role]?.some((role) => role === path)) {
+  if (path !== "settings" && !roles[session.user.role]?.some((role) => role === path)) {
     throw data("Forbidden", { status: 403 });
   }
   if (!session.user.twoFactorEnabled) {
