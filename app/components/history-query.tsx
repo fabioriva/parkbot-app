@@ -13,14 +13,14 @@ import { type DateRange } from "react-day-picker";
 export function HistoryQuery({ from, to, handleQuery }) {
   const [open, setOpen] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: parse(from, "yyyy-MM-dd HH:mm", new Date()), // new Date(2025, 5, 12),
-    to: parse(to, "yyyy-MM-dd HH:mm", new Date()), // new Date(2025, 6, 15),
+    from: parse(from, "yyyy-MM-dd HH:mm", new Date()),
+    to: parse(to, "yyyy-MM-dd HH:mm", new Date()),
   });
   const handleDateRange = (range) => {
     // console.log(range);
     handleQuery(range);
     setDateRange(range);
-    // setOpen(false);
+    setOpen(false);
   };
 
   return (
