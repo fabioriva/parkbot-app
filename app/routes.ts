@@ -24,7 +24,7 @@ export default [
   ...prefix("aps", [
     layout("routes/aps/layout.tsx", [
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
-      //     route(":aps/devices", "routes/aps/overview.tsx"),
+      route(":aps/devices", "routes/aps/devices.tsx"),
       route(":aps/history", "routes/aps/history.tsx"),
       //     route(":aps/map", "routes/aps/map.tsx"),
       //     route(":aps/racks/:nr", "routes/aps/rack.tsx"),
