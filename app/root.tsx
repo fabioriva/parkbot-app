@@ -109,31 +109,22 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message =
-      error.status === 404
-        ? "404 Not Found"
-        : error.status === 403
-          ? "403 Forbidden"
-          : "Error";
+    message = error.status === 404 ? "404" : "Error";
     details =
       error.status === 404
         ? "The requested page could not be found."
-        : error.status === 403
-          ? "You don't have permission to access this page."
-          : error.statusText || details;
+        : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
 
   return (
-    <main>
-      <h1>
-        {error.status} {error.data}
-      </h1>
+    <main className="pt-16 p-4 container mx-auto">
+      <h1>{message}</h1>
       <p>{details}</p>
       {stack && (
-        <pre>
+        <pre className="w-full p-4 overflow-x-auto">
           <code>{stack}</code>
         </pre>
       )}
