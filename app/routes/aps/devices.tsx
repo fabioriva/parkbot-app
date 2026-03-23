@@ -35,7 +35,7 @@ export default function Devices({ loaderData, params }: Route.ComponentProps) {
       })}
     >
       {data.devices.flat(1).map((item, key) => (
-        <Device device={item} key={key} />
+        <Device advanced device={item} key={key} />
       ))}
       {/* <ExitQueue
         exit={data.exitQueue.exitButton}
