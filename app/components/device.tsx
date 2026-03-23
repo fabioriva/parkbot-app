@@ -20,7 +20,7 @@ const Mode = ({ mode }) => {
       className={
         mode.id !== 8
           ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
-          : "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300"
+          : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
       }
     >
       {t("mode." + mode.key)}
