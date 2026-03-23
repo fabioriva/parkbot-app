@@ -1,4 +1,10 @@
 import { useTranslation } from "react-i18next";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -11,6 +17,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { Drive } from "~/components/drive";
 import { deviceT } from "~/lib/translation";
 
 const Mode = ({ mode }) => {
@@ -63,7 +70,22 @@ export function Device({ device, advanced = false }) {
                 </CardAction>
               </CardHeader>
               <CardContent>
-                <p>Tab {key}</p>
+                <Accordion type="multiple" collapsible="true">
+                  {view.drives.map((drive, key) => (
+                    <AccordionItem value={`drive-${key}`} key={key}>
+                      <Drive drive={drive} />
+                    </AccordionItem>
+                  ))}
+                  {view.motors.map((motor, key) => (
+                    <AccordionItem value={`motor-${key}`} key={key}>
+                      {/* <Motion motor={motor} /> */}
+                      <AccordionTrigger>{motor.name.key}</AccordionTrigger>
+                      <AccordionContent>
+                        Motor {motor.name.key}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </CardContent>
               <CardFooter>
                 <Button variant="outline" size="sm" className="w-full">
