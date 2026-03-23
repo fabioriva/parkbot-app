@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
+import { Device } from "~/components/device";
+// import { ExitQueue } from "~/components/exit-queue";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
 import type { Route } from "./+types/dashboard";
@@ -39,9 +41,46 @@ export default function Dashboard({
     }
   }, [fetcher.data]);
   // console.log(data);
-  // const { activity, exitQueue, occupancy, operations, system } = data;
-  // const [busy, free, lock] = occupancy;
-  // const { t } = useTranslation();
+  const { activity, exitQueue, occupancy, operations, system } = data;
+  const [busy, free, lock] = occupancy;
+  const { t } = useTranslation();
 
-  return <></>;
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
+      <div className="col-span-2">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
+          {system.map((item, key) => (
+            <Device device={item} key={key} />
+          ))}
+          {/* <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} /> */}
+        </div>
+      </div>
+      <div className="col-span-2">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
+          {/* <CardWrapper
+            title={t("aps.dashboard.occupancy-title")}
+            description={t("aps.dashboard.occupancy-description")}
+            link={`/aps/${params.aps}/map`}
+          >
+            <OccupancyChart occupancy={occupancy} />
+          </CardWrapper>
+          <CardWrapper
+            title={t("aps.dashboard.activity-title")}
+            description={t("aps.dashboard.activity-description")}
+            link={`/aps/${params.aps}/history`}
+          >
+            <HistoryList history={activity.documents} />
+          </CardWrapper>
+          <CardWrapper
+            title={t("aps.dashboard.operations-title")}
+            description={t("aps.dashboard.operations-description")}
+            // link={`/aps/${params.aps}/statistics`}
+            className="lg:col-span-2"
+          >
+            <OperationsBarChart operations={operations[0].data} />
+          </CardWrapper> */}
+        </div>
+      </div>
+    </div>
+  );
 }
