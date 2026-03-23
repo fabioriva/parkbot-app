@@ -1,5 +1,5 @@
 import clsx from "clsx";
-// import { Device } from "~/components/device";
+import { Device } from "~/components/device";
 // import { ExitQueue } from "~/components/exit-queue";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
@@ -35,10 +35,7 @@ export default function Devices({ loaderData, params }: Route.ComponentProps) {
       })}
     >
       {data.devices.flat(1).map((item, key) => (
-        // <Device device={item} enhanced={true} key={key} />
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-          {item.name}
-        </div>
+        <Device device={item} key={key} />
       ))}
       {/* <ExitQueue
         exit={data.exitQueue.exitButton}
