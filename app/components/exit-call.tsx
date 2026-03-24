@@ -86,11 +86,11 @@ export default function ExitCall({ exit }) {
         </Field>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">{t("cancel")}</Button>
+            <Button variant="outline">{t("exit-call.dialogCancel")}</Button>
           </DialogClose>
           <DialogClose asChild>
             <Button onClick={handleConfirm} disabled={error}>
-              {t("confirm")}
+              {t("exit-call.dialogConfirm")}
             </Button>
           </DialogClose>
         </DialogFooter>
