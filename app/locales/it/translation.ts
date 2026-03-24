@@ -5,6 +5,14 @@ export default {
     locatedIn: "Situato a {{city}} {{country}}.",
     submit: "Conferma selezione",
   },
+  dashboard: {
+    "activity-title": "Attività recente",
+    "activity-description": "Elenco delle operazioni più recenti",
+    "occupancy-title": "Occupazione parcheggio",
+    "occupancy-description": "Occupazione del sistema",
+    "operations-title": "Operazioni di oggi",
+    "operations-description": "Operazioni del sistema",
+  },
   device: {
     drive: {
       current: "Corrente",
@@ -83,7 +91,8 @@ export default {
     dialogDescription: "Inserisci il numero di tessera e conferma.",
     dialogTitle: "Richiesta di uscita",
     fieldDescription: "Intervallo tessere: {{min}} - {{max}}",
-    fieldError: "Il numero di tessera deve essere compreso tra {{min}} e {{max}}.",
+    fieldError:
+      "Il numero di tessera deve essere compreso tra {{min}} e {{max}}.",
     fieldLabel: "Numero di tessera",
   },
   "exit-queue": {

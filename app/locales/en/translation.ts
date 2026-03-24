@@ -5,6 +5,14 @@ export default {
     locatedIn: "Located in {{city}} {{country}}.",
     submit: "Confirm selection",
   },
+  dashboard: {
+    "activity-title": "Recent activity",
+    "activity-description": "List of the most recent operations",
+    "occupancy-title": "Parking occupancy",
+    "occupancy-description": "Pie chart showing system occupancy",
+    "operations-title": "Today's operations",
+    "operations-description": "Bar chart showing system operations",
+  },
   device: {
     drive: {
       current: "Current",

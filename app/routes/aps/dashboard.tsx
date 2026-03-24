@@ -68,9 +68,9 @@ export default function Dashboard({
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
           <Card>
             <CardHeader>
-              <CardTitle>{t("dashboard.occupancy-title")}</CardTitle>
+              <CardTitle>{t("dashboard.activity-title")}</CardTitle>
               <CardDescription>
-                {t("dashboard.occupancy-description")}
+                {t("dashboard.activity-description")}
               </CardDescription>
             </CardHeader>
             <CardContent>

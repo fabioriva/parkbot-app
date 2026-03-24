@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   Item,
+  ItemActions,
   ItemContent,
   ItemDescription,
   ItemMedia,
@@ -15,7 +16,7 @@ export function HistoryList({ history, media = false }: any) {
   return (
     <>
       {history.map((item, key) => (
-        <Item size="sm" className="px-0 py-1.5 gap-6" key={key}>
+        <Item size="xs" className="px-0 py-1.5 gap-6" key={key}>
           {media && (
             <ItemMedia>
               <Avatar size="lg">
@@ -44,12 +45,12 @@ export function HistoryList({ history, media = false }: any) {
             </ItemTitle>
             <ItemDescription>{logT(item, t)}</ItemDescription>
           </ItemContent>
-          <ItemContent className="flex-none text-right">
-            <ItemDescription className="flex flex-col">
+          <ItemActions>
+            <div className="flex flex-col text-right">
               <span>{item.date.slice(0, 10)}</span>
               <span>{item.date.slice(11, 19)}</span>
-            </ItemDescription>
-          </ItemContent>
+            </div>
+          </ItemActions>
         </Item>
       ))}
     </>
