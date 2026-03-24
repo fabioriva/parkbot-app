@@ -1,9 +1,33 @@
+import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Loader } from "lucide-react";
 import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
+import { Field, FieldLabel } from "~/components/ui/field";
+import { Progress } from "~/components/ui/progress";
 import { IoInfo } from "~/components/io-info";
-// import { DevicePosition as Position } from "~/components/device-position";
+
+const Position = ({ encoder: { destination, name, position } }) => {
+  const calc = (position / destination) * 100;
+  const [percent, setPercent] = React.useState(calc);
+  const [progress, setProgress] = React.useState(position);
+  React.useEffect(() => {
+    setProgress(position);
+    setPercent(calc);
+  }, [destination, position]);
+  return (
+    <Field className="w-full max-w-sm mb-6">
+      <FieldLabel htmlFor="progress">
+        <span>{name} position progress</span>
+        <span className="ml-auto">
+          {position}&nbsp;&rarr;&nbsp;{destination}&nbsp;&rarr;&nbsp;
+          {Math.round(percent)}%
+        </span>
+      </FieldLabel>
+      <Progress value={progress} max={destination} />
+    </Field>
+  );
+};
 
 export function Motion({ motor }) {
   const { t } = useTranslation();
@@ -28,10 +52,10 @@ export function Motion({ motor }) {
         </Badge>
       </AccordionTrigger>
       <AccordionContent>
-        {/* {motor.encoders !== undefined &&
+        {motor.encoders !== undefined &&
           motor.encoders.map((encoder, key) => (
             <Position encoder={encoder} key={key} />
-          ))} */}
+          ))}
         <div className="flex gap-1.5 overflow-auto">
           {motor.io.map((item, key) => (
             <IoInfo io={item} key={key}>
