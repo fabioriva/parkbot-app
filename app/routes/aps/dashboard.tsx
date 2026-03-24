@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
 import { Device } from "~/components/device";
-// import { ExitQueue } from "~/components/exit-queue";
+import { ExitQueue } from "~/components/exit-queue";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
 import type { Route } from "./+types/dashboard";
@@ -52,7 +52,7 @@ export default function Dashboard({
           {system.map((item, key) => (
             <Device device={item} key={key} />
           ))}
-          {/* <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} /> */}
+          <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} />
         </div>
       </div>
       <div className="col-span-2">
