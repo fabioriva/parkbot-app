@@ -18,6 +18,7 @@ import {
 } from "~/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Drive } from "~/components/drive";
+import { Motion } from "~/components/motion";
 import { deviceT } from "~/lib/translation";
 
 const Mode = ({ mode }) => {
@@ -78,11 +79,7 @@ export function Device({ device, advanced = false }) {
                   ))}
                   {view.motors.map((motor, key) => (
                     <AccordionItem value={`motor-${key}`} key={key}>
-                      {/* <Motion motor={motor} /> */}
-                      <AccordionTrigger>{motor.name.key}</AccordionTrigger>
-                      <AccordionContent>
-                        Motor {motor.name.key}
-                      </AccordionContent>
+                      <Motion motor={motor} />
                     </AccordionItem>
                   ))}
                 </Accordion>
