@@ -1,3 +1,4 @@
+import { Occupancy } from "~/components/occupancy-chart";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
@@ -23,6 +24,8 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
   const { data } = useData(url, { initialData: loaderData });
   return (
-    <></>
+    <>
+      <Occupancy occupancy={data.occupancy} />
+    </>
   );
 }
