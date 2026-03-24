@@ -1,9 +1,19 @@
+import { CheckCircle2Icon } from "lucide-react";
 import { useState } from "react";
 import { useOutletContext } from "react-router";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
 import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import {
   Field,
-  // FieldContent,
   FieldDescription,
   FieldError,
   FieldGroup,
@@ -12,7 +22,6 @@ import {
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/settings";
@@ -22,19 +31,22 @@ export default function Settings() {
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(
     user.twoFactorEnabled,
   );
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
   const changePassword = async () => {
+    if (newPassword && newPassword !== confirmPassword) {
+      return setError("Password doesn't match");
+    }
     const { data, error } = await authClient.changePassword({
       newPassword, // required
       currentPassword, // required
       revokeOtherSessions: true,
     });
     console.log(data, error);
-    error ? setError(error.message) : setError("")
+    error ? setError(error.message) : setError("");
   };
 
   const disable2FA = async () => {
@@ -47,7 +59,6 @@ export default function Settings() {
 
   const enable2FA = async () => {
     setTwoFactorEnabled(true);
-
     // const { data, error } = await authClient.twoFactor.enable({
     //   password,
     // });
@@ -55,48 +66,52 @@ export default function Settings() {
     // setTotpURI(data?.totpURI);
     // console.log(totpURI);
   };
+
   return (
-    <FieldGroup className="w-96">
-      <FieldSet>
-        <FieldLegend>Enter password</FieldLegend>
-        <FieldDescription>Enter current password.</FieldDescription>
-        <FieldGroup>
+    <div className="w-full max-w-md space-y-6">
+      {/* Current password */}
+      <FieldGroup>
+        <FieldSet>
+          <FieldLegend>Current password</FieldLegend>
+          <FieldDescription>
+            Enter your current password to log in.
+          </FieldDescription>
           <Field>
             <FieldLabel htmlFor="currentPassword">Current password</FieldLabel>
             <Input
-              type="password"
               name="currentPassword"
+              type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              required
             />
+            <FieldDescription>Enter your current password.</FieldDescription>
           </Field>
-        </FieldGroup>
-      </FieldSet>
-      <FieldSet>
-        <FieldLegend>Change password</FieldLegend>
-        <FieldDescription>Change current password.</FieldDescription>
-        <FieldGroup>
+        </FieldSet>
+      </FieldGroup>
+      {/* Change password */}
+      <FieldGroup>
+        <FieldSet>
+          <FieldLegend>Change password</FieldLegend>
+          <FieldDescription>
+            Change your current password. The new password must be at least 8
+            characters long.
+          </FieldDescription>
           <Field>
             <FieldLabel htmlFor="newPassword">New password</FieldLabel>
             <Input
-              type="password"
               name="newPassword"
+              type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              required
             />
           </Field>
           <Field>
-            <FieldLabel htmlFor="confirmPassword">
-              Confirm new password
-            </FieldLabel>
+            <FieldLabel htmlFor="confirmPassword">Confirm password</FieldLabel>
             <Input
-              type="password"
               name="confirmPassword"
+              type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              required
             />
           </Field>
           <Field>
@@ -107,36 +122,36 @@ export default function Settings() {
             >
               Change password
             </Button>
-            {error ? <FieldError>{error}</FieldError> : null}
+            {error && <FieldError>{error}</FieldError>}
+            <Alert className="max-w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
+              <CheckCircle2Icon />
+              <AlertTitle>Account updated successfully</AlertTitle>
+              <AlertDescription>
+                Your profile information has been saved. Changes will be
+                reflected immediately.
+              </AlertDescription>
+            </Alert>
           </Field>
-        </FieldGroup>
-      </FieldSet>
-      <FieldSet>
-        <FieldLegend>Two-factor</FieldLegend>
-        <FieldDescription>
-          Enable/Disable Two Factor Authentication.
-        </FieldDescription>
-        <FieldGroup>
-          <div className="flex items-center space-x-3">
+        </FieldSet>
+      </FieldGroup>
+      {/* 2FA */}
+      <FieldGroup>
+        <FieldSet>
+          <FieldLegend>Two Factor Authentication</FieldLegend>
+          <FieldDescription>
+            Enable/Disable Two Factor Authentication.
+          </FieldDescription>
+          <Field orientation="horizontal" className="w-fit">
+            <FieldLabel htmlFor="2fa">Multi-factor authentication</FieldLabel>
             <Switch
-              id="two-factor"
+              id="2fa"
               checked={twoFactorEnabled}
-              onClick={twoFactorEnabled ? disable2FA : enable2FA}
               disabled={!currentPassword}
+              onClick={twoFactorEnabled ? disable2FA : enable2FA}
             />
-            <Label htmlFor="two-factor">
-              {twoFactorEnabled ? "Disable 2FA" : "Enable 2FA"}
-            </Label>
-          </div>
-        </FieldGroup>
-      </FieldSet>
-      <FieldSet>
-        <FieldLegend>Email notifications</FieldLegend>
-        <FieldDescription>
-          Enable/Disable e-mail notifications.
-        </FieldDescription>
-        <FieldGroup></FieldGroup>
-      </FieldSet>
-    </FieldGroup>
+          </Field>
+        </FieldSet>
+      </FieldGroup>
+    </div>
   );
 }
