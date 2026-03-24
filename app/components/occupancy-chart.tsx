@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+import * as React from "react";
+import { TrendingUp } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
 
 import {
   Card,
@@ -11,13 +11,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card"
+} from "~/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "~/components/ui/chart"
+} from "~/components/ui/chart";
 
 const chartConfig = {
   busy: {
@@ -32,22 +32,17 @@ const chartConfig = {
     label: "Locked",
     color: "var(--chart-4)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
-export function Occupancy({occupancy}) {
-  console.log(occupancy);
+export function Occupancy({ occupancy }) {
   const chartData = occupancy.map((item) => ({
     ...item,
     fill: `var(--color-${item.id})`,
   }));
-  console.log(chartData);
   const [busy, free, lock] = occupancy;
-  console.log(busy, free, lock);
-  
   const totalSpaces = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.value, 0)
-  }, [])
-
+    return chartData.reduce((acc, curr) => acc + curr.value, 0);
+  }, []);
   return (
     <Card className="flex flex-col max-w-sm">
       <CardHeader className="items-center pb-0">
@@ -96,7 +91,7 @@ export function Occupancy({occupancy}) {
                           Spaces
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -106,10 +101,11 @@ export function Occupancy({occupancy}) {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">
-          An occupancy rate of {Math.round((busy.value / totalSpaces) * 100)}% out of {totalSpaces} parking spaces
+          An occupancy rate of {Math.round((busy.value / totalSpaces) * 100)}%
+          out of {totalSpaces} parking spaces
         </div>
         {/* <div className="leading-none text-muted-foreground" /> */}
       </CardFooter>
     </Card>
-  )
+  );
 }
