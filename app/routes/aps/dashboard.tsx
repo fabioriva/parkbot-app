@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Device } from "~/components/device";
 import { ExitQueue } from "~/components/exit-queue";
+import { HistoryList } from "~/components/history-list";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
 import type { Route } from "./+types/dashboard";
@@ -57,6 +66,17 @@ export default function Dashboard({
       </div>
       <div className="col-span-2">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("dashboard.occupancy-title")}</CardTitle>
+              <CardDescription>
+                {t("dashboard.occupancy-description")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <HistoryList history={activity.documents} />
+            </CardContent>
+          </Card>
           {/* <CardWrapper
             title={t("aps.dashboard.occupancy-title")}
             description={t("aps.dashboard.occupancy-description")}

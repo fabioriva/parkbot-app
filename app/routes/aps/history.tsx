@@ -68,7 +68,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
             </ItemDescription>
           </ItemContent>
         </Item>
-        <HistoryList history={query} />
+        <HistoryList history={query} media={true} />
       </div>
       <div className="hidden xl:block">
         <HistoryTable history={history} />
