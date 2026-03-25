@@ -184,10 +184,12 @@ export default {
   },
   sidebar: {
     menu: {
+      "2fa": "Two Factor",
       dashboard: "Dashboard",
       devices: "Devices",
       history: "History",
       map: "Map",
+      password: "Password",
       racks: "Racks",
       settings: "Settings",
       statistics: "Statistics",
@@ -195,9 +197,11 @@ export default {
     },
     title: "Main menu",
     user: {
+      logout: "Logout",
+      password: "Password",
       profile: "Profile",
       settings: "Settings",
-      logout: "Logout",
+      twoFactor: "Two Factor"
     },
   },
   signin: {

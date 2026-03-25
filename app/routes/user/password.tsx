@@ -28,13 +28,13 @@ import type { Route } from "./+types/settings";
 
 export default function Settings() {
   const user = useOutletContext();
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
-    user.twoFactorEnabled,
-  );
+  console.log(user);
+
   const [error, setError] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const changePassword = async () => {
     if (newPassword && newPassword !== confirmPassword) {
@@ -46,35 +46,21 @@ export default function Settings() {
       revokeOtherSessions: true,
     });
     console.log(data, error);
-    error ? setError(error.message) : setError("");
-  };
-
-  const disable2FA = async () => {
-    setTwoFactorEnabled(false);
-    // const { data, error } = await authClient.twoFactor.disable({
-    //   password,
-    // });
-    // console.log(data, error);
-  };
-
-  const enable2FA = async () => {
-    setTwoFactorEnabled(true);
-    // const { data, error } = await authClient.twoFactor.enable({
-    //   password,
-    // });
-    // console.log(data, error);
-    // setTotpURI(data?.totpURI);
-    // console.log(totpURI);
+    if (error) {
+      return setError(error.message);
+    }
+    setError(null)
+    setSuccess(true);
   };
 
   return (
     <div className="w-full max-w-md space-y-6">
-      {/* Current password */}
       <FieldGroup>
         <FieldSet>
-          <FieldLegend>Current password</FieldLegend>
+          <FieldLegend>Change password</FieldLegend>
           <FieldDescription>
-            Enter your current password to log in.
+            Change your current password. The new password must be at least 8
+            characters long.
           </FieldDescription>
           <Field>
             <FieldLabel htmlFor="currentPassword">Current password</FieldLabel>
@@ -86,16 +72,6 @@ export default function Settings() {
             />
             <FieldDescription>Enter your current password.</FieldDescription>
           </Field>
-        </FieldSet>
-      </FieldGroup>
-      {/* Change password */}
-      <FieldGroup>
-        <FieldSet>
-          <FieldLegend>Change password</FieldLegend>
-          <FieldDescription>
-            Change your current password. The new password must be at least 8
-            characters long.
-          </FieldDescription>
           <Field>
             <FieldLabel htmlFor="newPassword">New password</FieldLabel>
             <Input
@@ -123,32 +99,16 @@ export default function Settings() {
               Change password
             </Button>
             {error && <FieldError>{error}</FieldError>}
-            <Alert className="max-w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
-              <CheckCircle2Icon />
-              <AlertTitle>Account updated successfully</AlertTitle>
-              <AlertDescription>
-                Your profile information has been saved. Changes will be
-                reflected immediately.
-              </AlertDescription>
-            </Alert>
-          </Field>
-        </FieldSet>
-      </FieldGroup>
-      {/* 2FA */}
-      <FieldGroup>
-        <FieldSet>
-          <FieldLegend>Two Factor Authentication</FieldLegend>
-          <FieldDescription>
-            Enable/Disable Two Factor Authentication.
-          </FieldDescription>
-          <Field orientation="horizontal" className="w-fit">
-            <FieldLabel htmlFor="2fa">Multi-factor authentication</FieldLabel>
-            <Switch
-              id="2fa"
-              checked={twoFactorEnabled}
-              disabled={!currentPassword}
-              onClick={twoFactorEnabled ? disable2FA : enable2FA}
-            />
+            {success && (
+              <Alert className="max-w-md border-green-200 bg-green-50 text-green-900 dark:border-green-900 dark:bg-green-950 dark:text-green-50">
+                <CheckCircle2Icon />
+                <AlertTitle>Password updated successfully</AlertTitle>
+                <AlertDescription>
+                  Your profile information has been saved. Changes will be
+                  reflected immediately.
+                </AlertDescription>
+              </Alert>
+            )}
           </Field>
         </FieldSet>
       </FieldGroup>

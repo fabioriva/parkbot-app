@@ -186,10 +186,12 @@ export default {
   },
   sidebar: {
     menu: {
+      "2fa": "Two Factor",
       dashboard: "Dashboard",
       devices: "Dispositivi",
       history: "Cronologia",
       map: "Mappa",
+      password: "Impostazione password",
       racks: "Plc I/O",
       settings: "Impostazioni",
       statistics: "Statistiche",
@@ -197,9 +199,11 @@ export default {
     },
     title: "Menu principale",
     user: {
+      logout: "Esci",
+      password: "Password",
       profile: "Profilo",
       settings: "Impostazioni",
-      logout: "Esci",
+      twoFactor: "Two Factor",
     },
   },
   signin: {

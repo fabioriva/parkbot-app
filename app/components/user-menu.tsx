@@ -1,4 +1,11 @@
-import { ChevronsUpDown, LogOut, Sparkles, Settings } from "lucide-react";
+import {
+  ChevronsUpDown,
+  Key,
+  LogOut,
+  ScanFace,
+  Sparkles,
+  Settings,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
@@ -75,10 +82,19 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
+              <DropdownMenuLabel>
+                {t("sidebar.user.settings")}
+              </DropdownMenuLabel>
               <DropdownMenuItem asChild>
-                <a href={`/aps/${user.aps}/user/settings`}>
-                  <Settings />
-                  {t("sidebar.user.settings")}
+                <a href={`/aps/${user.aps}/user/password`}>
+                  <Key />
+                  {t("sidebar.user.password")}
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a href={`/aps/${user.aps}/user/2fa`}>
+                  <ScanFace />
+                  {t("sidebar.user.twoFactor")}
                 </a>
               </DropdownMenuItem>
             </DropdownMenuGroup>
