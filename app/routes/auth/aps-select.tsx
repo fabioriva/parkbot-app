@@ -47,9 +47,9 @@ export async function loader({ request }: Route.LoaderArgs) {
       return redirect("/");
     }
     const { session, user } = data;
-    // if (!user.twoFactorEnabled) {
-    //   return redirect("/2fa-setup");
-    // }
+    if (process.env.TWO_FACTOR === "enabled" && !user.twoFactorEnabled) {
+      return redirect("/2fa-setup");
+    }
     const subscription = await findSubscription(user?.email);
     const aps = await findSubscribedApsList(subscription?.aps);
     return aps;

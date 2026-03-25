@@ -12,9 +12,11 @@ import {
 } from "~/components/ui/card";
 import {
   Field,
+  FieldContent,
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { auth } from "~/lib/auth.server";
@@ -50,37 +52,40 @@ export default function Setup2FA({ actionData }) {
         </CardHeader>
         <CardContent>
           <FieldGroup>
-            <QRCode value={actionData.totpURI || ""} />
-
-            <Field>
-              <p className="text-muted-foreground text-sm">
-                {t("twoFA.setupTwo.cardContent")}
-              </p>
-              <div className="relative p-4 rounded-lg">
-                <pre className="grid grid-cols-2 gap-1">
-                  {actionData.backupCodes.map((code, i) => (
-                    <code key={i}>
-                      {code}
-                    </code>
-                  ))}
-                </pre>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="absolute top-2 right-2 size-8 cursor-pointer"
-                  onClick={() =>
-                    navigator.clipboard.writeText(actionData.backupCodes.map(code => code).join("\n"))
-                  }
-                >
-                  <CopyIcon size="20" />
+            <FieldSet>
+              <FieldContent>
+                <QRCode value={actionData.totpURI || ""} />
+              </FieldContent>
+              <Field>
+                <p className="text-muted-foreground text-sm">
+                  {t("twoFA.setupTwo.cardContent")}
+                </p>
+                <div className="relative py-4 rounded-lg">
+                  <pre className="grid grid-cols-2 gap-1">
+                    {actionData.backupCodes.map((code, i) => (
+                      <code key={i}>{code}</code>
+                    ))}
+                  </pre>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="absolute top-2 right-2 size-8 cursor-pointer"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        actionData.backupCodes.map((code) => code).join("\n"),
+                      )
+                    }
+                  >
+                    <CopyIcon size="20" />
+                  </Button>
+                </div>
+              </Field>
+              <Field>
+                <Button asChild>
+                  <Link to="/2fa-verify">{t("twoFA.setupTwo.submit")}</Link>
                 </Button>
-              </div>
-            </Field>
-            <Field>
-              <Button asChild>
-                <Link to="/2fa-verify">{t("twoFA.setupTwo.submit")}</Link>
-              </Button>
-            </Field>
+              </Field>
+            </FieldSet>
           </FieldGroup>
         </CardContent>
       </Card>

@@ -1,4 +1,4 @@
-import { CheckCircle2Icon } from "lucide-react";
+import { CheckCircle2Icon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import QRCode from "react-qr-code";
@@ -24,48 +24,51 @@ export default function TwoFactor() {
   let { t } = useTranslation();
   const user = useOutletContext();
   // console.log(user);
+  const [backupCodes, setBackupCodes] = useState(null);
   const [error, setError] = useState(null);
   const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);
   const [totp, setTotp] = useState(null);
   const [totpURI, setTotpURI] = useState(null);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
+    user.twoFactorEnabled,
+  );
 
   const disable2FA = async () => {
-    console.log("Disable 2FA");
     const { data, error } = await authClient.twoFactor.disable({
       password,
     });
-    console.log(data, error);
+    // console.log(data, error);
     if (error) {
       return setError(error.message);
     }
+    setTwoFactorEnabled(false);
   };
   const enable2FA = async () => {
-    console.log("Enable 2FA");
     const { data, error } = await authClient.twoFactor.enable({
       password,
     });
-    console.log(data, error);
+    // console.log(data, error);
     if (error) {
       return setError(error.message);
     }
     setError(null);
+    setBackupCodes(data?.backupCodes);
     setTotpURI(data?.totpURI);
-    // console.log(totpURI);
+    setTwoFactorEnabled(true);
   };
   const verify2FA = async () => {
     const { data, error } = await authClient.twoFactor.verifyTotp({
       code: totp, // required
       trustDevice: true,
     });
-    console.log(data, error);
+    // console.log(data, error);
     if (error) {
       return setError(error.message);
     }
     setError(null);
     setSuccess(true);
   };
-
   return (
     <div className="w-full max-w-md">
       <FieldGroup>
@@ -83,30 +86,37 @@ export default function TwoFactor() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <FieldDescription>
-              {t("twoFA.setupOne.cardDescription")}
+              Enter your password to{" "}
+              {twoFactorEnabled ? (
+                <span>disable</span>
+              ) : (
+                <span>disableenable</span>
+              )}{" "}
+              2FA
             </FieldDescription>
           </Field>
           <Field orientation="horizontal" className="w-fit">
             <FieldContent>
               <FieldLabel htmlFor="2fa">Multi-factor authentication</FieldLabel>
               <FieldDescription>
-                Focus is shared across devices, and turns off when you leave the
-                app.
+                {t("twoFA.setupTwo.cardDescription")}
               </FieldDescription>
             </FieldContent>
             <Switch
               id="2fa"
-              checked={user.twoFactorEnabled}
+              checked={twoFactorEnabled}
               disabled={!password}
-              onClick={user.twoFactorEnabled ? disable2FA : enable2FA}
+              onClick={twoFactorEnabled ? disable2FA : enable2FA}
             />
           </Field>
-          {totpURI && (
+          {!success && totpURI && (
             <FieldSet>
               <Field>
                 <FieldContent>
                   <QRCode value={totpURI || ""} />
                 </FieldContent>
+              </Field>
+              <Field>
                 <FieldLabel htmlFor="totp">
                   {t("twoFA.verify.codeLabel")}
                 </FieldLabel>
@@ -128,10 +138,40 @@ export default function TwoFactor() {
           {success && (
             <Alert className="max-w-md border-green-200 bg-green-50 text-green-900 dark:border-green-900 dark:bg-green-950 dark:text-green-50">
               <CheckCircle2Icon />
-              <AlertTitle>Two Factor Authenticaton updated successfully</AlertTitle>
+              <AlertTitle>
+                Two Factor Authenticaton updated successfully
+              </AlertTitle>
               <AlertDescription>
-                Your profile information has been saved. Changes will be
-                reflected immediately.
+                <p className="text-muted-foreground text-sm">
+                  {t("twoFA.setupTwo.cardContent")}
+                </p>
+              </AlertDescription>
+            </Alert>
+          )}
+          {success && (
+            <Alert className="max-w-md">
+              <CheckCircle2Icon />
+              <AlertTitle>Backup codes</AlertTitle>
+              <AlertDescription>
+                <div className="pt-1 relative w-full">
+                  <pre className="grid grid-cols-1">
+                    {backupCodes.map((code, i) => (
+                      <code key={i}>{code}</code>
+                    ))}
+                  </pre>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="absolute top-0 right-0 size-8 cursor-pointer"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        backupCodes.map((code) => code).join("\n"),
+                      )
+                    }
+                  >
+                    <CopyIcon size="20" />
+                  </Button>
+                </div>
               </AlertDescription>
             </Alert>
           )}
