@@ -76,7 +76,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <a href={`/aps/${user.aps}/settings`}>
+                <a href={`/aps/${user.aps}/user/settings`}>
                   <Settings />
                   {t("sidebar.user.settings")}
                 </a>

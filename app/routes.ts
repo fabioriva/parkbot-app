@@ -29,11 +29,17 @@ export default [
       route(":aps/map", "routes/aps/map.tsx"),
       //     route(":aps/racks/:nr", "routes/aps/rack.tsx"),
       //     route(":aps/racks", "routes/aps/racks.tsx"),
-      route(":aps/settings", "routes/aps/settings.tsx"),
+      // route(":aps/settings", "routes/aps/settings.tsx"),
+      route(":aps/user/settings", "routes/user/settings.tsx"),
       //     route(":aps/statistics", "routes/aps/statistics.tsx"),
       //     route(":aps/tags", "routes/aps/tags.tsx"),
     ]),
   ]),
+  // ...prefix("user", [
+  //   layout("routes/aps/layout.tsx", [
+  //     route("user/settings", "routes/user/settings.tsx"),
+  //   ]),
+  // ]),
   route("action/set-locale", "./routes/action.set-locale.ts"),
   route("action/set-theme", "./routes/action.set-theme.ts"),
   route("api/auth/*", "routes/api.auth.$.ts"),
