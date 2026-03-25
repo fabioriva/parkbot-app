@@ -16,12 +16,13 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { Spinner } from "~/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Drive } from "~/components/drive";
 import { Motion } from "~/components/motion";
 import { deviceT } from "~/lib/translation";
 
-const Mode = ({ mode }) => {
+const Mode = ({ mode, spin }) => {
   const { t } = useTranslation();
   return (
     <Badge
@@ -31,6 +32,7 @@ const Mode = ({ mode }) => {
           : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
       }
     >
+      {spin && <Spinner data-icon="inline-start" />}
       {t("mode." + mode.key)}
     </Badge>
   );
@@ -58,7 +60,7 @@ export function Device({ device, advanced = false }) {
                   <p>{deviceT(device, t)}</p>
                 </CardDescription>
                 <CardAction className="flex items-center gap-1">
-                  <Mode mode={device.mode} />
+                  <Mode mode={device.mode} spin={device.operation !== 0} />
                   <div
                     className={`w-3 h-3 rounded-full ${LA.status ? "bg-red-500" : "bg-slate-100 dark:bg-slate-600"}`}
                   />
@@ -103,7 +105,7 @@ export function Device({ device, advanced = false }) {
           <p>{deviceT(device, t)}</p>
         </CardDescription>
         <CardAction className="flex items-center gap-1">
-          <Mode mode={device.mode} />
+          <Mode mode={device.mode} spin={device.operation !== 0} />
           <div
             className={`w-3 h-3 rounded-full ${LA.status ? "bg-red-500" : "bg-slate-100 dark:bg-slate-600"}`}
           />
