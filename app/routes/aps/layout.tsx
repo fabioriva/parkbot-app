@@ -47,9 +47,9 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   ) {
     throw data("Forbidden", { status: 403 });
   }
-  if (!session.user.twoFactorEnabled) {
-    return redirect("/2fa-setup");
-  }
+  // if (!session.user.twoFactorEnabled) {
+  //   return redirect("/2fa-setup");
+  // }
   const sidebarState = getCookie(request, "sidebar_state");
   return {
     sidebarState,

@@ -1,19 +1,13 @@
 import { CheckCircle2Icon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import QRCode from "react-qr-code";
 import { useOutletContext } from "react-router";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import {
   Field,
+  FieldContent,
   FieldDescription,
   FieldError,
   FieldGroup,
@@ -26,28 +20,50 @@ import { Switch } from "~/components/ui/switch";
 import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/settings";
 
-export default function Settings() {
+export default function TwoFactor() {
+  let { t } = useTranslation();
   const user = useOutletContext();
+  // console.log(user);
   const [error, setError] = useState(null);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
-    user.twoFactorEnabled,
-  );
+  const [password, setPassword] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [totp, setTotp] = useState(null);
+  const [totpURI, setTotpURI] = useState(null);
+
   const disable2FA = async () => {
-    setTwoFactorEnabled(false);
-    // const { data, error } = await authClient.twoFactor.disable({
-    //   password,
-    // });
-    // console.log(data, error);
+    console.log("Disable 2FA");
+    const { data, error } = await authClient.twoFactor.disable({
+      password,
+    });
+    console.log(data, error);
+    if (error) {
+      return setError(error.message);
+    }
   };
   const enable2FA = async () => {
-    setTwoFactorEnabled(true);
-    // const { data, error } = await authClient.twoFactor.enable({
-    //   password,
-    // });
-    // console.log(data, error);
-    // setTotpURI(data?.totpURI);
+    console.log("Enable 2FA");
+    const { data, error } = await authClient.twoFactor.enable({
+      password,
+    });
+    console.log(data, error);
+    if (error) {
+      return setError(error.message);
+    }
+    setError(null);
+    setTotpURI(data?.totpURI);
     // console.log(totpURI);
+  };
+  const verify2FA = async () => {
+    const { data, error } = await authClient.twoFactor.verifyTotp({
+      code: totp, // required
+      trustDevice: true,
+    });
+    console.log(data, error);
+    if (error) {
+      return setError(error.message);
+    }
+    setError(null);
+    setSuccess(true);
   };
 
   return (
@@ -59,26 +75,66 @@ export default function Settings() {
             Enhance your app's security with two-factor authentication.
           </FieldDescription>
           <Field>
-            <FieldLabel htmlFor="currentPassword">Current password</FieldLabel>
+            <FieldLabel htmlFor="password">Current password</FieldLabel>
             <Input
-              name="currentPassword"
+              name="password"
               type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <FieldDescription>
-              Enter your current password to log in.
+              {t("twoFA.setupOne.cardDescription")}
             </FieldDescription>
           </Field>
           <Field orientation="horizontal" className="w-fit">
-            <FieldLabel htmlFor="2fa">Multi-factor authentication</FieldLabel>
+            <FieldContent>
+              <FieldLabel htmlFor="2fa">Multi-factor authentication</FieldLabel>
+              <FieldDescription>
+                Focus is shared across devices, and turns off when you leave the
+                app.
+              </FieldDescription>
+            </FieldContent>
             <Switch
               id="2fa"
-              checked={twoFactorEnabled}
-              disabled={!currentPassword}
-              onClick={twoFactorEnabled ? disable2FA : enable2FA}
+              checked={user.twoFactorEnabled}
+              disabled={!password}
+              onClick={user.twoFactorEnabled ? disable2FA : enable2FA}
             />
           </Field>
+          {totpURI && (
+            <FieldSet>
+              <Field>
+                <FieldContent>
+                  <QRCode value={totpURI || ""} />
+                </FieldContent>
+                <FieldLabel htmlFor="totp">
+                  {t("twoFA.verify.codeLabel")}
+                </FieldLabel>
+                <Input
+                  type="totp"
+                  name="totp"
+                  onChange={(e) => setTotp(e.target.value)}
+                  required
+                />
+              </Field>
+              <Field>
+                <Button className="w-full" onClick={verify2FA}>
+                  {t("twoFA.verify.submit")}
+                </Button>
+              </Field>
+            </FieldSet>
+          )}
+          {error && <FieldError>{error}</FieldError>}
+          {success && (
+            <Alert className="max-w-md border-green-200 bg-green-50 text-green-900 dark:border-green-900 dark:bg-green-950 dark:text-green-50">
+              <CheckCircle2Icon />
+              <AlertTitle>Two Factor Authenticaton updated successfully</AlertTitle>
+              <AlertDescription>
+                Your profile information has been saved. Changes will be
+                reflected immediately.
+              </AlertDescription>
+            </Alert>
+          )}
         </FieldSet>
       </FieldGroup>
     </div>

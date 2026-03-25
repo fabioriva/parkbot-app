@@ -4,15 +4,6 @@ import { useOutletContext } from "react-router";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
-import {
   Field,
   FieldDescription,
   FieldError,
@@ -26,7 +17,7 @@ import { Switch } from "~/components/ui/switch";
 import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/settings";
 
-export default function Settings() {
+export default function Password() {
   const user = useOutletContext();
   console.log(user);
 
@@ -49,7 +40,7 @@ export default function Settings() {
     if (error) {
       return setError(error.message);
     }
-    setError(null)
+    setError(null);
     setSuccess(true);
   };
 
@@ -62,6 +53,17 @@ export default function Settings() {
             Change your current password. The new password must be at least 8
             characters long.
           </FieldDescription>
+          {error && <FieldError>{error}</FieldError>}
+          {success && (
+            <Alert className="max-w-md border-green-200 bg-green-50 text-green-900 dark:border-green-900 dark:bg-green-950 dark:text-green-50">
+              <CheckCircle2Icon />
+              <AlertTitle>Password updated successfully</AlertTitle>
+              <AlertDescription>
+                Your profile information has been saved. Changes will be
+                reflected immediately.
+              </AlertDescription>
+            </Alert>
+          )}
           <Field>
             <FieldLabel htmlFor="currentPassword">Current password</FieldLabel>
             <Input
@@ -98,17 +100,6 @@ export default function Settings() {
             >
               Change password
             </Button>
-            {error && <FieldError>{error}</FieldError>}
-            {success && (
-              <Alert className="max-w-md border-green-200 bg-green-50 text-green-900 dark:border-green-900 dark:bg-green-950 dark:text-green-50">
-                <CheckCircle2Icon />
-                <AlertTitle>Password updated successfully</AlertTitle>
-                <AlertDescription>
-                  Your profile information has been saved. Changes will be
-                  reflected immediately.
-                </AlertDescription>
-              </Alert>
-            )}
           </Field>
         </FieldSet>
       </FieldGroup>
