@@ -13,7 +13,7 @@ export function Drive({ drive }) {
   const { t } = useTranslation();
   return (
     <>
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline py-2">
         <div
           className={clsx("grow", {
             "text-green-500": drive.enable.status,

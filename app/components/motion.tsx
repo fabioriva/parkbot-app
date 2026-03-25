@@ -35,7 +35,7 @@ export function Motion({ motor }) {
   const isRunning = motor.run.status;
   return (
     <>
-      <AccordionTrigger className="hover:no-underline">
+      <AccordionTrigger className="hover:no-underline py-2">
         <div className="grow">
           {t("device.motion." + motor.name.key, { id })}
         </div>
