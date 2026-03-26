@@ -39,19 +39,37 @@ export default function Dashboard({
       </h1>
     );
   const [data, setData] = useState(loaderData);
-  const fetcher = useFetcher();
+  const clientFetcher = useFetcher();
+
+  // Initial load
+  // useEffect(() => {
+  //   clientFetcher.load(`/aps/${params.aps}/dashboard`);
+  // }, []);
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetcher.load(`/aps/${params.aps}/dashboard`);
-    }, 1000);
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [fetcher]);
+    const intervalId = setInterval(() => {
+      clientFetcher.load(`/aps/${params.aps}/dashboard`);
+    }, 2500);
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
+
   useEffect(() => {
-    if (fetcher.data) {
-      setData(fetcher.data);
+    if (clientFetcher.data) {
+      setData(clientFetcher.data);
     }
-  }, [fetcher.data]);
-  // console.log(data);
+  }, [clientFetcher.data]);
+
+  // if (clientFetcher.state === "loading" && !clientFetcher.data) {
+  //   return <p>Loading...</p>;
+  // }
+
+  // return (
+  //   <div>
+  //     <h2>Data (auto-refresh every 1s)</h2>
+  //     <pre className="text-xs">{JSON.stringify(clientFetcher.data, null, 2)}</pre>
+  //   </div>
+  // );
+
   const { activity, exitQueue, occupancy, operations, system } = data;
   const [busy, free, lock] = occupancy;
   const { t } = useTranslation();
