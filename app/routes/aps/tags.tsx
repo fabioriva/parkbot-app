@@ -1,5 +1,11 @@
-import { Tag as TagIcon } from "lucide-react";
+import { Search, Tag as TagIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "~/components/ui/input-group";
 import {
   Item,
   ItemActions,
@@ -30,7 +36,9 @@ const Tag = ({ tag, handleEdit }) => (
       <TagIcon />
     </ItemMedia>
     <ItemContent>
-      <ItemTitle>Tag {tag.nr} {tag.code !== "0" && `PIN ${tag.code}`}</ItemTitle>
+      <ItemTitle>
+        Tag {tag.nr} {tag.code !== "0" && `PIN ${tag.code}`}
+      </ItemTitle>
       <ItemDescription>
         {tag.status === 0 ? "Valid for entry" : `Parked in slot ${tag.status}`}
       </ItemDescription>
@@ -52,6 +60,17 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     );
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`;
   const { data } = useData(url, { initialData: loaderData });
+  // Fuzzy search
+  const [search, setSearch] = useState([]);
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const Fuse = (await import("fuse.js")).default;
+    const fuse = new Fuse(data, {
+      keys: ["code", "nr", "type", "uid"],
+    });
+    const result = fuse.search(e.target.value);
+    setSearch(result);
+  };
+  // Edit
   const handleEdit = (tag) => {
     console.log(tag);
   };
@@ -63,11 +82,25 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   // );
 
   return (
-    // <ItemGroup className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-    <ItemGroup className="max-w-sm gap-3">
-      {data.map((item) => (
-        <Tag handleEdit={handleEdit} tag={item} key={item.nr} />
-      ))}
-    </ItemGroup>
+    <>
+      <InputGroup className="max-w-sm">
+        <InputGroupInput placeholder="Search by number, pin..." onChange={handleSearch} />
+        <InputGroupAddon>
+          <Search />
+        </InputGroupAddon>
+        <InputGroupAddon align="inline-end">
+          {search.length} results
+        </InputGroupAddon>
+      </InputGroup>
+      <ItemGroup className="max-w-sm gap-3">
+        {search.length > 0
+          ? search.map(({ item }) => (
+              <Tag handleEdit={handleEdit} tag={item} key={item.nr} />
+            ))
+          : data.map((item) => (
+              <Tag handleEdit={handleEdit} tag={item} key={item.nr} />
+            ))}
+      </ItemGroup>
+    </>
   );
 }
