@@ -36,11 +36,11 @@ export function ExitQueue({ exit, queue }) {
     console.log(queueItem);
   };
   return (
-    <Card>
+    <Card size="sm">
       <CardHeader>
         <CardTitle>{t("exit-queue.card-title")}</CardTitle>
         <CardDescription>
-          {queue.filter((item) => item.card !== 0).length === 0
+          {queue.filter((item) => item.card === 0).length === 0
             ? t("exit-queue.card-no-calls")
             : t("exit-queue.card-calls", { count: queue.length })}
         </CardDescription>
@@ -48,7 +48,7 @@ export function ExitQueue({ exit, queue }) {
       <CardContent>
         <Dialog>
           {queue
-            .filter((item: any) => item.card !== 0)
+            .filter((item: any) => item.card === 0)
             .map((item: any, key: any) => (
               <DialogTrigger key={key} asChild>
                 <Item size="sm" className="px-0 py-1 gap-6" key={key}>

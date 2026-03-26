@@ -12,6 +12,8 @@ import {
 import { Device } from "~/components/device";
 import { ExitQueue } from "~/components/exit-queue";
 import { HistoryList } from "~/components/history-list";
+import { Occupancy } from "~/components/occupancy-chart";
+import { Operations } from "~/components/operations-chart";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
 import type { Route } from "./+types/dashboard";
@@ -25,6 +27,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     },
   });
 }
+
+const Widget = () => <div className="aspect-video rounded-xl bg-muted" />;
 
 export default function Dashboard({
   loaderData,
@@ -55,51 +59,27 @@ export default function Dashboard({
   const { t } = useTranslation();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
-      <div className="col-span-2">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
-          {system.map((item, key) => (
-            <Device device={item} key={key} />
-          ))}
-          <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} />
-        </div>
+    <div className="flex flex-col gap-4">
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
+        {system.map((item, key) => (
+          <Device device={item} key={key} />
+        ))}
       </div>
-      <div className="col-span-2">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("dashboard.activity-title")}</CardTitle>
-              <CardDescription>
-                {t("dashboard.activity-description")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <HistoryList history={activity.documents} />
-            </CardContent>
-          </Card>
-          {/* <CardWrapper
-            title={t("aps.dashboard.occupancy-title")}
-            description={t("aps.dashboard.occupancy-description")}
-            link={`/aps/${params.aps}/map`}
-          >
-            <OccupancyChart occupancy={occupancy} />
-          </CardWrapper>
-          <CardWrapper
-            title={t("aps.dashboard.activity-title")}
-            description={t("aps.dashboard.activity-description")}
-            link={`/aps/${params.aps}/history`}
-          >
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
+        <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} />
+        <Occupancy occupancy={occupancy} />
+        <Card classname="aspect-video" size="sm">
+          <CardHeader>
+            <CardTitle>{t("dashboard.activity-title")}</CardTitle>
+            <CardDescription>
+              {t("dashboard.activity-description")}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <HistoryList history={activity.documents} />
-          </CardWrapper>
-          <CardWrapper
-            title={t("aps.dashboard.operations-title")}
-            description={t("aps.dashboard.operations-description")}
-            // link={`/aps/${params.aps}/statistics`}
-            className="lg:col-span-2"
-          >
-            <OperationsBarChart operations={operations[0].data} />
-          </CardWrapper> */}
-        </div>
+          </CardContent>
+        </Card>
+        <Operations operations={operations[0].data} />
       </div>
     </div>
   );

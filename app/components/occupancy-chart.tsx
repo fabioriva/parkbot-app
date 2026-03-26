@@ -44,7 +44,7 @@ export function Occupancy({ occupancy }) {
     return chartData.reduce((acc, curr) => acc + curr.value, 0);
   }, []);
   return (
-    <Card className="flex flex-col max-w-sm">
+    <Card>
       <CardHeader className="items-center pb-0">
         <CardTitle>Parking occupancy</CardTitle>
         <CardDescription>Current system usage</CardDescription>
@@ -100,11 +100,11 @@ export function Occupancy({ occupancy }) {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
+        {/* <div className="flex items-center gap-2 leading-none font-medium">
           An occupancy rate of {Math.round((busy.value / totalSpaces) * 100)}%
           out of {totalSpaces} parking spaces
         </div>
-        {/* <div className="leading-none text-muted-foreground" /> */}
+        <div className="leading-none text-muted-foreground" /> */}
       </CardFooter>
     </Card>
   );
