@@ -28,8 +28,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   });
 }
 
-const Widget = () => <div className="aspect-video rounded-xl bg-muted" />;
-
 export default function Dashboard({
   loaderData,
   params,
@@ -68,7 +66,7 @@ export default function Dashboard({
       <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
         <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} />
         <Occupancy occupancy={occupancy} />
-        <Card classname="aspect-video" size="sm">
+        <Card size="sm">
           <CardHeader>
             <CardTitle>{t("dashboard.activity-title")}</CardTitle>
             <CardDescription>
