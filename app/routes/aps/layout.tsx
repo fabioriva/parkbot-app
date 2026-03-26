@@ -101,21 +101,19 @@ export default function ApsLayout({
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
-            <div className="flex gap-3">
-              {!comm ? (
-                <Badge variant="destructive">Data not available!</Badge>
-              ) : (
-                <React.Fragment>
-                  <AlarmInfo active={diag || 0} />
-                  <ParkInfo occupancy={map} />
-                  <CommInfo status={comm} />
-                </React.Fragment>
-              )}
-              <Separator
-                orientation="vertical"
-                className="data-[orientation=vertical]:h-4"
-              />
-            </div>
+            {!comm ? (
+              <Badge variant="destructive">Data not available!</Badge>
+            ) : (
+              <React.Fragment>
+                <AlarmInfo active={diag || 0} />
+                <ParkInfo occupancy={map} />
+                <CommInfo status={comm} />
+              </React.Fragment>
+            )}
+            <Separator
+              orientation="vertical"
+              className="data-[orientation=vertical]:h-4"
+            />
             <LocaleToggle />
             <ModeToggle />
           </header>

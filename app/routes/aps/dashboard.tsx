@@ -41,11 +41,6 @@ export default function Dashboard({
   const [data, setData] = useState(loaderData);
   const clientFetcher = useFetcher();
 
-  // Initial load
-  // useEffect(() => {
-  //   clientFetcher.load(`/aps/${params.aps}/dashboard`);
-  // }, []);
-
   useEffect(() => {
     const intervalId = setInterval(() => {
       clientFetcher.load(`/aps/${params.aps}/dashboard`);
@@ -59,14 +54,10 @@ export default function Dashboard({
     }
   }, [clientFetcher.data]);
 
-  // if (clientFetcher.state === "loading" && !clientFetcher.data) {
-  //   return <p>Loading...</p>;
-  // }
-
   // return (
   //   <div>
-  //     <h2>Data (auto-refresh every 1s)</h2>
-  //     <pre className="text-xs">{JSON.stringify(clientFetcher.data, null, 2)}</pre>
+  //     <h2>Data (auto-refresh every 2.5s)</h2>
+  //     <pre className="text-xs">{JSON.stringify(data, null, 2)}</pre>
   //   </div>
   // );
 

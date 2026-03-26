@@ -1,4 +1,4 @@
-import { SquareParking, SquareParkingOff } from "lucide-react";
+import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
@@ -19,18 +19,8 @@ export function ParkInfo({ occupancy }: OccupancyInfoProps) {
   const cars = busy && busy.value > 0 ? true : false;
   return (
     <Tooltip>
-      <TooltipTrigger>
-        {cars ? (
-          <SquareParking
-            className="dark:fill-blue-700"
-            size="20"
-          />
-        ) : (
-          <SquareParkingOff
-            className="dark:fill-blue-700"
-            size="20"
-          />
-        )}
+      <TooltipTrigger asChild>
+        <Badge variant="outline">Parked {busy.value}</Badge>
       </TooltipTrigger>
       <TooltipContent>
         <p>Parking occupancy</p>
