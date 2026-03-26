@@ -54,13 +54,6 @@ export default function Dashboard({
     }
   }, [clientFetcher.data]);
 
-  // return (
-  //   <div>
-  //     <h2>Data (auto-refresh every 2.5s)</h2>
-  //     <pre className="text-xs">{JSON.stringify(data, null, 2)}</pre>
-  //   </div>
-  // );
-
   const { activity, exitQueue, occupancy, operations, system } = data;
   const [busy, free, lock] = occupancy;
   const { t } = useTranslation();
