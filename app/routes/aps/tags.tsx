@@ -74,12 +74,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   const handleEdit = (tag) => {
     console.log(tag);
   };
-  // return (
-  //   <div>
-  //     <h2>Data</h2>
-  //     <pre className="text-xs">{JSON.stringify(data, null, 2)}</pre>
-  //   </div>
-  // );
 
   return (
     <>
