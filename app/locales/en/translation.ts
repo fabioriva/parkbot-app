@@ -191,7 +191,7 @@ export default {
       map: "Map",
       nodes: "Profinet",
       password: "Password",
-      racks: "Racks",
+      racks: "PLC I/Os",
       settings: "Settings",
       statistics: "Statistics",
       tags: "Tags",
