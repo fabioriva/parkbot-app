@@ -49,13 +49,6 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
     }
   }, [clientFetcher.data]);
 
-  // return (
-  //   <div>
-  //     <h2>Data</h2>
-  //     <pre className="text-xs">{JSON.stringify(data, null, 2)}</pre>
-  //   </div>
-  // );
-
   return (
     <ItemGroup className="w-full lg:max-w-sm gap-3">
       {data.map((item) => (
