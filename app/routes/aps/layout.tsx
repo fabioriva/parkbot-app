@@ -39,9 +39,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (session.user.aps !== params.aps) {
     throw data("Forbidden", { status: 403 });
   }
-  const path = new URL(request.url).pathname.split("/")[3] // .pop() || "";
-  console.log(path);
-  
+  const path = new URL(request.url).pathname.split("/")[3] || "";
   if (
     path !== "user" &&
     !roles[session.user.role]?.some((role) => role === path)
