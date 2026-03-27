@@ -28,7 +28,7 @@ export default [
       route(":aps/history", "routes/aps/history.tsx"),
       route(":aps/map", "routes/aps/map.tsx"),
       // route(":aps/racks/:nr", "routes/aps/rack.tsx"),
-      // route(":aps/racks", "routes/aps/racks.tsx"),
+      route(":aps/racks", "routes/aps/racks.tsx"),
       // route(":aps/statistics", "routes/aps/statistics.tsx"),
       route(":aps/tags", "routes/aps/tags.tsx"),
       route(":aps/user/2fa", "routes/user/2fa.tsx"),

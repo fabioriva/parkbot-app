@@ -84,7 +84,10 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   return (
     <>
       <InputGroup className="max-w-sm">
-        <InputGroupInput placeholder="Search by number, pin..." onChange={handleSearch} />
+        <InputGroupInput
+          placeholder="Search by number, pin..."
+          onChange={handleSearch}
+        />
         <InputGroupAddon>
           <Search />
         </InputGroupAddon>
