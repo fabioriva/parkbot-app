@@ -34,6 +34,20 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
       </h1>
     );
   const [data, setData] = useState(loaderData);
+  const clientFetcher = useFetcher();
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      clientFetcher.load(`/aps/${params.aps}/nodes`);
+    }, 2500);
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    if (clientFetcher.data) {
+      setData(clientFetcher.data);
+    }
+  }, [clientFetcher.data]);
 
   // return (
   //   <div>
