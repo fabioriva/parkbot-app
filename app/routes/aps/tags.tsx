@@ -28,7 +28,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 const Tag = ({ tag, handleEdit }) => (
-  <Item className="" variant="outline">
+  <Item variant="outline">
     <ItemMedia variant="icon">
       <TagIcon />
     </ItemMedia>
