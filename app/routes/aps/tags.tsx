@@ -1,11 +1,6 @@
-import { Search, Tag as TagIcon } from "lucide-react";
+import { Tag as TagIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "~/components/ui/input-group";
 import {
   Item,
   ItemActions,
@@ -15,6 +10,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
+import { SearchInput } from "~/components/search-input";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
@@ -77,18 +73,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <>
-      <InputGroup className="max-w-sm">
-        <InputGroupInput
-          placeholder="Search by number, pin..."
-          onChange={handleSearch}
-        />
-        <InputGroupAddon>
-          <Search />
-        </InputGroupAddon>
-        <InputGroupAddon align="inline-end">
-          {search.length} results
-        </InputGroupAddon>
-      </InputGroup>
+      <SearchInput search={search} handleSearch={handleSearch} />
       <ItemGroup className="max-w-sm gap-3">
         {search.length > 0
           ? search.map(({ item }) => (
