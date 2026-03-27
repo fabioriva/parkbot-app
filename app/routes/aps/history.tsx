@@ -24,7 +24,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const to = format(endOfDay(new Date()), "yyyy-MM-dd HH:mm:ss");
   const filter = "a";
   const query = `system=0&dateFrom=${from}&dateTo=${to}&filter=${filter}&device=0&number=0`;
-  const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}`;
+  const url = `${process.env.BACKEND_URL}/${params?.aps}/history?${query}`;
   return await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,

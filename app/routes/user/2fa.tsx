@@ -16,7 +16,7 @@ import {
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Switch } from "~/components/ui/switch";
+// import { Switch } from "~/components/ui/switch";
 import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/settings";
 
@@ -90,12 +90,12 @@ export default function TwoFactor() {
               {twoFactorEnabled ? (
                 <span>disable</span>
               ) : (
-                <span>disableenable</span>
+                <span>enable</span>
               )}{" "}
               2FA
             </FieldDescription>
           </Field>
-          <Field orientation="horizontal" className="w-fit">
+          {/* <Field orientation="horizontal" className="w-fit">
             <FieldContent>
               <FieldLabel htmlFor="2fa">Multi-factor authentication</FieldLabel>
               <FieldDescription>
@@ -108,6 +108,20 @@ export default function TwoFactor() {
               disabled={!password}
               onClick={twoFactorEnabled ? disable2FA : enable2FA}
             />
+          </Field> */}
+          <Field>
+            <Button
+              className="w-full"
+              onClick={twoFactorEnabled ? disable2FA : enable2FA}
+              disabled={!password}
+            >
+              {twoFactorEnabled ? (
+                <span>Disable</span>
+              ) : (
+                <span>Enable</span>
+              )}{" "}
+              2FA
+            </Button>
           </Field>
           {!success && totpURI && (
             <FieldSet>

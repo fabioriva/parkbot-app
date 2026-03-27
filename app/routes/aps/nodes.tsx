@@ -18,7 +18,7 @@ import type { Route } from "./+types/nodes";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getCookie(request, "parkbot.session_token").split(".")[0];
-  const url = `${process.env.VITE_BACKEND_URL}/${params?.aps}/racks`;
+  const url = `${process.env.BACKEND_URL}/${params?.aps}/racks`;
   return await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
