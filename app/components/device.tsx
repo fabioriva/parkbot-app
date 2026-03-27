@@ -51,9 +51,7 @@ export function Device({ device, advanced = false }) {
             <Card size="sm">
               <CardHeader>
                 <CardTitle>{device.name}</CardTitle>
-                <CardDescription>
-                  <p>{deviceT(device, t)}</p>
-                </CardDescription>
+                <CardDescription>{deviceT(device, t)}</CardDescription>
                 <CardAction className="flex items-center gap-1">
                   <Mode mode={device.mode} spin={device.operation !== 0} />
                   <div
@@ -96,9 +94,7 @@ export function Device({ device, advanced = false }) {
     <Card size="sm">
       <CardHeader>
         <CardTitle>{device.name}</CardTitle>
-        <CardDescription>
-          <p>{deviceT(device, t)}</p>
-        </CardDescription>
+        <CardDescription>{deviceT(device, t)}</CardDescription>
         <CardAction className="flex items-center gap-1">
           <Mode mode={device.mode} spin={device.operation !== 0} />
           <div
