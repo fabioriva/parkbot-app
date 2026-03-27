@@ -28,7 +28,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 const Tag = ({ tag, handleEdit }) => (
-  <Item variant="outline">
+  <Item variant={tag.status === 0 ? "outline" : "muted"}>
     <ItemMedia variant="icon">
       <TagIcon />
     </ItemMedia>
