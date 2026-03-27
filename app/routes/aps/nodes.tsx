@@ -9,7 +9,7 @@ import {
   ItemContent,
   ItemDescription,
   ItemGroup,
-  ItemMedia,
+  // ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
 import { getCookie } from "~/lib/cookie.server";
@@ -52,8 +52,11 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
   return (
     <ItemGroup className="w-full lg:max-w-sm gap-3">
       {data.map((item) => (
-        <Item variant="outline" key={item.deviceNr}>
-          <ItemMedia variant="image">
+        <Item
+          variant={item.online.status ? "outline" : "muted"}
+          key={item.deviceNr}
+        >
+          {/* <ItemMedia variant="image">
             <img
               src={`/pn/et200mp.png`}
               alt={item.deviceName}
@@ -61,7 +64,7 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
               height={32}
               // className="object-cover grayscale"
             />
-          </ItemMedia>
+          </ItemMedia> */}
           <ItemContent>
             <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
             <ItemDescription>
