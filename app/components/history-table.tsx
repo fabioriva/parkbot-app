@@ -110,9 +110,7 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
   );
 };
 
-export function HistoryTable({
-  history: { count, dateFrom, dateTo, query },
-}: any) {
+export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
   const { t } = useTranslation();
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -183,7 +181,7 @@ export function HistoryTable({
                 onValueChange={(rows) => setRowsPerPages(rows)}
               >
                 <SelectTrigger className="grow-0">
-                  <SelectValue placeholder=""/>
+                  <SelectValue placeholder="" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>

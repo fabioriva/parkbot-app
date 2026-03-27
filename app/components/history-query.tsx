@@ -24,7 +24,7 @@ export function HistoryQuery({ from, to, handleQuery }) {
   };
 
   return (
-    <div className="">
+    <div>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button

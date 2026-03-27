@@ -73,8 +73,12 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <>
-      <SearchInput search={search} handleSearch={handleSearch} />
-      <ItemGroup className="max-w-sm gap-3">
+      <SearchInput
+        search={search}
+        placeholder={"Search by number, pin..."}
+        handleSearch={handleSearch}
+      />
+      <ItemGroup className="w-full lg:max-w-sm gap-3">
         {search.length > 0
           ? search.map(({ item }) => (
               <Tag handleEdit={handleEdit} tag={item} key={item.nr} />

@@ -10,6 +10,7 @@ import {
 import { HistoryList } from "~/components/history-list";
 import { HistoryQuery } from "~/components/history-query";
 import { HistoryTable } from "~/components/history-table";
+import { SearchInput } from "~/components/search-input";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
 import type { Route } from "./+types/history";
@@ -52,9 +53,27 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
       setHistory(json);
     }
   };
+  // Fuzzy search
+  const [search, setSearch] = useState([]);
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const Fuse = (await import("fuse.js")).default;
+    const fuse = new Fuse(query, {
+      keys: ["alarm.id", "card", "stall", "device.key"],
+    });
+    const result = fuse.search(e.target.value);
+    setSearch(result);
+  };
+
   return (
     <>
-      <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+      <div className="flex flex-col lg:flex-row justify-between gap-3">
+        <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+        <SearchInput
+          search={search}
+          placeholder={"Search by card, device or stall..."}
+          handleSearch={handleSearch}
+        />
+      </div>
       <div className="block xl:hidden">
         <Item className="mb-3" variant="outline">
           <ItemContent>
@@ -68,10 +87,24 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
             </ItemDescription>
           </ItemContent>
         </Item>
-        <HistoryList history={query} media={true} />
+        {search.length > 0 ? (
+          <HistoryList
+            query={search.map((obj) => obj["item"]).flat()}
+            media={true}
+          />
+        ) : (
+          <HistoryList query={query} media={true} />
+        )}
       </div>
       <div className="hidden xl:block">
-        <HistoryTable history={history} />
+        {search.length > 0 ? (
+          <HistoryTable
+            history={history}
+            query={search.map((obj) => obj["item"]).flat()}
+          />
+        ) : (
+          <HistoryTable history={history} query={query} />
+        )}
       </div>
     </>
   );

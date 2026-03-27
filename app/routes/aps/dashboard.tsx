@@ -76,7 +76,7 @@ export default function Dashboard({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <HistoryList history={activity.documents} />
+            <HistoryList query={activity.documents} />
           </CardContent>
         </Card>
         <Operations operations={operations[0].data} />

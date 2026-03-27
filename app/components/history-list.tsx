@@ -11,11 +11,11 @@ import {
 } from "~/components/ui/item";
 import { logT } from "~/lib/translation";
 
-export function HistoryList({ history, media = false }: any) {
+export function HistoryList({ query, media = false }: any) {
   const { t } = useTranslation();
   return (
     <>
-      {history.map((item, key) => (
+      {query.map((item, key) => (
         <Item size="xs" className="px-0 py-1.5 gap-6" key={key}>
           {media && (
             <ItemMedia>

@@ -5,11 +5,11 @@ import {
   InputGroupInput,
 } from "~/components/ui/input-group";
 
-export function SearchInput({ search, handleSearch }) {
+export function SearchInput({ search, placeholder, handleSearch }) {
   return (
-    <InputGroup className="max-w-sm">
+    <InputGroup className="w-full lg:max-w-sm">
       <InputGroupInput
-        placeholder="Search by number, pin..."
+        placeholder={placeholder}
         onChange={(e) => handleSearch(e)}
       />
       <InputGroupAddon>
