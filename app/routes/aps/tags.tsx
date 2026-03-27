@@ -1,5 +1,6 @@
 import { Tag as TagIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "~/components/ui/button";
 import {
   Item,
@@ -56,6 +57,10 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     );
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`;
   const { data } = useData(url, { initialData: loaderData });
+  const { t } = useTranslation();
+  const handleEdit = (tag) => {
+    console.log(tag);
+  };
   // Fuzzy search
   const [search, setSearch] = useState([]);
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,10 +70,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     });
     const result = fuse.search(e.target.value);
     setSearch(result);
-  };
-  // Edit
-  const handleEdit = (tag) => {
-    console.log(tag);
   };
 
   return (
