@@ -46,15 +46,15 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
     <ItemGroup className="w-full lg:max-w-sm gap-3">
       {data.map((item) => (
         <Item variant="outline" key={item.deviceNr}>
-          {/* <ItemMedia variant="image">
+          <ItemMedia variant="image">
             <img
-              src={`https://github.com/shadcn.png`}
-              alt={"song.title"}
+              src={`/pn/et200mp.png`}
+              alt={item.deviceName}
               width={32}
               height={32}
-              className="object-cover grayscale"
+              // className="object-cover grayscale"
             />
-          </ItemMedia> */}
+          </ItemMedia>
           <ItemContent>
             <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
             <ItemDescription>
