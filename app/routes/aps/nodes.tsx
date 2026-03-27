@@ -1,4 +1,4 @@
-import { CircleFadingArrowUpIcon } from "lucide-react";
+import { Circle, ExternalLinkIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
@@ -14,7 +14,7 @@ import {
 } from "~/components/ui/item";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
-import type { Route } from "./+types/racks";
+import type { Route } from "./+types/nodes";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getCookie(request, "parkbot.session_token").split(".")[0];
@@ -26,7 +26,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   });
 }
 
-export default function Dashboard({
+export default function Nodes({
   loaderData,
   params,
 }: Route.ComponentProps) {
@@ -49,13 +49,27 @@ export default function Dashboard({
     <ItemGroup className="w-full lg:max-w-sm gap-3">
       {data.map((item) => (
         <Item variant="outline" key={item.deviceNr}>
+          {/* <ItemMedia variant="image">
+            <img
+              src={`https://github.com/shadcn.png`}
+              alt={"song.title"}
+              width={32}
+              height={32}
+              className="object-cover grayscale"
+            />
+          </ItemMedia> */}
           <ItemContent>
-            <ItemTitle>{item.deviceName} I/Os</ItemTitle>
-            <ItemDescription>{item.type}</ItemDescription>
+            <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
+            <ItemDescription>
+              Node {item.deviceNr} Type {item.type}
+            </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button variant="outline" size="icon">
-              <CircleFadingArrowUpIcon />
+            <Circle
+              className={`size-4 ${item.online.status ? "fill-green-500 stroke-green-500" : "fill-red-500  stroke-red-500"}`}
+            />
+            <Button variant="ghost" size="icon">
+              <ExternalLinkIcon className="size-4" />
             </Button>
           </ItemActions>
         </Item>

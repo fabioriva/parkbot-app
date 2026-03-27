@@ -189,6 +189,7 @@ export default {
       devices: "Devices",
       history: "History",
       map: "Map",
+      nodes: "Profinet",
       password: "Password",
       racks: "Racks",
       settings: "Settings",

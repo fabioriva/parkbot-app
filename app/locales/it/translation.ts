@@ -191,6 +191,7 @@ export default {
       devices: "Dispositivi",
       history: "Cronologia",
       map: "Mappa",
+      nodes: "Profinet",
       password: "Impostazione password",
       racks: "Plc I/O",
       settings: "Impostazioni",

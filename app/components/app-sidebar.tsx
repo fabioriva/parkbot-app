@@ -42,6 +42,10 @@ export function AppSidebar({ pathname, user }: SidebarProps) {
         title: t("sidebar.menu.map"),
       },
       {
+        pathname: `/aps/${user.aps}/nodes`,
+        title: t("sidebar.menu.nodes"),
+      },
+      {
         pathname: `/aps/${user.aps}/racks`,
         title: t("sidebar.menu.racks"),
       },
