@@ -26,10 +26,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   });
 }
 
-export default function Nodes({
-  loaderData,
-  params,
-}: Route.ComponentProps) {
+export default function Nodes({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData)
     return (
       <h1 className="text-lg dark:text-red-500 font-semibold">
@@ -68,8 +65,12 @@ export default function Nodes({
             <Circle
               className={`size-4 ${item.online.status ? "fill-green-500 stroke-green-500" : "fill-red-500  stroke-red-500"}`}
             />
-            <Button variant="ghost" size="icon">
-              <ExternalLinkIcon className="size-4" />
+            <Button variant="ghost" size="icon" asChild>
+              <a
+                href={`/${params.aps}/racks/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
+              >
+                <ExternalLinkIcon className="size-4" />
+              </a>
             </Button>
           </ItemActions>
         </Item>
