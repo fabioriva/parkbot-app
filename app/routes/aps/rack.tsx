@@ -1,0 +1,32 @@
+import { useData } from "~/hooks/use-ws";
+import { getCookie } from "~/lib/cookie.server";
+import fetcher from "~/lib/fetch.server";
+import type { Route } from "./+types/nodes";
+
+export async function loader({ params, request }: Route.LoaderArgs) {
+  const token = getCookie(request, "parkbot.session_token").split(".")[0];
+  const url = `${process.env.VITE_BACKEND_URL}/${params?.aps}/racks/${params?.nr}`;
+  return await fetcher(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export default function Rack({ loaderData, params }: Route.ComponentProps) {
+  if (!loaderData)
+    return (
+      <h1 className="text-lg dark:text-red-500 font-semibold">
+        Data not available!
+      </h1>
+    );
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/racks/${params.nr}`;
+  const { data } = useData(url, { initialData: loaderData?.data });
+
+  return (
+    <div>
+      <h2>Data</h2>
+      <pre className="text-xs">{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+}

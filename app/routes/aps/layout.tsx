@@ -39,10 +39,11 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (session.user.aps !== params.aps) {
     throw data("Forbidden", { status: 403 });
   }
-  const path = new URL(request.url).pathname.split("/").pop() || "";
+  const path = new URL(request.url).pathname.split("/")[3] // .pop() || "";
+  console.log(path);
+  
   if (
-    path !== "2fa" &&
-    path !== "password" &&
+    path !== "user" &&
     !roles[session.user.role]?.some((role) => role === path)
   ) {
     throw data("Forbidden", { status: 403 });

@@ -81,7 +81,7 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
             />
             <Button variant="ghost" size="icon" asChild>
               <a
-                href={`/${params.aps}/racks/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
+                href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
               >
                 <ExternalLinkIcon className="size-4" />
               </a>
