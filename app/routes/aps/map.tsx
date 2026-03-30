@@ -35,7 +35,7 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
   const [view, setView] = useState("view-2");
   const DynamicComponent = components[params.aps];
   return (
-    <>
+    <Fragment>
       <Suspense
         fallback={
           <div className="flex items-center justify-center">
@@ -45,6 +45,6 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
       >
         <DynamicComponent data={data} view={view} />
       </Suspense>
-    </>
+    </Fragment>
   );
 }

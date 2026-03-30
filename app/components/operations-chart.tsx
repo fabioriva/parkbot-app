@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { TrendingUp } from "lucide-react";
+// import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {

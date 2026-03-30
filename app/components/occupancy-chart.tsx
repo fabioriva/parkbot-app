@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { TrendingUp } from "lucide-react";
-import { Label, Pie, PieChart } from "recharts";
-
+// import { TrendingUp } from "lucide-react";
+import { Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
