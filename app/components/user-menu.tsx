@@ -46,7 +46,7 @@ export function NavUser({
             >
               <Avatar className="rounded-full">
                 <AvatarImage src={user.image} alt={user.name} />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarFallback>{user.name.split(" ").map(s => s[0]).join('')}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
