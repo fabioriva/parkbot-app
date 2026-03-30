@@ -1,3 +1,4 @@
+import { IoInfo } from "~/components/io-info";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
@@ -34,21 +35,25 @@ export default function Rack({ loaderData, params }: Route.ComponentProps) {
     <div className="flex overflow-scroll gap-0.5 py-3">
       {data.cards.map((card) => (
         <div
-          className="bg-slate-400 flex flex-col gap-0.5 border p-1 relative text-xs text-white"
+          className="bg-slate-400 flex flex-col gap-0.5 border rounded-xs p-1 text-xs text-white"
           key={card.nr}
         >
           <p className="text-[0.625rem]">{card.type}</p>
           {card.bytes.map((byte) => (
-            <div className="flex flex-col gap-0.5 text-black" key={byte.label}>
-              <p className="mt-1.5">Byte {byte.label.substring(0, 1) + "B" + byte.label.substring(1)}</p>
+            <div className="flex flex-col gap-0.5" key={byte.label}>
+              <p className="mt-1.5">
+                {byte.label.substring(0, 1) + "B" + byte.label.substring(1)}
+              </p>
               {byte.bits.map((bit) => (
-                <div className="bg-white flex border" key={bit.addr}>
-                  <span className="w-12">{bit.addr}</span>
-                  <span className="w-16">{bit.label}</span>
-                  <span
-                    className={`text-center w-3 ${bit.status ? "bg-green-500" : "bg-gray-300"}`}
-                  />
-                </div>
+                <IoInfo io={bit} key={bit.addr}>
+                  <div className="bg-white flex border text-black">
+                    <span className="w-12">{bit.addr}</span>
+                    <span className="w-16">{bit.label}</span>
+                    <span
+                      className={`w-3 ${bit.status ? "bg-green-500" : "bg-gray-300"}`}
+                    />
+                  </div>
+                </IoInfo>
               ))}
             </div>
           ))}
