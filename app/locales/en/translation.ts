@@ -221,7 +221,9 @@ export default {
   signup: {
     cardDescription: `Enter your details to activate your account`,
     cardTitle: "Create a Parkbot account",
+    confirmDescription: "Please confirm your password.",
     confirmLabel: "Confirm password",
+    emailDescription: "We'll use this to contact you. We will not share your email with anyone else.",
     errorOne: "You are not subscribed",
     errorTwo: "The password doesn't match",
     firstLabel: "First Name",

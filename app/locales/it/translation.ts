@@ -223,7 +223,9 @@ export default {
   signup: {
     cardDescription: "Inserisci i tuoi dati per attivare l'account",
     cardTitle: "Registra il tuo account",
+    confirmDescription: "Conferma il tuo indirizzo email.",
     confirmLabel: "Conferma Password",
+    emailDescription: "Useremo questo indirizzo per contattarti. Non condivideremo la tua email con nessun'altro.",
     errorOne: "Non sei autorizzato a registrarti",
     errorTwo: "La password non corrisponde",
     firstLabel: "Nome",
