@@ -6,7 +6,7 @@ export function Level({ definitions, level, view }) {
       <p className="py-1 text-sm">
         {level.label}: {level.min} - {level.max}
       </p>
-      <div className="level relative border bg-card" id={"l-" + level.nr}>
+      <div className="level relative border bg-sidebar" id={"l-" + level.nr}>
         {level.stalls.map((stall) => (
           <Stall definitions={definitions} stall={stall} key={stall.nr} />
         ))}
