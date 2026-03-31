@@ -34,8 +34,6 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function Operations({ operations, title, description }) {
-  console.log(operations);
-
   const chartData = operations.map((item) => ({
     name: item.name,
     entries: item.entries,
