@@ -22,18 +22,18 @@ export function Stall({
           className={clsx(
             "absolute h-[30px] w-[40px] border flex items-center justify-center text-xs",
             {
-              "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300":
+              "bg-red-300 text-red-950 dark:bg-red-950 dark:text-red-300":
                 status !== 0 &&
                 status !== LOCK &&
                 status !== PAPA &&
                 status !== RSVD,
-              "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300":
+              "bg-green-300 text-green-950 dark:bg-green-950 dark:text-green-300":
                 status === FREE,
-              "bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300":
+              "bg-purple-300 text-purple-950 dark:bg-purple-950 dark:text-purple-300":
                 status === LOCK,
-              "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300":
+              "bg-blue-300 text-blue-950 dark:bg-blue-950 dark:text-blue-300":
                 status === PAPA,
-              "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300":
+              "bg-amber-300 text-amber-950 dark:bg-amber-950 dark:text-amber-300":
                 status === RSVD,
             },
           )}
