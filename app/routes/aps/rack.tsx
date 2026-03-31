@@ -35,7 +35,7 @@ export default function Rack({ loaderData, params }: Route.ComponentProps) {
     <div className="flex overflow-scroll gap-0.5 py-3">
       {data.cards.map((card) => (
         <div
-          className="bg-slate-400 flex flex-col gap-0.5 border rounded-xs p-1 text-xs text-white"
+          className="bg-sidebar flex flex-col gap-0.5 border rounded-xs p-1 text-xs"
           key={card.nr}
         >
           <p className="text-[0.625rem]">{card.type}</p>
@@ -46,12 +46,15 @@ export default function Rack({ loaderData, params }: Route.ComponentProps) {
               </p>
               {byte.bits.map((bit) => (
                 <IoInfo io={bit} key={bit.addr}>
-                  <div className="bg-white flex border text-black">
+                  {/* <div className="flex border bg-white text-black"> */}
+                  <div className="flex border">
                     <span className="w-12">{bit.addr}</span>
                     <span className="w-16">{bit.label}</span>
                     <span
-                      className={`w-3 ${bit.status ? "bg-green-500" : "bg-gray-300"}`}
-                    />
+                      className={`w-3 text-center ${bit.status ? "bg-green-300 text-green-950 dark:bg-green-950 dark:text-green-300" : "bg-neutral-300 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-300"}`}
+                    >
+                      {bit.addr.slice(-1)}
+                    </span>
                   </div>
                 </IoInfo>
               ))}
