@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { Car, Lock } from "lucide-react";
 
 export function Stall({
   definitions,
@@ -23,6 +24,8 @@ export function Stall({
       )}
       id={"s-" + nr}
     >
+      {view === "view0" && status === LOCK && <Lock size={18} />}
+      {view === "view0" && status !== LOCK && status !== 0 && <Car size={20} />}
       {view === "view1" && status}
       {view === "view2" && nr}
       {view === "view3" && size}

@@ -41,7 +41,8 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <Tabs value={tab} onValueChange={onTabChange}>
-      <TabsList className="grid w-sm grid-cols-4">
+      <TabsList className="grid w-sm grid-cols-5">
+        <TabsTrigger value="view0">Icons</TabsTrigger>
         <TabsTrigger value="view1">Cards</TabsTrigger>
         <TabsTrigger value="view2">Slots</TabsTrigger>
         <TabsTrigger value="view3">Sizes</TabsTrigger>
@@ -58,7 +59,9 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
           </Suspense>
         </TabsContent>
       ) : (
-        <Occupancy occupancy={data.occupancy} />
+        <div className="max-w-xl">
+          <Occupancy occupancy={data.occupancy} />
+        </div>
       )}
     </Tabs>
   );
