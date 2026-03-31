@@ -8,7 +8,12 @@ export function Level({ definitions, level, view }) {
       </p>
       <div className="level relative border bg-sidebar" id={"l-" + level.nr}>
         {level.stalls.map((stall) => (
-          <Stall definitions={definitions} stall={stall} key={stall.nr} />
+          <Stall
+            definitions={definitions}
+            stall={stall}
+            view={view}
+            key={stall.nr}
+          />
         ))}
       </div>
     </div>

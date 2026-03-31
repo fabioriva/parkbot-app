@@ -1,5 +1,7 @@
 import { lazy, Fragment, Suspense, useState } from "react";
-// import { Occupancy } from "~/components/occupancy-chart";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { Occupancy } from "~/components/occupancy-chart";
+// import { ViewRadioGroup } from "~/components/map-view";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
@@ -32,19 +34,33 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
     );
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
   const { data } = useData(url, { initialData: loaderData });
-  const [view, setView] = useState("view-2");
+  const [tab, setTab] = useState("view2");
+  const onTabChange = (value) => {
+    setTab(value);
+  };
   const DynamicComponent = components[params.aps];
+
   return (
-    <Fragment>
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center">
-            Loading...
-          </div>
-        }
-      >
-        <DynamicComponent data={data} view={view} />
-      </Suspense>
-    </Fragment>
+    <Tabs value={tab} onValueChange={onTabChange}>
+      <TabsList className="grid w-sm grid-cols-4">
+        <TabsTrigger value="view1">Cards</TabsTrigger>
+        <TabsTrigger value="view2">Slots</TabsTrigger>
+        <TabsTrigger value="view3">Sizes</TabsTrigger>
+        <TabsTrigger value="view4">Stats</TabsTrigger>
+      </TabsList>
+      {tab !== "view4" ? (
+        <TabsContent value={tab}>
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center">Loading...</div>
+            }
+          >
+            <DynamicComponent data={data} view={tab} />
+          </Suspense>
+        </TabsContent>
+      ) : (
+        <Occupancy occupancy={data.occupancy} />
+      )}
+    </Tabs>
   );
 }

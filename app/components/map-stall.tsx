@@ -23,7 +23,9 @@ export function Stall({
       )}
       id={"s-" + nr}
     >
-      {status}
+      {view === "view1" && status}
+      {view === "view2" && nr}
+      {view === "view3" && size}
     </div>
   );
 }
