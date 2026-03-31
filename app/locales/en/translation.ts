@@ -195,6 +195,7 @@ export default {
       history: "History",
       map: "Map",
       nodes: "Profinet",
+      operations: "Operations",
       password: "Password",
       racks: "PLC I/Os",
       settings: "Settings",

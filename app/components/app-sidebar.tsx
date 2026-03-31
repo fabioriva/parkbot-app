@@ -46,12 +46,12 @@ export function AppSidebar({ pathname, user }: SidebarProps) {
         title: t("sidebar.menu.nodes"),
       },
       {
-        pathname: `/aps/${user.aps}/racks`,
-        title: t("sidebar.menu.racks"),
+        pathname: `/aps/${user.aps}/operations`,
+        title: t("sidebar.menu.operations"),
       },
       {
-        pathname: `/aps/${user.aps}/statistics`,
-        title: t("sidebar.menu.statistics"),
+        pathname: `/aps/${user.aps}/racks`,
+        title: t("sidebar.menu.racks"),
       },
       {
         pathname: `/aps/${user.aps}/tags`,

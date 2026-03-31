@@ -198,6 +198,7 @@ export default {
       history: "Cronologia",
       map: "Mappa",
       nodes: "Profinet",
+      operations: "Operazioni",
       password: "Impostazione password",
       racks: "PLC I/Os",
       settings: "Impostazioni",
