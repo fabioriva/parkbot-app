@@ -34,7 +34,7 @@ export default function Operations({
   // console.log(devices);
   const [dateFrom, dateTo] = devices.query.date.split(" ")
   return (
-    <div className="grid grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
       <Statistics
         operations={devices.data}
         title="System operations grouped by device"
