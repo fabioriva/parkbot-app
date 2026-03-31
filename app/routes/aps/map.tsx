@@ -41,7 +41,7 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <Tabs value={tab} onValueChange={onTabChange}>
-      <TabsList className="grid w-sm grid-cols-5">
+      <TabsList className="grid grid-cols-5">
         <TabsTrigger value="view0">Icons</TabsTrigger>
         <TabsTrigger value="view1">Cards</TabsTrigger>
         <TabsTrigger value="view2">Slots</TabsTrigger>
