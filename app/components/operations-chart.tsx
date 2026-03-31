@@ -47,7 +47,6 @@ export function Operations({ operations, title, description }) {
     <Card size="sm">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        {/* <CardDescription>{format(new Date(), "MM/dd/yyyy")}</CardDescription> */}
         <CardDescription>{description}</CardDescription>
         <CardAction className="flex items-center gap-2">
           <Label htmlFor="stacked">Stacked</Label>
