@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
@@ -79,7 +80,11 @@ export default function Dashboard({
             <HistoryList query={activity.documents} />
           </CardContent>
         </Card>
-        <Operations operations={operations[0].data} />
+        <Operations
+          operations={operations[0].data}
+          title="Daily operations"
+          description={format(new Date(), "MM/dd/yyyy")}
+        />
       </div>
     </div>
   );

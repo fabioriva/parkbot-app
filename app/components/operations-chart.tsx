@@ -1,14 +1,13 @@
 "use client";
 
-import { format } from "date-fns";
-// import { TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
+import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
@@ -20,26 +19,8 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "~/components/ui/chart";
-
-// const chartData = [
-//   { month: "January", desktop: 186, mobile: 80 },
-//   { month: "February", desktop: 305, mobile: 200 },
-//   { month: "March", desktop: 237, mobile: 120 },
-//   { month: "April", desktop: 73, mobile: 190 },
-//   { month: "May", desktop: 209, mobile: 130 },
-//   { month: "June", desktop: 214, mobile: 140 },
-// ];
-
-// const chartConfig = {
-//   desktop: {
-//     label: "Desktop",
-//     color: "var(--chart-1)",
-//   },
-//   mobile: {
-//     label: "Mobile",
-//     color: "var(--chart-2)",
-//   },
-// } satisfies ChartConfig;
+import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
 
 const chartConfig = {
   entries: {
@@ -52,25 +33,33 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function Operations({ operations }) {
+export function Operations({ operations, title, description }) {
+  console.log(operations);
+
   const chartData = operations.map((item) => ({
-    hour: item.name,
+    name: item.name,
     entries: item.entries,
     exits: item.exits,
   }));
+  const [stacked, setStacked] = useState(true);
 
   return (
-    <Card>
+    <Card size="sm">
       <CardHeader>
-        <CardTitle>Daily operations</CardTitle>
-        <CardDescription>{format(new Date(), "MM/dd/yyyy")}</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        {/* <CardDescription>{format(new Date(), "MM/dd/yyyy")}</CardDescription> */}
+        <CardDescription>{description}</CardDescription>
+        <CardAction className="flex items-center gap-2">
+          <Label htmlFor="stacked">Stacked</Label>
+          <Switch id="stacked" checked={stacked} onCheckedChange={setStacked} />
+        </CardAction>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="hour"
+              dataKey="name"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -80,37 +69,19 @@ export function Operations({ operations }) {
             <ChartLegend content={<ChartLegendContent />} />
             <Bar
               dataKey="entries"
-              stackId="a"
               fill="var(--color-entries)"
-              // radius={[0, 0, 10, 10]}
-            />
-            <Bar
-              dataKey="exits"
-              stackId="a"
-              fill="var(--color-exits)"
-              // radius={[10, 10, 0, 0]}
-            />
-            {/* <Bar
-              dataKey="entries"
-              fill="var(--color-entries)"
-              radius={[10, 10, 0, 0]}
+              radius={stacked ? [0, 0, 3, 3] : [3, 3, 0, 0]}
+              stackId={(stacked && "a") || undefined}
             />
             <Bar
               dataKey="exits"
               fill="var(--color-exits)"
-              radius={[10, 10, 0, 0]}
-            /> */}
+              radius={stacked ? [3, 3, 0, 0] : [3, 3, 0, 0]}
+              stackId={(stacked && "a") || undefined}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        {/* <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div> */}
-      </CardFooter>
     </Card>
   );
 }

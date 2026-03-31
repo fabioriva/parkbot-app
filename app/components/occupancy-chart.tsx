@@ -1,13 +1,11 @@
 "use client";
 
 import * as React from "react";
-// import { TrendingUp } from "lucide-react";
 import { Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
@@ -45,7 +43,7 @@ export function Occupancy({ occupancy }) {
     return chartData.reduce((acc, curr) => acc + curr.value, 0);
   }, []);
   return (
-    <Card>
+    <Card size="sm">
       <CardHeader className="items-center pb-0">
         <CardTitle>Parking occupancy</CardTitle>
         <CardDescription>
@@ -70,13 +68,6 @@ export function Occupancy({ occupancy }) {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        {/* <div className="flex items-center gap-2 leading-none font-medium">
-          An occupancy rate of {Math.round((busy.value / totalSpaces) * 100)}%
-          out of {totalSpaces} parking spaces
-        </div>
-        <div className="leading-none text-muted-foreground" /> */}
-      </CardFooter>
     </Card>
   );
 }
