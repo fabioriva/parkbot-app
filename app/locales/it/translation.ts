@@ -159,6 +159,12 @@ export default {
     loginButton: "Accedi a Parkbot",
     title: "Parkbot Web Service",
   },
+  map: {
+    "stall-busy":
+      "Stallo {{nr}} é occupato dalla tessera {{status}} dal {{date}}",
+    "stall-free": "Stallo {{nr}} é libero dal {{date}}",
+    "stall-lock": "Stallo {{nr}} é bloccato dal {{date}}",
+  },
   mode: {
     "mode-data-edit": "Modifica dati",
     "mode-data-read": "Lettura dati",
@@ -225,7 +231,8 @@ export default {
     cardTitle: "Registra il tuo account",
     confirmDescription: "Conferma il tuo indirizzo email.",
     confirmLabel: "Conferma Password",
-    emailDescription: "Useremo questo indirizzo per contattarti. Non condivideremo la tua email con nessun'altro.",
+    emailDescription:
+      "Useremo questo indirizzo per contattarti. Non condivideremo la tua email con nessun'altro.",
     errorOne: "Non sei autorizzato a registrarti",
     errorTwo: "La password non corrisponde",
     firstLabel: "Nome",

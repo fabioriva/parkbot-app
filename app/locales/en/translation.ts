@@ -158,6 +158,11 @@ export default {
     loginButton: "Login to Parkbot",
     title: "Parkbot Web Service",
   },
+  map: {
+    "stall-busy": "Slot {{nr}} is occupied by card {{status}} since {{date}}",
+    "stall-free": "Slot {{nr}} is vacant since {{date}}",
+    "stall-lock": "Slot {{nr}} is locked since {{date}}",
+  },
   mode: {
     "mode-data-edit": "Data edit",
     "mode-data-read": "Data read",
@@ -202,7 +207,7 @@ export default {
       password: "Password",
       profile: "Profile",
       settings: "Settings",
-      twoFactor: "Two Factor"
+      twoFactor: "Two Factor",
     },
   },
   signin: {
@@ -223,7 +228,8 @@ export default {
     cardTitle: "Create a Parkbot account",
     confirmDescription: "Please confirm your password.",
     confirmLabel: "Confirm password",
-    emailDescription: "We'll use this to contact you. We will not share your email with anyone else.",
+    emailDescription:
+      "We'll use this to contact you. We will not share your email with anyone else.",
     errorOne: "You are not subscribed",
     errorTwo: "The password doesn't match",
     firstLabel: "First Name",
