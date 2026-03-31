@@ -1,7 +1,6 @@
-import { lazy, Fragment, Suspense, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Occupancy } from "~/components/occupancy-chart";
-// import { ViewRadioGroup } from "~/components/map-view";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
