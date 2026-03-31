@@ -46,7 +46,6 @@ export default function Rack({ loaderData, params }: Route.ComponentProps) {
               </p>
               {byte.bits.map((bit) => (
                 <IoInfo io={bit} key={bit.addr}>
-                  {/* <div className="flex border bg-white text-black"> */}
                   <div className="flex border">
                     <span className="w-12">{bit.addr}</span>
                     <span className="w-16">{bit.label}</span>
