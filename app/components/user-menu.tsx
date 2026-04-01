@@ -1,12 +1,5 @@
-import {
-  ChevronsUpDown,
-  Key,
-  LogOut,
-  ScanFace,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, Key, LogOut, ScanFace, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +15,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar";
+import { UserAvatar } from "~/components/user-avatar";
 
 export function NavUser({
   user,
@@ -43,10 +37,7 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="rounded-full">
-                <AvatarImage src={user.image} alt={user.name} />
-                <AvatarFallback>{user.name.split(" ").map(s => s[0]).join('')}</AvatarFallback>
-              </Avatar>
+              <UserAvatar user={user} />
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
@@ -62,10 +53,7 @@ export function NavUser({
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="rounded-full">
-                  <AvatarImage src={user.image} alt={user.name} />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
+                <UserAvatar user={user} />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
