@@ -1,6 +1,4 @@
-import { UserRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   Item,
   ItemActions,
@@ -9,6 +7,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
+import { DeviceAvatar } from "~/components/device-avatar";
 import { logT } from "~/lib/translation";
 
 export function HistoryList({ query, media = false }: any) {
@@ -19,17 +18,7 @@ export function HistoryList({ query, media = false }: any) {
         <Item size="xs" className="px-0 py-1.5 gap-6" key={key}>
           {media && (
             <ItemMedia>
-              <Avatar size="lg">
-                {item.device.id !== 0 ? (
-                  <AvatarFallback className="text-xs">
-                    {item.device.key}
-                  </AvatarFallback>
-                ) : (
-                  <AvatarFallback>
-                    <UserRound size={20} />
-                  </AvatarFallback>
-                )}
-              </Avatar>
+              <DeviceAvatar device={item.device} />
             </ItemMedia>
           )}
           <ItemContent className="gap-0.5">
