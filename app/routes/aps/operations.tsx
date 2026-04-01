@@ -1,4 +1,7 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { DateRange } from "~/components/date-range";
 import { Operations as Statistics } from "~/components/operations-chart";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
@@ -7,7 +10,7 @@ import type { Route } from "./+types/operations";
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getCookie(request, "parkbot.session_token").split(".")[0];
   const from = format(
-    subDays(startOfDay(new Date()), 14),
+    subDays(startOfDay(new Date()), 7),
     "yyyy-MM-dd HH:mm:ss",
   );
   const to = format(endOfDay(new Date()), "yyyy-MM-dd HH:mm:ss");
@@ -30,11 +33,27 @@ export default function Operations({
         Data not available!
       </h1>
     );
-  const { devices, operations } = loaderData;
-  // console.log(devices);
-  const [dateFrom, dateTo] = devices.query.date.split(" ")
+  const [data, setData] = useState(loaderData);
+  const { devices, operations } = data;
+  const [dateFrom, dateTo] = devices.query.date.split(" ");
+  const handleQuery = async ({ from, to }) => {
+    const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss");
+    const strTo = format(endOfDay(to), "yyyy-MM-dd HH:mm:ss");
+    const query = `dateFrom=${strFrom}&dateTo=${strTo}`;
+    const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/statistics?${query}`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const json = await res.json();
+      setData(json);
+    }
+  };
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    <div className="flex flex-col gap-6 max-w-3xl">
+      <DateRange
+        from={dateFrom + " 00:00"}
+        to={dateTo + " 00:00"}
+        handleQuery={handleQuery}
+      />
       <Statistics
         operations={devices.data}
         title="System operations grouped by device"

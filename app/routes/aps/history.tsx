@@ -7,8 +7,8 @@ import {
   ItemDescription,
   ItemTitle,
 } from "~/components/ui/item";
+import { DateRange } from "~/components/date-range";
 import { HistoryList } from "~/components/history-list";
-import { HistoryQuery } from "~/components/history-query";
 import { HistoryTable } from "~/components/history-table";
 import { SearchInput } from "~/components/search-input";
 import { getCookie } from "~/lib/cookie.server";
@@ -67,7 +67,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   return (
     <>
       <div className="flex flex-col lg:flex-row justify-between gap-3">
-        <HistoryQuery from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+        <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
         <SearchInput
           search={search}
           placeholder={"Search by card, device or stall..."}

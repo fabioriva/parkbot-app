@@ -10,7 +10,8 @@ import {
 } from "~/components/ui/popover";
 import { type DateRange } from "react-day-picker";
 
-export function HistoryQuery({ from, to, handleQuery }) {
+export function DateRange({ from, to, handleQuery }) {
+  // console.log(typeof from, from, typeof to, to);
   const [open, setOpen] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: parse(from, "yyyy-MM-dd HH:mm", new Date()),
@@ -22,7 +23,6 @@ export function HistoryQuery({ from, to, handleQuery }) {
     setDateRange(range);
     setOpen(false);
   };
-
   return (
     <div>
       <Popover open={open} onOpenChange={setOpen}>
