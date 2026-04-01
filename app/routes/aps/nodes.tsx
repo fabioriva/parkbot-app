@@ -2,14 +2,13 @@ import { Circle, ExternalLinkIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
-import { Button } from "~/components/ui/button";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
   ItemGroup,
-  // ItemMedia,
+  ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
 import { getCookie } from "~/lib/cookie.server";
@@ -52,37 +51,29 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
   return (
     <ItemGroup className="w-full lg:max-w-sm gap-3">
       {data.map((item) => (
-        <Item
-          variant={item.online.status ? "outline" : "muted"}
-          key={item.deviceNr}
-        >
-          {/* <ItemMedia variant="image">
-            <img
-              src={`/pn/et200mp.png`}
-              alt={item.deviceName}
-              width={32}
-              height={32}
-              // className="object-cover grayscale"
-            />
-          </ItemMedia> */}
-          <ItemContent>
-            <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
-            <ItemDescription>
-              Node {item.deviceNr} Type {item.type}
-            </ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <Circle
-              className={`size-4 ${item.online.status ? "fill-green-500 stroke-green-500" : "fill-red-500  stroke-red-500"}`}
-            />
-            <Button variant="ghost" size="icon" asChild>
-              <a
-                href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
-              >
-                <ExternalLinkIcon className="size-4" />
-              </a>
-            </Button>
-          </ItemActions>
+        <Item variant="outline" key={item.deviceNr} asChild>
+          <a
+            href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
+          >
+            <ItemMedia variant="image">
+              <Circle
+                className={
+                  item.online.status
+                    ? "fill-green-500 stroke-green-500"
+                    : "fill-red-500  stroke-red-500"
+                }
+              />
+            </ItemMedia>
+            <ItemContent>
+              <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
+              <ItemDescription>
+                Node {item.deviceNr} Type {item.type}
+              </ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <ExternalLinkIcon className="size-4" />
+            </ItemActions>
+          </a>
         </Item>
       ))}
     </ItemGroup>
