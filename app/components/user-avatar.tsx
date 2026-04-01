@@ -47,13 +47,13 @@ function stringToHslColor(str: string, s = 65, l = 55) {
 
 export function UserAvatar({ user }) {
   const initials = getInitials(user.name);
-  const bgColor = stringToHslColor(initials);
+  const bg = stringToHslColor(initials);
   return (
     <Avatar className="rounded-full">
-      <AvatarImage src={user.image} alt={user.name} />
+      <AvatarImage src={user.image} alt={initials} />
       <AvatarFallback
-        className={`${colors[stringToColorIndex(initials)]} text-white`}
-        // style={{ backgroundColor: bgColor, color: "white" }}
+        // className={`${colors[stringToColorIndex(initials)]} text-white`}
+        style={{ backgroundColor: bg, color: "white" }}
       >
         {initials}
       </AvatarFallback>
