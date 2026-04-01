@@ -1,5 +1,15 @@
+import clsx from "clsx";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BadgeAlert,
+  BadgeCheck,
+  User,
+  Wrench
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { Badge } from "~/components/ui/badge";
 import { Field, FieldLabel } from "~/components/ui/field";
 import {
   Pagination,
@@ -31,11 +41,11 @@ import {
 } from "~/components/ui/table";
 
 // utils/pagination.ts
-const getPageNumbers = (
+function getPageNumbers(
   currentPage: number,
   totalPages: number,
   delta: number = 2,
-): (number | string)[] => {
+): (number | string)[] {
   const range: (number | string)[] = [];
   const left = Math.max(2, currentPage - delta);
   const right = Math.min(totalPages - 1, currentPage + delta);
@@ -51,6 +61,47 @@ const getPageNumbers = (
   if (totalPages > 1) range.push(totalPages);
 
   return range;
+}
+
+const Operation = ({ item }) => {
+  const { t } = useTranslation();
+  const { alarm, device, operation } = item;
+  return (
+    <>
+      {alarm !== undefined ? (
+        <Badge
+          className={clsx({
+            "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300":
+              operation.id === 1,
+            "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300":
+              operation.id === 2,
+          })}
+          variant="outline"
+        >
+          {operation.id === 1 && <BadgeAlert data-icon="inline-start" />}
+          {operation.id === 2 && <BadgeCheck data-icon="inline-start" />}
+          <span>AL{alarm.id}</span>
+          {t("alarms." + alarm.key, alarm.query)}
+        </Badge>
+      ) : (
+        <Badge
+          className={clsx("text-muted-foreground", {
+            "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300":
+              operation.id === 3,
+          })}
+          variant="outline"
+        >
+          {device.id === 0 && <User data-icon="inline-start" />}
+          {operation.id === 3 && <Wrench data-icon="inline-start" />}
+          {operation.id === 5 && <ArrowRight data-icon="inline-start" />}
+          {operation.id === 6 && <ArrowLeft data-icon="inline-start" />}
+          {operation.id === 7 && <ArrowRight data-icon="inline-start" />}
+          {operation.id === 8 && <ArrowLeft data-icon="inline-start" />}
+          {t("history.table." + operation.key)}
+        </Badge>
+      )}
+    </>
+  );
 };
 
 const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
@@ -120,7 +171,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
   const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <Table className="border border-muted">
+    <Table className="border border-muted table-fixed">
       <TableCaption>
         {t("history.description", { from: dateFrom, to: dateTo, count })}
       </TableCaption>
@@ -129,8 +180,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
           <TableHead>{t("history.table.date")}</TableHead>
           <TableHead>{t("history.table.device")}</TableHead>
           <TableHead>{t("history.table.mode")}</TableHead>
-          <TableHead>{t("history.table.operation")}</TableHead>
-          <TableHead>{t("history.table.alarm")}</TableHead>
+          <TableHead className="pl-3">{t("history.table.operation")}</TableHead>
           <TableHead>{t("history.table.card")}</TableHead>
           <TableHead>{t("history.table.stall")}</TableHead>
           <TableHead>{t("history.table.size")}</TableHead>
@@ -139,7 +189,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
       <TableBody>
         {currentRows.map((item, key) => (
           <TableRow key={key}>
-            <TableCell className="font-medium">
+            <TableCell>
               {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
             </TableCell>
             <TableCell>
@@ -150,17 +200,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
               {item.mode.id} - {t("mode." + item.mode.key)}
             </TableCell>
             <TableCell>
-              {item.alarm !== undefined
-                ? t("alarms." + item.alarm.key, item.alarm.query)
-                : t("history.table." + item.operation.key)}
-            </TableCell>
-            <TableCell>
-              {item.operation.key === "op-alarm-on" && (
-                <span className="text-alert">AL{item.alarm.id}</span>
-              )}
-              {item.operation.key === "op-alarm-off" && (
-                <span className="text-ready">AL{item.alarm.id}</span>
-              )}
+              <Operation item={item} />
             </TableCell>
             <TableCell>{item.card}</TableCell>
             <TableCell>{item.stall}</TableCell>
