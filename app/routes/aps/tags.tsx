@@ -28,27 +28,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   });
 }
 
-const Tag = ({ tag, handleEdit }) => (
-  <Item variant={tag.status === 0 ? "outline" : "muted"}>
-    <ItemMedia variant="icon">
-      <TagIcon />
-    </ItemMedia>
-    <ItemContent>
-      <ItemTitle>
-        Tag {tag.nr} {tag.code !== "0" && `PIN ${tag.code}`}
-      </ItemTitle>
-      <ItemDescription>
-        {tag.status === 0 ? "Valid for entry" : `Parked in slot ${tag.status}`}
-      </ItemDescription>
-    </ItemContent>
-    <ItemActions>
-      <Button size="sm" variant="outline" onClick={() => handleEdit(tag)}>
-        Edit
-      </Button>
-    </ItemActions>
-  </Item>
-);
-
 export default function Tags({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData)
     return (
@@ -78,13 +57,16 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    console.log(data, search, tags);
     setTags(
       search.length === 0
         ? data.slice(0, chunkSize)
         : search.slice(0, chunkSize),
     );
-    setHasMore(true);
+    if (search.length <= chunkSize) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
+    }
   }, [data, search]);
 
   const loadMore = () => {
@@ -100,7 +82,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     )
       setHasMore(false);
   };
-  console.log(tags.length, hasMore);
 
   return (
     <>
@@ -113,34 +94,38 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         dataLength={tags.length}
         next={loadMore}
         hasMore={hasMore}
-        loader={<p className="pt-6">Loading more tags…</p>}
+        // loader={<p className="pt-6">Loading more tags…</p>}
         endMessage={<p className="pt-6">All tags loaded.</p>}
       >
         <ItemGroup className="w-full lg:max-w-sm gap-3">
           {tags.map((tag) => (
-            <Tag handleEdit={handleEdit} tag={tag} key={tag.nr} />
+            <Item variant={tag.status === 0 ? "outline" : "muted"} key={tag.nr}>
+              <ItemMedia variant="icon">
+                <TagIcon />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle>
+                  Tag {tag.nr} {tag.code !== "0" && `PIN ${tag.code}`}
+                </ItemTitle>
+                <ItemDescription>
+                  {tag.status === 0
+                    ? "Valid for entry"
+                    : `Parked in slot ${tag.status}`}
+                </ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleEdit(tag)}
+                >
+                  Edit
+                </Button>
+              </ItemActions>
+            </Item>
           ))}
         </ItemGroup>
       </InfiniteScroll>
     </>
   );
-
-  // return (
-  //   <>
-  //     <SearchInput
-  //       search={search}
-  //       placeholder={"Search by number, pin..."}
-  //       handleSearch={handleSearch}
-  //     />
-  //     <ItemGroup className="w-full lg:max-w-sm gap-3">
-  //       {search.length > 0
-  //         ? search.map(({ item }) => (
-  //             <Tag handleEdit={handleEdit} tag={item} key={item.nr} />
-  //           ))
-  //         : data.map((item) => (
-  //             <Tag handleEdit={handleEdit} tag={item} key={item.nr} />
-  //           ))}
-  //     </ItemGroup>
-  //   </>
-  // );
 }
