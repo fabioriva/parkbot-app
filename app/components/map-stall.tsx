@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { Car, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   Tooltip,
@@ -39,11 +38,11 @@ export function Stall({
           )}
           id={"s-" + nr}
         >
-          {view === "view0" && status === LOCK && <Lock size={20} />}
-          {view === "view0" && status === PAPA && <Car size={24} />}
-          {view === "view0" && status === RSVD && <Car size={24} />}
+          {view === "view0" && status === LOCK && <span className="text-xl">🔒</span>}
+          {view === "view0" && status === PAPA && <span className="text-xl">🚗</span>}
+          {view === "view0" && status === RSVD && <span className="text-xl">🚗</span>}
           {view === "view0" && status !== LOCK && status !== 0 && (
-            <Car size={24} />
+            <span className="text-xl">🚗</span>
           )}
           {view === "view1" && status}
           {view === "view2" && nr}
