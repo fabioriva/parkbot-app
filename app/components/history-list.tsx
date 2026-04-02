@@ -18,13 +18,13 @@ export function HistoryList({ query, media = false }: any) {
         <Item size="xs" className="px-0 py-1.5 gap-6" key={key}>
           {media && (
             <ItemMedia>
-              <DeviceAvatar device={item.device} />
+              <DeviceAvatar device={item.device} operation={item.operation} />
             </ItemMedia>
           )}
           <ItemContent className="gap-0.5">
             <ItemTitle className="line-clamp-1">
               {item.device.id === 0 && t("history.log.operator")}
-              {item.device.id !== 0 && !media && item.device.key}
+              {item.device.id !== 0 && item.device.key}
               {item.device.id !== 0 && (
                 <span className="Capitalize">
                   {" "}
