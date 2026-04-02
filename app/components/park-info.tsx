@@ -14,13 +14,15 @@ interface OccupancyInfoProps {
   occupancy: OccupancyItem[];
 }
 
-export function ParkInfo({ occupancy }: OccupancyInfoProps) {
+export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
   const [busy, ,] = occupancy;
   const cars = busy && busy.value > 0 ? true : false;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Badge variant="outline">Parked {busy.value}</Badge>
+        <Badge variant="outline" asChild>
+          <a href={`/aps/${user.aps}/map`}>Parked {busy.value}</a>
+        </Badge>
       </TooltipTrigger>
       <TooltipContent>
         <p>Parking occupancy</p>

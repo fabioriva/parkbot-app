@@ -105,7 +105,7 @@ export default function ApsLayout({
             ) : (
               <React.Fragment>
                 <AlarmInfo active={diag || 0} />
-                <ParkInfo occupancy={map} />
+                <ParkInfo occupancy={map} user={user} />
                 <CommInfo status={comm} />
               </React.Fragment>
             )}
