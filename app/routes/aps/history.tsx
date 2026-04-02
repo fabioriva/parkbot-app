@@ -78,7 +78,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
         <Item className="mb-3" variant="outline">
           <ItemContent>
             <ItemTitle>{t("history.title")}</ItemTitle>
-            <ItemDescription>
+            <ItemDescription className="text-xs">
               {t("history.description", {
                 from: dateFrom,
                 to: dateTo,
