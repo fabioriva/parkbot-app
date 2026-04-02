@@ -63,48 +63,66 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     console.log(tag);
   };
   // Fuzzy search
-  // const [search, setSearch] = useState([]);
-  // const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const Fuse = (await import("fuse.js")).default;
-  //   const fuse = new Fuse(data, {
-  //     keys: ["code", "nr", "type", "uid"],
-  //   });
-  //   const result = fuse.search(e.target.value);
-  //   setSearch(result);
-  // };
+  const [search, setSearch] = useState([]);
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const Fuse = (await import("fuse.js")).default;
+    const fuse = new Fuse(data, {
+      keys: ["code", "nr", "type", "uid"],
+    });
+    const result = fuse.search(e.target.value);
+    setSearch(result.map((obj) => obj["item"]).flat());
+  };
   // Infinite scroll
   const chunkSize = 10;
-  const [visibleTags, setVisibleTags] = useState([]);
+  const [tags, setTags] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    setVisibleTags(data.slice(0, chunkSize));
-  }, [data]);
+    console.log(data, search, tags);
+    setTags(
+      search.length === 0
+        ? data.slice(0, chunkSize)
+        : search.slice(0, chunkSize),
+    );
+    setHasMore(true);
+  }, [data, search]);
 
   const loadMore = () => {
-    const nextLength = visibleTags.length + chunkSize;
-    const nextSlice = data.slice(0, nextLength);
-    setVisibleTags(nextSlice);
-    if (nextSlice.length >= data.length) setHasMore(false);
+    const nextLength = tags.length + chunkSize;
+    const nextSlice =
+      search.length === 0
+        ? data.slice(0, nextLength)
+        : search.slice(0, nextLength);
+    setTags(nextSlice);
+    if (
+      nextSlice.length >= data.length ||
+      (search.length > 0 && nextSlice.length >= search.length)
+    )
+      setHasMore(false);
   };
-
-  console.log(hasMore, visibleTags);
-  
+  console.log(tags.length, hasMore);
 
   return (
-    <InfiniteScroll
-      dataLength={visibleTags.length}
-      next={loadMore}
-      hasMore={hasMore}
-      loader={<p className="text-center py-2">Loading more tags…</p>}
-      endMessage={<p className="text-center py-2">All tags loaded.</p>}
-    >
-      <ItemGroup className="w-full lg:max-w-sm gap-3">
-        {visibleTags.map((tag) => (
-          <Tag handleEdit={handleEdit} tag={tag} key={tag.nr} />
-        ))}
-      </ItemGroup>
-    </InfiniteScroll>
+    <>
+      <SearchInput
+        search={search}
+        placeholder={"Search by number, pin..."}
+        handleSearch={handleSearch}
+      />
+      <InfiniteScroll
+        dataLength={tags.length}
+        next={loadMore}
+        hasMore={hasMore}
+        loader={<p className="text-center pt-6">Loading more tags…</p>}
+        endMessage={<p className="text-center pt-6">All tags loaded.</p>}
+      >
+        <ItemGroup className="w-full lg:max-w-sm gap-3">
+          {tags.map((tag) => (
+            <Tag handleEdit={handleEdit} tag={tag} key={tag.nr} />
+          ))}
+        </ItemGroup>
+      </InfiniteScroll>
+    </>
   );
 
   // return (
