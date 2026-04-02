@@ -5,7 +5,7 @@ import {
   BadgeAlert,
   BadgeCheck,
   User,
-  Wrench
+  Wrench,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
@@ -91,13 +91,21 @@ const Operation = ({ item }) => {
           })}
           variant="outline"
         >
-          {device.id === 0 && <User data-icon="inline-start" />}
-          {operation.id === 3 && <Wrench data-icon="inline-start" />}
-          {operation.id === 5 && <ArrowRight data-icon="inline-start" />}
-          {operation.id === 6 && <ArrowLeft data-icon="inline-start" />}
-          {operation.id === 7 && <ArrowRight data-icon="inline-start" />}
-          {operation.id === 8 && <ArrowLeft data-icon="inline-start" />}
-          {t("history.table." + operation.key)}
+          {device.id === 0 ? (
+            <>
+              <User data-icon="inline-start" />
+              {t("history.table." + operation.key)}
+            </>
+          ) : (
+            <>
+              {operation.id === 3 && <Wrench data-icon="inline-start" />}
+              {operation.id === 5 && <ArrowRight data-icon="inline-start" />}
+              {operation.id === 6 && <ArrowLeft data-icon="inline-start" />}
+              {operation.id === 7 && <ArrowRight data-icon="inline-start" />}
+              {operation.id === 8 && <ArrowLeft data-icon="inline-start" />}
+              {t("history.table." + operation.key)}
+            </>
+          )}
         </Badge>
       )}
     </>
@@ -171,7 +179,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
   const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <Table className="border border-muted table-fixed">
+    <Table className="border border-muted">
       <TableCaption>
         {t("history.description", { from: dateFrom, to: dateTo, count })}
       </TableCaption>

@@ -66,7 +66,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row justify-between gap-3">
+      <div className="flex flex-col xl:flex-row justify-between gap-3">
         <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
         <SearchInput
           search={search}
