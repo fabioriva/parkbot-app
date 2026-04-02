@@ -42,7 +42,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     console.log(tag);
   };
   // Fuzzy search
-  const [search, setSearch] = useState(data);
+  const [search, setSearch] = useState([]);
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const Fuse = (await import("fuse.js")).default;
     const fuse = new Fuse(data, {
