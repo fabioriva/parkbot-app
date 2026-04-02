@@ -113,8 +113,8 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         dataLength={tags.length}
         next={loadMore}
         hasMore={hasMore}
-        loader={<p className="text-center pt-6">Loading more tags…</p>}
-        endMessage={<p className="text-center pt-6">All tags loaded.</p>}
+        loader={<p className="pt-6">Loading more tags…</p>}
+        endMessage={<p className="pt-6">All tags loaded.</p>}
       >
         <ItemGroup className="w-full lg:max-w-sm gap-3">
           {tags.map((tag) => (
