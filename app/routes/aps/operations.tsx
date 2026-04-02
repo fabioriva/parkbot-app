@@ -48,7 +48,7 @@ export default function Operations({
     }
   };
   return (
-    <div className="flex flex-col gap-6 max-w-3xl">
+    <div className="flex flex-col flex-col-reverse gap-6 max-w-3xl">
       <DateRange
         from={dateFrom + " 00:00"}
         to={dateTo + " 00:00"}
