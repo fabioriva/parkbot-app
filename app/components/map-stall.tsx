@@ -38,9 +38,15 @@ export function Stall({
           )}
           id={"s-" + nr}
         >
-          {view === "view0" && status === LOCK && <span className="text-xl">🔒</span>}
-          {view === "view0" && status === PAPA && <span className="text-xl">🚗</span>}
-          {view === "view0" && status === RSVD && <span className="text-xl">🚗</span>}
+          {view === "view0" && status === LOCK && (
+            <span className="text-xl">🔒</span>
+          )}
+          {view === "view0" && status === PAPA && (
+            <span className="text-xl">🚗</span>
+          )}
+          {view === "view0" && status === RSVD && (
+            <span className="text-xl">🚗</span>
+          )}
           {view === "view0" && status !== LOCK && status !== 0 && (
             <span className="text-xl">🚗</span>
           )}
