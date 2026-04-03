@@ -7,7 +7,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
-import { DeviceAvatar } from "~/components/device-avatar";
+import { OperationsAvatar } from "~/components/operations-avatar";
 import { logT } from "~/lib/translation";
 
 export function HistoryList({ query, media = false }: any) {
@@ -18,7 +18,7 @@ export function HistoryList({ query, media = false }: any) {
         <Item size="xs" className="px-0 py-1.5 gap-6" key={key}>
           {media && (
             <ItemMedia>
-              <DeviceAvatar device={item.device} operation={item.operation} />
+              <OperationsAvatar device={item.device} operation={item.operation} />
             </ItemMedia>
           )}
           <ItemContent className="gap-0.5">
