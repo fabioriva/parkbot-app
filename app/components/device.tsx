@@ -6,7 +6,7 @@ import {
   Card,
   CardAction,
   CardContent,
-  CardDescription,
+  // CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -75,15 +75,22 @@ export function Device({ device, advanced = false }) {
             <Card size="sm">
               <CardHeader>
                 <CardTitle>{device.name}</CardTitle>
-                <CardDescription className="text-normal">
-                  {deviceT(device, t)}
-                </CardDescription>
+                {/* <CardDescription>{deviceT(device, t)}</CardDescription> */}
                 <CardAction className="flex items-center gap-1">
                   <Mode mode={device.mode} spin={device.operation !== 0} />
                   <Info device={device} />
                 </CardAction>
               </CardHeader>
               <CardContent>
+                <p
+                  className={`mb-3 ${
+                    device.operation !== 0
+                      ? "font-semibold text-normal"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {deviceT(device, t)}
+                </p>
                 <Accordion type="multiple" collapsible="true">
                   {view.drives.map((drive, key) => (
                     <AccordionItem value={`drive-${key}`} key={key}>
@@ -112,12 +119,23 @@ export function Device({ device, advanced = false }) {
     <Card size="sm">
       <CardHeader>
         <CardTitle>{device.name}</CardTitle>
-        <CardDescription>{deviceT(device, t)}</CardDescription>
+        {/* <CardDescription>{deviceT(device, t)}</CardDescription> */}
         <CardAction className="flex items-center gap-1">
           <Mode mode={device.mode} spin={device.operation !== 0} />
           <Info device={device} />
         </CardAction>
       </CardHeader>
+      <CardContent>
+        <p
+          className={
+            device.operation !== 0
+              ? "font-semibold text-normal"
+              : "text-muted-foreground"
+          }
+        >
+          {deviceT(device, t)}
+        </p>
+      </CardContent>
     </Card>
   );
 }
