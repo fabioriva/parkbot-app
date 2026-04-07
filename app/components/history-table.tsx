@@ -4,6 +4,7 @@ import {
   ArrowRight,
   BadgeAlert,
   BadgeCheck,
+  Tag,
   User,
   Wrench,
 } from "lucide-react";
@@ -99,6 +100,7 @@ const Operation = ({ item }) => {
           ) : (
             <>
               {operation.id === 3 && <Wrench data-icon="inline-start" />}
+              {operation.id === 4 && <Tag data-icon="inline-start" />}
               {operation.id === 5 && <ArrowRight data-icon="inline-start" />}
               {operation.id === 6 && <ArrowLeft data-icon="inline-start" />}
               {operation.id === 7 && <ArrowRight data-icon="inline-start" />}
