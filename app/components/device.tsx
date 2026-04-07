@@ -14,8 +14,33 @@ import {
 import { Spinner } from "~/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Drive } from "~/components/drive";
+import { IoInfo } from "~/components/io-info";
 import { Motion } from "~/components/motion";
 import { deviceT } from "~/lib/translation";
+
+const Info = ({ device }) => {
+  const [LS, LC, LA] = device.c;
+  const { t } = useTranslation();
+  return (
+    <>
+      <IoInfo io={LA}>
+        <div
+          className={`w-3 h-3 rounded-full ${LA.status ? "bg-red-500" : "bg-slate-100 dark:bg-slate-600"}`}
+        />
+      </IoInfo>
+      <IoInfo io={LC}>
+        <div
+          className={`w-3 h-3 rounded-full ${LC.status ? "bg-yellow-500" : "bg-slate-100 dark:bg-slate-600"}`}
+        />
+      </IoInfo>
+      <IoInfo io={LS}>
+        <div
+          className={`w-3 h-3 rounded-full ${LS.status ? "bg-green-500" : "bg-slate-100 dark:bg-slate-600"}`}
+        />
+      </IoInfo>
+    </>
+  );
+};
 
 const Mode = ({ mode, spin }) => {
   const { t } = useTranslation();
@@ -51,18 +76,12 @@ export function Device({ device, advanced = false }) {
             <Card size="sm">
               <CardHeader>
                 <CardTitle>{device.name}</CardTitle>
-                <CardDescription>{deviceT(device, t)}</CardDescription>
+                <CardDescription className="text-normal">
+                  {deviceT(device, t)}
+                </CardDescription>
                 <CardAction className="flex items-center gap-1">
                   <Mode mode={device.mode} spin={device.operation !== 0} />
-                  <div
-                    className={`w-3 h-3 rounded-full ${LA.status ? "bg-red-500" : "bg-slate-100 dark:bg-slate-600"}`}
-                  />
-                  <div
-                    className={`w-3 h-3 rounded-full ${LC.status ? "bg-yellow-500" : "bg-slate-100 dark:bg-slate-600"}`}
-                  />
-                  <div
-                    className={`w-3 h-3 rounded-full ${LS.status ? "bg-green-500" : "bg-slate-100 dark:bg-slate-600"}`}
-                  />
+                  <Info device={device} />
                 </CardAction>
               </CardHeader>
               <CardContent>
@@ -97,15 +116,7 @@ export function Device({ device, advanced = false }) {
         <CardDescription>{deviceT(device, t)}</CardDescription>
         <CardAction className="flex items-center gap-1">
           <Mode mode={device.mode} spin={device.operation !== 0} />
-          <div
-            className={`w-3 h-3 rounded-full ${LA.status ? "bg-red-500" : "bg-slate-100 dark:bg-slate-600"}`}
-          />
-          <div
-            className={`w-3 h-3 rounded-full ${LC.status ? "bg-yellow-500" : "bg-slate-100 dark:bg-slate-600"}`}
-          />
-          <div
-            className={`w-3 h-3 rounded-full ${LS.status ? "bg-green-500" : "bg-slate-100 dark:bg-slate-600"}`}
-          />
+          <Info device={device} />
         </CardAction>
       </CardHeader>
     </Card>
