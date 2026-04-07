@@ -39,7 +39,7 @@ export async function action({ request }: Route.ActionArgs) {
     if ("twoFactorRedirect" in response) {
       return redirect("/2fa-verify", { headers });
     }
-    return redirect(response?.url || "/dashboard", { headers });
+    return redirect(response?.url, { headers });
   } catch (error) {
     console.log("signInEmail error:\n", error);
     return { message: error?.body?.message };
