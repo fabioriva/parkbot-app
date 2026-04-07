@@ -60,7 +60,6 @@ const Mode = ({ mode, spin }) => {
 
 export function Device({ device, advanced = false }) {
   const { t } = useTranslation();
-  const [LS, LC, LA] = device.c;
   if (advanced) {
     return (
       <Tabs defaultValue="tab-0">
