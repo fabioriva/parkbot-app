@@ -101,7 +101,11 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
           {tags.map((tag) => (
             <Item variant={tag.status === 0 ? "outline" : "muted"} key={tag.nr}>
               <ItemMedia variant="icon">
-                <TagIcon />
+                <TagIcon
+                  className={
+                    tag.status !== 0 ? "stroke-chart-1" : "stroke-chart-2"
+                  }
+                />
               </ItemMedia>
               <ItemContent>
                 <ItemTitle>
