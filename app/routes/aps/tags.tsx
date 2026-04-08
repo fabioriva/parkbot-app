@@ -52,7 +52,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
     setSearch(result.map((obj) => obj["item"]).flat());
   };
   // Infinite scroll
-  const chunkSize = 10;
+  const chunkSize = 20;
   const [tags, setTags] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
