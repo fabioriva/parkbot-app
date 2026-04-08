@@ -29,7 +29,7 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
         <table className="m-0 p-0">
           <thead>
             <tr>
-              <th className="py-1">Parking occupancy</th>
+              <th>Parking occupancy</th>
             </tr>
           </thead>
           <tbody>
