@@ -197,6 +197,7 @@ export default {
       nodes: "Profinet",
       operations: "Operations",
       password: "Password",
+      rack: "PLC I/Os",
       racks: "PLC I/Os",
       settings: "Settings",
       statistics: "Statistics",

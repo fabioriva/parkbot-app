@@ -94,7 +94,7 @@ export default function ApsLayout({
                   <BreadcrumbSeparator className="hidden md:block" />
                   <BreadcrumbItem>
                     <BreadcrumbPage className="capitalize">
-                      {t(`sidebar.menu.${location.pathname.split("/").pop()}`)}
+                      {t(`sidebar.menu.${location.pathname.split("/")[3]}`)}
                     </BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
