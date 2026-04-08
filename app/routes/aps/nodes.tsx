@@ -1,4 +1,4 @@
-import { Circle, ExternalLinkIcon } from "lucide-react";
+import { ChevronRight, CircleCheck, CircleX } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
@@ -55,14 +55,12 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
           <a
             href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
           >
-            <ItemMedia variant="image">
-              <Circle
-                className={
-                  item.online.status
-                    ? "fill-green-500 stroke-green-500"
-                    : "fill-red-500  stroke-red-500"
-                }
-              />
+            <ItemMedia variant="icon">
+              {item.online.status ? (
+                <CircleCheck className="stroke-green-500" />
+              ) : (
+                <CircleX className="stroke-red-500" />
+              )}
             </ItemMedia>
             <ItemContent>
               <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
@@ -71,7 +69,7 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
               </ItemDescription>
             </ItemContent>
             <ItemActions>
-              <ExternalLinkIcon className="size-4" />
+              <ChevronRight className="size-4" />
             </ItemActions>
           </a>
         </Item>
