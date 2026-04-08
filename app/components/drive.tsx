@@ -25,13 +25,18 @@ export function Drive({ drive }) {
             ? t("device.drive.ready")
             : t("device.drive.not-ready")}
         </div>
-        <div>{drive.speed}&nbsp;Hz</div>
-        <div>{drive.current}&nbsp;A</div>
+        <div className="flex gap-1.5 mr-2 text-xs">
+          <span>{drive.speed}&nbsp;Hz</span>
+          <span>{drive.current}&nbsp;A</span>
+        </div>
       </AccordionTrigger>
       <AccordionContent>
         <div className="grid grid-cols-4">
           <Item title={t("device.drive.speed")} value={`${drive.speed} Hz`} />
-          <Item title={t("device.drive.current")}value={`${drive.current} A`} />
+          <Item
+            title={t("device.drive.current")}
+            value={`${drive.current} A`}
+          />
           <Item title={t("device.drive.load")} value={`${drive.load} %`} />
           <Item title={t("device.drive.trip")} value={drive.trip} />
         </div>
