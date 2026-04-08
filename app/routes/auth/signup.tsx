@@ -18,7 +18,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
-import { findSubscription } from "~/lib/db.server";
+import { findSubscription, updateSubscription } from "~/lib/db.server";
 import { getInstance } from "~/middleware/i18next";
 import type { Route } from "./+types/signup";
 
@@ -32,7 +32,7 @@ export async function action({ context, request }: Route.ActionArgs) {
     const password = formData.get("password");
     const confirm = formData.get("confirm");
     const subscription = await findSubscription(email);
-    const i18next = getInstance(context)
+    const i18next = getInstance(context);
     if (subscription === null) {
       return { error: i18next.t("signup.errorOne") };
     }
@@ -46,11 +46,12 @@ export async function action({ context, request }: Route.ActionArgs) {
         name: `${firstName} ${lastName}`, // name || email.split("@")[0],
         email,
         password,
-        role: subscription.role, // ["dashboard", "map", "racks", "tags"],
-        image: "https://github.com/fabioriva.png", // optional
+        role: subscription.role,
+        // image: "https://github.com/fabioriva.png", // optional
         callbackURL: "/aps-select", // optional
       },
     });
+    const result = await updateSubscription(email);
     return redirect(`/verify-email?email=${email}`, { headers });
   } catch (error) {
     console.log("signUpEmail error:\n", error);
@@ -70,15 +71,19 @@ export default function Signup({ actionData }: Route.ComponentProps) {
         <Form method="post">
           <FieldGroup>
             <FieldGroup className="grid max-w-sm grid-cols-2">
-            <Field>
-              <FieldLabel htmlFor="first-name">{t("signup.firstLabel")}</FieldLabel>
-              <Input name="first-name" placeholder="John" />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="last-name">{t("signup.lastLabel")}</FieldLabel>
-              <Input name="last-name" placeholder="Doe" />
-            </Field>
-          </FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="first-name">
+                  {t("signup.firstLabel")}
+                </FieldLabel>
+                <Input name="first-name" placeholder="John" />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="last-name">
+                  {t("signup.lastLabel")}
+                </FieldLabel>
+                <Input name="last-name" placeholder="Doe" />
+              </Field>
+            </FieldGroup>
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
               <Input
@@ -87,7 +92,9 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 autoComplete="email"
                 placeholder="john.doe@example.com"
               />
-              <FieldDescription>{t("signup.emailDescription")}</FieldDescription>
+              <FieldDescription>
+                {t("signup.emailDescription")}
+              </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>
@@ -96,7 +103,9 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 name="password"
                 autoComplete="current-password"
               />
-              <FieldDescription>{t("signup.passwordDescription")}</FieldDescription>
+              <FieldDescription>
+                {t("signup.passwordDescription")}
+              </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="confirm">
@@ -107,13 +116,13 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 name="confirm"
                 autoComplete="current-password"
               />
-              <FieldDescription>{t("signup.confirmDescription")}</FieldDescription>
+              <FieldDescription>
+                {t("signup.confirmDescription")}
+              </FieldDescription>
             </Field>
             <Field>
               <Submit action="/signup" title={t("signup.submit")} />
-              {actionData ? (
-                <FieldError>{actionData.error}</FieldError>
-              ) : null}
+              {actionData ? <FieldError>{actionData.error}</FieldError> : null}
             </Field>
           </FieldGroup>
         </Form>

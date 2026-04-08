@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient, ObjectId, type UpdateResult } from "mongodb";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -46,6 +46,18 @@ export async function findSubscription(
   const subscription = db.collection("subscription");
   const result = await subscription.findOne({ email });
   // console.log(result);
-  // return result === null ? false : true;
+  return result;
+}
+
+export async function updateSubscription(
+  email: string,
+  subscribed: boolean = true,
+): Promise<UpdateResult> | null {
+  const subscription = db.collection("subscription");
+  const result = await subscription.updateOne(
+    { email },
+    { $set: { subscribed } },
+  );
+  // console.log(result);
   return result;
 }
