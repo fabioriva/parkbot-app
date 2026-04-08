@@ -205,6 +205,7 @@ export default {
       settings: "Impostazioni",
       statistics: "Statistiche",
       tags: "Tags",
+      user: "Impostazioni",
     },
     title: "Menu principale",
     user: {
