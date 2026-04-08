@@ -16,6 +16,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Drive } from "~/components/drive";
 import { IoInfo } from "~/components/io-info";
 import { Motion } from "~/components/motion";
+import { Garage } from "~/components/view-garage";
+import { Silomat } from "~/components/view-silomat";
 import { deviceT } from "~/lib/translation";
 
 const Info = ({ device }) => {
@@ -91,6 +93,8 @@ export function Device({ device, advanced = false }) {
                 >
                   {deviceT(device, t)}
                 </p>
+                {view.name === "view-garage" && <Garage sensors={view.sensors} />}
+                {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
                 <Accordion type="multiple" collapsible="true">
                   {view.drives.map((drive, key) => (
                     <AccordionItem value={`drive-${key}`} key={key}>
