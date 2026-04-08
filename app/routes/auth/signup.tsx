@@ -75,13 +75,13 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 <FieldLabel htmlFor="first-name">
                   {t("signup.firstLabel")}
                 </FieldLabel>
-                <Input name="first-name" placeholder="John" />
+                <Input name="first-name" placeholder="John" required/>
               </Field>
               <Field>
                 <FieldLabel htmlFor="last-name">
                   {t("signup.lastLabel")}
                 </FieldLabel>
-                <Input name="last-name" placeholder="Doe" />
+                <Input name="last-name" placeholder="Doe" required/>
               </Field>
             </FieldGroup>
             <Field>
@@ -91,6 +91,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 name="email"
                 autoComplete="email"
                 placeholder="john.doe@example.com"
+                required
               />
               <FieldDescription>
                 {t("signup.emailDescription")}
@@ -102,6 +103,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 type="password"
                 name="password"
                 autoComplete="current-password"
+                required
               />
               <FieldDescription>
                 {t("signup.passwordDescription")}
@@ -115,6 +117,7 @@ export default function Signup({ actionData }: Route.ComponentProps) {
                 type="password"
                 name="confirm"
                 autoComplete="current-password"
+                required
               />
               <FieldDescription>
                 {t("signup.confirmDescription")}
