@@ -95,7 +95,7 @@ export function Device({ device, advanced = false }) {
                 <p
                   className={`mb-3 ${
                     device.operation !== 0
-                      ? "font-semibold text-normal"
+                      ? "text-normal"
                       : "text-muted-foreground"
                   }`}
                 >
@@ -143,7 +143,7 @@ export function Device({ device, advanced = false }) {
         <p
           className={
             device.operation !== 0
-              ? "font-semibold text-normal"
+              ? "text-normal"
               : "text-muted-foreground"
           }
         >
