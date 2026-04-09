@@ -122,6 +122,7 @@ export default function ApsLayout({
         </SidebarInset>
       </SidebarProvider>
       <Toaster
+        position="top-center"
         toastOptions={{
           classNames: {
             description: "!text-muted-foreground !dark:text-muted",
