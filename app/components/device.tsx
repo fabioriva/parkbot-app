@@ -44,7 +44,7 @@ const Info = ({ device }) => {
   );
 };
 
-const Mode = ({ mode, spin }) => {
+const Mode = ({ mode }) => {
   const { t } = useTranslation();
   return (
     <Badge
@@ -54,8 +54,16 @@ const Mode = ({ mode, spin }) => {
           : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
       }
     >
-      {spin && <Spinner data-icon="inline-start" />}
       {t("mode." + mode.key)}
+    </Badge>
+  );
+};
+
+const Step = ({ step }) => {
+  return (
+    <Badge variant="outline">
+      <Spinner data-icon="inline-start" />
+      {step}
     </Badge>
   );
 };
@@ -77,9 +85,9 @@ export function Device({ device, advanced = false }) {
             <Card size="sm">
               <CardHeader>
                 <CardTitle>{device.name}</CardTitle>
-                {/* <CardDescription>{deviceT(device, t)}</CardDescription> */}
                 <CardAction className="flex items-center gap-1">
-                  <Mode mode={device.mode} spin={device.operation !== 0} />
+                  {device.step !== 0 && <Step step={device.step} />}
+                  <Mode mode={device.mode} />
                   <Info device={device} />
                 </CardAction>
               </CardHeader>
@@ -93,7 +101,9 @@ export function Device({ device, advanced = false }) {
                 >
                   {deviceT(device, t)}
                 </p>
-                {view.name === "view-garage" && <Garage sensors={view.sensors} />}
+                {view.name === "view-garage" && (
+                  <Garage sensors={view.sensors} />
+                )}
                 {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
                 <Accordion type="multiple" collapsible="true">
                   {view.drives.map((drive, key) => (
@@ -123,9 +133,9 @@ export function Device({ device, advanced = false }) {
     <Card size="sm">
       <CardHeader>
         <CardTitle>{device.name}</CardTitle>
-        {/* <CardDescription>{deviceT(device, t)}</CardDescription> */}
         <CardAction className="flex items-center gap-1">
-          <Mode mode={device.mode} spin={device.operation !== 0} />
+          {device.step !== 0 && <Step step={device.step} />}
+          <Mode mode={device.mode} />
           <Info device={device} />
         </CardAction>
       </CardHeader>
