@@ -43,8 +43,8 @@ export default function ExitCall({ exit }) {
   const handleConfirm = async () => {
     // console.log(card);
     showConfirm({
-      title: "Confirm exit call?",
-      description: `Click confirm to call exit for ${card}`,
+      title: "Do you confirm?",
+      description: `Click confirm to request exit for tag number ${card}`,
       onConfirm: () => console.log(card),
     });
   };
