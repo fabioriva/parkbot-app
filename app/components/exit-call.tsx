@@ -26,7 +26,7 @@ import { useConfirmDialog } from "~/components/confirm-dialog";
 export default function ExitCall({ exit }) {
   const { t } = useTranslation();
   const { enable, max, min } = exit;
-  const { showConfirm } = useConfirmDialog();
+  const { showConfirmDialog } = useConfirmDialog();
   const [card, setCard] = useState(min);
   const [error, setError] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,7 @@ export default function ExitCall({ exit }) {
   };
   const handleConfirm = async () => {
     // console.log(card);
-    showConfirm({
+    showConfirmDialog({
       title: "Do you confirm?",
       description: `Click confirm to request exit for tag number ${card}`,
       onConfirm: () => console.log(card),

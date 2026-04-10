@@ -39,10 +39,10 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`;
   const { data } = useData(url, { initialData: loaderData });
   const { t } = useTranslation();
-  const { showConfirm } = useConfirmDialog();
+  const { showConfirmDialog } = useConfirmDialog();
   const handleEdit = (tag) => {
     // console.log(tag);
-    showConfirm({
+    showConfirmDialog({
       title: "Do you confirm?",
       description: `Click confirm to change the PIN code for tag number ${tag.nr}`,
       onConfirm: () => console.log(tag),

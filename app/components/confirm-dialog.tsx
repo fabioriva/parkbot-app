@@ -13,25 +13,25 @@ import {
   // AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 
-const ConfirmContext = createContext();
+const ConfirmDialogContext = createContext();
 
 export const useConfirmDialog = () => {
-  const context = useContext(ConfirmContext);
+  const context = useContext(ConfirmDialogContext);
   if (!context) {
-    throw new Error("useConfirmDialog must be used within ConfirmProvider");
+    throw new Error("useConfirmDialog must be used within ConfirmDialogProvider");
   }
   return context;
 };
 
-export function ConfirmProvider({ children }) {
+export function ConfirmDialogProvider({ children }) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState({});
-  const showConfirm = (opts) => {
+  const showConfirmDialog = (opts) => {
     setOptions(opts);
     setOpen(true);
   };
   return (
-    <ConfirmContext.Provider value={{ showConfirm }}>
+    <ConfirmDialogContext.Provider value={{ showConfirmDialog }}>
       {children}
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
@@ -58,6 +58,6 @@ export function ConfirmProvider({ children }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </ConfirmContext.Provider>
+    </ConfirmDialogContext.Provider>
   );
 }
