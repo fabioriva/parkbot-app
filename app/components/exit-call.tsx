@@ -21,11 +21,12 @@ import {
   // FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-// import { Label } from "~/components/ui/label";
+import { useConfirmDialog } from "~/components/confirm-dialog";
 
 export default function ExitCall({ exit }) {
   const { t } = useTranslation();
   const { enable, max, min } = exit;
+  const { showConfirm } = useConfirmDialog();
   const [card, setCard] = useState(min);
   const [error, setError] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +41,12 @@ export default function ExitCall({ exit }) {
     }
   };
   const handleConfirm = async () => {
-    console.log(card);
+    // console.log(card);
+    showConfirm({
+      title: "Confirm exit call?",
+      description: `Click confirm to call exit for ${card}`,
+      onConfirm: () => console.log(card),
+    });
   };
   const handleOpen = () => {
     setError(false);

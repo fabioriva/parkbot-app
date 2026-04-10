@@ -21,6 +21,7 @@ import { Toaster } from "~/components/ui/sonner";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { AlarmInfo } from "~/components/alarm-info";
 import { CommInfo } from "~/components/comm-info";
+import { ConfirmProvider } from "~/components/confirm-dialog";
 import { LocaleToggle } from "~/components/locale-toggle";
 import { ParkInfo } from "~/components/park-info";
 import { ModeToggle } from "~/components/mode-toggle";
@@ -117,7 +118,9 @@ export default function ApsLayout({
             <ModeToggle />
           </header>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <Outlet context={user} />
+            <ConfirmProvider>
+              <Outlet context={user} />
+            </ConfirmProvider>
           </div>
         </SidebarInset>
       </SidebarProvider>
