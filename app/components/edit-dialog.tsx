@@ -76,7 +76,6 @@ export function EditStallDialogProvider({ children }) {
               name="value"
               type="number"
               value={value}
-              // onChange={options?.onChange}
               onChange={handleChange}
             />
             {error && (
