@@ -22,10 +22,10 @@ import {
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 
-const EditDialogContext = createContext();
+const EditStallDialogContext = createContext();
 
 export const useEditStallDialog = () => {
-  const context = useContext(EditDialogContext);
+  const context = useContext(EditStallDialogContext);
   if (!context) {
     throw new Error("useEditDialog must be used within EditDialogProvider");
   }
@@ -57,7 +57,7 @@ export function EditStallDialogProvider({ children }) {
   };
 
   return (
-    <EditDialogContext.Provider value={{ showEditDialog }}>
+    <EditStallDialogContext.Provider value={{ showEditDialog }}>
       {children}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
@@ -111,6 +111,6 @@ export function EditStallDialogProvider({ children }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </EditDialogContext.Provider>
+    </EditStallDialogContext.Provider>
   );
 }
