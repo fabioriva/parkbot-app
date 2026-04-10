@@ -19,7 +19,7 @@ export function Stall({
       <TooltipTrigger asChild>
         <div
           className={clsx(
-            "absolute h-[30px] w-[40px] border flex items-center justify-center text-xs",
+            "absolute h-[30px] w-[40px] border flex items-center justify-center text-xs hover:cursor-pointer",
             {
               "bg-red-300 text-red-950 dark:bg-red-950 dark:text-red-300":
                 status !== 0 &&
