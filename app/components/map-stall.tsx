@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { useEditDialog } from "~/components/edit-stall-dialog";
+import { useEditStallDialog } from "~/components/edit-stall-dialog";
 
 export function Stall({
   definitions,
@@ -14,7 +14,7 @@ export function Stall({
 }) {
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const { t } = useTranslation();
-  const { showEditDialog } = useEditDialog();
+  const { showEditDialog } = useEditStallDialog();
   return (
     <Tooltip>
       <TooltipTrigger asChild>

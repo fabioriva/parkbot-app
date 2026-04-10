@@ -24,7 +24,7 @@ import { Input } from "~/components/ui/input";
 
 const EditDialogContext = createContext();
 
-export const useEditDialog = () => {
+export const useEditStallDialog = () => {
   const context = useContext(EditDialogContext);
   if (!context) {
     throw new Error("useEditDialog must be used within EditDialogProvider");
