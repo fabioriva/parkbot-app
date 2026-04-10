@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { EditStallDialogProvider } from "~/components/edit-dialog";
+import { EditStallDialogProvider } from "~/components/edit-stall-dialog";
 import { Occupancy } from "~/components/occupancy-chart";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";

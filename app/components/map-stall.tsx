@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { useEditDialog } from "~/components/edit-dialog";
+import { useEditDialog } from "~/components/edit-stall-dialog";
 
 export function Stall({
   definitions,
