@@ -2,6 +2,7 @@ import { ChevronRight, CircleCheck, CircleX } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
+import { Button } from "~/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -51,29 +52,61 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
   return (
     <ItemGroup className="w-full lg:max-w-sm gap-3">
       {data.map((item) => (
-        <Item variant="outline" key={item.deviceNr} asChild>
-          <a
-            href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
-          >
-            <ItemMedia variant="icon">
-              {item.online.status ? (
-                <CircleCheck className="stroke-green-500" />
-              ) : (
-                <CircleX className="stroke-red-500" />
-              )}
-            </ItemMedia>
-            <ItemContent>
-              <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
-              <ItemDescription>
-                Node {item.deviceNr} Type {item.type}
-              </ItemDescription>
-            </ItemContent>
-            <ItemActions>
-              <ChevronRight className="size-4" />
-            </ItemActions>
-          </a>
+        <Item variant="outline" key={item.deviceNr}>
+          <ItemMedia variant="icon">
+            {item.online.status ? (
+              <CircleCheck className="stroke-green-500" />
+            ) : (
+              <CircleX className="stroke-red-500" />
+            )}
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
+            <ItemDescription>
+              Node {item.deviceNr} Type {item.type}
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <Button size="sm" variant="outline" onClick={() => handleEdit(tag)}>
+              <a
+                className="flex items-center justify-center"
+                href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
+              >
+                View
+              </a>
+            </Button>
+          </ItemActions>
         </Item>
       ))}
     </ItemGroup>
   );
+
+  // return (
+  //   <ItemGroup className="w-full lg:max-w-sm gap-3">
+  //     {data.map((item) => (
+  //       <Item variant="outline" key={item.deviceNr} asChild>
+  //         <a
+  //           href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
+  //         >
+  //           <ItemMedia variant="icon">
+  //             {item.online.status ? (
+  //               <CircleCheck className="stroke-green-500" />
+  //             ) : (
+  //               <CircleX className="stroke-red-500" />
+  //             )}
+  //           </ItemMedia>
+  //           <ItemContent>
+  //             <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
+  //             <ItemDescription>
+  //               Node {item.deviceNr} Type {item.type}
+  //             </ItemDescription>
+  //           </ItemContent>
+  //           <ItemActions>
+  //             <ChevronRight className="size-4" />
+  //           </ItemActions>
+  //         </a>
+  //       </Item>
+  //     ))}
+  //   </ItemGroup>
+  // );
 }
