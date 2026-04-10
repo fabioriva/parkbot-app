@@ -99,7 +99,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
       >
         <ItemGroup className="w-full lg:max-w-sm gap-3">
           {tags.map((tag) => (
-            <Item variant={tag.status === 0 ? "outline" : "muted"} key={tag.nr}>
+            <Item variant="outline" key={tag.nr}>
               <ItemMedia variant="icon">
                 <TagIcon
                   className={
