@@ -45,7 +45,7 @@ export default function ExitCall({ exit }) {
     showConfirmDialog({
       title: "Do you confirm?",
       description: `Click confirm to request exit for tag number ${card}`,
-      onConfirm: () => console.log(card),
+      onConfirm: (value) => console.log(`Exit request sent for card nr ${card}`),
     });
   };
   const handleOpen = () => {
