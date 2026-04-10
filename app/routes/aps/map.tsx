@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { EditDialogProvider } from "~/components/edit-dialog";
+import { EditStallDialogProvider } from "~/components/edit-dialog";
 import { Occupancy } from "~/components/occupancy-chart";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
@@ -56,9 +56,9 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
               <div className="flex items-center justify-center">Loading...</div>
             }
           >
-            <EditDialogProvider>
+            <EditStallDialogProvider>
               <DynamicComponent data={data} view={tab} />
-            </EditDialogProvider>
+            </EditStallDialogProvider>
           </Suspense>
         </TabsContent>
       ) : (

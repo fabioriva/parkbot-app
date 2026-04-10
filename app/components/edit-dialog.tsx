@@ -32,7 +32,7 @@ export const useEditDialog = () => {
   return context;
 };
 
-export function EditDialogProvider({ children }) {
+export function EditStallDialogProvider({ children }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState({});
