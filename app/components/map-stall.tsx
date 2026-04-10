@@ -5,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { useEditDialog } from "~/components/edit-dialog";
 
 export function Stall({
   definitions,
@@ -13,7 +14,7 @@ export function Stall({
 }) {
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const { t } = useTranslation();
-
+  const { showEditDialog } = useEditDialog();
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -37,6 +38,15 @@ export function Stall({
             },
           )}
           id={"s-" + nr}
+          onClick={() => showEditDialog({
+            title: "",
+            description: `Edit stall nr ${nr}?`,
+            min: 1,
+            max: definitions.cards,
+            value: status,
+            onConfirm: (value) =>
+              console.log(`Stall nr ${nr} changed from ${status} to ${value}`),
+          })}
         >
           {view === "view0" && status === LOCK && (
             <span className="text-xl">🔒</span>
