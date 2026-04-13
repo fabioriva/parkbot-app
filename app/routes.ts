@@ -13,7 +13,6 @@ export default [
     route("2fa-setup", "routes/auth/2fa-setup.tsx"),
     route("2fa-verify", "routes/auth/2fa-verify.tsx"),
     route("aps-select", "routes/auth/aps-select.tsx"),
-    // route("password-change", "routes/auth/password-change.tsx"),
     route("password-forgot", "routes/auth/password-forgot.tsx"),
     route("password-reset", "routes/auth/password-reset.tsx"),
     route("signin", "routes/auth/signin.tsx"),
