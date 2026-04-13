@@ -39,8 +39,8 @@ export function Stall({
           )}
           id={"s-" + nr}
           onClick={() => showEditDialog({
-            title: "",
-            description: `Edit stall nr ${nr}?`,
+            title: "Change stall status",
+            description: `Change the status for stall nr ${nr}`,
             min: 1,
             max: definitions.cards,
             value: status,

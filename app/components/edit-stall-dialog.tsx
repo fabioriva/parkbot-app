@@ -40,7 +40,6 @@ export function EditStallDialogProvider({ children }) {
     setOptions(opts);
     setOpen(true);
     setValue(opts.value);
-    console.log(opts);
   };
   const [error, setError] = useState(false);
   const [value, setValue] = useState(options?.value);
@@ -63,7 +62,7 @@ export function EditStallDialogProvider({ children }) {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
-              {options?.title || "Are you absolutely sure?"}
+              {options?.title}
             </DialogTitle>
             <DialogDescription>{options?.description}</DialogDescription>
           </DialogHeader>
