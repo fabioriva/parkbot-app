@@ -51,7 +51,7 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Change PIN code</DialogTitle>
-          <DialogDescription>{`Edit PIN code for tag ${tag.nr}`}</DialogDescription>
+          <DialogDescription>{`Change PIN code for tag ${tag.nr}`}</DialogDescription>
         </DialogHeader>
         <Field>
           <FieldLabel htmlFor="pin">PIN code</FieldLabel>
