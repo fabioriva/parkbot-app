@@ -1,7 +1,7 @@
 import { CheckCircle2Icon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import QRCode from "react-qr-code";
+import { QRCode } from "react-qr-code";
 import { useOutletContext } from "react-router";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
