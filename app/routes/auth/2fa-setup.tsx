@@ -1,6 +1,6 @@
 import { CopyIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import QRCode from "react-qr-code";
+import { QRCode } from "react-qr-code";
 import { Form, Link, redirect } from "react-router";
 import { Button } from "~/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import {
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
 import type { Route } from "./+types/2fa-setup";
 
@@ -53,7 +54,7 @@ export default function Setup2FA({ actionData }) {
         <CardContent>
           <FieldGroup>
             <FieldSet>
-              <FieldContent>
+              <FieldContent className="bg-white p-[16px]">
                 <QRCode value={actionData.totpURI || ""} />
               </FieldContent>
               <Field>
@@ -112,7 +113,7 @@ export default function Setup2FA({ actionData }) {
               />
             </Field>
             <Field>
-              <Button type="submit">{t("twoFA.setupOne.submit")}</Button>
+              <Submit action="/2fa-setup" title={t("twoFA.setupOne.submit")} />
               {actionData ? (
                 <FieldError>{actionData.message}</FieldError>
               ) : null}

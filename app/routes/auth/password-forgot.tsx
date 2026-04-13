@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,6 +14,7 @@ import {
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
 import type { Route } from "./+types/password-forgot";
 
@@ -59,9 +59,7 @@ export default function PasswordForgot({ actionData }: Route.ComponentProps) {
               />
             </Field>
             <Field>
-              <Button className="w-full" type="submit">
-                {t("passwordForgot.submit")}
-              </Button>
+              <Submit action="/password-forgot" title={t("passwordForgot.submit")} />
               {actionData ? (
                 <FieldError>{actionData.message}</FieldError>
               ) : null}

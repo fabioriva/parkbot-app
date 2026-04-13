@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,6 +14,7 @@ import {
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
 import type { Route } from "./+types/2fa-reset";
 
@@ -64,7 +64,7 @@ export default function Reset2FA({
               <Input type="text" name="code" required />
             </Field>
             <Field>
-              <Button type="submit">{t("twoFA.reset.submit")}</Button>
+              <Submit action="/2fa-reset" title={t("twoFA.reset.submit")} />
               {actionData ? (
                 <FieldError>{actionData.message}</FieldError>
               ) : null}
