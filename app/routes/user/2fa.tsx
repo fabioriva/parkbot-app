@@ -1,7 +1,7 @@
 import { CheckCircle2Icon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import QRCode from "react-qr-code";
+import { QRCode } from "react-qr-code";
 import { useOutletContext } from "react-router";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
@@ -16,20 +16,18 @@ import {
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-// import { Switch } from "~/components/ui/switch";
 import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/settings";
 
 export default function TwoFactor() {
   let { t } = useTranslation();
   const user = useOutletContext();
-  // console.log(user);
   const [backupCodes, setBackupCodes] = useState(null);
   const [error, setError] = useState(null);
   const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);
   const [totp, setTotp] = useState(null);
-  const [totpURI, setTotpURI] = useState(null);
+  const [totpURI, setTotpURI] = useState("");
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(
     user.twoFactorEnabled,
   );
@@ -55,7 +53,7 @@ export default function TwoFactor() {
     setError(null);
     setBackupCodes(data?.backupCodes);
     setTotpURI(data?.totpURI);
-    setTwoFactorEnabled(true);
+    // setTwoFactorEnabled(true);
   };
   const verify2FA = async () => {
     const { data, error } = await authClient.twoFactor.verifyTotp({
@@ -68,6 +66,7 @@ export default function TwoFactor() {
     }
     setError(null);
     setSuccess(true);
+    setTwoFactorEnabled(true);
   };
   return (
     <div className="w-full max-w-md">
@@ -86,48 +85,31 @@ export default function TwoFactor() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <FieldDescription>
-              Enter your password to{" "}
               {twoFactorEnabled ? (
-                <span>disable</span>
+                <span>Enter your password to disable 2FA</span>
               ) : (
-                <span>enable</span>
-              )}{" "}
-              2FA
+                <span>
+                  Enter your password to generate a QR code to scan
+                  with your authenticator app and enable 2FA.
+                </span>
+              )}
             </FieldDescription>
           </Field>
-          {/* <Field orientation="horizontal" className="w-fit">
-            <FieldContent>
-              <FieldLabel htmlFor="2fa">Multi-factor authentication</FieldLabel>
-              <FieldDescription>
-                {t("twoFA.setupTwo.cardDescription")}
-              </FieldDescription>
-            </FieldContent>
-            <Switch
-              id="2fa"
-              checked={twoFactorEnabled}
-              disabled={!password}
-              onClick={twoFactorEnabled ? disable2FA : enable2FA}
-            />
-          </Field> */}
           <Field>
             <Button
               className="w-full"
               onClick={twoFactorEnabled ? disable2FA : enable2FA}
-              disabled={!password}
+              disabled={!password || totpURI !== ""}
             >
-              {twoFactorEnabled ? (
-                <span>Disable</span>
-              ) : (
-                <span>Enable</span>
-              )}{" "}
+              {twoFactorEnabled ? <span>Disable</span> : <span>Enable</span>}{" "}
               2FA
             </Button>
           </Field>
           {!success && totpURI && (
             <FieldSet>
               <Field>
-                <FieldContent>
-                  <QRCode value={totpURI || ""} />
+                <FieldContent className="bg-white p-[16px]">
+                  <QRCode value={totpURI} />
                 </FieldContent>
               </Field>
               <Field>
@@ -140,6 +122,9 @@ export default function TwoFactor() {
                   onChange={(e) => setTotp(e.target.value)}
                   required
                 />
+                <FieldDescription>
+                  Enter the TOTP code from your authenticator app.
+                </FieldDescription>
               </Field>
               <Field>
                 <Button className="w-full" onClick={verify2FA}>
