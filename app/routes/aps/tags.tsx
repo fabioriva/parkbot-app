@@ -13,6 +13,7 @@ import {
   ItemTitle,
 } from "~/components/ui/item";
 import { SearchInput } from "~/components/search-input";
+import { EditTagDialog } from "~/components/edit-tag-dialog";
 import { useConfirmDialog } from "~/components/confirm-dialog";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
@@ -39,14 +40,21 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`;
   const { data } = useData(url, { initialData: loaderData });
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const [tag, setTag] = useState({ code: "" });
   const { showConfirmDialog } = useConfirmDialog();
-  const handleEdit = (tag) => {
+  const handleConfirm = (pin) => {
     // console.log(tag);
+    // setOpen(false);
     showConfirmDialog({
       title: "Do you confirm?",
       description: `Click confirm to change the PIN code for tag number ${tag.nr}`,
-      onConfirm: () => console.log(tag),
+      onConfirm: () => console.log(pin, tag),
     });
+  };
+  const handleEdit = (tag) => {
+    setOpen(true);
+    setTag(tag);
   };
   // Fuzzy search
   const [search, setSearch] = useState([]);
@@ -62,7 +70,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   const chunkSize = 20;
   const [tags, setTags] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-
   useEffect(() => {
     setTags(
       search.length === 0
@@ -75,7 +82,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
       setHasMore(true);
     }
   }, [data, search]);
-
   const loadMore = () => {
     const nextLength = tags.length + chunkSize;
     const nextSlice =
@@ -92,6 +98,12 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <>
+      <EditTagDialog
+        open={open}
+        onConfirm={handleConfirm}
+        onOpenChange={setOpen}
+        tag={tag}
+      />
       <SearchInput
         search={search}
         placeholder={"Search by number, pin..."}
