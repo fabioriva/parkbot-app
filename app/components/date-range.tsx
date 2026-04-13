@@ -44,7 +44,7 @@ export function DateRange({ from, to, handleQuery }) {
             defaultMonth={dateRange?.from}
             selected={dateRange}
             onSelect={handleDateRange}
-            numberOfMonths={1}
+            numberOfMonths={2}
             className="rounded-lg border"
           />
         </PopoverContent>
