@@ -41,8 +41,6 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
     setValue(e.target.value);
   };
   const handleConfirm = () => {
-    // console.log(tag);
-    // console.log(value);
     setError(false);
     onConfirm(value);
   };

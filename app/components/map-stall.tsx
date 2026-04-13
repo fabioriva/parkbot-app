@@ -12,6 +12,9 @@ export function Stall({ definitions, stall, view }) {
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const { t } = useTranslation();
   const { showEditDialog } = useEditStallDialog();
+  const handleConfirm = (value) => {
+    console.log(`Stall nr ${nr} changed from ${status} to ${value}`);
+  };
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -39,16 +42,7 @@ export function Stall({ definitions, stall, view }) {
             showEditDialog({
               definitions,
               stall,
-              // title: "Change stall status",
-              // description: `Change the status for stall nr ${nr}`,
-              // min: 1,
-              // max: definitions.cards,
-              // stallStatus: definitions.stallStatus,
-              // value: status,
-              onConfirm: (value) =>
-                console.log(
-                  `Stall nr ${nr} changed from ${status} to ${value}`,
-                ),
+              onConfirm: (value) => handleConfirm(value),
             })
           }
         >

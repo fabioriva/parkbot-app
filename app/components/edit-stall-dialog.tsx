@@ -37,7 +37,6 @@ export function EditStallDialogProvider({ children }) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState({});
   const showEditDialog = (opts) => {
-    console.log(opts);
     setOptions(opts);
     setOpen(true);
     setValue(opts.stall.status);
@@ -45,7 +44,7 @@ export function EditStallDialogProvider({ children }) {
   const min = 1;
   const max = options?.definitions?.cards || 1;
   const stall = options?.stall;
-  const stallStatus = options?.definitions?.stallStatus
+  const stallStatus = options?.definitions?.stallStatus;
   const [error, setError] = useState(false);
   const [value, setValue] = useState(options?.stall?.status || 0);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,11 +59,10 @@ export function EditStallDialogProvider({ children }) {
     }
   };
   const handleConfirm = (status) => {
-    console.log(status);
     setOpen(false);
     options?.onConfirm?.(status);
   };
-  
+
   return (
     <EditStallDialogContext.Provider value={{ showEditDialog }}>
       {children}
@@ -105,14 +103,6 @@ export function EditStallDialogProvider({ children }) {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            {/* <DialogClose asChild>
-              <Button
-                onClick={() => handleConfirm(value)}
-                disabled={error}
-              >
-                Confirm
-              </Button>
-            </DialogClose> */}
             <Button onClick={() => handleConfirm(stallStatus.FREE)}>
               Clear
             </Button>
