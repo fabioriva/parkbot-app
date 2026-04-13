@@ -249,7 +249,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
             <TablePagination
               currentPage={currentPage}
               rowsPerPage={rowsPerPage}
-              totalRows={count}
+              totalRows={query.length}
               paginate={paginate}
             />
           </TableCell>
