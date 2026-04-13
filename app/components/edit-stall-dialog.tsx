@@ -37,14 +37,19 @@ export function EditStallDialogProvider({ children }) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState({});
   const showEditDialog = (opts) => {
+    console.log(opts);
     setOptions(opts);
     setOpen(true);
-    setValue(opts.value);
+    setValue(opts.stall.status);
   };
+  const min = 1;
+  const max = options?.definitions?.cards || 1;
+  const stall = options?.stall;
+  const stallStatus = options?.definitions?.stallStatus
   const [error, setError] = useState(false);
-  const [value, setValue] = useState(options?.value);
+  const [value, setValue] = useState(options?.stall?.status || 0);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const schema = z.coerce.number().min(options.min).max(options.max);
+    const schema = z.coerce.number().min(min).max(max);
     const result = schema.safeParse(e.target.value);
     if (!result.success) {
       setError(true);
@@ -54,24 +59,28 @@ export function EditStallDialogProvider({ children }) {
       setValue(result.data);
     }
   };
-
+  const handleConfirm = (status) => {
+    console.log(status);
+    setOpen(false);
+    options?.onConfirm?.(status);
+  };
+  
   return (
     <EditStallDialogContext.Provider value={{ showEditDialog }}>
       {children}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>
-              {options?.title}
-            </DialogTitle>
-            <DialogDescription>{options?.description}</DialogDescription>
+            <DialogTitle>Change stall status</DialogTitle>
+            <DialogDescription>
+              Change the status for stall nr {stall?.nr}
+            </DialogDescription>
           </DialogHeader>
           <Field>
-            <FieldLabel htmlFor="card">{options?.label}</FieldLabel>
+            <FieldLabel htmlFor="value">Tag number</FieldLabel>
             <Input
-              id="value"
-              min={options?.min}
-              max={options?.max}
+              min={min}
+              max={max}
               name="value"
               type="number"
               value={value}
@@ -80,15 +89,15 @@ export function EditStallDialogProvider({ children }) {
             {error && (
               <FieldError>
                 {t("exit-call.fieldError", {
-                  min: options?.min,
-                  max: options?.max,
+                  min: min,
+                  max: max,
                 })}
               </FieldError>
             )}
             <FieldDescription>
               {t("exit-call.fieldDescription", {
-                min: options?.min,
-                max: options?.max,
+                min: min,
+                max: max,
               })}
             </FieldDescription>
           </Field>
@@ -96,17 +105,23 @@ export function EditStallDialogProvider({ children }) {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <DialogClose asChild>
+            {/* <DialogClose asChild>
               <Button
-                onClick={() => {
-                  setOpen(false);
-                  options?.onConfirm?.(value);
-                }}
+                onClick={() => handleConfirm(value)}
                 disabled={error}
               >
                 Confirm
               </Button>
-            </DialogClose>
+            </DialogClose> */}
+            <Button onClick={() => handleConfirm(stallStatus.FREE)}>
+              Clear
+            </Button>
+            <Button onClick={() => handleConfirm(stallStatus.LOCK)}>
+              Lock
+            </Button>
+            <Button onClick={() => handleConfirm(value)} disabled={error}>
+              Confirm
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

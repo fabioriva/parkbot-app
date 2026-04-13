@@ -7,11 +7,8 @@ import {
 } from "~/components/ui/tooltip";
 import { useEditStallDialog } from "~/components/edit-stall-dialog";
 
-export function Stall({
-  definitions,
-  stall: { date, nr, size, status },
-  view,
-}) {
+export function Stall({ definitions, stall, view }) {
+  const { date, nr, size, status } = stall;
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
   const { t } = useTranslation();
   const { showEditDialog } = useEditStallDialog();
@@ -38,15 +35,22 @@ export function Stall({
             },
           )}
           id={"s-" + nr}
-          onClick={() => showEditDialog({
-            title: "Change stall status",
-            description: `Change the status for stall nr ${nr}`,
-            min: 1,
-            max: definitions.cards,
-            value: status,
-            onConfirm: (value) =>
-              console.log(`Stall nr ${nr} changed from ${status} to ${value}`),
-          })}
+          onClick={() =>
+            showEditDialog({
+              definitions,
+              stall,
+              // title: "Change stall status",
+              // description: `Change the status for stall nr ${nr}`,
+              // min: 1,
+              // max: definitions.cards,
+              // stallStatus: definitions.stallStatus,
+              // value: status,
+              onConfirm: (value) =>
+                console.log(
+                  `Stall nr ${nr} changed from ${status} to ${value}`,
+                ),
+            })
+          }
         >
           {view === "view0" && status === LOCK && (
             <span className="text-xl">🔒</span>
