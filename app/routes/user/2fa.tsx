@@ -1,7 +1,7 @@
 import { CheckCircle2Icon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { QRCode } from "react-qr-code";
+import QRCode from "react-qr-code";
 import { useOutletContext } from "react-router";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
@@ -89,8 +89,8 @@ export default function TwoFactor() {
                 <span>Enter your password to disable 2FA</span>
               ) : (
                 <span>
-                  Enter your password to generate a QR code to scan
-                  with your authenticator app and enable 2FA.
+                  Enter your password to generate a QR code to scan with your
+                  authenticator app and enable 2FA.
                 </span>
               )}
             </FieldDescription>
