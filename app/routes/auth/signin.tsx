@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -41,7 +40,7 @@ export async function action({ request }: Route.ActionArgs) {
     }
     return redirect(response?.url, { headers });
   } catch (error) {
-    console.log("signInEmail error:\n", error);
+    // console.log("signInEmail error:\n", error);
     return { message: error?.body?.message };
   }
 }
@@ -86,7 +85,6 @@ export default function Signin({ actionData }: Route.ComponentProps) {
             </Field>
             <Field>
               <Submit action="/signin" title={t("signin.submit")} />
-              {/* <Button type="submit">{t("signin.submit")}</Button> */}
               {actionData ? (
                 <FieldError>{actionData.message}</FieldError>
               ) : null}
