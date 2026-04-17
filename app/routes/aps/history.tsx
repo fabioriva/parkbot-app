@@ -58,7 +58,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const Fuse = (await import("fuse.js")).default;
     const fuse = new Fuse(query, {
-      keys: ["alarm.id", "card", "stall", "device.key"],
+      keys: ["alarm.id", "card", "device.key", "operation.key", "stall"],
     });
     const result = fuse.search(e.target.value);
     setSearch(result);
@@ -70,7 +70,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
         <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
         <SearchInput
           search={search}
-          placeholder={"Search by card, device or stall..."}
+          placeholder={"Fuzzy search!"}
           handleSearch={handleSearch}
         />
       </div>
