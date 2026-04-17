@@ -10,35 +10,12 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
-// function hashStringToNumber(str: string) {
-//   let hash = 0;
-//   for (let i = 0; i < str.length; i++) {
-//     hash = str.charCodeAt(i) + ((hash << 5) - hash);
-//     hash |= 0;
-//   }
-//   return Math.abs(hash);
-// }
-
-// function stringToHsl(str: string, s = 60, l = 55) {
-//   const num = hashStringToNumber(str);
-//   const hue = num % 360;
-//   return `hsl(${hue} ${s}% ${l}%)`;
-// }
-
 export function OperationsAvatar({ device, operation }) {
   // console.log(device, operation);
-  // const bg = stringToHsl(device.key);
   return (
-    <Avatar size="lg">
+    <Avatar size="smdefault">
       {device.id !== 0 ? (
-        <AvatarFallback
-          // className="text-xs"
-          // style={{
-          //   // backgroundColor: bg,
-          //   // color: bg,
-          // }}
-        >
-          {/* {device.key} */}
+        <AvatarFallback>
           {operation.id === 1 && (
             <BadgeAlert
               data-icon="inline-start"
@@ -58,10 +35,7 @@ export function OperationsAvatar({ device, operation }) {
             />
           )}
           {operation.id === 4 && (
-            <Tag
-              data-icon="inline-start"
-              className="size-5 text-blue-500"
-            />
+            <Tag data-icon="inline-start" className="size-5 text-blue-500" />
           )}
           {operation.id === 5 && (
             <ArrowRight
@@ -89,12 +63,7 @@ export function OperationsAvatar({ device, operation }) {
           )}
         </AvatarFallback>
       ) : (
-        <AvatarFallback
-          // style={{
-          //   // backgroundColor: bg,
-          //   // color: "white",
-          // }}
-        >
+        <AvatarFallback>
           <User className="size-5 text-muted-foreground" />
         </AvatarFallback>
       )}

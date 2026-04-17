@@ -18,7 +18,10 @@ export function HistoryList({ query, media = false }: any) {
         <Item size="xs" className="px-0 py-1.5 gap-6" key={key}>
           {media && (
             <ItemMedia>
-              <OperationsAvatar device={item.device} operation={item.operation} />
+              <OperationsAvatar
+                device={item.device}
+                operation={item.operation}
+              />
             </ItemMedia>
           )}
           <ItemContent className="gap-0.5">
@@ -32,7 +35,9 @@ export function HistoryList({ query, media = false }: any) {
                 </span>
               )}
             </ItemTitle>
-            <ItemDescription>{logT(item, t)}</ItemDescription>
+            <ItemDescription className="flex items-center gap-3">
+              <span>{logT(item, t)}</span>
+            </ItemDescription>
           </ItemContent>
           <ItemActions>
             <div className="flex flex-col text-right text-xs">
