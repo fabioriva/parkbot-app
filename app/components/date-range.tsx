@@ -24,31 +24,29 @@ export function DateRange({ from, to, handleQuery }) {
     setOpen(false);
   };
   return (
-    <div>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            id="date"
-            className="w-full justify-between font-normal"
-          >
-            {dateRange
-              ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
-              : "Select date"}
-            <ChevronDownIcon />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-          <Calendar
-            mode="range"
-            defaultMonth={dateRange?.from}
-            selected={dateRange}
-            onSelect={handleDateRange}
-            numberOfMonths={2}
-            className="rounded-lg border"
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          id="date"
+          className="w-full xl:max-w-xs justify-between font-normal"
+        >
+          {dateRange
+            ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
+            : "Select date"}
+          <ChevronDownIcon />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+        <Calendar
+          mode="range"
+          defaultMonth={dateRange?.from}
+          selected={dateRange}
+          onSelect={handleDateRange}
+          numberOfMonths={2}
+          className="rounded-lg border"
+        />
+      </PopoverContent>
+    </Popover>
   );
 }

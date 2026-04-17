@@ -15,7 +15,7 @@ export function HistoryList({ query, media = false }: any) {
   return (
     <>
       {query.map((item, key) => (
-        <Item size="xs" className="px-0 py-1.5 gap-6" key={key}>
+        <Item className="px-0 py-1.5 gap-4" key={key}>
           {media && (
             <ItemMedia>
               <OperationsAvatar
@@ -40,7 +40,7 @@ export function HistoryList({ query, media = false }: any) {
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <div className="flex flex-col text-right text-xs">
+            <div className="flex flex-col text-right">
               <span>{item.date.slice(0, 10)}</span>
               <span>{item.date.slice(11, 19)}</span>
             </div>

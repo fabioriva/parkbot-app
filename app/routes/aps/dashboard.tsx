@@ -83,7 +83,7 @@ export default function Dashboard({
             </CardAction>
           </CardHeader>
           <CardContent>
-            <HistoryList query={activity.documents} media />
+            <HistoryList query={activity.documents} media={true} />
           </CardContent>
         </Card>
         <Operations
