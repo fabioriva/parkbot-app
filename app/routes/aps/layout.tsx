@@ -5,12 +5,22 @@ import { AppSidebar } from "~/components/app-sidebar";
 import { Badge } from "~/components/ui/badge";
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
+import { Button } from "~/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu"
 import { Separator } from "~/components/ui/separator";
 import {
   SidebarInset,
@@ -87,17 +97,36 @@ export default function ApsLayout({
             <div className="grow-1">
               <Breadcrumb>
                 <BreadcrumbList>
+                  {/* breakpoint md:block */}
                   <BreadcrumbItem className="hidden md:block">
                     <BreadcrumbLink href={`/aps/${user.aps}/dashboard`}>
                       {aps.name}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden md:block" />
-                  <BreadcrumbItem>
+                  <BreadcrumbItem className="hidden md:block">
                     <BreadcrumbPage className="capitalize">
                       {t(`sidebar.menu.${location.pathname.split("/")[3]}`)}
                     </BreadcrumbPage>
                   </BreadcrumbItem>
+                  {/* breakpoint md:hidden */}
+                  <BreadcrumbItem className="block md:hidden">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button size="icon-sm" variant="ghost">
+                          <BreadcrumbEllipsis />
+                          <span className="sr-only">Toggle menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-40" align="start">
+                        <DropdownMenuGroup>
+                          <DropdownMenuLabel>{aps.name}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t(`sidebar.menu.${location.pathname.split("/")[3]}`)}</DropdownMenuItem>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </BreadcrumbItem>
+
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
