@@ -67,14 +67,40 @@ export function IoInfo({ io, children }) {
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent>
-        <ul className="text-sm">
-          <li>{io?.addr}</li>
-          <li>{io?.label}</li>
-          <li className={io?.status ? "text-green-500" : "text-muted-foreground"}>
-            {io?.status ? "TRUE" : "FALSE"}
-          </li>
-          <li>{io.label ? key && t("io." + key, query) : ""}</li>
-        </ul>
+        <table className="m-0 p-0 text-sm">
+          <thead>
+            <tr>
+              <th className="text-left">Bit info</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="capitalize">
+              <td>Address</td>
+              <td className="w-16 text-right">{io?.addr}</td>
+            </tr>
+            <tr className="capitalize">
+              <td>Label</td>
+              <td className="w-16 text-right">{io?.label}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td className="w-16 text-right">
+                <span
+                  className={
+                    io?.status ? "text-green-500" : "text-muted-foreground"
+                  }
+                >
+                  {io?.status ? "TRUE" : "FALSE"}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr className="capitalize">
+              <td>{io.label ? key && t("io." + key, query) : ""}</td>
+            </tr>
+          </tfoot>
+        </table>
       </TooltipContent>
     </Tooltip>
   );
