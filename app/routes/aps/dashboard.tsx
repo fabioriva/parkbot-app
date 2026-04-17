@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardAction,
@@ -75,6 +76,11 @@ export default function Dashboard({
             <CardDescription>
               {t("dashboard.activity-description")}
             </CardDescription>
+            <CardAction>
+              <Button variant="link" asChild>
+                <a href={`/aps/${params.aps}/history`}>View</a>
+              </Button>
+            </CardAction>
           </CardHeader>
           <CardContent>
             <HistoryList query={activity.documents} />
