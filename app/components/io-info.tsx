@@ -74,17 +74,17 @@ export function IoInfo({ io, children }) {
             </tr>
           </thead>
           <tbody>
-            <tr className="capitalize">
+            <tr>
               <td>Address</td>
-              <td className="w-16 text-right">{io?.addr}</td>
+              <td className="w-16 text-right font-semibold">{io?.addr}</td>
             </tr>
-            <tr className="capitalize">
+            <tr>
               <td>Label</td>
-              <td className="w-16 text-right">{io?.label}</td>
+              <td className="w-16 text-right font-semibold">{io?.label}</td>
             </tr>
             <tr>
               <td>Status</td>
-              <td className="w-16 text-right">
+              <td className="w-16 text-right font-semibold">
                 <span
                   className={
                     io?.status ? "text-green-500" : "text-muted-foreground"
@@ -96,7 +96,7 @@ export function IoInfo({ io, children }) {
             </tr>
           </tbody>
           <tfoot>
-            <tr className="capitalize">
+            <tr>
               <td>{io.label ? key && t("io." + key, query) : ""}</td>
             </tr>
           </tfoot>
