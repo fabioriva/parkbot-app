@@ -29,7 +29,7 @@ export function DateRange({ from, to, handleQuery }) {
         <Button
           variant="outline"
           id="date"
-          className="w-full xl:max-w-xs justify-between font-normal"
+          className="w-full xl:max-w-sm justify-between font-normal"
         >
           {dateRange
             ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
