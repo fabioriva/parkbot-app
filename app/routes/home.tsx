@@ -16,16 +16,16 @@ export default function Home() {
   let { t } = useTranslation();
   return (
     <div className="flex items-center justify-center h-screen px-3">
-      <div className="flex flex-col gap-3 items-center text-center">
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight">
+      <div className="flex flex-col gap-4 items-center text-center">
+        <h1 className="text-6xl font-extrabold tracking-tight">
           <AuroraText>Parkbot</AuroraText>
           <span className="inline md:hidden"> App</span>
           <span className="hidden md:inline"> Web Service</span>
         </h1>
-        <h2 className="text-lg md:text-3xl">
+        <h2 className="text-xl md:text-3xl">
           {t("home.description")}
         </h2>
-        <div className="mt-6 space-y-3">
+        <div className="flex flex-col gap-4">
           <Button className="w-48" size="lg" variant="outline" asChild>
             <Link to="/signin">{t("home.loginButton")}</Link>
           </Button>
