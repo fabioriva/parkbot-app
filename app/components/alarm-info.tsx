@@ -1,3 +1,4 @@
+import { BadgeAlert } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
@@ -16,7 +17,12 @@ export function AlarmInfo({ active }: AlarmInfoProps) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Badge className="bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300">
-              Active {active}
+              <span className="hidden sm:block">Active</span>
+              <BadgeAlert
+                className="block sm:hidden"
+                data-icon="inline-start"
+              />{" "}
+              {active}
             </Badge>
           </TooltipTrigger>
           <TooltipContent>

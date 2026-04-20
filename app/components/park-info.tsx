@@ -1,3 +1,4 @@
+import { User as Car } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
@@ -22,7 +23,11 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
     <Tooltip>
       <TooltipTrigger asChild>
         <Badge variant="outline" asChild>
-          <a href={`/aps/${user.aps}/map`}>Parked {busy.value}</a>
+          <a href={`/aps/${user.aps}/map`}>
+            <span className="hidden sm:block">Parked</span>
+            <Car className="block sm:hidden" data-icon="inline-start" />{" "}
+            {busy.value}
+          </a>
         </Badge>
       </TooltipTrigger>
       <TooltipContent className="flex flex-col">
