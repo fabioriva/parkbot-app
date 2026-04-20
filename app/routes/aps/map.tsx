@@ -12,7 +12,7 @@ const components = {
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
   menloa: lazy(() => import("~/components/maps/menlo-a")),
   menlob: lazy(() => import("~/components/maps/menlo-b")),
-  // wallstreet: lazy(() => import("~/components/maps/wallstreet")),
+  wallstreet: lazy(() => import("~/components/maps/spire")),
 };
 
 export async function loader({ params, request }: Route.LoaderArgs) {
