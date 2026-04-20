@@ -40,7 +40,7 @@ export function HistoryList({ query, media = false }: any) {
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <div className="flex flex-col text-right">
+            <div className="flex flex-col text-right text-xs">
               <span>{item.date.slice(0, 10)}</span>
               <span>{item.date.slice(11, 19)}</span>
             </div>
