@@ -146,7 +146,7 @@ export default function ApsLayout({
             <LocaleToggle />
             <ModeToggle />
           </header>
-          <div className="px-3">
+          <div className="p-3">
             <ConfirmDialogProvider>
               <Outlet context={user} />
             </ConfirmDialogProvider>
