@@ -33,9 +33,9 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
+  // TableCaption,
   TableCell,
-  TableFooter,
+  // TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -123,7 +123,7 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
   const pageNumbers = getPageNumbers(currentPage, pages);
   // console.log(pageNumbers);
   return (
-    <Pagination className="justify-end w-full">
+    <Pagination className="justify-end">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -181,80 +181,81 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
   const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <Table className="border border-muted">
-      <TableCaption>
-        {t("history.description", { from: dateFrom, to: dateTo, count })}
-      </TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>{t("history.table.date")}</TableHead>
-          <TableHead>{t("history.table.device")}</TableHead>
-          <TableHead>{t("history.table.mode")}</TableHead>
-          <TableHead className="pl-3">{t("history.table.operation")}</TableHead>
-          <TableHead>{t("history.table.card")}</TableHead>
-          <TableHead>{t("history.table.stall")}</TableHead>
-          <TableHead>{t("history.table.size")}</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {currentRows.map((item, key) => (
-          <TableRow key={key}>
-            <TableCell>
-              {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
-            </TableCell>
-            <TableCell>
-              {item.device.id === 0 && t("history.log.operator")}
-              {item.device.id !== 0 && item.device.key}
-            </TableCell>
-            <TableCell>
-              {item.mode.id} - {t("mode." + item.mode.key)}
-            </TableCell>
-            <TableCell>
-              <Operation item={item} />
-            </TableCell>
-            <TableCell>{item.card}</TableCell>
-            <TableCell>{item.stall}</TableCell>
-            <TableCell>{item.size}</TableCell>
+    <>
+      <Table className="border border-muted">
+        {/* <TableCaption>
+          {t("history.description", { from: dateFrom, to: dateTo, count })}
+        </TableCaption> */}
+        <TableHeader className="bg-muted">
+          <TableRow>
+            <TableHead>{t("history.table.date")}</TableHead>
+            <TableHead>{t("history.table.device")}</TableHead>
+            <TableHead>{t("history.table.mode")}</TableHead>
+            <TableHead className="pl-3">
+              {t("history.table.operation")}
+            </TableHead>
+            <TableHead>{t("history.table.card")}</TableHead>
+            <TableHead>{t("history.table.stall")}</TableHead>
+            <TableHead>{t("history.table.size")}</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={4}>
-            <Field orientation="horizontal" className="w-fit">
-              <FieldLabel htmlFor="select-rows-per-page">
-                Rows per page
-              </FieldLabel>
-              <Select
-                className="grow-0"
-                defaultValue={rowsPerPage}
-                onValueChange={(rows) => setRowsPerPages(rows)}
-              >
-                <SelectTrigger className="grow-0">
-                  <SelectValue placeholder="" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Rows per page</SelectLabel>
-                    <SelectItem value={15}>15</SelectItem>
-                    <SelectItem value={30}>30</SelectItem>
-                    <SelectItem value={50}>50</SelectItem>
-                    <SelectItem value={100}>100</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </Field>
-          </TableCell>
-          <TableCell className="text-right" colSpan={4}>
-            <TablePagination
-              currentPage={currentPage}
-              rowsPerPage={rowsPerPage}
-              totalRows={query.length}
-              paginate={paginate}
-            />
-          </TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {currentRows.map((item, key) => (
+            <TableRow key={key}>
+              <TableCell>
+                {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
+              </TableCell>
+              <TableCell>
+                {item.device.id === 0 && t("history.log.operator")}
+                {item.device.id !== 0 && item.device.key}
+              </TableCell>
+              <TableCell>
+                {item.mode.id} - {t("mode." + item.mode.key)}
+              </TableCell>
+              <TableCell>
+                <Operation item={item} />
+              </TableCell>
+              <TableCell>{item.card}</TableCell>
+              <TableCell>{item.stall}</TableCell>
+              <TableCell>{item.size}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <div className="flex items-center gap-3 pl-1.5 pt-3">
+        <div className="grow-1">
+          {t("history.description", { from: dateFrom, to: dateTo, count })}
+        </div>
+        <Field orientation="horizontal" className="w-fit">
+          <FieldLabel htmlFor="select-rows-per-page">Rows per page</FieldLabel>
+          <Select
+            className="grow-0"
+            defaultValue={rowsPerPage}
+            onValueChange={(rows) => setRowsPerPages(rows)}
+          >
+            <SelectTrigger className="grow-0">
+              <SelectValue placeholder="" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Rows per page</SelectLabel>
+                <SelectItem value={15}>15</SelectItem>
+                <SelectItem value={30}>30</SelectItem>
+                <SelectItem value={50}>50</SelectItem>
+                <SelectItem value={100}>100</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </Field>
+        <div className="w-fit">
+          <TablePagination
+            currentPage={currentPage}
+            rowsPerPage={rowsPerPage}
+            totalRows={query.length}
+            paginate={paginate}
+          />
+        </div>
+      </div>
+    </>
   );
 }

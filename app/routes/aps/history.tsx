@@ -7,6 +7,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from "~/components/ui/item";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { DateRange } from "~/components/date-range";
 import { HistoryList } from "~/components/history-list";
 import { HistoryTable } from "~/components/history-table";
@@ -63,6 +64,69 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
     const result = fuse.search(e.target.value);
     setSearch(result);
   };
+
+  return (
+    <>
+      <div className="block xl:hidden">
+        <div className="flex flex-col gap-1.5">
+          <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+          <SearchInput
+            search={search}
+            placeholder={"Fuzzy search!"}
+            handleSearch={handleSearch}
+          />
+        </div>
+        <Item className="my-1.5" variant="outline">
+          <ItemContent>
+            <ItemTitle>{t("history.title")}</ItemTitle>
+            <ItemDescription className="text-xs">
+              {t("history.description", {
+                from: dateFrom,
+                to: dateTo,
+                count,
+              })}
+            </ItemDescription>
+          </ItemContent>
+        </Item>
+        {search.length > 0 ? (
+          <HistoryList
+            query={search.map((obj) => obj["item"]).flat()}
+            media={true}
+          />
+        ) : (
+          <HistoryList query={query} media={true} />
+        )}
+      </div>
+      <div className="hidden xl:block">
+        <Tabs defaultValue="system">
+          <div className="flex gap-3">
+            <div className="grow-1">
+              <TabsList>
+                <TabsTrigger value="system">System</TabsTrigger>
+                <TabsTrigger value="parkbot" disabled>Parkbot</TabsTrigger>
+              </TabsList>
+            </div>
+            <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+            <SearchInput
+              search={search}
+              placeholder={"Fuzzy search!"}
+              handleSearch={handleSearch}
+            />
+          </div>
+          <TabsContent className="mt-3" value="system">
+            {search.length > 0 ? (
+              <HistoryTable
+                history={history}
+                query={search.map((obj) => obj["item"]).flat()}
+              />
+            ) : (
+              <HistoryTable history={history} query={query} />
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
+    </>
+  );
 
   return (
     <>

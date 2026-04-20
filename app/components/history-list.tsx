@@ -15,7 +15,7 @@ export function HistoryList({ query, media = false }: any) {
   return (
     <>
       {query.map((item, key) => (
-        <Item className="px-0 py-1.5 gap-4" key={key}>
+        <Item className="px-0 py-1.5 gap-3" key={key}>
           {media && (
             <ItemMedia>
               <OperationsAvatar
