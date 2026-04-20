@@ -20,7 +20,7 @@ interface SidebarProps {
   user: User;
   // Sidebar: React.ComponentProps<typeof Sidebar>
 }
-export function AppSidebar({ pathname, user }: SidebarProps) {
+export function AppSidebar({ aps, pathname, user }: SidebarProps) {
   const { t } = useTranslation();
   const navMain = {
     title: t("sidebar.title"),
@@ -84,7 +84,8 @@ export function AppSidebar({ pathname, user }: SidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>{navMain.title}</SidebarGroupLabel>
+          {/* <SidebarGroupLabel>{navMain.title}</SidebarGroupLabel> */}
+          <SidebarGroupLabel>{aps}</SidebarGroupLabel>
           <SidebarMenu className="gap-0.5">
             {navMain.items.map((item) => (
               <SidebarMenuItem key={item.title}>
