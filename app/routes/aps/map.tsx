@@ -50,7 +50,7 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
         <TabsTrigger value="view4">Stats</TabsTrigger>
       </TabsList>
       {tab !== "view4" ? (
-        <TabsContent className="pb-3 pl-3" value={tab}>
+        <TabsContent value={tab}>
           <Suspense
             fallback={
               <div className="flex items-center justify-center">Loading...</div>
