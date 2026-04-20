@@ -68,7 +68,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   return (
     <>
       <div className="block xl:hidden">
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-3">
           <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
           <SearchInput
             search={search}
@@ -76,7 +76,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
             handleSearch={handleSearch}
           />
         </div>
-        <Item className="my-1.5" variant="outline">
+        <Item className="my-3" variant="outline">
           <ItemContent>
             <ItemTitle>{t("history.title")}</ItemTitle>
             <ItemDescription className="text-xs">
