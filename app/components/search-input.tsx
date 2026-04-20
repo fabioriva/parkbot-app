@@ -7,7 +7,7 @@ import {
 
 export function SearchInput({ search, placeholder, handleSearch }) {
   return (
-    <InputGroup className="w-full xl:max-w-64">
+    <InputGroup className="w-auto">
       <InputGroupInput
         placeholder={placeholder}
         onChange={(e) => handleSearch(e)}

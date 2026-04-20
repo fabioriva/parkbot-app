@@ -97,7 +97,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   };
 
   return (
-    <>
+    <div className="w-full lg:max-w-sm space-y-3">
       <EditTagDialog
         open={open}
         onConfirm={handleConfirm}
@@ -116,7 +116,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         // loader={<p className="pt-6">Loading more tags…</p>}
         endMessage={<p className="pt-6">All tags loaded.</p>}
       >
-        <ItemGroup className="w-full lg:max-w-sm gap-3">
+        <ItemGroup>
           {tags.map((tag) => (
             <Item variant="outline" key={tag.nr}>
               <ItemMedia variant="icon">
@@ -149,6 +149,6 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
           ))}
         </ItemGroup>
       </InfiniteScroll>
-    </>
+    </div>
   );
 }
