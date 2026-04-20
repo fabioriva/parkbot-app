@@ -59,7 +59,6 @@ export default function Dashboard({
   const { activity, exitQueue, occupancy, operations, system } = data;
   const [busy, free, lock] = occupancy;
   const { t } = useTranslation();
-
   return (
     <div className="flex flex-col gap-4">
       <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
@@ -68,7 +67,10 @@ export default function Dashboard({
         ))}
       </div>
       <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
-        <ExitQueue exit={exitQueue.exitButton} queue={exitQueue.queueList} />
+        <ExitQueue
+          exit={exitQueue.exitButton}
+          queue={exitQueue.queueList.filter((item) => item.card !== 0)}
+        />
         <Occupancy occupancy={occupancy} />
         <Card size="sm">
           <CardHeader>
