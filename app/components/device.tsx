@@ -1,5 +1,7 @@
+import { AlertCircleIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Accordion, AccordionItem } from "~/components/ui/accordion";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -19,6 +21,20 @@ import { Motion } from "~/components/motion";
 import { Garage } from "~/components/view-garage";
 import { Silomat } from "~/components/view-silomat";
 import { deviceT } from "~/lib/translation";
+
+const Active = ({ alarm }) => {
+  // console.log(alarm);
+  const { t } = useTranslation();
+  return (
+    <Alert variant="destructive">
+      <AlertCircleIcon />
+      <AlertTitle>{alarm.date}</AlertTitle>
+      <AlertDescription>
+        AL{alarm.id} {t("alarms." + alarm.key, alarm.query)}
+      </AlertDescription>
+    </Alert>
+  );
+};
 
 const Info = ({ device }) => {
   const [LS, LC, LA] = device.c;
@@ -79,6 +95,9 @@ export function Device({ device, advanced = false }) {
               {t("device.view." + item.name)}
             </TabsTrigger>
           ))}
+          <TabsTrigger value="diagnostic" disabled={!device.alarms.length}>
+            Diagnostic
+          </TabsTrigger>
         </TabsList>
         {device.views.map((view, key) => (
           <TabsContent key={key} value={`tab-${key}`}>
@@ -126,6 +145,28 @@ export function Device({ device, advanced = false }) {
             </Card>
           </TabsContent>
         ))}
+        <TabsContent value="diagnostic">
+          <Card>
+            <CardHeader>
+              <CardTitle>{device.name}</CardTitle>
+              <CardAction className="flex items-center gap-1">
+                {device.step !== 0 && <Step step={device.step} />}
+                <Mode mode={device.mode} />
+                <Info device={device} />
+              </CardAction>
+            </CardHeader>
+            <CardContent>
+              {/* <p className="text-sm text-muted-foreground">
+                There are {device.alarms.length} active alarms.
+              </p> */}
+              <div className="flex flex-col gap-1">
+                {device.alarms.map((alarm) => (
+                  <Active alarm={alarm} key={alarm.id} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     );
   }
@@ -142,9 +183,7 @@ export function Device({ device, advanced = false }) {
       <CardContent>
         <p
           className={
-            device.operation !== 0
-              ? "text-normal"
-              : "text-muted-foreground"
+            device.operation !== 0 ? "text-normal" : "text-muted-foreground"
           }
         >
           {deviceT(device, t)}
