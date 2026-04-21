@@ -86,20 +86,20 @@ export default function ApsLayout({
               className="mr-2 data-[orientation=vertical]:h-4"
             />
             <div className="grow-1">
-              <Breadcrumb>
+              <Breadcrumb className="hidden lg:block">
                 <BreadcrumbList>
                   {/* breakpoint md:block */}
-                  <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbItem>
                     <BreadcrumbLink href="/aps-select">Aps</BreadcrumbLink>
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator className="hidden md:block" />
-                  <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
                     <BreadcrumbLink href={`/aps/${user.aps}/dashboard`}>
                       {aps.name}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator className="hidden md:block" />
-                  <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
                     <BreadcrumbPage className="capitalize">
                       {t(`sidebar.menu.${location.pathname.split("/")[3]}`)}
                     </BreadcrumbPage>
