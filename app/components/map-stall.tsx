@@ -55,9 +55,11 @@ export function Stall({ definitions, stall, view }) {
           {view === "view0" && status === RSVD && (
             <span className="text-xl">🚗</span>
           )}
-          {view === "view0" && status !== LOCK && status !== 0 && (
-            <span className="text-xl">🚗</span>
-          )}
+          {view === "view0" &&
+            status !== LOCK &&
+            status !== PAPA &&
+            status !== RSVD &&
+            status !== 0 && <span className="text-xl">🚗</span>}
           {view === "view1" && status}
           {view === "view2" && nr}
           {view === "view3" && size}
