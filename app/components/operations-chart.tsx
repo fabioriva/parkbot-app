@@ -66,13 +66,13 @@ export function Operations({ operations, title, description }) {
             <Bar
               dataKey="entries"
               fill="var(--color-entries)"
-              radius={stacked ? [0, 0, 3, 3] : [3, 3, 0, 0]}
+              radius={stacked ? [0, 0, 6, 6] : [6, 6, 0, 0]}
               stackId={(stacked && "a") || undefined}
             />
             <Bar
               dataKey="exits"
               fill="var(--color-exits)"
-              radius={stacked ? [3, 3, 0, 0] : [3, 3, 0, 0]}
+              radius={stacked ? [6, 6, 0, 0] : [6, 6, 0, 0]}
               stackId={(stacked && "a") || undefined}
             />
           </BarChart>
