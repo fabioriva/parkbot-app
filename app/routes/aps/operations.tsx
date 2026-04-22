@@ -50,8 +50,35 @@ export default function Operations({
 
   return (
     <>
+      <div className="flex flex-col xl:flex-row xl:items-center gap-3 mb-3">
+        <p className="grow-1 hidden xl:block">
+          Operations from {dateFrom} to {dateTo}
+        </p>
+        <DateRange
+          from={dateFrom + " 00:00"}
+          to={dateTo + " 00:00"}
+          handleQuery={handleQuery}
+        />
+      </div>
+      <div className="grid 2xl:grid-cols-2 gap-6">
+        <Statistics
+          operations={operations.data}
+          title="System operations"
+          description={`From ${dateFrom} to ${dateTo}`}
+        />
+        <Statistics
+          operations={devices.data}
+          title="Operations by device"
+          description={`From ${dateFrom} to ${dateTo}`}
+        />
+      </div>
+    </>
+  );
+
+  return (
+    <>
       <div className="flex mb-3">
-        <h1 className="grow-1">Operations from {dateFrom} to {dateTo}</h1>
+        <h1 className="grow-1 hidden xl:block" />
         <DateRange
           from={dateFrom + " 00:00"}
           to={dateTo + " 00:00"}
