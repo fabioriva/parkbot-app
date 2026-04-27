@@ -84,7 +84,7 @@ const Step = ({ step }) => {
   );
 };
 
-export function Device({ device, advanced = false }) {
+export function Device({ device, advanced = false, link = false }) {
   const { t } = useTranslation();
   if (advanced) {
     return (
@@ -171,24 +171,26 @@ export function Device({ device, advanced = false }) {
     );
   }
   return (
-    <Card size="sm">
-      <CardHeader>
-        <CardTitle>{device.name}</CardTitle>
-        <CardAction className="flex items-center gap-1">
-          {device.step !== 0 && <Step step={device.step} />}
-          <Mode mode={device.mode} />
-          <Info device={device} />
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <p
-          className={
-            device.operation !== 0 ? "text-normal" : "text-muted-foreground"
-          }
-        >
-          {deviceT(device, t)}
-        </p>
-      </CardContent>
+    <Card className={link && "hover:bg-muted"} size="sm">
+      <a href={link ? link : undefined}>
+        <CardHeader>
+          <CardTitle>{device.name}</CardTitle>
+          <CardAction className="flex items-center gap-1">
+            {device.step !== 0 && <Step step={device.step} />}
+            <Mode mode={device.mode} />
+            <Info device={device} />
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          <p
+            className={
+              device.operation !== 0 ? "text-normal" : "text-muted-foreground"
+            }
+          >
+            {deviceT(device, t)}
+          </p>
+        </CardContent>
+      </a>
     </Card>
   );
 }

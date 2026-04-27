@@ -2,10 +2,8 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
-import { Button } from "~/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -63,7 +61,7 @@ export default function Dashboard({
     <div className="flex flex-col gap-4">
       <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
         {system.map((item, key) => (
-          <Device device={item} key={key} />
+          <Device device={item} link={`/aps/${params.aps}/devices`} key={key} />
         ))}
       </div>
       <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
@@ -71,27 +69,25 @@ export default function Dashboard({
           exit={exitQueue.exitButton}
           queue={exitQueue.queueList.filter((item) => item.card !== 0)}
         />
-        <Occupancy occupancy={occupancy} />
-        <Card size="sm">
-          <CardHeader>
-            <CardTitle>{t("dashboard.activity-title")}</CardTitle>
-            <CardDescription>
-              {t("dashboard.activity-description")}
-            </CardDescription>
-            <CardAction>
-              <Button variant="link" asChild>
-                <a href={`/aps/${params.aps}/history`}>View</a>
-              </Button>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <HistoryList query={activity.documents} />
-          </CardContent>
+        <Occupancy occupancy={occupancy} link={`/aps/${params.aps}/map`} />
+        <Card className="hover:bg-muted" size="sm">
+          <a href={`/aps/${params.aps}/history`}>
+            <CardHeader>
+              <CardTitle>{t("dashboard.activity-title")}</CardTitle>
+              <CardDescription>
+                {t("dashboard.activity-description")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <HistoryList query={activity.documents} />
+            </CardContent>
+          </a>
         </Card>
         <Operations
           operations={operations[0].data}
           title="Daily operations"
           description={format(new Date(), "MM/dd/yyyy")}
+          link={`/aps/${params.aps}/operations`}
         />
       </div>
     </div>
