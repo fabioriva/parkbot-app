@@ -103,23 +103,27 @@ export function App({ locale }) {
   );
 }
 
-const errors = [
+const http_responses = [
   {
-    code: 400,
+    status: 400,
     message: "Bad Request",
     details: "Malformed request syntax or invalid request.",
   },
   {
-    code: 401,
+    status: 401,
     message: "Unauthorized",
     details: "Authentication required or failed.",
   },
   {
-    code: 403,
+    status: 403,
     message: "Forbidden",
     details: "Server refuses to fulfill the request.",
   },
-  { code: 404, message: "Not Found", details: "Requested resource not found." },
+  {
+    status: 404,
+    message: "Not Found",
+    details: "Requested resource not found.",
+  },
 ];
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
@@ -133,23 +137,28 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     //   error.status === 404
     //     ? "The requested page could not be found"
     //     : error.statusText || details;
-    const e = errors.find((e) => e.code === error.status) || {
+    const response = http_responses.find(
+      (response) => response.status === error.status,
+    ) || {
       message,
       details,
     };
-    message = e.code !== undefined && e.code + " " + e.message || e.message;
-    details = e.details;
+    message =
+      (response.status !== undefined &&
+        response.status + " " + response.message) ||
+      response.message;
+    details = response.details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main>
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre>
           <code>{stack}</code>
         </pre>
       )}
