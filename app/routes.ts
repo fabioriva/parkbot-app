@@ -38,5 +38,6 @@ export default [
   route("action/set-theme", "./routes/action.set-theme.ts"),
   route("api/auth/*", "routes/api.auth.$.ts"),
   route("api/locales/:lng/:ns", "./routes/locales.ts"),
-  route("*", "./routes/not-found.tsx"),
+  // route("*", "./routes/not-found.tsx"),
+  route("*", "./routes/catchall.tsx"),
 ] satisfies RouteConfig;

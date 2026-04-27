@@ -103,17 +103,42 @@ export function App({ locale }) {
   );
 }
 
+const errors = [
+  {
+    code: 400,
+    message: "Bad Request",
+    details: "Malformed request syntax or invalid request.",
+  },
+  {
+    code: 401,
+    message: "Unauthorized",
+    details: "Authentication required or failed.",
+  },
+  {
+    code: 403,
+    message: "Forbidden",
+    details: "Server refuses to fulfill the request.",
+  },
+  { code: 404, message: "Not Found", details: "Requested resource not found." },
+];
+
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    // message = error.status === 404 ? "404" : "Error";
+    // details =
+    //   error.status === 404
+    //     ? "The requested page could not be found"
+    //     : error.statusText || details;
+    const e = errors.find((e) => e.code === error.status) || {
+      message,
+      details,
+    };
+    message = e.code !== undefined && e.code + " " + e.message || e.message;
+    details = e.details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
@@ -128,6 +153,8 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
           <code>{stack}</code>
         </pre>
       )}
+      <hr />
+      <p>Parkbot (Linux) Server at www.sotefinservice.com</p>
     </main>
   );
 }

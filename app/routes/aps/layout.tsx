@@ -36,7 +36,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     headers: await request.headers,
   });
   if (!session) {
-    throw data("Unauthorized", { status: 401 });
+    // throw data("Unauthorized", { status: 401 });
+    return redirect("/signin");
   }
   if (session.user.aps !== params.aps) {
     throw data("Forbidden", { status: 403 });
