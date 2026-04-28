@@ -122,7 +122,7 @@ export function Device({ device, advanced = false, link = false }) {
               </CardHeader>
               <CardContent>
                 <p
-                  className={`mb-3 ${
+                  className={`mb-1.5 ${
                     device.operation !== 0
                       ? "text-normal"
                       : "text-muted-foreground"

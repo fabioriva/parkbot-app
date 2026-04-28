@@ -10,7 +10,7 @@ export function Silomat({ sensors }) {
   // console.log(sensors);
   const [RMV, RMH, RES, REH, RCV, RAV, RAH, RCH] = sensors;
   return (
-    <div className="svg-container border p-1">
+    <div className="svg-container border">
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"

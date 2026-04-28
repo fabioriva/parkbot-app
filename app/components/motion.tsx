@@ -35,14 +35,14 @@ export function Motion({ motor }) {
   const isRunning = motor.run.status;
   return (
     <>
-      <AccordionTrigger className="hover:no-underline py-2">
+      <AccordionTrigger className="hover:no-underline py-1.5 flex items-center gap-1.5">
         <div className="grow">
           {t("device.motion." + motor.name.key, { id })}
         </div>
         <Badge
           className={
             isRunning
-              ? "bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"
+              ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
               : undefined
           }
           variant="ghost"
