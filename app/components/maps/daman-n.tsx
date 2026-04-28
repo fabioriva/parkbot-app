@@ -18,6 +18,26 @@ export default function Map({ data }) {
           height: 160px;
           width: 1153px;
         }
+        #el-1 {
+          top: 95px;
+          left: 207px;
+        }
+        #el-2 {
+          top: 95px;
+          left: 289px;
+        }
+        #el-3 {
+          top: 95px;
+          left: 371px;
+        }
+        #el-4 {
+          top: 95px;
+          left: 453px;
+        }
+        #el-5 {
+          top: 95px;
+          left: 535px;
+        }
         #s-1 {
           top: 2px;
           left: 2px;

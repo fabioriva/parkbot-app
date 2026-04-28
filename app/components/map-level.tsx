@@ -61,6 +61,16 @@ export function Level({ definitions, level }) {
       </CardHeader>
       <CardContent>
         <div className="level relative" id={"l-" + level.nr}>
+          {level?.elevators !== undefined &&
+            level.elevators.map((el, i) => (
+              <div
+                className="absolute h-[30px] w-[40px] leading-[30px] bg-muted text-center text-sm el"
+                id={el.id}
+                key={i}
+              >
+                {el.label}
+              </div>
+            ))}
           {level.stalls.map((stall) => (
             <Stall
               definitions={definitions}
@@ -73,25 +83,4 @@ export function Level({ definitions, level }) {
       </CardContent>
     </Card>
   );
-
-  // return (
-  //   <div className="w-fit">
-  //     <div className="flex flex-col gap-0">
-  //       <h1 className="">{level.label}</h1>
-  //       <p className="text-muted-foreground text-sm">
-  //         Parking slots {level.min} - {level.max}
-  //       </p>
-  //     </div>
-  //     <div className="level relative border bg-sidebar" id={"l-" + level.nr}>
-  //       {level.stalls.map((stall) => (
-  //         <Stall
-  //           definitions={definitions}
-  //           stall={stall}
-  //           view={view}
-  //           key={stall.nr}
-  //         />
-  //       ))}
-  //     </div>
-  //   </div>
-  // );
 }
