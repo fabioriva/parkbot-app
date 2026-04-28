@@ -1,3 +1,4 @@
+import { EyeIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
@@ -32,7 +33,9 @@ export function Level({ definitions, level }) {
         <CardAction>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">View</Button>
+              <Button variant="outline">
+                <EyeIcon /> View
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-32">
               <DropdownMenuGroup>
@@ -56,7 +59,8 @@ export function Level({ definitions, level }) {
           </DropdownMenu>
         </CardAction>
       </CardHeader>
-      <CardContent className="level relative" id={"l-" + level.nr}>
+      <CardContent>
+        <div className="level relative" id={"l-" + level.nr}>
           {level.stalls.map((stall) => (
             <Stall
               definitions={definitions}
@@ -65,6 +69,7 @@ export function Level({ definitions, level }) {
               key={stall.nr}
             />
           ))}
+        </div>
       </CardContent>
     </Card>
   );
