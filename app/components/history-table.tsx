@@ -123,13 +123,15 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
   const pageNumbers = getPageNumbers(currentPage, pages);
   // console.log(pageNumbers);
   return (
-    <Pagination className="justify-end">
+    <Pagination>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
             href="#"
             className={
-              currentPage <= 1 ? "pointer-events-none cursor-not-allowed" : ""
+              currentPage <= 1
+                ? "pointer-events-none cursor-not-allowed"
+                : undefined
             }
             onClick={() => paginate(currentPage - 1)}
           />
@@ -146,7 +148,7 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
               <PaginationItem key={key}>
                 <PaginationLink
                   href="#"
-                  className={number === currentPage ? "bg-muted" : ""}
+                  isActive={number === currentPage}
                   onClick={() => paginate(number)}
                 >
                   {number}
@@ -161,7 +163,7 @@ const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
             className={
               currentPage >= pages
                 ? "pointer-events-none cursor-not-allowed"
-                : ""
+                : undefined
             }
             onClick={() => paginate(currentPage + 1)}
           />
@@ -182,7 +184,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
-      <Table className="border border-muted">
+      <Table className="border">
         {/* <TableCaption>
           {t("history.description", { from: dateFrom, to: dateTo, count })}
         </TableCaption> */}
@@ -222,8 +224,8 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
           ))}
         </TableBody>
       </Table>
-      <div className="flex items-center gap-3 pl-1.5 pt-3">
-        <div className="grow-1">
+      <div className="flex items-center gap-3 border-b border-x p-2">
+        <div className="grow-1 text-muted-foreground">
           {t("history.description", { from: dateFrom, to: dateTo, count })}
         </div>
         <Field orientation="horizontal" className="w-fit">
@@ -247,7 +249,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
             </SelectContent>
           </Select>
         </Field>
-        <div className="w-fit">
+        <div>
           <TablePagination
             currentPage={currentPage}
             rowsPerPage={rowsPerPage}

@@ -113,7 +113,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
               handleSearch={handleSearch}
             />
           </div>
-          <TabsContent className="mt-3" value="system">
+          <TabsContent value="system">
             {search.length > 0 ? (
               <HistoryTable
                 history={history}
@@ -128,48 +128,48 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
     </>
   );
 
-  return (
-    <>
-      <div className="flex flex-col xl:flex-row justify-between gap-3">
-        <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
-        <SearchInput
-          search={search}
-          placeholder={"Fuzzy search!"}
-          handleSearch={handleSearch}
-        />
-      </div>
-      <div className="block xl:hidden">
-        <Item className="mb-3" variant="outline">
-          <ItemContent>
-            <ItemTitle>{t("history.title")}</ItemTitle>
-            <ItemDescription className="text-xs">
-              {t("history.description", {
-                from: dateFrom,
-                to: dateTo,
-                count,
-              })}
-            </ItemDescription>
-          </ItemContent>
-        </Item>
-        {search.length > 0 ? (
-          <HistoryList
-            query={search.map((obj) => obj["item"]).flat()}
-            media={true}
-          />
-        ) : (
-          <HistoryList query={query} media={true} />
-        )}
-      </div>
-      <div className="hidden xl:block">
-        {search.length > 0 ? (
-          <HistoryTable
-            history={history}
-            query={search.map((obj) => obj["item"]).flat()}
-          />
-        ) : (
-          <HistoryTable history={history} query={query} />
-        )}
-      </div>
-    </>
-  );
+  // return (
+  //   <>
+  //     <div className="flex flex-col xl:flex-row justify-between gap-3">
+  //       <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+  //       <SearchInput
+  //         search={search}
+  //         placeholder={"Fuzzy search!"}
+  //         handleSearch={handleSearch}
+  //       />
+  //     </div>
+  //     <div className="block xl:hidden">
+  //       <Item className="mb-3" variant="outline">
+  //         <ItemContent>
+  //           <ItemTitle>{t("history.title")}</ItemTitle>
+  //           <ItemDescription className="text-xs">
+  //             {t("history.description", {
+  //               from: dateFrom,
+  //               to: dateTo,
+  //               count,
+  //             })}
+  //           </ItemDescription>
+  //         </ItemContent>
+  //       </Item>
+  //       {search.length > 0 ? (
+  //         <HistoryList
+  //           query={search.map((obj) => obj["item"]).flat()}
+  //           media={true}
+  //         />
+  //       ) : (
+  //         <HistoryList query={query} media={true} />
+  //       )}
+  //     </div>
+  //     <div className="hidden xl:block">
+  //       {search.length > 0 ? (
+  //         <HistoryTable
+  //           history={history}
+  //           query={search.map((obj) => obj["item"]).flat()}
+  //         />
+  //       ) : (
+  //         <HistoryTable history={history} query={query} />
+  //       )}
+  //     </div>
+  //   </>
+  // );
 }
