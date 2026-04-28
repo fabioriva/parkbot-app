@@ -19,7 +19,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Stall } from "~/components/map-stall";
 
-// export function Level({ definitions, level, view }) {
 export function Level({ definitions, level }) {
   const [view, setView] = useState("view2");
 
