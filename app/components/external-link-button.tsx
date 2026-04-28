@@ -1,4 +1,4 @@
-import { ArrowUpRightIcon, ExternalLinkIcon } from "lucide-react";
+import { ArrowUpRightIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 
 export function ExternalLink({ link }) {
