@@ -106,7 +106,7 @@ export function Device({ device, advanced = false, link = false }) {
             </TabsTrigger>
           ))}
           <TabsTrigger value="diagnostic" disabled={!device.alarms.length}>
-            Diagnostic
+            Diagnostic {device.alarms.length > 0 && <Badge variant="destructive">{device.alarms.length}</Badge>}
           </TabsTrigger>
         </TabsList>
         {device.views.map((view, key) => (
