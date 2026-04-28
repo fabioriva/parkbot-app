@@ -45,7 +45,7 @@ import {
 function getPageNumbers(
   currentPage: number,
   totalPages: number,
-  delta: number = 2,
+  delta: number = 1,
 ): (number | string)[] {
   const range: (number | string)[] = [];
   const left = Math.max(2, currentPage - delta);
@@ -114,14 +114,9 @@ const Operation = ({ item }) => {
   );
 };
 
-const TablePagination = ({ currentPage, rowsPerPage, totalRows, paginate }) => {
-  // const pageNumbers = [];
-  // for (let i = 1; i <= Math.ceil(pages); i++) {
-  //   pageNumbers.push(i);
-  // }
-  const pages = Math.ceil(totalRows / rowsPerPage);
+const TablePagination = ({ currentPage, pages, paginate }) => {
+  // const pages = Math.ceil(totalRows / rowsPerPage);
   const pageNumbers = getPageNumbers(currentPage, pages);
-  // console.log(pageNumbers);
   return (
     <Pagination>
       <PaginationContent>
@@ -181,10 +176,11 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
   const indexOfLastPost = currentPage * rowsPerPage;
   const indexOfFirstPost = indexOfLastPost - rowsPerPage;
   const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
+  const pages = Math.ceil(query.length / rowsPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
-      <Table className="border">
+      <Table className="border my-3">
         {/* <TableCaption>
           {t("history.description", { from: dateFrom, to: dateTo, count })}
         </TableCaption> */}
@@ -224,7 +220,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
           ))}
         </TableBody>
       </Table>
-      <div className="flex items-center gap-3 border-b border-x p-2">
+      <div className="flex items-center gap-6">
         <div className="grow-1 text-muted-foreground">
           {t("history.description", { from: dateFrom, to: dateTo, count })}
         </div>
@@ -249,11 +245,13 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
             </SelectContent>
           </Select>
         </Field>
+        <p>
+          Page {currentPage} of {pages}
+        </p>
         <div>
           <TablePagination
             currentPage={currentPage}
-            rowsPerPage={rowsPerPage}
-            totalRows={query.length}
+            pages={pages}
             paginate={paginate}
           />
         </div>
