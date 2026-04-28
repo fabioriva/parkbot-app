@@ -57,8 +57,7 @@ export function Level({ definitions, level }) {
           </DropdownMenu>
         </CardAction>
       </CardHeader>
-      <CardContent>
-        <div className="level relative" id={"l-" + level.nr}>
+      <CardContent className="level relative" id={"l-" + level.nr}>
           {level.stalls.map((stall) => (
             <Stall
               definitions={definitions}
@@ -67,7 +66,6 @@ export function Level({ definitions, level }) {
               key={stall.nr}
             />
           ))}
-        </div>
       </CardContent>
     </Card>
   );
