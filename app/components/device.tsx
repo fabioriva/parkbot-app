@@ -181,7 +181,14 @@ export function Device({ device, advanced = false, link = false }) {
     );
   }
   return (
-    <Card size="sm">
+    <Card
+      className={
+        device.operation !== 0
+          ? "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+          : undefined
+      }
+      size="sm"
+    >
       <CardHeader>
         <CardTitle>{device.name}</CardTitle>
         <CardAction className="flex items-center gap-1">
