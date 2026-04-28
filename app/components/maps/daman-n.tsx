@@ -9,7 +9,7 @@ export default function Map({ data }) {
   // );
   const levels = [...data.levels].reverse(); // Creates a copy and reverses it
   return (
-    <div className="flex flex-col gap-3">
+    <div className="overflow-auto p-0.5 flex flex-col gap-3">
       {levels.map((level) => (
         <Level definitions={data.definitions} level={level} key={level.nr} />
       ))}
