@@ -1,6 +1,6 @@
 import { Level } from "~/components/map-level";
 
-export default function Map({ data, view }) {
+export default function Map({ data }) {
   // return (
   //   <div>
   //     <h2>Data</h2>
@@ -9,14 +9,9 @@ export default function Map({ data, view }) {
   // );
   const levels = [...data.levels].reverse(); // Creates a copy and reverses it
   return (
-    <div className="overflow-auto flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       {levels.map((level) => (
-        <Level
-          definitions={data.definitions}
-          level={level}
-          view={view}
-          key={level.nr}
-        />
+        <Level definitions={data.definitions} level={level} key={level.nr} />
       ))}
       <style jsx="true">{`
         .level {
