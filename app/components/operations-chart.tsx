@@ -20,6 +20,7 @@ import {
 } from "~/components/ui/chart";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
+import { ExternalLink } from "~/components/external-link-button";
 
 const chartConfig = {
   entries: {
@@ -41,49 +42,44 @@ export function Operations({ operations, title, description, link = false }) {
   const [stacked, setStacked] = useState(true);
 
   return (
-    <Card className={link && "hover:bg-muted"} size="sm">
-      <a href={link ? link : undefined}>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-          <CardAction className="flex items-center gap-2">
-            <Label htmlFor="stacked">Stacked</Label>
-            <Switch
-              id="stacked"
-              checked={stacked}
-              onCheckedChange={setStacked}
+    <Card size="sm">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+        <CardAction className="flex items-center gap-2">
+          <Label htmlFor="stacked">Stacked</Label>
+          <Switch id="stacked" checked={stacked} onCheckedChange={setStacked} />
+          {link && <ExternalLink link={link} />}
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => value.toUpperCase()}
             />
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="name"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.toUpperCase()}
-              />
-              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-              <ChartLegend content={<ChartLegendContent />} />
-              <Bar
-                dataKey="entries"
-                fill="var(--color-entries)"
-                radius={stacked ? [0, 0, 6, 6] : [6, 6, 0, 0]}
-                stackId={(stacked && "a") || undefined}
-              />
-              <Bar
-                dataKey="exits"
-                fill="var(--color-exits)"
-                radius={stacked ? [6, 6, 0, 0] : [6, 6, 0, 0]}
-                stackId={(stacked && "a") || undefined}
-              />
-            </BarChart>
-          </ChartContainer>
-        </CardContent>
-      </a>
+            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            <ChartLegend content={<ChartLegendContent />} />
+            <Bar
+              dataKey="entries"
+              fill="var(--color-entries)"
+              radius={stacked ? [0, 0, 6, 6] : [6, 6, 0, 0]}
+              stackId={(stacked && "a") || undefined}
+            />
+            <Bar
+              dataKey="exits"
+              fill="var(--color-exits)"
+              radius={stacked ? [6, 6, 0, 0] : [6, 6, 0, 0]}
+              stackId={(stacked && "a") || undefined}
+            />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
     </Card>
   );
 }

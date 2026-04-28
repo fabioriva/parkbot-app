@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useFetcher } from "react-router";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -11,6 +12,7 @@ import {
 } from "~/components/ui/card";
 import { Device } from "~/components/device";
 import { ExitQueue } from "~/components/exit-queue";
+import { ExternalLink } from "~/components/external-link-button";
 import { HistoryList } from "~/components/history-list";
 import { Occupancy } from "~/components/occupancy-chart";
 import { Operations } from "~/components/operations-chart";
@@ -70,18 +72,19 @@ export default function Dashboard({
           queue={exitQueue.queueList.filter((item) => item.card !== 0)}
         />
         <Occupancy occupancy={occupancy} link={`/aps/${params.aps}/map`} />
-        <Card className="hover:bg-muted" size="sm">
-          <a href={`/aps/${params.aps}/history`}>
-            <CardHeader>
-              <CardTitle>{t("dashboard.activity-title")}</CardTitle>
-              <CardDescription>
-                {t("dashboard.activity-description")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <HistoryList query={activity.documents} />
-            </CardContent>
-          </a>
+        <Card size="sm">
+          <CardHeader>
+            <CardTitle>{t("dashboard.activity-title")}</CardTitle>
+            <CardDescription>
+              {t("dashboard.activity-description")}
+            </CardDescription>
+            <CardAction className="flex items-center gap-2">
+              <ExternalLink link={`/aps/${params.aps}/history`} />
+            </CardAction>
+          </CardHeader>
+          <CardContent>
+            <HistoryList query={activity.documents} />
+          </CardContent>
         </Card>
         <Operations
           operations={operations[0].data}

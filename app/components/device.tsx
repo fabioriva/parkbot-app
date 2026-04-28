@@ -1,4 +1,4 @@
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, ArrowUpRightIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Accordion, AccordionItem } from "~/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
@@ -35,6 +35,16 @@ const Active = ({ alarm }) => {
     </Alert>
   );
 };
+
+export function ExternalLink({ link }) {
+  return (
+    <Badge variant="ghost" asChild>
+      <a href={link}>
+        <ArrowUpRightIcon data-icon="inline-end" />
+      </a>
+    </Badge>
+  );
+}
 
 const Info = ({ device }) => {
   const [LS, LC, LA] = device.c;
@@ -171,26 +181,25 @@ export function Device({ device, advanced = false, link = false }) {
     );
   }
   return (
-    <Card className={link && "hover:bg-muted"} size="sm">
-      <a href={link ? link : undefined}>
-        <CardHeader>
-          <CardTitle>{device.name}</CardTitle>
-          <CardAction className="flex items-center gap-1">
-            {device.step !== 0 && <Step step={device.step} />}
-            <Mode mode={device.mode} />
-            <Info device={device} />
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          <p
-            className={
-              device.operation !== 0 ? "text-normal" : "text-muted-foreground"
-            }
-          >
-            {deviceT(device, t)}
-          </p>
-        </CardContent>
-      </a>
+    <Card size="sm">
+      <CardHeader>
+        <CardTitle>{device.name}</CardTitle>
+        <CardAction className="flex items-center gap-1">
+          {device.step !== 0 && <Step step={device.step} />}
+          <Mode mode={device.mode} />
+          <Info device={device} />
+          {link && <ExternalLink link={link} />}
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <p
+          className={
+            device.operation !== 0 ? "text-normal" : "text-muted-foreground"
+          }
+        >
+          {deviceT(device, t)}
+        </p>
+      </CardContent>
     </Card>
   );
 }
