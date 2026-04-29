@@ -133,6 +133,7 @@ export default {
       "mv-2": "Swapping card {{card}} in stall {{stall}}",
     },
     view: {
+      "view-diag": "Diagnostic",
       "view-garage": "Garage",
       "view-main": "Main",
       "view-sil": "Silomat",

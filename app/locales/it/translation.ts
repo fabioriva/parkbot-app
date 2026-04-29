@@ -133,6 +133,7 @@ export default {
       "mv-2": "Spostamento tessera {{card}}, stallo {{stall}}",
     },
     view: {
+      "view-diag": "Diagnostica",
       "view-garage": "Garage",
       "view-main": "Principale",
       "view-sil": "Silomat",
