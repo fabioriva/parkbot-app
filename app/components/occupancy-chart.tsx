@@ -1,6 +1,7 @@
 "use client";
 
-import * as React from "react";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Pie, PieChart } from "recharts";
 import {
   Card,
@@ -20,36 +21,36 @@ import {
 } from "~/components/ui/chart";
 import { ExternalLink } from "~/components/external-link-button";
 
-const chartConfig = {
-  busy: {
-    label: "Busy",
-    color: "var(--chart-5)",
-  },
-  free: {
-    label: "Vacant",
-    color: "var(--chart-2)",
-  },
-  lock: {
-    label: "Locked",
-    color: "var(--chart-4)",
-  },
-} satisfies ChartConfig;
-
 export function Occupancy({ occupancy, link = false }) {
+  const { t } = useTranslation();
+  const chartConfig = {
+    busy: {
+      label: t("occupancy.busy"),
+      color: "var(--chart-5)",
+    },
+    free: {
+      label: t("occupancy.free"),
+      color: "var(--chart-2)",
+    },
+    lock: {
+      label: t("occupancy.lock"),
+      color: "var(--chart-4)",
+    },
+  } satisfies ChartConfig;
   const chartData = occupancy.map((item) => ({
     ...item,
     fill: `var(--color-${item.id})`,
   }));
   const [busy, free, lock] = occupancy;
-  const totalSpaces = React.useMemo(() => {
+  const totalSpaces = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.value, 0);
   }, []);
   return (
     <Card size="sm">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Parking occupancy</CardTitle>
+        <CardTitle>{t("occupancy.title")}</CardTitle>
         <CardDescription>
-          Total number of parking spaces: {totalSpaces}
+          {t("occupancy.description", { count: totalSpaces })}
         </CardDescription>
         <CardAction className="flex items-center gap-2">
           {link && <ExternalLink link={link} />}

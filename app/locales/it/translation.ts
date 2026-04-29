@@ -64,10 +64,8 @@ export default {
   dashboard: {
     "activity-title": "Attività recente",
     "activity-description": "Elenco delle operazioni più recenti",
-    "occupancy-title": "Occupazione parcheggio",
-    "occupancy-description": "Occupazione del sistema",
-    "operations-title": "Operazioni di oggi",
-    "operations-description": "Operazioni del sistema",
+    "operations-title": "Operazioni del sistema",
+    "operations-description": "Operazioni del {{date}}",
   },
   device: {
     drive: {
@@ -496,6 +494,17 @@ export default {
     "mode-preset": "Preset",
     "mode-auto": "Automatico",
     "mode-man": "Manuale",
+  },
+  occupancy: {
+    "title": "Occupazione del parcheggio",
+    "description": "Totale posti auto {{count}}",
+    busy: "Occupati",
+    free: "Liberi",
+    lock: "Bloccati",
+  },
+  operations: {
+    entries: "Entrate",
+    exits: "Uscite",
   },
   passwordForgot: {
     cardDescription:

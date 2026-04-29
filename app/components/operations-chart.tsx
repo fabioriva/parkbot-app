@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
@@ -22,25 +23,24 @@ import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { ExternalLink } from "~/components/external-link-button";
 
-const chartConfig = {
-  entries: {
-    label: "Entries",
-    color: "var(--chart-1)",
-  },
-  exits: {
-    label: "Exits",
-    color: "var(--chart-2)",
-  },
-} satisfies ChartConfig;
-
 export function Operations({ operations, title, description, link = false }) {
+  const { t } = useTranslation();
+  const chartConfig = {
+    entries: {
+      label: t("operations.entries"),
+      color: "var(--chart-1)",
+    },
+    exits: {
+      label: t("operations.exits"),
+      color: "var(--chart-2)",
+    },
+  } satisfies ChartConfig;
   const chartData = operations.map((item) => ({
     name: item.name,
     entries: item.entries,
     exits: item.exits,
   }));
   const [stacked, setStacked] = useState(true);
-
   return (
     <Card size="sm">
       <CardHeader>

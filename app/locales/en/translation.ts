@@ -64,10 +64,8 @@ export default {
   dashboard: {
     "activity-title": "Recent activity",
     "activity-description": "List of the most recent operations",
-    "occupancy-title": "Parking occupancy",
-    "occupancy-description": "Pie chart showing system occupancy",
-    "operations-title": "Today's operations",
-    "operations-description": "Bar chart showing system operations",
+    "operations-title": "System operations",
+    "operations-description": "Operations of {{date}}",
   },
   device: {
     drive: {
@@ -495,6 +493,17 @@ export default {
     "mode-preset": "Preset",
     "mode-auto": "Automatic",
     "mode-man": "Manual mode",
+  },
+  occupancy: {
+    title: "Parking occupancy",
+    description: "Total parking spaces {{count}}",
+    busy: "Busy",
+    free: "Vacant",
+    lock: "Locked",
+  },
+  operations: {
+    entries: "Entries",
+    exits: "Exits",
   },
   passwordForgot: {
     cardDescription: "Enter your email to receive a password reset link",
