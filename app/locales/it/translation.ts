@@ -65,7 +65,7 @@ export default {
     "activity-title": "Attività recente",
     "activity-description": "Elenco delle operazioni più recenti",
     "operations-title": "Operazioni del sistema",
-    "operations-description": "Operazioni del {{date}}",
+    "operations-description": "Oggi {{date}}",
   },
   device: {
     drive: {
@@ -527,6 +527,9 @@ export default {
     lock: "Bloccati",
   },
   operations: {
+    title: "Operazioni del sistema",
+    titleDevice: "Operazioni del sistema per dispositivo",
+    description: "Periodo dal {{dateFrom}} al {{dateTo}}",
     entries: "Entrate",
     exits: "Uscite",
   },

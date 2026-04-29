@@ -33,6 +33,7 @@ export default function Operations({
         Data not available!
       </h1>
     );
+  const { t } = useTranslation();
   const [data, setData] = useState(loaderData);
   const { devices, operations } = data;
   const [dateFrom, dateTo] = devices.query.date.split(" ");
@@ -51,9 +52,7 @@ export default function Operations({
   return (
     <>
       <div className="flex flex-col xl:flex-row xl:items-center gap-3 mb-3">
-        <p className="grow-1 hidden xl:block">
-          Operations from {dateFrom} to {dateTo}
-        </p>
+        <p className="grow-1 hidden xl:block" />
         <DateRange
           from={dateFrom + " 00:00"}
           to={dateTo + " 00:00"}
@@ -63,13 +62,13 @@ export default function Operations({
       <div className="grid 2xl:grid-cols-2 gap-6">
         <Statistics
           operations={operations.data}
-          title="System operations"
-          description={`From ${dateFrom} to ${dateTo}`}
+          title={t("operations.title")}
+          description={t("operations.description", { dateFrom, dateTo })}
         />
         <Statistics
           operations={devices.data}
-          title="Operations by device"
-          description={`From ${dateFrom} to ${dateTo}`}
+          title={t("operations.titleDevice")}
+          description={t("operations.description", { dateFrom, dateTo })}
         />
       </div>
     </>

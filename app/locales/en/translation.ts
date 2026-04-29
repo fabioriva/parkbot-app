@@ -65,7 +65,7 @@ export default {
     "activity-title": "Recent activity",
     "activity-description": "List of the most recent operations",
     "operations-title": "System operations",
-    "operations-description": "Operations of {{date}}",
+    "operations-description": "Today {{date}}",
   },
   device: {
     drive: {
@@ -526,6 +526,9 @@ export default {
     lock: "Locked",
   },
   operations: {
+    title: "System operations",
+    titleDevice: "System operations by device",
+    description: "Date range from {{dateFrom}} to {{dateTo}}",
     entries: "Entries",
     exits: "Exits",
   },
