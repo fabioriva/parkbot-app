@@ -139,6 +139,10 @@ export default {
     },
   },
   "exit-call": {
+    confirmDialog: {
+      title: "Vuoi confermare?",
+      description: "Premi conferma per richiedere l'uscita della tessera {{card}}",
+    },
     dialogButton: "Uscita vettura",
     dialogCancel: "Annulla",
     dialogConfirm: "Conferma uscita",

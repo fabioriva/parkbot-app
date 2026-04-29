@@ -139,6 +139,10 @@ export default {
     },
   },
   "exit-call": {
+    confirmDialog: {
+      title: "Do you confirm?",
+      description: "Click confirm to request exit for tag number {{card}}",
+    },
     dialogButton: "Exit vehicle",
     dialogCancel: "Cancel",
     dialogConfirm: "Confirm exit",
