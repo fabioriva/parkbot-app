@@ -106,12 +106,15 @@ export function Device({ device, advanced = false, link = false }) {
             </TabsTrigger>
           ))}
           <TabsTrigger value="diagnostic" disabled={!device.alarms.length}>
-            Diagnostic {device.alarms.length > 0 && <Badge variant="destructive">{device.alarms.length}</Badge>}
+            Diagnostic{" "}
+            {device.alarms.length > 0 && (
+              <Badge variant="destructive">{device.alarms.length}</Badge>
+            )}
           </TabsTrigger>
         </TabsList>
         {device.views.map((view, key) => (
           <TabsContent key={key} value={`tab-${key}`}>
-            <Card className="max-w-sm" size="sm">
+            <Card size="sm">
               <CardHeader>
                 <CardTitle>{device.name}</CardTitle>
                 <CardAction className="flex items-center gap-1">
@@ -156,7 +159,7 @@ export function Device({ device, advanced = false, link = false }) {
           </TabsContent>
         ))}
         <TabsContent value="diagnostic">
-          <Card className="max-w-sm">
+          <Card>
             <CardHeader>
               <CardTitle>{device.name}</CardTitle>
               <CardAction className="flex items-center gap-1">
