@@ -162,7 +162,12 @@ export default {
     "item-title": "{{key}}° chiamata",
   },
   history: {
-    description: "Da {{from}} a {{to}}. Registrazioni {{count}}.",
+    description: "Storico dal {{from}} al {{to}}. Totale registrazioni {{count}}.",
+    next: "Avanti",
+    pages: "Pagina {{current}} di {{total}}",
+    previous: "Indietro",
+    rows: "Registrazioni per pagina",
+    title: "Cronologia delle operazioni",
     log: {
       "op-id-1": "Allarme {{id}} attivo",
       "op-id-2": "Allarme {{id}} annullato",
@@ -206,7 +211,6 @@ export default {
       "op-req-repark": "Re-park iniziato",
       "op-card-issued": "Card emessa",
     },
-    title: "Cronologia delle operazioni",
   },
   home: {
     description: "Supervisione dei sistemi di parcheggio automatizzati",
@@ -496,8 +500,8 @@ export default {
     "mode-man": "Manuale",
   },
   occupancy: {
-    "title": "Occupazione del parcheggio",
-    "description": "Totale posti auto {{count}}",
+    title: "Occupazione del parcheggio",
+    description: "Totale posti auto {{count}}",
     busy: "Occupati",
     free: "Liberi",
     lock: "Bloccati",

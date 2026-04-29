@@ -161,7 +161,12 @@ export default {
     "item-title": "{{key}}° call",
   },
   history: {
-    description: "From {{from}} to {{to}}. Records {{count}}.",
+    description: "History from {{from}} to {{to}}. Total records {{count}}.",
+    next: "Next",
+    pages: "Page {{current}} of {{total}}",
+    previous: "Previous",
+    rows: "Rows per page",
+    title: "Operations history",
     log: {
       "op-id-1": "Alarm {{id}} active",
       "op-id-2": "Alarm {{id}} cleared",
@@ -205,7 +210,6 @@ export default {
       "op-req-repark": "Re-park initiated",
       "op-card-issued": "Card issued",
     },
-    title: "Operations history",
   },
   home: {
     description: "The robotic parking monitoring tool",

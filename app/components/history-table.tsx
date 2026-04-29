@@ -115,7 +115,7 @@ const Operation = ({ item }) => {
 };
 
 const TablePagination = ({ currentPage, pages, paginate }) => {
-  // const pages = Math.ceil(totalRows / rowsPerPage);
+  const { t } = useTranslation();
   const pageNumbers = getPageNumbers(currentPage, pages);
   return (
     <Pagination>
@@ -129,6 +129,7 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
                 : undefined
             }
             onClick={() => paginate(currentPage - 1)}
+            text={t("history.previous")}
           />
         </PaginationItem>
         {pageNumbers.map((number, key) => {
@@ -161,6 +162,7 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
                 : undefined
             }
             onClick={() => paginate(currentPage + 1)}
+            text={t("history.next")}
           />
         </PaginationItem>
       </PaginationContent>
@@ -225,7 +227,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
           {t("history.description", { from: dateFrom, to: dateTo, count })}
         </div>
         <Field orientation="horizontal" className="w-fit">
-          <FieldLabel htmlFor="select-rows-per-page">Rows per page</FieldLabel>
+          <FieldLabel htmlFor="select-rows-per-page">{t("history.rows")}</FieldLabel>
           <Select
             className="grow-0"
             defaultValue={rowsPerPage}
@@ -245,9 +247,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
             </SelectContent>
           </Select>
         </Field>
-        <p>
-          Page {currentPage} of {pages}
-        </p>
+        <p>{t("history.pages", { current: currentPage, total: pages })}</p>
         <div>
           <TablePagination
             currentPage={currentPage}
