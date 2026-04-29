@@ -24,7 +24,7 @@ export function Level({ definitions, level }) {
   const [view, setView] = useState("view2");
 
   return (
-    <Card className="bg-sidebar w-fit" size="sm">
+    <Card className="w-fit" size="sm">
       <CardHeader>
         <CardTitle>{level.label}</CardTitle>
         <CardDescription>

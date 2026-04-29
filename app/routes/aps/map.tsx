@@ -12,6 +12,7 @@ const components = {
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
   menloa: lazy(() => import("~/components/maps/menlo-a")),
   menlob: lazy(() => import("~/components/maps/menlo-b")),
+  muse: lazy(() => import("~/components/maps/muse")),
   wallstreet: lazy(() => import("~/components/maps/spire")),
   washingtonblvd: lazy(() => import("~/components/maps/8888")),
 };
@@ -60,28 +61,28 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
     </Tabs>
   );
 
-//   return (
-//     <Tabs value={tab} onValueChange={onTabChange}>
-//       <TabsList>
-//         <TabsTrigger value="view0">Icons</TabsTrigger>
-//         <TabsTrigger value="view1">Cards</TabsTrigger>
-//         <TabsTrigger value="view2">Slots</TabsTrigger>
-//         <TabsTrigger value="view3">Sizes</TabsTrigger>
-//         <TabsTrigger value="view4">Occupancy</TabsTrigger>
-//       </TabsList>
-//       {tab !== "view4" ? (
-//         <TabsContent value={tab}>
-//           <Suspense fallback={<p className="py-3">Loading...</p>}>
-//             <EditStallDialogProvider>
-//               <DynamicComponent data={data} view={tab} />
-//             </EditStallDialogProvider>
-//           </Suspense>
-//         </TabsContent>
-//       ) : (
-//         <div className="max-w-xl">
-//           <Occupancy occupancy={data.occupancy} />
-//         </div>
-//       )}
-//     </Tabs>
-//   );
+  //   return (
+  //     <Tabs value={tab} onValueChange={onTabChange}>
+  //       <TabsList>
+  //         <TabsTrigger value="view0">Icons</TabsTrigger>
+  //         <TabsTrigger value="view1">Cards</TabsTrigger>
+  //         <TabsTrigger value="view2">Slots</TabsTrigger>
+  //         <TabsTrigger value="view3">Sizes</TabsTrigger>
+  //         <TabsTrigger value="view4">Occupancy</TabsTrigger>
+  //       </TabsList>
+  //       {tab !== "view4" ? (
+  //         <TabsContent value={tab}>
+  //           <Suspense fallback={<p className="py-3">Loading...</p>}>
+  //             <EditStallDialogProvider>
+  //               <DynamicComponent data={data} view={tab} />
+  //             </EditStallDialogProvider>
+  //           </Suspense>
+  //         </TabsContent>
+  //       ) : (
+  //         <div className="max-w-xl">
+  //           <Occupancy occupancy={data.occupancy} />
+  //         </div>
+  //       )}
+  //     </Tabs>
+  //   );
 }
