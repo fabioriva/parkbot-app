@@ -142,7 +142,8 @@ export default {
   "exit-call": {
     confirmDialog: {
       title: "Vuoi confermare?",
-      description: "Premi conferma per richiedere l'uscita della tessera {{card}}",
+      description:
+        "Premi conferma per richiedere l'uscita della tessera {{card}}",
     },
     dialogButton: "Uscita vettura",
     dialogCancel: "Annulla",
@@ -167,7 +168,8 @@ export default {
     "item-title": "{{key}}° chiamata",
   },
   history: {
-    description: "Storico dal {{from}} al {{to}}. Totale registrazioni {{count}}.",
+    description:
+      "Storico dal {{from}} al {{to}}. Totale registrazioni {{count}}.",
     next: "Avanti",
     pages: "Pagina {{current}} di {{total}}",
     previous: "Indietro",
@@ -487,10 +489,16 @@ export default {
     UC: "Pulsante di conferma comando",
   },
   map: {
+    "slots": "Posti auto",
     "stall-busy":
       "Stallo {{nr}} é occupato dalla tessera {{status}} dal {{date}}",
     "stall-free": "Stallo {{nr}} é libero dal {{date}}",
     "stall-lock": "Stallo {{nr}} é bloccato dal {{date}}",
+    "tab-icon": "Icona",
+    "tab-card": "Tessera",
+    "tab-slot": "Stallo",
+    "tab-size": "Dimensione",
+    "tab-occupancy": "Occupazione",
   },
   mode: {
     "mode-data-edit": "Modifica dati",

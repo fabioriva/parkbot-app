@@ -1,5 +1,6 @@
 import { EyeIcon } from "lucide-react";
 import { lazy, Suspense, useState } from "react";
+import { useTranslation } from "react-i18next";
 // import { Button } from "~/components/ui/button";
 // import {
 //   DropdownMenu,
@@ -45,6 +46,7 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
         Data not available!
       </h1>
     );
+  const { t } = useTranslation();
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
   const { data } = useData(url, { initialData: loaderData });
   const [tab, setTab] = useState("view2");
@@ -104,11 +106,11 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
     return (
       <Tabs value={tab} onValueChange={onTabChange}>
         <TabsList>
-          <TabsTrigger value="view0">Icons</TabsTrigger>
-          <TabsTrigger value="view1">Cards</TabsTrigger>
-          <TabsTrigger value="view2">Slots</TabsTrigger>
-          <TabsTrigger value="view3">Sizes</TabsTrigger>
-          <TabsTrigger value="view4">Occupancy</TabsTrigger>
+          <TabsTrigger value="view0">{t("map.tab-icon")}</TabsTrigger>
+          <TabsTrigger value="view1">{t("map.tab-card")}</TabsTrigger>
+          <TabsTrigger value="view2">{t("map.tab-slot")}</TabsTrigger>
+          <TabsTrigger value="view3">{t("map.tab-size")}</TabsTrigger>
+          <TabsTrigger value="view4">{t("map.tab-occupancy")}</TabsTrigger>
         </TabsList>
         {tab !== "view4" ? (
           <TabsContent className="mt-3" value={tab}>

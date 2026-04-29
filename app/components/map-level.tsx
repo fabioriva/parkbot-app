@@ -18,15 +18,17 @@
 //   DropdownMenuRadioItem,
 //   DropdownMenuTrigger,
 // } from "~/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 import { Stall } from "~/components/map-stall";
 
 export function Level({ definitions, level, view }) {
+  const { t } = useTranslation();
   // const [view, setView] = useState("view2");
   return (
     <div className="flex flex-col gap-0.5 bg-card border p-3 rounded-lg w-fit">
       <h1 className="grow-1">{level.label}</h1>
       <p className="text-muted-foreground">
-        Parking slots {level.min} - {level.max}
+        {t("map.slots")} {level.min} - {level.max}
       </p>
       <div className="level relative" id={"l-" + level.nr}>
         {level?.elevators !== undefined &&

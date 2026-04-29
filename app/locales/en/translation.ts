@@ -487,9 +487,15 @@ export default {
     UC: "Control confirmation push-button",
   },
   map: {
+    "slots": "Parking slots",
     "stall-busy": "Slot {{nr}} is occupied by card {{status}} since {{date}}",
     "stall-free": "Slot {{nr}} is vacant since {{date}}",
     "stall-lock": "Slot {{nr}} is locked since {{date}}",
+    "tab-icon": "Icon",
+    "tab-card": "Card",
+    "tab-slot": "Stall",
+    "tab-size": "Size",
+    "tab-occupancy": "Occupancy",
   },
   mode: {
     "mode-data-edit": "Data edit",
