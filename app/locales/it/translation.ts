@@ -489,7 +489,14 @@ export default {
     UC: "Pulsante di conferma comando",
   },
   map: {
-    "slots": "Posti auto",
+    edit: {
+      dialogButtonCard: "Conferma",
+      dialogButtonClear: "Libera",
+      dialogButtonLock: "Blocca",
+      dialogTitle: "Modifica stallo",
+      dialogDescription: "Vuoi modificare lo stato del posto numero {{nr}}?",
+    },
+    slots: "Posti auto",
     "stall-busy":
       "Stallo {{nr}} é occupato dalla tessera {{status}} dal {{date}}",
     "stall-free": "Stallo {{nr}} é libero dal {{date}}",

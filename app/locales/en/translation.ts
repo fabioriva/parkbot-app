@@ -487,7 +487,16 @@ export default {
     UC: "Control confirmation push-button",
   },
   map: {
-    "slots": "Parking slots",
+    edit: {
+      dialogButtonCard: "Confirm",
+      dialogButtonClear: "Clear",
+      dialogButtonLock: "Lock",
+      dialogTitle: "Edit stall",
+      dialogDescription:
+        "Do you want to change the status for stall nr {{nr}}?",
+      label: "Tag number",
+    },
+    slots: "Parking slots",
     "stall-busy": "Slot {{nr}} is occupied by card {{status}} since {{date}}",
     "stall-free": "Slot {{nr}} is vacant since {{date}}",
     "stall-lock": "Slot {{nr}} is locked since {{date}}",

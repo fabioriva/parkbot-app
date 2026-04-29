@@ -69,13 +69,13 @@ export function EditStallDialogProvider({ children }) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Change stall status</DialogTitle>
+            <DialogTitle>{t("map.edit.dialogTitle")}</DialogTitle>
             <DialogDescription>
-              Change the status for stall nr {stall?.nr}
+              {t("map.edit.dialogDescription", { nr: stall?.nr })}
             </DialogDescription>
           </DialogHeader>
           <Field>
-            <FieldLabel htmlFor="value">Tag number</FieldLabel>
+            <FieldLabel htmlFor="value">{t("exit-call.fieldLabel")}</FieldLabel>
             <Input
               min={min}
               max={max}
@@ -101,16 +101,16 @@ export function EditStallDialogProvider({ children }) {
           </Field>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("exit-call.dialogCancel")}</Button>
             </DialogClose>
             <Button onClick={() => handleConfirm(stallStatus.FREE)}>
-              Clear
+              {t("map.edit.dialogButtonClear")}
             </Button>
             <Button onClick={() => handleConfirm(stallStatus.LOCK)}>
-              Lock
+              {t("map.edit.dialogButtonLock")}
             </Button>
             <Button onClick={() => handleConfirm(value)} disabled={error}>
-              Confirm
+              {t("map.edit.dialogButtonCard")}
             </Button>
           </DialogFooter>
         </DialogContent>
