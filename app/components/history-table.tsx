@@ -179,13 +179,13 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
   const pages = Math.ceil(query.length / rowsPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
-    <>
-      <Table className="border my-3">
+    <div className="overflow-hidden rounded-lg border">
+      <Table className="">
         {/* <TableCaption>
           {t("history.description", { from: dateFrom, to: dateTo, count })}
         </TableCaption> */}
-        <TableHeader className="bg-muted">
-          <TableRow>
+        <TableHeader className="">
+          <TableRow className="rounded rounded-lg">
             <TableHead>{t("history.table.date")}</TableHead>
             <TableHead>{t("history.table.device")}</TableHead>
             <TableHead>{t("history.table.mode")}</TableHead>
@@ -220,7 +220,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
           ))}
         </TableBody>
       </Table>
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-6 border-t p-2">
         <div className="grow-1 text-muted-foreground">
           {t("history.description", { from: dateFrom, to: dateTo, count })}
         </div>
@@ -256,6 +256,6 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }
