@@ -111,7 +111,7 @@ export function Device({ device, advanced = false, link = false }) {
         </TabsList>
         {device.views.map((view, key) => (
           <TabsContent key={key} value={`tab-${key}`}>
-            <Card size="sm">
+            <Card className="max-w-sm" size="sm">
               <CardHeader>
                 <CardTitle>{device.name}</CardTitle>
                 <CardAction className="flex items-center gap-1">
@@ -156,7 +156,7 @@ export function Device({ device, advanced = false, link = false }) {
           </TabsContent>
         ))}
         <TabsContent value="diagnostic">
-          <Card>
+          <Card className="max-w-sm">
             <CardHeader>
               <CardTitle>{device.name}</CardTitle>
               <CardAction className="flex items-center gap-1">
@@ -166,9 +166,6 @@ export function Device({ device, advanced = false, link = false }) {
               </CardAction>
             </CardHeader>
             <CardContent>
-              {/* <p className="text-sm text-muted-foreground">
-                There are {device.alarms.length} active alarms.
-              </p> */}
               <div className="flex flex-col gap-1">
                 {device.alarms.map((alarm) => (
                   <Active alarm={alarm} key={alarm.id} />

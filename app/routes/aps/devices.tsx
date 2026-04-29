@@ -27,7 +27,7 @@ export default function Devices({ loaderData, params }: Route.ComponentProps) {
   const COLS = data.devices[0].length;
   return (
     <div
-      className={clsx("grid grid-col-1 lg:grid-cols-2 gap-4 items-start", {
+      className={clsx("grid grid-col-1 lg:grid-cols-2 gap-4", {
         "xl:grid-cols-2": COLS <= 2,
         "xl:grid-cols-3": COLS === 3,
         "xl:grid-cols-4": COLS >= 4,
