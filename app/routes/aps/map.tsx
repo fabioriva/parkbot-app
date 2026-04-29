@@ -1,4 +1,15 @@
-import { lazy, Suspense } from "react";
+import { EyeIcon } from "lucide-react";
+import { lazy, Suspense, useState } from "react";
+// import { Button } from "~/components/ui/button";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuGroup,
+//   DropdownMenuLabel,
+//   DropdownMenuRadioGroup,
+//   DropdownMenuRadioItem,
+//   DropdownMenuTrigger,
+// } from "~/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { EditStallDialogProvider } from "~/components/edit-stall-dialog";
 import { Occupancy } from "~/components/occupancy-chart";
@@ -36,53 +47,82 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
     );
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
   const { data } = useData(url, { initialData: loaderData });
-  // const [tab, setTab] = useState("view2");
-  // const onTabChange = (value) => {
-  //   setTab(value);
-  // };
+  const [tab, setTab] = useState("view2");
+  const onTabChange = (value) => {
+    setTab(value);
+  };
+  // const [view, setView] = useState("view2");
   const DynamicComponent = components[params.aps];
 
-  return (
-    <Tabs defaultValue="map">
-      <TabsList className="grid grid-cols-2">
-        <TabsTrigger value="map">Map</TabsTrigger>
-        <TabsTrigger value="occupancy">Occupancy</TabsTrigger>
-      </TabsList>
-      <TabsContent value="map">
-        <Suspense fallback={<p className="py-3">Loading...</p>}>
-          <EditStallDialogProvider>
-            <DynamicComponent data={data} />
-          </EditStallDialogProvider>
-        </Suspense>
-      </TabsContent>
-      <TabsContent value="occupancy" className="max-w-xl">
-        <Occupancy occupancy={data.occupancy} />
-      </TabsContent>
-    </Tabs>
-  );
-
-  //   return (
-  //     <Tabs value={tab} onValueChange={onTabChange}>
-  //       <TabsList>
-  //         <TabsTrigger value="view0">Icons</TabsTrigger>
-  //         <TabsTrigger value="view1">Cards</TabsTrigger>
-  //         <TabsTrigger value="view2">Slots</TabsTrigger>
-  //         <TabsTrigger value="view3">Sizes</TabsTrigger>
-  //         <TabsTrigger value="view4">Occupancy</TabsTrigger>
+  // return (
+  //   <Tabs defaultValue="map">
+  //     <div className="flex gap-6">
+  //       <TabsList className="grid grid-cols-2">
+  //         <TabsTrigger value="map">Map</TabsTrigger>
+  //         <TabsTrigger value="occupancy">Occupancy</TabsTrigger>
   //       </TabsList>
-  //       {tab !== "view4" ? (
-  //         <TabsContent value={tab}>
-  //           <Suspense fallback={<p className="py-3">Loading...</p>}>
-  //             <EditStallDialogProvider>
-  //               <DynamicComponent data={data} view={tab} />
-  //             </EditStallDialogProvider>
-  //           </Suspense>
-  //         </TabsContent>
-  //       ) : (
-  //         <div className="max-w-xl">
-  //           <Occupancy occupancy={data.occupancy} />
-  //         </div>
-  //       )}
-  //     </Tabs>
-  //   );
+  //       <DropdownMenu>
+  //         <DropdownMenuTrigger asChild>
+  //           <Button variant="outline">
+  //             <EyeIcon /> View
+  //           </Button>
+  //         </DropdownMenuTrigger>
+  //         <DropdownMenuContent className="w-32">
+  //           <DropdownMenuGroup>
+  //             <DropdownMenuLabel>Select a view</DropdownMenuLabel>
+  //             <DropdownMenuRadioGroup value={view} onValueChange={setView}>
+  //               <DropdownMenuRadioItem value="view0">
+  //                 Icons
+  //               </DropdownMenuRadioItem>
+  //               <DropdownMenuRadioItem value="view3">
+  //                 Sizes
+  //               </DropdownMenuRadioItem>
+  //               <DropdownMenuRadioItem value="view2">
+  //                 Slots
+  //               </DropdownMenuRadioItem>
+  //               <DropdownMenuRadioItem value="view1">
+  //                 Tags
+  //               </DropdownMenuRadioItem>
+  //             </DropdownMenuRadioGroup>
+  //           </DropdownMenuGroup>
+  //         </DropdownMenuContent>
+  //       </DropdownMenu>
+  //     </div>
+  //     <TabsContent value="map">
+  //       <Suspense fallback={<p className="py-3">Loading...</p>}>
+  //         <EditStallDialogProvider>
+  //           <DynamicComponent data={data} view={view} />
+  //         </EditStallDialogProvider>
+  //       </Suspense>
+  //     </TabsContent>
+  //     <TabsContent value="occupancy" className="max-w-xl">
+  //       <Occupancy occupancy={data.occupancy} />
+  //     </TabsContent>
+  //   </Tabs>
+  // );
+
+    return (
+      <Tabs value={tab} onValueChange={onTabChange}>
+        <TabsList  className="grid grid-cols-5">
+          <TabsTrigger value="view0">Icons</TabsTrigger>
+          <TabsTrigger value="view1">Cards</TabsTrigger>
+          <TabsTrigger value="view2">Slots</TabsTrigger>
+          <TabsTrigger value="view3">Sizes</TabsTrigger>
+          <TabsTrigger value="view4">Occupancy</TabsTrigger>
+        </TabsList>
+        {tab !== "view4" ? (
+          <TabsContent className="mt-3" value={tab}>
+            <Suspense fallback={<p className="py-3">Loading...</p>}>
+              <EditStallDialogProvider>
+                <DynamicComponent data={data} view={tab} />
+              </EditStallDialogProvider>
+            </Suspense>
+          </TabsContent>
+        ) : (
+          <div className="max-w-xl">
+            <Occupancy occupancy={data.occupancy} />
+          </div>
+        )}
+      </Tabs>
+    );
 }

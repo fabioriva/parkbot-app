@@ -1,10 +1,15 @@
 import { Level } from "~/components/map-level";
 
-export default function Map({ data }) {
+export default function Map({ data, view }) {
   return (
     <div className="overflow-auto p-0.5 flex flex-col gap-3">
       {data.levels.map((level) => (
-        <Level definitions={data?.definitions} level={level} key={level.nr} />
+        <Level
+          definitions={data?.definitions}
+          level={level}
+          view={view}
+          key={level.nr}
+        />
       ))}
       <style jsx="true">{`
         .el {
