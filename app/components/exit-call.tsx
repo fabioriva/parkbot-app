@@ -41,7 +41,6 @@ export default function ExitCall({ exit }) {
     }
   };
   const handleConfirm = async () => {
-    console.log(card, t("exit-call.confirmDialog.title"));
     showConfirmDialog({
       title: t("exit-call.confirmDialog.title"),
       description: t("exit-call.confirmDialog.description", { card }),
