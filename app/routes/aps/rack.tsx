@@ -35,7 +35,7 @@ export default function Rack({ loaderData, params }: Route.ComponentProps) {
     <div className="flex overflow-scroll gap-0.5 py-3">
       {data.cards.map((card) => (
         <div
-          className="bg-sidebar flex flex-col gap-0.5 border rounded-xs p-1 text-xs"
+          className="flex flex-col gap-0.5 bg-card border rounded-xs p-1 text-xs"
           key={card.nr}
         >
           <p className="text-[0.625rem]">{card.type}</p>
