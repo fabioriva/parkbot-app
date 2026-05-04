@@ -35,7 +35,7 @@ export default function Operations({
     );
   const { t } = useTranslation();
   const [data, setData] = useState(loaderData);
-  const { devices, operations } = data;
+  const { cards, devices, operations } = data;
   const [dateFrom, dateTo] = devices.query.date.split(" ");
   const handleQuery = async ({ from, to }) => {
     const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss");
@@ -70,32 +70,40 @@ export default function Operations({
           title={t("operations.titleDevice")}
           description={t("operations.description", { dateFrom, dateTo })}
         />
+        <div className="col-span-1 2xl:col-span-2">
+        <Statistics
+          // layout="vertical"
+          operations={cards.data}
+          title={t("operations.title")}
+          description={t("operations.description", { dateFrom, dateTo })}
+        />
+        </div>
       </div>
     </>
   );
 
-  return (
-    <>
-      <div className="flex mb-3">
-        <h1 className="grow-1 hidden xl:block" />
-        <DateRange
-          from={dateFrom + " 00:00"}
-          to={dateTo + " 00:00"}
-          handleQuery={handleQuery}
-        />
-      </div>
-      <div className="grid 2xl:grid-cols-2 gap-6">
-        <Statistics
-          operations={operations.data}
-          title="System operations"
-          description={`From ${dateFrom} to ${dateTo}`}
-        />
-        <Statistics
-          operations={devices.data}
-          title="Operations by device"
-          description={`From ${dateFrom} to ${dateTo}`}
-        />
-      </div>
-    </>
-  );
+  // return (
+  //   <>
+  //     <div className="flex mb-3">
+  //       <h1 className="grow-1 hidden xl:block" />
+  //       <DateRange
+  //         from={dateFrom + " 00:00"}
+  //         to={dateTo + " 00:00"}
+  //         handleQuery={handleQuery}
+  //       />
+  //     </div>
+  //     <div className="grid 2xl:grid-cols-2 gap-6">
+  //       <Statistics
+  //         operations={operations.data}
+  //         title="System operations"
+  //         description={`From ${dateFrom} to ${dateTo}`}
+  //       />
+  //       <Statistics
+  //         operations={devices.data}
+  //         title="Operations by device"
+  //         description={`From ${dateFrom} to ${dateTo}`}
+  //       />
+  //     </div>
+  //   </>
+  // );
 }
