@@ -28,8 +28,10 @@ export function Level({ definitions, level, view }) {
   return (
     <div className="flex flex-col gap-0.5 w-fit">
       <div className="flex text-xs">
-        <h1 className="grow-1">{level.label}</h1>
-        <div className="text-muted-foreground">{level.min} - {level.max}</div>
+        <h1 className="grow">{level.label}</h1>
+        <div className="text-muted-foreground">
+          {level.min} - {level.max}
+        </div>
         {/* <p className="text-muted-foreground">
           {t("map.slots")} {level.min} - {level.max}
         </p> */}
