@@ -1,0 +1,7 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "example_message": "Hello world {username}",
+  "hello": "Hello",
+  "welcome_text": "The robotic parking monitoring tool",
+  "welcome_login_button": "Signin to Parkbot"
+}
