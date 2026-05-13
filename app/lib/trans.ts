@@ -2,12 +2,10 @@ import { m } from "@paraglide/messages.js";
 
 export function logT(log) {
   const { alarm, card, operation, mode, stall, uid } = log;
-  return;
   switch (operation.id) {
     case 1:
     case 2:
-      // return t("alarms." + alarm.key, alarm.query);
-      return "alarms." + alarm.key;
+      return m["alarms." + alarm.key]({ ...alarm.query });
     case 3:
       return m.log_id_3({ id: mode.id });
     case 4:

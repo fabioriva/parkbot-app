@@ -68,7 +68,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
     <TooltipProvider>
       <Outlet context={loaderData?.user} />
       <Toaster
-        position="top-center"
+        position="bottom-right"
         toastOptions={{
           classNames: {
             description: "!text-muted-foreground !dark:text-muted",

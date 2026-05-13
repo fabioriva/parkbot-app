@@ -1,5 +1,4 @@
 import * as React from "react";
-// import { useTranslation } from "react-i18next";
 import { logT } from "~/lib/trans";
 import { toast } from "sonner";
 
