@@ -1,5 +1,5 @@
+import * as React from "react";
 import { data, Outlet, redirect, useLocation } from "react-router";
-// import { AppSidebar } from "~/components/app-sidebar";
 import { Badge } from "~/components/ui/badge";
 import {
   Breadcrumb,
@@ -19,15 +19,17 @@ import {
 import { Toaster } from "~/components/ui/sonner";
 import { TooltipProvider } from "~/components/ui/tooltip";
 // import { AlarmInfo } from "~/components/alarm-info";
+import { AppSidebar } from "~/components/app-sidebar";
 // import { CommInfo } from "~/components/comm-info";
 // import { ConfirmDialogProvider } from "~/components/confirm-dialog";
 // import { LocaleToggle } from "~/components/locale-toggle";
 // import { ParkInfo } from "~/components/park-info";
-// import { ModeToggle } from "~/components/mode-toggle";
+import { ModeToggle } from "~/components/mode-toggle";
 import { auth } from "~/lib/auth.server";
 import { getCookie } from "~/lib/cookie.server";
 import { roles } from "~/lib/roles";
 import { useInfo } from "~/hooks/use-ws";
+import { m } from "@paraglide/messages.js";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const session = await auth.api.getSession({
@@ -66,7 +68,73 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   const location = useLocation();
   return (
     <TooltipProvider>
-      <Outlet context={loaderData?.user} />
+      <SidebarProvider
+        defaultOpen={loaderData?.sidebarState === "true"}
+        style={
+          {
+            "--sidebar-width": "19rem",
+          } as React.CSSProperties
+        }
+      >
+        <AppSidebar
+          aps={loaderData?.aps.name}
+          pathname={location.pathname}
+          user={loaderData?.user}
+        />
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
+            <div className="grow-1">
+              <Breadcrumb className="hidden lg:block">
+                <BreadcrumbList>
+                  {/* breakpoint md:block */}
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/aps-select">Aps</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink
+                      href={`/aps/${loaderData?.user.aps}/dashboard`}
+                    >
+                      {loaderData?.aps.name}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="capitalize">
+                      {m[`sidebar_main.${location.pathname.split("/")[3]}`]()}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+            {!comm ? (
+              <Badge variant="destructive">Data not available!</Badge>
+            ) : (
+              <React.Fragment>
+                {/* <AlarmInfo active={diag || 0} /> */}
+                {/* <ParkInfo occupancy={map} user={user} /> */}
+                {/* <CommInfo status={comm} /> */}
+              </React.Fragment>
+            )}
+            <Separator
+              orientation="vertical"
+              className="data-[orientation=vertical]:h-4"
+            />
+            {/* <LocaleToggle /> */}
+            <ModeToggle />
+          </header>
+          <div className="p-3">
+            {/* <ConfirmDialogProvider> */}
+            <Outlet context={loaderData?.user} />
+            {/* </ConfirmDialogProvider> */}
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
       <Toaster
         position="bottom-right"
         toastOptions={{
