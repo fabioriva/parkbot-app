@@ -22,7 +22,7 @@ import { TooltipProvider } from "~/components/ui/tooltip";
 import { AppSidebar } from "~/components/app-sidebar";
 // import { CommInfo } from "~/components/comm-info";
 // import { ConfirmDialogProvider } from "~/components/confirm-dialog";
-// import { LocaleToggle } from "~/components/locale-toggle";
+import { LocaleToggle } from "~/components/locale-toggle";
 // import { ParkInfo } from "~/components/park-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { auth } from "~/lib/auth.server";
@@ -125,7 +125,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
               orientation="vertical"
               className="data-[orientation=vertical]:h-4"
             />
-            {/* <LocaleToggle /> */}
+            <LocaleToggle />
             <ModeToggle />
           </header>
           <div className="p-3">
