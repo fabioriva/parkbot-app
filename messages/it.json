@@ -5,8 +5,6 @@
   "aps_location": "Sito in {city} {country}.",
   "cancel": "Annulla",
   "confirm": "Conferma",
-  "example_message": "Buongiorno {username}",
-  "hello": "Ciao",
   "signin": "Accedi",
   "signin_card_description": "Inserisci la tua email per accedere",
   "signin_card_title": "Accedi a Parkbot",

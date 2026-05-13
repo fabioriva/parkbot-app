@@ -5,8 +5,6 @@
   "aps_location": "Located in {city} {country}.",
   "cancel": "Cancel",
   "confirm": "Confirm",
-  "example_message": "Hello world {username}",
-  "hello": "Hello",
   "signin": "Signin",
   "signin_card_description": "Enter your email below to login to your account",
   "signin_card_title": "Login to Parkbot",
