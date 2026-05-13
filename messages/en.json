@@ -1,7 +1,17 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
+  "cancel": "Cancel",
   "example_message": "Hello world {username}",
   "hello": "Hello",
+  "signin": "Signin",
+  "signin_card_description": "Enter your email below to login to your account",
+  "signin_card_title": "Login to Parkbot",
+  "signin_forgot": "Forgot your password?",
+  "signin_signup": "Don't have an account?",
+  "signin_signup_link": "Sign up",
+  "signout": "Logout",
+  "signout_card_description": "Are you sure you want to log out?",
+  "signout_card_title": "Logout from Parkbot",
   "welcome_text": "The robotic parking monitoring tool",
   "welcome_login_button": "Signin to Parkbot"
 }
