@@ -1,6 +1,10 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
+  "aps_card_description": "Seleziona il sistema che vuoi monitorare.",
+  "aps_card_title": "Seleziona Aps",
+  "aps_location": "Sito in {city} {country}.",
   "cancel": "Annulla",
+  "confirm": "Conferma",
   "example_message": "Buongiorno {username}",
   "hello": "Ciao",
   "signin": "Accedi",

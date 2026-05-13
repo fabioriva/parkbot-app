@@ -10,4 +10,7 @@ export const auth = betterAuth({
     cookiePrefix: "parkbot",
   },
   database: mongodbAdapter(db),
+  emailAndPassword: {
+    enabled: true,
+  },
 });
