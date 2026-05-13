@@ -1,4 +1,3 @@
-// import { NavUser } from "~/components/user-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -10,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
+import { UserMenu } from "~/components/user-menu";
 import type { Aps } from "~/lib/aps.server";
 import type { User } from "~/lib/user.server";
 import { roles } from "~/lib/roles";
@@ -110,7 +110,9 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>{/* <NavUser user={user} /> */}</SidebarFooter>
+      <SidebarFooter>
+        <UserMenu user={user} />
+      </SidebarFooter>
     </Sidebar>
   );
 }

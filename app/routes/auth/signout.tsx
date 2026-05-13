@@ -29,7 +29,7 @@ export default function Signout() {
     <Card>
       <CardHeader>
         <CardTitle>{m.signout_card_title()}</CardTitle>
-        <CardDescription>{m.signout_card_title()}</CardDescription>
+        <CardDescription>{m.signout_card_description()}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form method="post" className="flex gap-3">
