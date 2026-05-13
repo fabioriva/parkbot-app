@@ -1,15 +1,7 @@
-# misc
 .DS_Store
-
-# dependencies
+.env
 /node_modules/
 
 # React Router
 /.react-router/
 /build/
-
-# tools
-/utils
-
-# env
-.env
