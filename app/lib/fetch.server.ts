@@ -6,7 +6,6 @@ export default async function fetcher(...args) {
     }
     throw new Error(res);
   } catch (error) {
-    // console.error("Fetch error:", error);
     return null;
   }
 }
