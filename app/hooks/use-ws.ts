@@ -1,6 +1,6 @@
 import * as React from "react";
 // import { useTranslation } from "react-i18next";
-// import { logT } from "~/lib/translation";
+import { logT } from "~/lib/trans";
 import { toast } from "sonner";
 
 export function useData(url: string, options: any) {
@@ -62,9 +62,9 @@ export function useInfo(url: string) {
       const message = JSON.parse(e.data);
       Object.keys(message).forEach((key) => {
         if (key === "notification") {
-          // toast(logT(message[key], t), {
-          //   description: message[key].date.slice(0, -1).split("T").join(" "),
-          // });
+          toast(logT(message[key]), {
+            description: message[key].date.slice(0, -1).split("T").join(" "),
+          });
         } else {
           setInfo(message);
         }
