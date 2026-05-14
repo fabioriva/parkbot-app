@@ -44,7 +44,6 @@ export function useInfo(url: string) {
   const [loading, setLoading] = React.useState(true);
 
   const ws = React.useRef(null);
-  // const { t } = useTranslation();
 
   React.useEffect(() => {
     ws.current = new WebSocket(url);
