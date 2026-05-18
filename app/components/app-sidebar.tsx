@@ -66,7 +66,11 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
             <SidebarMenuButton size="lg" asChild>
               <a href={`/aps/${user.aps}/dashboard`}>
                 <div className="flex aspect-square size-10 items-center justify-center rounded-lg mr-1">
-                  <img src="/bot.svg" alt="Parkbot" />
+                  <img
+                    // src="/bot.svg"
+                    src={`https://api.dicebear.com/9.x/bottts/svg?seed=${user.aps}`}
+                    alt="Parkbot"
+                  />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-bold">
