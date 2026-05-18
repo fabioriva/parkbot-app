@@ -106,6 +106,18 @@
   "signout": "Esci",
   "signout_card_description": "Sei sicuro di voler uscire?",
   "signout_card_title": "Disconnessione da Parkbot",
+  "signup": "Iscriviti",
+  "signup_card_description": "Inserisci i tuoi dati per attivare l'account",
+  "signup_card_title": "Registra il tuo account",
+  "signup_first_name": "Nome",
+  "signup_confirm": "Conferma password.",
+  "signup_email_field_description": "Useremo questo indirizzo per contattarti. Non condivideremo la tua email con nessun'altro.",
+  "signup_last_name": "Cognome",
+  "signup_not_subscribed": "Non sei autorizzato a registrarti",
+  "signup_password_field_description": "La password deve essere di almeno 8 caratteri.",
+  "signup_password_match": "La password non coincide",
+  "signup_registered": "Hai già un account?",
+  "signup_signin_link": "Accedi",
   "welcome_text": "Supervisione dei sistemi di parcheggio automatizzati",
   "welcome_login_button": "Accedi a Parkbot"
 }

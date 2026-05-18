@@ -106,6 +106,18 @@
   "signout": "Logout",
   "signout_card_description": "Are you sure you want to log out?",
   "signout_card_title": "Logout from Parkbot",
+  "signup": "Signup",
+  "signup_card_description": "Enter your details to activate your account",
+  "signup_card_title": "Create a Parkbot account",
+  "signup_confirm": "Confirm password",
+  "signup_email_field_description": "We'll use this to contact you. We will not share your email with anyone else.",
+  "signup_first_name": "First Name",
+  "signup_last_name": "Last Name",
+  "signup_not_subscribed": "You are not subscribed",
+  "signup_password_field_description": "Your password must be at least 8 characters long.",
+  "signup_password_match": "The password doesn't match",
+  "signup_registered": "Already registered?",
+  "signup_signin_link": "Sign in",
   "welcome_text": "The robotic parking monitoring tool",
   "welcome_login_button": "Signin to Parkbot"
 }

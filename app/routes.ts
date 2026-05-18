@@ -17,7 +17,7 @@ export default [
     // route("password-reset", "routes/auth/password-reset.tsx"),
     route("signin", "routes/auth/signin.tsx"),
     route("signout", "routes/auth/signout.tsx"),
-    // route("signup", "routes/auth/signup.tsx"),
+    route("signup", "routes/auth/signup.tsx"),
     // route("verify-email", "routes/auth/verify-email.tsx"),
   ]),
   ...prefix("aps", [
