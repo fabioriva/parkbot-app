@@ -67,8 +67,7 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
               <a href={`/aps/${user.aps}/dashboard`}>
                 <div className="flex aspect-square size-10 items-center justify-center rounded-lg mr-1">
                   <img
-                    // src="/bot.svg"
-                    src={`https://api.dicebear.com/9.x/bottts/svg?seed=${user.aps}`}
+                    src={`https://api.dicebear.com/9.x/bottts/svg?seed=${user.aps}`} // src="/bot.svg"
                     alt="Parkbot"
                   />
                 </div>
