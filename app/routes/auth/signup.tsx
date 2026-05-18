@@ -26,12 +26,10 @@ export async function action({ context, request }: Route.ActionArgs) {
     const formData = await request.formData();
     const firstName = formData.get("first-name");
     const lastName = formData.get("last-name");
-    // const name = formData.get("name");
     const email = formData.get("email");
     const password = formData.get("password");
     const confirm = formData.get("confirm");
     const subscription = await findSubscription(email);
-    // const i18next = getInstance(context);
     if (subscription === null) {
       return { error: m.signup_not_subscribed() };
     }
@@ -53,7 +51,6 @@ export async function action({ context, request }: Route.ActionArgs) {
     const result = await updateSubscription(email);
     return redirect(`/verify-email?email=${email}`, { headers });
   } catch (error) {
-    console.log("signUpEmail error:\n", error);
     return { error: error?.body?.message };
   }
 }
