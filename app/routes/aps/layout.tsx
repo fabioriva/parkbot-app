@@ -18,12 +18,12 @@ import {
 } from "~/components/ui/sidebar";
 import { Toaster } from "~/components/ui/sonner";
 import { TooltipProvider } from "~/components/ui/tooltip";
-// import { AlarmInfo } from "~/components/alarm-info";
+import { AlarmInfo } from "~/components/alarm-info";
 import { AppSidebar } from "~/components/app-sidebar";
-// import { CommInfo } from "~/components/comm-info";
+import { CommInfo } from "~/components/comm-info";
 // import { ConfirmDialogProvider } from "~/components/confirm-dialog";
 import { LocaleToggle } from "~/components/locale-toggle";
-// import { ParkInfo } from "~/components/park-info";
+import { ParkInfo } from "~/components/park-info";
 import { ModeToggle } from "~/components/mode-toggle";
 import { auth } from "~/lib/auth.server";
 import { getCookie } from "~/lib/cookie.server";
@@ -86,39 +86,30 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             <SidebarTrigger className="-ml-1" />
             <Separator
               orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4"
+              className="data-[orientation=vertical]:h-4 mr-2"
             />
-            <div className="grow-1">
-              <Breadcrumb className="hidden lg:block">
-                <BreadcrumbList>
-                  {/* breakpoint md:block */}
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="/aps-select">Aps</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbLink
-                      href={`/aps/${loaderData?.user.aps}/dashboard`}
-                    >
-                      {loaderData?.aps.name}
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage className="capitalize">
-                      {m[`sidebar_main.${location.pathname.split("/")[3]}`]()}
-                    </BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
-            </div>
+            <Breadcrumb className="grow">
+              <BreadcrumbList>
+                <BreadcrumbItem className="hidden lg:block">
+                  <BreadcrumbLink href="/aps-select">
+                    {loaderData?.aps.name}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden lg:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="capitalize">
+                    {m[`sidebar_main.${location.pathname.split("/")[3]}`]()}
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
             {!comm ? (
               <Badge variant="destructive">Data not available!</Badge>
             ) : (
               <React.Fragment>
-                {/* <AlarmInfo active={diag || 0} /> */}
-                {/* <ParkInfo occupancy={map} user={user} /> */}
-                {/* <CommInfo status={comm} /> */}
+                <AlarmInfo active={diag || 0} />
+                <ParkInfo occupancy={map} user={loaderData?.user} />
+                <CommInfo status={comm} />
               </React.Fragment>
             )}
             <Separator
