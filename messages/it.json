@@ -54,6 +54,8 @@
   "alarm.al-spbe-fc": "Porta EZE/EOE",
   "alarm.al-spba-to": "Time out porta U",
   "alarm.al-spba-fc": "Porta EZA/EOA",
+  "alarms": "Allarmi",
+  "alarms_active": "Allarmi attivi {active}",
   "aps_card_description": "Seleziona il sistema che vuoi monitorare.",
   "aps_card_title": "Seleziona Aps",
   "aps_location": "Sito in {city} {country}.",

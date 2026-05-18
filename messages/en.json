@@ -54,6 +54,8 @@
   "alarm.al-spbe-fc": "Door EZE/EOE",
   "alarm.al-spba-to": "Door U time out",
   "alarm.al-spba-fc": "Door EZA/EOA",
+  "alarms": "Alarms",
+  "alarms_active": "Active alarms {active}",
   "aps_card_description": "Select the system you want to monitor.",
   "aps_card_title": "Select Aps",
   "aps_location": "Located in {city} {country}.",

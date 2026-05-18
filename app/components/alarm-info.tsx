@@ -5,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { m } from "@paraglide/messages.js";
 
 interface AlarmInfoProps {
   active: number;
@@ -17,7 +18,7 @@ export function AlarmInfo({ active }: AlarmInfoProps) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Badge className="bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300">
-              <span className="hidden sm:block">Active</span>
+              <span className="hidden sm:block">{m.alarms()}</span>
               <BadgeAlert
                 className="block sm:hidden"
                 data-icon="inline-start"
@@ -26,7 +27,7 @@ export function AlarmInfo({ active }: AlarmInfoProps) {
             </Badge>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Active alarms {active}</p>
+            <p>m.alarms_active({active})</p>
           </TooltipContent>
         </Tooltip>
       )}
