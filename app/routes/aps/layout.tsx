@@ -97,7 +97,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden lg:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="capitalize">
+                  <BreadcrumbPage className="capitalize w-16 lg:w-full truncate">
                     {m[`sidebar_main.${location.pathname.split("/")[3]}`]()}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
