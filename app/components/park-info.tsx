@@ -25,7 +25,7 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
       <TooltipTrigger asChild>
         <Badge variant="outline" asChild>
           <a href={`/aps/${user.aps}/map`}>
-            <span className="hidden sm:block">Parked</span>
+            <span className="hidden sm:block">{m.occupancy_parked()}</span>
             <Car className="block sm:hidden" data-icon="inline-start" />{" "}
             {busy.value}
           </a>
@@ -35,7 +35,7 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
         <table className="m-0 p-0">
           <thead>
             <tr>
-              <th>Parking occupancy</th>
+              <th>{m.occupancy_title()}</th>
             </tr>
           </thead>
           <tbody>

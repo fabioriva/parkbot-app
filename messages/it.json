@@ -78,6 +78,8 @@
   "occupancy.busy": "Occupati",
   "occupancy.free": "Liberi",
   "occupancy.lock": "Bloccati",
+  "occupancy_parked": "Parcheggiate",
+  "occupancy_title": "Occupazione del sistema",
   "occupancy_total": "Totale posti",
   "sidebar_main": "Menu Principale",
   "sidebar_main.dashboard": "Dashboard",
