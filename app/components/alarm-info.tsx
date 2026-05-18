@@ -27,7 +27,7 @@ export function AlarmInfo({ active }: AlarmInfoProps) {
             </Badge>
           </TooltipTrigger>
           <TooltipContent>
-            <p>m.alarms_active({active})</p>
+            <p>{m.alarms_active({ active })}</p>
           </TooltipContent>
         </Tooltip>
       )}
