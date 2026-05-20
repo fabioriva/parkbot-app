@@ -18,7 +18,6 @@ import type { Route } from "./+types/settings";
 
 export default function Password() {
   const user = useOutletContext();
-  console.log(user);
 
   const [error, setError] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,7 +34,6 @@ export default function Password() {
       currentPassword, // required
       revokeOtherSessions: true,
     });
-    console.log(data, error);
     if (error) {
       return setError(error.message);
     }
