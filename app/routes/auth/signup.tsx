@@ -16,7 +16,10 @@ import {
 import { Input } from "~/components/ui/input";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
-import { findSubscription, updateSubscription } from "~/lib/db.server";
+import {
+  findSubscription,
+  updateSubscription,
+} from "~/lib/subscription.server";
 import { m } from "@paraglide/messages.js";
 
 import type { Route } from "./+types/signup";

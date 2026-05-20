@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth/minimal";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { customSession, haveIBeenPwned, twoFactor } from "better-auth/plugins";
-import { db, findAps } from "./db.server";
+import { aps } from "./aps";
+// import { findAps } from "./aps.server";
+import { db } from "./db.server";
 // import { sendEmail } from "./email.server";
 
 export const auth = betterAuth({
@@ -16,9 +18,9 @@ export const auth = betterAuth({
   // ...
   plugins: [
     customSession(async ({ user, session }) => {
-      const aps = await findAps(user.aps);
+      // const aps = await findAps(user.aps);
       return {
-        aps,
+        aps: aps.find((element) => element.ns === user.aps),
         user,
         session,
       };
