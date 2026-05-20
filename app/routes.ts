@@ -35,5 +35,6 @@ export default [
     ]),
   ]),
   route("action/set-theme", "./routes/action.set-theme.ts"),
+  route("api/auth/*", "routes/api.auth.$.ts"),
   route("*", "./routes/catchall.tsx"),
 ] satisfies RouteConfig;
