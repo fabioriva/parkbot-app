@@ -3,7 +3,7 @@ import type { Aps } from "./aps";
 
 const COLLECTION = "aps";
 
-export async function findAps(ns: string): Promise<Aps | null> {
+export async function findAps(ns: string): Promise<Aps> | null {
   const aps = db.collection(COLLECTION);
   const result = await aps.findOne({ ns }, { projection: { _id: 0, ns: 0 } });
   if (result === null) {
@@ -14,7 +14,7 @@ export async function findAps(ns: string): Promise<Aps | null> {
 
 export async function findSubscribedApsList(
   nsList: string[],
-): Promise<Aps[] | null> {
+): Promise<Aps[]> | null {
   const aps = db.collection(COLLECTION);
   const result = await aps
     .find({ ns: { $in: nsList } }) //, { projection: { _id: 0 } })

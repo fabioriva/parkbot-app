@@ -1,4 +1,11 @@
-import { ChevronsUpDown, Key, LogOut, ScanFace, Sparkles } from "lucide-react";
+import {
+  ChevronsUpDown,
+  Key,
+  LogOut,
+  ScanFace,
+  Sparkles,
+  UserRoundCog,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -67,6 +74,7 @@ export function UserMenu({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
               <DropdownMenuLabel>{m.sidebar_user_settings()}</DropdownMenuLabel>
               <DropdownMenuItem asChild>
@@ -79,6 +87,16 @@ export function UserMenu({
                 <a href={`/aps/${user.aps}/user/2fa`}>
                   <ScanFace />
                   {m.sidebar_user_twoFactor()}
+                </a>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>{m.sidebar_user_admin()}</DropdownMenuLabel>
+              <DropdownMenuItem disabled={user.role !== "admin"} asChild>
+                <a href={`/aps/${user.aps}/user/subscription`}>
+                  <UserRoundCog />
+                  {m.sidebar_user_subscriptions()}
                 </a>
               </DropdownMenuItem>
             </DropdownMenuGroup>

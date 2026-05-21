@@ -1,6 +1,5 @@
 import { CheckCircle2Icon } from "lucide-react";
 import { useState } from "react";
-import { useOutletContext } from "react-router";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
 import {
@@ -17,8 +16,6 @@ import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/settings";
 
 export default function Password() {
-  const user = useOutletContext();
-
   const [error, setError] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");

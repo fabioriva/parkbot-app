@@ -32,6 +32,7 @@ export default [
       //     route(":aps/tags", "routes/aps/tags.tsx"),
       //     route(":aps/user/2fa", "routes/user/2fa.tsx"),
       route(":aps/user/password", "routes/user/password.tsx"),
+      route(":aps/user/subscription", "routes/user/subscription.tsx"),
     ]),
   ]),
   route("action/set-theme", "./routes/action.set-theme.ts"),

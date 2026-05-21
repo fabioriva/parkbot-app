@@ -18,6 +18,14 @@ export async function findSubscription(
   return result;
 }
 
+export async function findSubscriptions(
+  email: string,
+): Promise<Subscription[]> | null {
+  const subscription = db.collection(COLLECTION);
+  const result = await subscription.find().toArray();
+  return result;
+}
+
 export async function updateSubscription(
   email: string,
   subscribed: boolean = true,
