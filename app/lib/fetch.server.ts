@@ -4,9 +4,8 @@ export default async function fetcher(...args) {
     if (res.ok) {
       return await res.json();
     }
-    throw new Error(res)
+    throw new Error(res);
   } catch (error) {
-    // console.error("Fetch error:", error);
     return null;
   }
 }

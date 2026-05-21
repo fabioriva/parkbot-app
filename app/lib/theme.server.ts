@@ -1,18 +1,16 @@
-import { createCookieSessionStorage } from "react-router";
 import { createThemeSessionResolver } from "remix-themes";
+import { createCookieSessionStorage } from "react-router";
 
-// const isProduction = import.meta.env.PROD;
-
-const sessionStorage = createCookieSessionStorage({
-  cookie: {
-    name: "parkbot.theme",
-    path: "/",
-    httpOnly: true,
-    sameSite: "lax",
-    secrets: [process.env.BETTER_AUTH_SECRET],
-    // Set domain and secure only if in production
-    // ...(isProduction ? { domain: "sotefinservice.com", secure: true } : {}),
-  },
-});
-
-export const themeSessionResolver = createThemeSessionResolver(sessionStorage);
+export const themeSessionResolver = createThemeSessionResolver(
+  createCookieSessionStorage({
+    cookie: {
+      name: "__parkbot-theme",
+      // domain: 'remix.run',
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      secrets: ["s3cr3t"],
+      // secure: true,
+    },
+  }),
+);

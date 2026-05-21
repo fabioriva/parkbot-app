@@ -1,24 +1,23 @@
-import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSet,
   FieldTitle,
 } from "~/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
-import { findSubscribedApsList, findSubscription } from "~/lib/db.server";
+import { aps } from "~/lib/aps";
+// import { findSubscribedApsList } from "~/lib/aps.server";
+import { findSubscription } from "~/lib/subscription.server";
+import { m } from "@paraglide/messages.js";
+
 import type { Route } from "./+types/aps-select";
 
 export async function action({ request }: Route.ActionArgs) {
@@ -27,9 +26,7 @@ export async function action({ request }: Route.ActionArgs) {
   const aps = formData.get("aps");
   const data = await auth.api.updateUser({
     body: {
-      aps, // TODO: import Aps interface????????????????????????????????
-      // image: "https://example.com/image.jpg",
-      // name: "John Doe",
+      aps,
     },
     headers: await request.headers,
   });
@@ -51,42 +48,45 @@ export async function loader({ request }: Route.LoaderArgs) {
       return redirect("/2fa-setup");
     }
     const subscription = await findSubscription(user?.email);
-    const aps = await findSubscribedApsList(subscription?.aps);
-    return aps;
+    // const aps = await findSubscribedApsList(subscription?.aps);
+    // return aps;
+    // return await findSubscribedApsList(subscription?.aps);
+    return aps.filter((a) => subscription?.aps.includes(a.ns));
   } catch (error) {
     console.log("getSession error:", error);
   }
 }
 
 export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
-  let { t } = useTranslation();
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{t("apsSelect.cardTitle")}</CardTitle>
-        <CardDescription>{t("apsSelect.cardDescription")}</CardDescription>
-      </CardHeader>
       <CardContent>
         <Form method="post">
           <FieldGroup>
-            <RadioGroup defaultValue={loaderData[0].ns} name="aps">
-              {loaderData.map(({ city, country, name, ns }, key) => (
-                <FieldLabel htmlFor={ns} key={key}>
-                  <Field orientation="horizontal">
-                    <FieldContent>
-                      <FieldTitle className="capitalize">{name}</FieldTitle>
-                      <FieldDescription>
-                        {t("apsSelect.locatedIn", { city, country })}
-                      </FieldDescription>
-                    </FieldContent>
-                    <RadioGroupItem value={ns} id={ns} />
-                  </Field>
-                </FieldLabel>
-              ))}
-            </RadioGroup>
-            <Field>
-              <Submit action="/aps-select" title={t("apsSelect.submit")} />
-            </Field>
+            <FieldSet>
+              <FieldLegend variant="label">{m.aps_card_title()}</FieldLegend>
+              <FieldDescription>{m.aps_card_description()}</FieldDescription>
+              <RadioGroup defaultValue={loaderData[0].ns} name="aps">
+                {loaderData.map(
+                  ({ city, country, flag, name, ns, parkingSpaces }, key) => (
+                    <FieldLabel htmlFor={ns} key={key}>
+                      <Field orientation="horizontal">
+                        <FieldContent>
+                          <FieldTitle>{name}</FieldTitle>
+                          <FieldDescription>
+                            {m.aps_location({ city, country, flag })}
+                          </FieldDescription>
+                        </FieldContent>
+                        <RadioGroupItem value={ns} id={ns} />
+                      </Field>
+                    </FieldLabel>
+                  ),
+                )}
+              </RadioGroup>
+              <Field>
+                <Submit action="/aps-select" title={m.confirm()} />
+              </Field>
+            </FieldSet>
           </FieldGroup>
         </Form>
       </CardContent>

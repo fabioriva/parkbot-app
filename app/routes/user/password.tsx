@@ -1,6 +1,5 @@
 import { CheckCircle2Icon } from "lucide-react";
 import { useState } from "react";
-import { useOutletContext } from "react-router";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
 import {
@@ -13,14 +12,10 @@ import {
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Switch } from "~/components/ui/switch";
 import { authClient } from "~/lib/auth";
 import type { Route } from "./+types/settings";
 
 export default function Password() {
-  const user = useOutletContext();
-  console.log(user);
-
   const [error, setError] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -36,7 +31,6 @@ export default function Password() {
       currentPassword, // required
       revokeOtherSessions: true,
     });
-    console.log(data, error);
     if (error) {
       return setError(error.message);
     }

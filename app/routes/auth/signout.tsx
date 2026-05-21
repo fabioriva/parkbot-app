@@ -1,5 +1,4 @@
 import { Loader2Icon } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { Form, Link, redirect, useNavigate, useNavigation } from "react-router";
 import { Button } from "~/components/ui/button";
 import {
@@ -9,8 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Field, FieldGroup } from "~/components/ui/field";
 import { auth } from "~/lib/auth.server";
+import { m } from "@paraglide/messages.js";
+
 import type { Route } from "./+types/signout";
 
 export async function action({ request }: Route.ActionArgs) {
@@ -25,12 +25,11 @@ export async function action({ request }: Route.ActionArgs) {
 export default function Signout() {
   const navigate = useNavigate();
   const navigation = useNavigation();
-  let { t } = useTranslation();
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("signout.cardTitle")}</CardTitle>
-        <CardDescription>{t("signout.cardDescription")}</CardDescription>
+        <CardTitle>{m.signout_card_title()}</CardTitle>
+        <CardDescription>{m.signout_card_description()}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form method="post" className="flex gap-3">
@@ -41,17 +40,17 @@ export default function Signout() {
                 navigate(-1);
               }}
             >
-              Cancel
+              {m.cancel()}
             </Link>
           </Button>
           {navigation.formAction === "/signout" ? (
             <Button className="flex-1" disabled>
               <Loader2Icon className="animate-spin" />
-              {t("signout.submit")}
+              {m.signout()}
             </Button>
           ) : (
             <Button className="flex-1" type="submit">
-              {t("signout.submit")}
+              {m.signout()}
             </Button>
           )}
         </Form>

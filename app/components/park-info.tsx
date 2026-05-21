@@ -5,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { m } from "@paraglide/messages.js";
 
 interface OccupancyItem {
   id: string;
@@ -24,7 +25,7 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
       <TooltipTrigger asChild>
         <Badge variant="outline" asChild>
           <a href={`/aps/${user.aps}/map`}>
-            <span className="hidden sm:block">Parked</span>
+            <span className="hidden sm:block">{m.occupancy_parked()}</span>
             <Car className="block sm:hidden" data-icon="inline-start" />{" "}
             {busy.value}
           </a>
@@ -34,20 +35,20 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
         <table className="m-0 p-0">
           <thead>
             <tr>
-              <th>Parking occupancy</th>
+              <th>{m.occupancy_title()}</th>
             </tr>
           </thead>
           <tbody>
             {occupancy.map((item, key) => (
               <tr className="capitalize" key={key}>
-                <td>{item.id}</td>
+                <td>{m[`occupancy.${item.id}`]()}</td>
                 <td className="w-16 text-right">{item.value}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr className="capitalize">
-              <td>Total spaces</td>
+              <td>{m.occupancy_total()}</td>
               <td className="w-16 text-right">{total(occupancy)}</td>
             </tr>
           </tfoot>

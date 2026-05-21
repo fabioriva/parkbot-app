@@ -15,11 +15,11 @@ export function CommInfo({ status }: CommInfoProps) {
       <TooltipTrigger asChild>
         {status ? (
           <Badge className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300">
-            ONLINE
+            PLC
           </Badge>
         ) : (
           <Badge className="bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300">
-            OFFLINE
+            PLC
           </Badge>
         )}
       </TooltipTrigger>

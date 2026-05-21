@@ -1,5 +1,11 @@
-import { ChevronsUpDown, Key, LogOut, ScanFace, Sparkles } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import {
+  ChevronsUpDown,
+  Key,
+  LogOut,
+  ScanFace,
+  Sparkles,
+  UserRoundCog,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,8 +22,9 @@ import {
   useSidebar,
 } from "~/components/ui/sidebar";
 import { UserAvatar } from "~/components/user-avatar";
+import { m } from "@paraglide/messages.js";
 
-export function NavUser({
+export function UserMenu({
   user,
 }: {
   user: {
@@ -27,7 +34,6 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const { t } = useTranslation();
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -68,20 +74,29 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
-              <DropdownMenuLabel>
-                {t("sidebar.user.settings")}
-              </DropdownMenuLabel>
+              <DropdownMenuLabel>{m.sidebar_user_settings()}</DropdownMenuLabel>
               <DropdownMenuItem asChild>
                 <a href={`/aps/${user.aps}/user/password`}>
                   <Key />
-                  {t("sidebar.user.password")}
+                  {m.sidebar_user_password()}
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <a href={`/aps/${user.aps}/user/2fa`}>
                   <ScanFace />
-                  {t("sidebar.user.twoFactor")}
+                  {m.sidebar_user_twoFactor()}
+                </a>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>{m.sidebar_user_admin()}</DropdownMenuLabel>
+              <DropdownMenuItem disabled={user.role !== "admin"} asChild>
+                <a href={`/aps/${user.aps}/user/subscription`}>
+                  <UserRoundCog />
+                  {m.sidebar_user_subscriptions()}
                 </a>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -89,7 +104,7 @@ export function NavUser({
             <DropdownMenuItem asChild>
               <a href="/signout">
                 <LogOut />
-                {t("sidebar.user.logout")}
+                {m.signout()}
               </a>
             </DropdownMenuItem>
           </DropdownMenuContent>

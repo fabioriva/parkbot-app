@@ -6,7 +6,7 @@ export function getCookie(request, name) {
       .map((cookie) => cookie.split("="))
       .map(([key, value]) => [key, decodeURIComponent(value)]) || [],
   );
-  return cookies[name] || null;  
+  return cookies[name] || null;
 }
 
 export function getCookies(request) {
@@ -17,5 +17,5 @@ export function getCookies(request) {
       .map((cookie) => cookie.split("="))
       .map(([key, value]) => [key, decodeURIComponent(value)]) || [],
   );
-  return cookies;  
+  return cookies;
 }

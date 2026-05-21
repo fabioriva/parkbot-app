@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { Form, redirect } from "react-router";
 import {
   Card,
@@ -16,6 +15,8 @@ import {
 import { Input } from "~/components/ui/input";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
+import { m } from "@paraglide/messages.js";
+
 import type { Route } from "./+types/signin";
 
 export async function action({ request }: Route.ActionArgs) {
@@ -40,18 +41,16 @@ export async function action({ request }: Route.ActionArgs) {
     }
     return redirect(response?.url, { headers });
   } catch (error) {
-    // console.log("signInEmail error:\n", error);
     return { message: error?.body?.message };
   }
 }
 
 export default function Signin({ actionData }: Route.ComponentProps) {
-  let { t } = useTranslation();
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("signin.cardTitle")}</CardTitle>
-        <CardDescription>{t("signin.cardDescription")}</CardDescription>
+        <CardTitle>{m.signin_card_title()}</CardTitle>
+        <CardDescription>{m.signin_card_description()}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form method="post">
@@ -73,7 +72,7 @@ export default function Signin({ actionData }: Route.ComponentProps) {
                   href="/password-forgot"
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                 >
-                  {t("signin.forgotLink")}
+                  {m.signin_forgot()}
                 </a>
               </div>
               <Input
@@ -84,7 +83,7 @@ export default function Signin({ actionData }: Route.ComponentProps) {
               />
             </Field>
             <Field>
-              <Submit action="/signin" title={t("signin.submit")} />
+              <Submit action="/signin" title={m.signin()} />
               {actionData ? (
                 <FieldError>{actionData.message}</FieldError>
               ) : null}
@@ -92,9 +91,9 @@ export default function Signin({ actionData }: Route.ComponentProps) {
           </FieldGroup>
         </Form>
         <div className="mt-6 text-sm">
-          {t("signin.signup")}{" "}
+          {m.signin_signup()}{" "}
           <a href="/signup" className="underline underline-offset-4">
-            {t("signin.signupLink")}
+            {m.signin_signup_link()}
           </a>
         </div>
       </CardContent>

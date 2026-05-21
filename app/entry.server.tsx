@@ -1,15 +1,13 @@
+import dotenv from "dotenv";
 import { PassThrough } from "node:stream";
-import type { EntryContext, RouterContextProvider } from "react-router";
+
+import type { AppLoadContext, EntryContext } from "react-router";
 import { createReadableStreamFromReadable } from "@react-router/node";
 import { ServerRouter } from "react-router";
 import { isbot } from "isbot";
 import type { RenderToPipeableStreamOptions } from "react-dom/server";
 import { renderToPipeableStream } from "react-dom/server";
-// i18n
-import { I18nextProvider } from "react-i18next";
-import { getInstance } from "./middleware/i18next";
-// env
-import dotenv from "dotenv";
+
 dotenv.config();
 
 export const streamTimeout = 5_000;
@@ -18,8 +16,10 @@ export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  entryContext: EntryContext,
-  routerContext: RouterContextProvider,
+  routerContext: EntryContext,
+  loadContext: AppLoadContext,
+  // If you have middleware enabled:
+  // loadContext: RouterContextProvider
 ) {
   // https://httpwg.org/specs/rfc9110.html#HEAD
   if (request.method.toUpperCase() === "HEAD") {
@@ -48,9 +48,7 @@ export default function handleRequest(
     );
 
     const { pipe, abort } = renderToPipeableStream(
-      <I18nextProvider i18n={getInstance(routerContext)}>
-        <ServerRouter context={entryContext} url={request.url} />
-      </I18nextProvider>,
+      <ServerRouter context={routerContext} url={request.url} />,
       {
         [readyOption]() {
           shellRendered = true;

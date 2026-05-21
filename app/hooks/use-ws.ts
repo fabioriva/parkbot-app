@@ -1,15 +1,14 @@
-import { useState, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
-import { logT } from "~/lib/translation";
+import * as React from "react";
+import { logT } from "~/lib/trans";
 import { toast } from "sonner";
 
 export function useData(url: string, options: any) {
   const { initialData } = options;
-  const [data, setData] = useState(initialData);
-  const [loading, setLoading] = useState(true);
-  const ws = useRef(null);
+  const [data, setData] = React.useState(initialData);
+  const [loading, setLoading] = React.useState(true);
+  const ws = React.useRef(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     ws.current = new WebSocket(url);
     ws.current.onopen = () => console.log("ws opened");
     ws.current.onclose = () => console.log("ws closed");
@@ -18,7 +17,7 @@ export function useData(url: string, options: any) {
     };
   }, [url]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!ws.current) return;
     ws.current.onerror = (e) => console.error(e);
     ws.current.onmessage = (e) => {
@@ -32,7 +31,7 @@ export function useData(url: string, options: any) {
 }
 
 export function useInfo(url: string) {
-  const [info, setInfo] = useState({
+  const [info, setInfo] = React.useState({
     comm: false,
     diag: 0,
     map: [
@@ -42,12 +41,11 @@ export function useInfo(url: string) {
     ],
     // operations: {}
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = React.useState(true);
 
-  const ws = useRef(null);
-  const { t } = useTranslation();
+  const ws = React.useRef(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     ws.current = new WebSocket(url);
     ws.current.onopen = () => console.log("ws opened");
     ws.current.onclose = () => console.log("ws closed");
@@ -56,18 +54,16 @@ export function useInfo(url: string) {
     };
   }, [url]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!ws.current) return;
     ws.current.onmessage = (e) => {
       const message = JSON.parse(e.data);
       Object.keys(message).forEach((key) => {
         if (key === "notification") {
-          // console.log(message[key]);
-          toast(logT(message[key], t), {
+          toast(logT(message[key]), {
             description: message[key].date.slice(0, -1).split("T").join(" "),
           });
         } else {
-          // console.log(e.data);
           setInfo(message);
         }
       });

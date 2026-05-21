@@ -1,7 +1,5 @@
 import clsx from "clsx";
-import { useEffect } from "react";
 import {
-  data,
   isRouteErrorResponse,
   Links,
   Meta,
@@ -16,18 +14,11 @@ import {
   useTheme,
 } from "remix-themes";
 import { themeSessionResolver } from "~/lib/theme.server";
-// i18n
-import { useTranslation } from "react-i18next";
-import {
-  getLocale,
-  i18nextMiddleware,
-  localeCookie,
-} from "./middleware/i18next";
+import { getLocale, getTextDirection } from "@paraglide/runtime.js";
+import { paraglideMiddleware } from "@paraglide/server.js";
 
 import type { Route } from "./+types/root";
 import "./app.css";
-
-export const middleware = [i18nextMiddleware];
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -42,54 +33,35 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-// Return the theme from the session storage using the loader
-export async function loader({ context, request }: LoaderFunctionArgs) {
-  const locale = getLocale(context);
+export const loader: LoaderFunction = async ({ request }) => {
   const { getTheme } = await themeSessionResolver(request);
-  return data(
-    {
-      locale,
-      theme: getTheme(),
-    },
-    { headers: { "Set-Cookie": await localeCookie.serialize(locale) } },
-  );
-}
+  return {
+    theme: getTheme(),
+  };
+};
 
-// Wrap your app with ThemeProvider.
-// `specifiedTheme` is the stored theme in the session storage.
-// `themeAction` is the action name that's used to change the theme in the session storage.
-export default function AppWithProviders({
-  loaderData: { locale, theme },
-}: Route.ComponentProps) {
-  // const data = useLoaderData<typeof loader>();
+export const middleware: MiddlewareFunction[] = [
+  (ctx, next) => paraglideMiddleware(ctx.request, () => next()),
+];
+
+export default function AppWithProviders() {
+  const data = useLoaderData<typeof loader>();
   return (
-    <ThemeProvider
-      specifiedTheme={theme ?? "dark"}
-      themeAction="/action/set-theme"
-    >
-      <App locale={locale} />
+    <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
+      <App />
     </ThemeProvider>
   );
 }
 
-export function App({ locale }) {
+export function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
-
-  const { i18n } = useTranslation();
-  useEffect(() => {
-    if (i18n.language !== locale) i18n.changeLanguage(locale);
-  }, [locale, i18n]);
-
   return (
-    <html
-      className={clsx(theme)}
-      dir={i18n.dir(i18n.language)}
-      lang={i18n.language}
-    >
+    <html lang={getLocale()} dir={getTextDirection()} className={clsx(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google" content="notranslate" />
         <Meta />
         <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
@@ -103,28 +75,40 @@ export function App({ locale }) {
   );
 }
 
-const http_responses = [
-  {
-    status: 400,
-    message: "Bad Request",
-    details: "Malformed request syntax or invalid request.",
-  },
-  {
-    status: 401,
-    message: "Unauthorized",
-    details: "Authentication required or failed.",
-  },
-  {
-    status: 403,
-    message: "Forbidden",
-    details: "Server refuses to fulfill the request.",
-  },
-  {
-    status: 404,
-    message: "Not Found",
-    details: "Requested resource not found.",
-  },
-];
+// export function Layout({ children }: { children: React.ReactNode }) {
+//   const data = useLoaderData<typeof loader>();
+//   const [theme] = useTheme();
+//   return (
+//     <html lang={getLocale()} dir={getTextDirection()} className={clsx(theme)}>
+//       <head>
+//         <meta charSet="utf-8" />
+//         <meta name="viewport" content="width=device-width, initial-scale=1" />
+//         <meta name="google" content="notranslate" />
+//         <Meta />
+//         <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
+//         <Links />
+//       </head>
+//       <body>
+//         {children}
+//         <ScrollRestoration />
+//         <Scripts />
+//       </body>
+//     </html>
+//   );
+// }
+
+// export default function App() {
+//   const data = useLoaderData();
+//   return (
+//     <ThemeProvider
+//       specifiedTheme={data.theme}
+//       themeAction="/action/set-theme"
+//       disableTransitionOnThemeChange={true}
+//     >
+//       <Outlet />
+//     </ThemeProvider>
+//   );
+// }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
@@ -132,22 +116,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    // message = error.status === 404 ? "404" : "Error";
-    // details =
-    //   error.status === 404
-    //     ? "The requested page could not be found"
-    //     : error.statusText || details;
-    const response = http_responses.find(
-      (response) => response.status === error.status,
-    ) || {
-      message,
-      details,
-    };
-    message =
-      (response.status !== undefined &&
-        response.status + " " + response.message) ||
-      response.message;
-    details = response.details;
+    message = error.status === 404 ? "404" : "Error";
+    details =
+      error.status === 404
+        ? "The requested page could not be found."
+        : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
@@ -162,8 +135,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
           <code>{stack}</code>
         </pre>
       )}
-      <hr />
-      <p>Parkbot (Linux) Server at www.sotefinservice.com</p>
     </main>
   );
 }
