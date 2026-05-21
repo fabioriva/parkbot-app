@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router";
+import { data } from "react-router";
 import {
   Table,
   TableBody,
@@ -11,17 +11,24 @@ import {
 } from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { aps } from "~/lib/aps";
+import { auth } from "~/lib/auth.server";
 import { findSubscriptions } from "~/lib/subscription.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
+  const session = await auth.api.getSession({
+    headers: await request.headers,
+  });
+  if (!session) {
+    return redirect("/signin");
+  }
+  if (session.user.role !== "admin") {
+    throw data("Forbidden", { status: 403 });
+  }
   const subscriptions = await findSubscriptions();
   return subscriptions;
 }
 
 export default function Subscription({ loaderData }: Route.LoaderArgs) {
-  const user = useOutletContext();
-  if (user?.role !== "admin") return <h1>Not authorized</h1>;
-
   const totalSpaces = aps.reduce((accumulator, currentValue) => {
     return accumulator + Number(currentValue.parkingSpaces);
   }, 0);
