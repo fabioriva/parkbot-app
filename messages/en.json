@@ -61,6 +61,7 @@
   "aps_location": "Located in {city}, {country} {flag}.",
   "aps_parking_spaces": "{parkingSpaces} parking spaces.",
   "auth_email_resend": "Resend verification email",
+  "auth_email_sent": "Email sent",
   "auth_email_verification_card_content": "Please check your inbox and click the link to activate your account.",
   "auth_email_verification_card_description": "We've sent you an email to verify your address. Click the link in the email to complete verification.",
   "auth_email_verification_card_title": "Verify your email address",

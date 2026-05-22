@@ -48,7 +48,7 @@ export default function EmailVerification({
           </Field>
           <Field>
             <Button onClick={resendEmail}>{m.auth_email_resend()}</Button>
-            {emailSent ? <p>{"We have sent you an email"}</p> : null}
+            {emailSent ? <p>{m.auth_email_sent()}</p> : null}
           </Field>
         </FieldGroup>
       </CardContent>

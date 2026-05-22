@@ -61,6 +61,7 @@
   "aps_location": "Sito in {city}, {country} {flag}.",
   "aps_parking_spaces": "{parkingSpaces} posti auto.",
   "auth_email_resend": "Reinvia email di verifica",
+  "auth_email_sent": "Email inviata",
   "auth_email_verification_card_content": "Controlla la tua casella di posta e clicca sul link per attivare il tuo account.",
   "auth_email_verification_card_description": "Ti abbiamo inviato un'email per verificare il tuo indirizzo. Clicca sul link nell'email per completare la verifica.",
   "auth_email_verification_card_title": "Verifica il tuo indirizzo email",
