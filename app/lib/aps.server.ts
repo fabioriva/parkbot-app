@@ -1,14 +1,38 @@
 import { db } from "./db.server";
-import type { Aps } from "./aps";
 
 const COLLECTION = "aps";
+
+export interface Aps {
+  _id: ObjectId;
+  city: string;
+  company: string;
+  country: string;
+  flag: string;
+  name: string;
+  ns: string;
+  parkingSpaces: number;
+}
+
+export async function createAps(aps: Aps) {
+  try {
+    const collection = db.collection(COLLECTION);
+    const result = await collection.insertOne({ ...aps });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function findApsAll(ns: string): Promise<Aps[]> | null {
+  const aps = db.collection(COLLECTION);
+  const result = await aps.find().toArray();
+  return result;
+}
 
 export async function findAps(ns: string): Promise<Aps> | null {
   const aps = db.collection(COLLECTION);
   const result = await aps.findOne({ ns }, { projection: { _id: 0, ns: 0 } });
-  if (result === null) {
-    return null;
-  }
   return result;
 }
 

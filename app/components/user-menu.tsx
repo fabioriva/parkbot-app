@@ -1,5 +1,6 @@
 import {
   ChevronsUpDown,
+  SquareParking,
   Key,
   LogOut,
   ScanFace,
@@ -93,6 +94,12 @@ export function UserMenu({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuLabel>{m.sidebar_user_admin()}</DropdownMenuLabel>
+              <DropdownMenuItem disabled={user.role !== "admin"} asChild>
+                <a href={`/aps/${user.aps}/user/aps`}>
+                  <SquareParking />
+                  Aps
+                </a>
+              </DropdownMenuItem>
               <DropdownMenuItem disabled={user.role !== "admin"} asChild>
                 <a href={`/aps/${user.aps}/user/subscription`}>
                   <UserRoundCog />

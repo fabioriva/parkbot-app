@@ -1,4 +1,4 @@
-import { Form, useFetcher } from "react-router";
+import { Form } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -7,7 +7,7 @@ import {
   FieldGroup,
   FieldLabel,
   FieldLegend,
-  FieldSeparator,
+  // FieldSeparator,
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
@@ -31,9 +31,7 @@ export function SubscriptionForm({ aps, user }) {
             <FieldDescription>Add new subscription</FieldDescription>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="checkout-7j9-card-name-43j">
-                  Email
-                </FieldLabel>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   type="email"
                   name="email"
@@ -66,7 +64,7 @@ export function SubscriptionForm({ aps, user }) {
             <FieldDescription>
               Select the systems you want to assign to this subscription.
             </FieldDescription>
-            <FieldGroup className="gap-3">
+            <FieldGroup className="grid grid-cols-2 gap-3">
               {aps.map((aps) => (
                 <Field orientation="horizontal" key={aps.ns}>
                   <Checkbox

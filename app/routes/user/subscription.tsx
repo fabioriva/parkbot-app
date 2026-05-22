@@ -2,7 +2,6 @@ import { data } from "react-router";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -11,7 +10,8 @@ import {
 } from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { SubscriptionForm } from "~/components/subscription-form";
-import { aps } from "~/lib/aps";
+// import { aps } from "~/lib/aps";
+import { findApsAll } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 import {
   createSubscription,
@@ -21,7 +21,6 @@ import {
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    // console.log(formData);
     const email = formData.get("email");
     const role = formData.get("role");
     const selectedAps = formData.getAll("aps");
@@ -31,8 +30,8 @@ export async function action({ context, request }: Route.ActionArgs) {
       role,
       subscribed: false,
     });
-    console.log(result);
 
+    console.log(result);
     if (result?.acknowledged) {
       console.log(`A document was inserted with the _id: ${result.insertedId}`);
     }
@@ -52,64 +51,29 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (session.user.role !== "admin") {
     throw data("Forbidden", { status: 403 });
   }
+  const aps = await findApsAll();
   const subscriptions = await findSubscriptions();
-  // return subscriptions;
   return {
+    aps,
     subscriptions,
     user: session.user,
   };
 }
 
 export default function Subscription({ loaderData }: Route.LoaderArgs) {
-  const totalSpaces = aps.reduce((accumulator, currentValue) => {
+  const totalSpaces = loaderData.aps.reduce((accumulator, currentValue) => {
     return accumulator + Number(currentValue.parkingSpaces);
   }, 0);
 
   return (
-    <Tabs defaultValue="aps">
-      <TabsList>
-        <TabsTrigger value="aps">Aps</TabsTrigger>
-        <TabsTrigger value="subscription">Subscriptions</TabsTrigger>
+    <Tabs defaultValue="subscription">
+      <TabsList className="mb-3">
+        <TabsTrigger value="subscription">Subscription List</TabsTrigger>
+        <TabsTrigger value="subscription-form">Add Subscription</TabsTrigger>
       </TabsList>
-      <TabsContent value="aps">
-        <div className="w-6xl overflow-x-auto">
-          <Table className="border min-w-6xl">
-            <TableCaption>Aps list.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Company</TableHead>
-                <TableHead>Country</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Namespace</TableHead>
-                <TableHead className="text-right">Spaces</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {aps.map((aps) => (
-                <TableRow key={aps.ns}>
-                  <TableCell>{aps.company}</TableCell>
-                  <TableCell>{aps.country}</TableCell>
-                  <TableCell className="font-semibold">{aps.name}</TableCell>
-                  <TableCell>{aps.ns}</TableCell>
-                  <TableCell className="font-semibold text-right">
-                    {aps.parkingSpaces}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={4}>Total</TableCell>
-                <TableCell className="text-right">{totalSpaces}</TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
-      </TabsContent>
-      <TabsContent className="space-y-6" value="subscription">
+      <TabsContent value="subscription">
         <div className="w-6xl">
-          <Table className="border min-w-6xl">
-            <TableCaption>List of user subscriptions.</TableCaption>
+          <Table className="border">
             <TableHeader>
               <TableRow>
                 <TableHead>Email</TableHead>
@@ -136,7 +100,9 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
             </TableBody>
           </Table>
         </div>
-        <SubscriptionForm aps={aps} user={loaderData.user} />
+      </TabsContent>
+      <TabsContent value="subscription-form">
+        <SubscriptionForm aps={loaderData.aps} user={loaderData.user} />
       </TabsContent>
     </Tabs>
   );

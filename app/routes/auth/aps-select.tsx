@@ -13,8 +13,8 @@ import {
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
-import { aps } from "~/lib/aps";
-// import { findSubscribedApsList } from "~/lib/aps.server";
+// import { aps } from "~/lib/aps";
+import { findSubscribedApsList } from "~/lib/aps.server";
 import { findSubscription } from "~/lib/subscription.server";
 import { m } from "@paraglide/messages.js";
 
@@ -48,10 +48,9 @@ export async function loader({ request }: Route.LoaderArgs) {
       return redirect("/2fa-setup");
     }
     const subscription = await findSubscription(user?.email);
-    // const aps = await findSubscribedApsList(subscription?.aps);
-    // return aps;
-    // return await findSubscribedApsList(subscription?.aps);
-    return aps.filter((a) => subscription?.aps.includes(a.ns));
+    const aps = await findSubscribedApsList(subscription?.aps);
+    return aps;
+    // return aps.filter((a) => subscription?.aps.includes(a.ns));
   } catch (error) {
     console.log("getSession error:", error);
   }

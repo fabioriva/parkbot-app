@@ -13,7 +13,6 @@ export interface Subscription {
 export async function createSubscription(subscription: Subscription) {
   try {
     const collection = db.collection(COLLECTION);
-    // await collection.createIndex({ email: 1 }, { unique: true }); // A unique index ensures that the indexed fields do not store duplicate values
     const result = await collection.insertOne({ ...subscription });
     return result;
   } catch (error) {

@@ -10,10 +10,11 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
 import { UserMenu } from "~/components/user-menu";
-import type { Aps } from "~/lib/aps.server";
-import type { User } from "~/lib/user.server";
 import { roles } from "~/lib/roles";
 import { m } from "@paraglide/messages.js";
+
+import type { Aps } from "~/lib/aps.server";
+import type { User } from "~/lib/user.server";
 
 interface SidebarProps {
   aps: Aps;

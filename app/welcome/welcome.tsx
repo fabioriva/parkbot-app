@@ -1,5 +1,5 @@
-import logoDark from "./logo-dark.svg";
-import logoLight from "./logo-light.svg";
+// import logoDark from "./logo-dark.svg";
+// import logoLight from "./logo-light.svg";
 import { Button } from "~/components/ui/button";
 import { AuroraText } from "~/components/aurora-text";
 import { ModeToggle } from "~/components/mode-toggle";
