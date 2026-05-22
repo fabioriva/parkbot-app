@@ -52,8 +52,7 @@ export async function action({ context, request }: Route.ActionArgs) {
       },
     });
     const result = await updateSubscription(email);
-    // return redirect(`/verify-email?email=${email}`, { headers });
-    return redirect("/aps-select", { headers });
+    return redirect(`/email-verification?email=${email}`, { headers });
   } catch (error) {
     return { error: error?.body?.message };
   }

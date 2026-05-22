@@ -4,7 +4,9 @@ import { customSession, haveIBeenPwned, twoFactor } from "better-auth/plugins";
 import { aps } from "./aps";
 // import { findAps } from "./aps.server";
 import { db } from "./db.server";
-// import { sendEmail } from "./email.server";
+import { roles } from "./roles";
+import { sendEmail } from "./email.server";
+import { m } from "@paraglide/messages.js";
 
 export const auth = betterAuth({
   appName: "Parkbot", // Used as the default issuer for TOTP
@@ -38,11 +40,24 @@ export const auth = betterAuth({
         required: false, // set to false because selected after signin/up
       },
       role: {
-        type: ["admin", "service", "valet"],
+        type: Object.keys(roles),
         defaultValue: "service",
         input: true,
         required: true,
       },
     },
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      void sendEmail({
+        to: user.email,
+        subject: m.auth_email_verification_subject(),
+        text: m.auth_email_verification_text({ url }),
+        html: m.auth_email_verification_html({ url }),
+      });
+    },
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    expiresIn: 3600, // 1 hour
   },
 });

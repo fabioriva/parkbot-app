@@ -13,12 +13,12 @@ export default [
     // route("2fa-setup", "routes/auth/2fa-setup.tsx"),
     // route("2fa-verify", "routes/auth/2fa-verify.tsx"),
     route("aps-select", "routes/auth/aps-select.tsx"),
+    route("email-verification", "routes/auth/email-verification.tsx"),
     // route("password-forgot", "routes/auth/password-forgot.tsx"),
     // route("password-reset", "routes/auth/password-reset.tsx"),
     route("signin", "routes/auth/signin.tsx"),
     route("signout", "routes/auth/signout.tsx"),
     route("signup", "routes/auth/signup.tsx"),
-    // route("verify-email", "routes/auth/verify-email.tsx"),
   ]),
   ...prefix("aps", [
     layout("routes/aps/layout.tsx", [
