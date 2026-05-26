@@ -39,7 +39,6 @@ export async function action({ context, request }: Route.ActionArgs) {
       return { success: true };
     }
   } catch (error) {
-    console.log(error);
     return { message: error?.body?.message };
   }
 }
