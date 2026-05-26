@@ -2,6 +2,7 @@ import { data } from "react-router";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -10,26 +11,33 @@ import {
 } from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ApsForm } from "~/components/aps-form";
-import { createAps, findSubscribedApsList } from "~/lib/aps.server";
+import {
+  // createAps,
+  findSubscribedApsList,
+} from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
+    console.log(formData);
+
     const company = formData.get("company");
     const country = formData.get("country");
+    const flag = formData.get("flag");
     const name = formData.get("name");
     const ns = formData.get("ns");
+    const notifications = formData.get("notifications");
     const parkingSpaces = formData.get("parkingSpaces");
-    const result = await createAps({
-      company,
-      country,
-      name,
-      ns,
-      parkingSpaces: Number(parkingSpaces),
-    });
+    // const result = await createAps({
+    //   company,
+    //   country,
+    //   name,
+    //   ns,
+    //   parkingSpaces: Number(parkingSpaces),
+    // });
 
-    console.log(result);
+    // console.log(result);
     if (result?.acknowledged) {
       console.log(`A document was inserted with the _id: ${result.insertedId}`);
     }
@@ -70,12 +78,15 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
       <TabsContent value="aps">
         <div className="w-6xl overflow-x-auto">
           <Table className="border">
+            <TableCaption>
+              The number of active aps is {loaderData.aps.length}
+            </TableCaption>
             <TableHeader>
               <TableRow>
+                <TableHead>Name</TableHead>
                 <TableHead>Company</TableHead>
                 <TableHead>Country</TableHead>
                 <TableHead>City</TableHead>
-                <TableHead>Name</TableHead>
                 <TableHead>Namespace</TableHead>
                 <TableHead className="text-right">Spaces</TableHead>
               </TableRow>
@@ -83,12 +94,12 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
             <TableBody>
               {loaderData.aps.map((aps) => (
                 <TableRow key={aps.ns}>
+                  <TableCell className="font-semibold">{aps.name}</TableCell>
                   <TableCell>{aps.company}</TableCell>
                   <TableCell>
-                    {aps.country} {aps.flag}
+                    {aps.country}, {aps.flag}
                   </TableCell>
                   <TableCell>{aps.city}</TableCell>
-                  <TableCell className="font-semibold">{aps.name}</TableCell>
                   <TableCell>{aps.ns}</TableCell>
                   <TableCell className="font-semibold text-right">
                     {aps.parkingSpaces}
@@ -98,7 +109,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
             </TableBody>
             <TableFooter>
               <TableRow>
-                <TableCell colSpan={5}>Total</TableCell>
+                <TableCell colSpan={5}>Total parking spaces</TableCell>
                 <TableCell className="text-right">{totalSpaces}</TableCell>
               </TableRow>
             </TableFooter>

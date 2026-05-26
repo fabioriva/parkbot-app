@@ -61,11 +61,11 @@ export function ApsForm({ user }) {
                 </Field>
                 <Field orientation="horizontal">
                   <Checkbox
-                    name="notification"
+                    name="notifications"
                     // value={aps.ns}
                     defaultChecked
                   />
-                  <FieldLabel htmlFor="notification" className="font-normal">
+                  <FieldLabel htmlFor="notifications" className="font-normal">
                     Enable notifications
                   </FieldLabel>
                 </Field>
@@ -73,8 +73,9 @@ export function ApsForm({ user }) {
             </FieldGroup>
           </FieldSet>
           <Field orientation="horizontal">
-            <Button type="submit">Submit</Button>
-            <Button variant="outline">Cancel</Button>
+            <Button className="w-full" type="submit">
+              Submit
+            </Button>
           </Field>
         </FieldGroup>
       </Form>
