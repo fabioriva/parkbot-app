@@ -1,3 +1,4 @@
+import { PlusIcon, TableIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { data } from "react-router";
 import {
@@ -78,8 +79,14 @@ export default function Subscription({
   return (
     <Tabs defaultValue="aps">
       <TabsList>
-        <TabsTrigger value="aps">Aps List</TabsTrigger>
-        <TabsTrigger value="aps-form">Add Aps</TabsTrigger>
+        <TabsTrigger value="aps">
+          <TableIcon />
+          Aps
+        </TabsTrigger>
+        <TabsTrigger value="aps-form">
+          <PlusIcon />
+          Add
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="aps">
         <div className="overflow-hidden rounded-lg border">
