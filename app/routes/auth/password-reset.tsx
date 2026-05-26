@@ -31,7 +31,6 @@ export async function action({ request }: Route.ActionArgs) {
         token, // required
       },
     });
-    console.log("resetPassword (server):\n", data);
     if (data) {
       return { success: true };
     }
