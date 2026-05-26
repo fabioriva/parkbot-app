@@ -20,9 +20,6 @@ import { auth } from "~/lib/auth.server";
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    console.log(formData);
-    return { success: true };
-
     const company = formData.get("company");
     const country = formData.get("country");
     const flag = formData.get("flag");
@@ -37,14 +34,13 @@ export async function action({ context, request }: Route.ActionArgs) {
       ns,
       parkingSpaces: Number(parkingSpaces),
     });
-    // console.log(result);
     if (result?.acknowledged) {
-      console.log(`A document was inserted with the _id: ${result.insertedId}`);
+      // console.log(`A document was inserted with the _id: ${result.insertedId}`);
       return { success: true };
     }
   } catch (error) {
     console.log(error);
-    // return { error: error?.body?.message };
+    return { message: error?.body?.message };
   }
 }
 

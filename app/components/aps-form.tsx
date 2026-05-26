@@ -1,10 +1,11 @@
-import { Form } from "react-router";
+import { Form, useActionData } from "react-router";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardFooter } from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
@@ -14,11 +15,12 @@ import {
 import { Input } from "~/components/ui/input";
 
 export function ApsForm({ user }) {
+  const actionData = useActionData();
   return (
     <Card className="w-full max-w-md">
       <Form action={`/aps/${user.aps}/user/aps`} method="post">
         <FieldGroup>
-          <CardContent>
+          <CardContent className="space-y-6">
             <FieldSet>
               <FieldLegend>Add aps</FieldLegend>
               <FieldDescription>Add new aps</FieldDescription>
@@ -74,12 +76,15 @@ export function ApsForm({ user }) {
                 </div>
               </FieldGroup>
             </FieldSet>
+            <Field orientation="vertical">
+              <Button className="w-full" type="submit">
+                Submit
+              </Button>
+              {actionData ? (
+                <FieldError>{actionData?.message}</FieldError>
+              ) : null}
+            </Field>
           </CardContent>
-          <CardFooter>
-            <Button className="w-full" type="submit">
-              Submit
-            </Button>
-          </CardFooter>
         </FieldGroup>
       </Form>
     </Card>

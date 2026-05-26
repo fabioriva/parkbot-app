@@ -1,10 +1,11 @@
-import { Form } from "react-router";
+import { Form, useActionData } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import { Card, CardContent, CardFooter } from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
@@ -23,6 +24,7 @@ import {
 import { roles } from "~/lib/roles";
 
 export function SubscriptionForm({ aps, user }) {
+  const actionData = useActionData();
   return (
     <Card className="w-full max-w-md">
       <Form action={`/aps/${user.aps}/user/subscription`} method="post">
@@ -82,12 +84,20 @@ export function SubscriptionForm({ aps, user }) {
                 ))}
               </FieldGroup>
             </FieldSet>
+            <Field orientation="vertical">
+              <Button className="w-full" type="submit">
+                Submit
+              </Button>
+              {actionData ? (
+                <FieldError>{actionData?.message}</FieldError>
+              ) : null}
+            </Field>
           </CardContent>
-          <CardFooter>
+          {/* <CardFooter>
             <Button className="w-full" type="submit">
               Submit
             </Button>
-          </CardFooter>
+          </CardFooter> */}
         </FieldGroup>
       </Form>
     </Card>

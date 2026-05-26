@@ -25,26 +25,22 @@ import {
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    console.log(formData);
-    return { success: true };
-
     const email = formData.get("email");
     const role = formData.get("role");
-    const selectedAps = formData.getAll("aps");
+    const aps = formData.getAll("aps");
     const result = await createSubscription({
-      aps: selectedAps,
+      aps,
       email,
       role,
       subscribed: false,
     });
-    // console.log(result);
     if (result?.acknowledged) {
-      console.log(`A document was inserted with the _id: ${result.insertedId}`);
+      // console.log(`A document was inserted with the _id: ${result.insertedId}`);
       return { success: true };
     }
   } catch (error) {
     console.log(error);
-    // return { error: error?.body?.message };
+    return { message: error?.body?.message };
   }
 }
 
@@ -78,7 +74,6 @@ export default function Subscription({
     <Tabs defaultValue="subscription">
       <TabsList>
         <TabsTrigger value="subscription">
-          {" "}
           <TableIcon />
           Subscriptions
         </TabsTrigger>
