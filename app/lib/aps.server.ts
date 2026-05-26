@@ -14,14 +14,9 @@ export interface Aps {
 }
 
 export async function createAps(aps: Aps) {
-  try {
-    const collection = db.collection(COLLECTION);
-    const result = await collection.insertOne({ ...aps });
-    return result;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  const collection = db.collection(COLLECTION);
+  const result = await collection.insertOne({ ...aps });
+  return result;
 }
 
 export async function findAps(ns: string): Promise<Aps> | null {

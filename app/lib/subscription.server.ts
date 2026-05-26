@@ -11,14 +11,9 @@ export interface Subscription {
 }
 
 export async function createSubscription(subscription: Subscription) {
-  try {
-    const collection = db.collection(COLLECTION);
-    const result = await collection.insertOne({ ...subscription });
-    return result;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  const collection = db.collection(COLLECTION);
+  const result = await collection.insertOne({ ...subscription });
+  return result;
 }
 
 export async function findSubscription(
