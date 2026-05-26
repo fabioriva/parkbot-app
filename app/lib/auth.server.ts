@@ -16,8 +16,28 @@ export const auth = betterAuth({
   database: mongodbAdapter(db),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url, token }, request) => {
+      void sendEmail({
+        to: user.email,
+        subject: m.auth_reset_password_subject(),
+        text: m.auth_reset_password_text({ url }),
+        html: m.auth_reset_password_html({ url }),
+      });
+    },
   },
-  // ...
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      void sendEmail({
+        to: user.email,
+        subject: m.auth_email_verification_subject(),
+        text: m.auth_email_verification_text({ url }),
+        html: m.auth_email_verification_html({ url }),
+      });
+    },
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    expiresIn: 3600, // 1 hour
+  },
   plugins: [
     customSession(async ({ user, session }) => {
       const aps = await findAps(user.aps);
@@ -46,18 +66,5 @@ export const auth = betterAuth({
         required: true,
       },
     },
-  },
-  emailVerification: {
-    sendVerificationEmail: async ({ user, url, token }, request) => {
-      void sendEmail({
-        to: user.email,
-        subject: m.auth_email_verification_subject(),
-        text: m.auth_email_verification_text({ url }),
-        html: m.auth_email_verification_html({ url }),
-      });
-    },
-    sendOnSignUp: true,
-    autoSignInAfterVerification: true,
-    expiresIn: 3600, // 1 hour
   },
 });
