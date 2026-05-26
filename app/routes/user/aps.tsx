@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { data } from "react-router";
 import {
   Table,
@@ -11,16 +12,15 @@ import {
 } from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ApsForm } from "~/components/aps-form";
-import {
-  // createAps,
-  findSubscribedApsList,
-} from "~/lib/aps.server";
+import { Success } from "~/components/success-alert";
+import { createAps, findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     console.log(formData);
+    return { success: true };
 
     const company = formData.get("company");
     const country = formData.get("country");
@@ -29,17 +29,17 @@ export async function action({ context, request }: Route.ActionArgs) {
     const ns = formData.get("ns");
     const notifications = formData.get("notifications");
     const parkingSpaces = formData.get("parkingSpaces");
-    // const result = await createAps({
-    //   company,
-    //   country,
-    //   name,
-    //   ns,
-    //   parkingSpaces: Number(parkingSpaces),
-    // });
-
+    const result = await createAps({
+      company,
+      country,
+      name,
+      ns,
+      parkingSpaces: Number(parkingSpaces),
+    });
     // console.log(result);
     if (result?.acknowledged) {
       console.log(`A document was inserted with the _id: ${result.insertedId}`);
+      return { success: true };
     }
   } catch (error) {
     console.log(error);
@@ -64,20 +64,26 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export default function Subscription({ loaderData }: Route.LoaderArgs) {
+export default function Subscription({
+  actionData,
+  loaderData,
+}: Route.LoaderArgs) {
+  const [success, setSuccess] = useState(false);
+  useEffect(() => setSuccess(actionData?.success), [actionData?.success]);
+
   const totalSpaces = loaderData.aps.reduce((accumulator, currentValue) => {
     return accumulator + Number(currentValue.parkingSpaces);
   }, 0);
 
   return (
     <Tabs defaultValue="aps">
-      <TabsList className="mb-3">
+      <TabsList>
         <TabsTrigger value="aps">Aps List</TabsTrigger>
         <TabsTrigger value="aps-form">Add Aps</TabsTrigger>
       </TabsList>
       <TabsContent value="aps">
-        <div className="w-6xl overflow-x-auto">
-          <Table className="border">
+        <div className="overflow-hidden rounded-lg border">
+          <Table>
             <TableCaption>
               The number of active aps is {loaderData.aps.length}
             </TableCaption>
@@ -117,6 +123,9 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
         </div>
       </TabsContent>
       <TabsContent value="aps-form">
+        {success && (
+          <Success description="Aps successfully created" title="created!" />
+        )}
         <ApsForm user={loaderData.user} />
       </TabsContent>
     </Tabs>

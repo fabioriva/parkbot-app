@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { data } from "react-router";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -10,6 +12,7 @@ import {
 } from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { SubscriptionForm } from "~/components/subscription-form";
+import { Success } from "~/components/success-alert";
 // import { aps } from "~/lib/aps";
 import { findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
@@ -21,6 +24,9 @@ import {
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
+    console.log(formData);
+    return { success: true };
+
     const email = formData.get("email");
     const role = formData.get("role");
     const selectedAps = formData.getAll("aps");
@@ -30,10 +36,10 @@ export async function action({ context, request }: Route.ActionArgs) {
       role,
       subscribed: false,
     });
-
-    console.log(result);
+    // console.log(result);
     if (result?.acknowledged) {
       console.log(`A document was inserted with the _id: ${result.insertedId}`);
+      return { success: true };
     }
   } catch (error) {
     console.log(error);
@@ -60,20 +66,26 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-export default function Subscription({ loaderData }: Route.LoaderArgs) {
-  const totalSpaces = loaderData.aps.reduce((accumulator, currentValue) => {
-    return accumulator + Number(currentValue.parkingSpaces);
-  }, 0);
+export default function Subscription({
+  actionData,
+  loaderData,
+}: Route.LoaderArgs) {
+  const [success, setSuccess] = useState(false);
+  useEffect(() => setSuccess(actionData?.success), [actionData?.success]);
 
   return (
     <Tabs defaultValue="subscription">
-      <TabsList className="mb-3">
+      <TabsList>
         <TabsTrigger value="subscription">Subscription List</TabsTrigger>
         <TabsTrigger value="subscription-form">Add Subscription</TabsTrigger>
       </TabsList>
       <TabsContent value="subscription">
-        <div className="w-6xl">
-          <Table className="border">
+        <div className="overflow-hidden rounded-lg border">
+          <Table>
+            <TableCaption>
+              The number of active subscriptions is{" "}
+              {loaderData.subscriptions.length}
+            </TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead>Email</TableHead>
@@ -102,6 +114,12 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
         </div>
       </TabsContent>
       <TabsContent value="subscription-form">
+        {success && (
+          <Success
+            description="Subscription successfully created"
+            title="created!"
+          />
+        )}
         <SubscriptionForm aps={loaderData.aps} user={loaderData.user} />
       </TabsContent>
     </Tabs>
