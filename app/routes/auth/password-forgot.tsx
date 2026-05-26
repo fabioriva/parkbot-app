@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Form, redirect } from "react-router";
 import {
   Card,
@@ -32,12 +33,16 @@ export async function action({ request }: Route.ActionArgs) {
         redirectTo: "/password-reset", // required
       },
     });
+    return { success: true };
   } catch (error) {
     return { message: error?.body?.message };
   }
 }
 
 export default function PasswordForgot({ actionData }: Route.ComponentProps) {
+  const [emailSent, setEmailSent] = useState(false);
+  useEffect(() => setEmailSent(actionData?.success), [actionData?.success]);
+
   return (
     <Card>
       <CardHeader>
@@ -63,6 +68,7 @@ export default function PasswordForgot({ actionData }: Route.ComponentProps) {
                 action="/password-forgot"
                 title={m.password_forgot_send_link()}
               />
+              {emailSent ? <p>{m.auth_email_sent()}</p> : null}
               {actionData ? (
                 <FieldError>{actionData.message}</FieldError>
               ) : null}
