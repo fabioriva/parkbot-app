@@ -14,7 +14,7 @@ export default [
     // route("2fa-verify", "routes/auth/2fa-verify.tsx"),
     route("aps-select", "routes/auth/aps-select.tsx"),
     route("email-verification", "routes/auth/email-verification.tsx"),
-    // route("password-forgot", "routes/auth/password-forgot.tsx"),
+    route("password-forgot", "routes/auth/password-forgot.tsx"),
     // route("password-reset", "routes/auth/password-reset.tsx"),
     route("signin", "routes/auth/signin.tsx"),
     route("signout", "routes/auth/signout.tsx"),
