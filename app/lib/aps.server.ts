@@ -24,12 +24,6 @@ export async function createAps(aps: Aps) {
   }
 }
 
-export async function findApsAll(ns: string): Promise<Aps[]> | null {
-  const aps = db.collection(COLLECTION);
-  const result = await aps.find().toArray();
-  return result;
-}
-
 export async function findAps(ns: string): Promise<Aps> | null {
   const aps = db.collection(COLLECTION);
   const result = await aps.findOne({ ns }, { projection: { _id: 0, ns: 0 } });
@@ -41,7 +35,7 @@ export async function findSubscribedApsList(
 ): Promise<Aps[]> | null {
   const aps = db.collection(COLLECTION);
   const result = await aps
-    .find({ ns: { $in: nsList } }) //, { projection: { _id: 0 } })
+    .find(nsList.length > 0 ? { ns: { $in: nsList } } : {})
     .toArray();
   return result;
 }

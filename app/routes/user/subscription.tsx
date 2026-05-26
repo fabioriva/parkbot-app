@@ -11,7 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { SubscriptionForm } from "~/components/subscription-form";
 // import { aps } from "~/lib/aps";
-import { findApsAll } from "~/lib/aps.server";
+import { findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 import {
   createSubscription,
@@ -51,7 +51,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (session.user.role !== "admin") {
     throw data("Forbidden", { status: 403 });
   }
-  const aps = await findApsAll();
+  const aps = await findSubscribedApsList([]);
   const subscriptions = await findSubscriptions();
   return {
     aps,

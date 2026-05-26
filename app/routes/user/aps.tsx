@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ApsForm } from "~/components/aps-form";
-import { createAps, findApsAll } from "~/lib/aps.server";
+import { createAps, findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -49,7 +49,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (session.user.role !== "admin") {
     throw data("Forbidden", { status: 403 });
   }
-  const aps = await findApsAll();
+  const aps = await findSubscribedApsList([]);
   return {
     aps,
     user: session.user,
