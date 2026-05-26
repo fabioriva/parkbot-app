@@ -26,6 +26,7 @@ export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     const email = formData.get("email");
+    const company = formData.get("company");
     const role = formData.get("role");
     const aps = formData.getAll("aps");
     const result = await createSubscription({
