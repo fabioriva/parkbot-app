@@ -35,16 +35,16 @@ export default function EmailVerification({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{m.auth_email_verification_card_title()}</CardTitle>
+        <CardTitle>{m.email_verification_card_title()}</CardTitle>
         <CardDescription>
-          {m.auth_email_verification_card_description()}{" "}
+          {m.email_verification_card_description()}{" "}
           <span className="text-blue-500">{loaderData?.email}</span>
         </CardDescription>
       </CardHeader>
       <CardContent>
         <FieldGroup>
           <Field>
-            <p>{m.auth_email_verification_card_content()}</p>
+            <p>{m.email_verification_card_content()}</p>
           </Field>
           <Field>
             <Button onClick={resendEmail}>{m.auth_email_resend()}</Button>
