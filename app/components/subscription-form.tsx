@@ -22,8 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { CompanySelect } from "~/components/company-select";
 import { roles } from "~/lib/roles";
-import { companies } from "../../utils/companies";
 
 export function SubscriptionForm({ aps, user }) {
   const actionData = useActionData();
@@ -71,32 +71,13 @@ export function SubscriptionForm({ aps, user }) {
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="company">Company</FieldLabel>
-                  <Select
-                    id="company"
-                    name="company"
-                    // defaultValue="Elecon"
-                    value={company}
-                    onValueChange={setCompany}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="service" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {companies.map((company) => (
-                          <SelectItem value={company} key={company}>
-                            {company}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <CompanySelect company={company} setCompany={setCompany} />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="role">User's role</FieldLabel>
                   <Select id="role" name="role" defaultValue="service">
                     <SelectTrigger>
-                      <SelectValue placeholder="service" />
+                      <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
