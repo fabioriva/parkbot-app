@@ -27,16 +27,7 @@ export function SubscriptionForm({ aps }) {
   const [checkedState, setCheckedState] = useState(
     new Array(aps.length).fill(false),
   );
-
-  const handleCheckboxChange = (aps, index) => {
-    const updatedCheckedState = checkedState.map((item, position) =>
-      index === position ? !item : item,
-    );
-    setCheckedState(updatedCheckedState);
-  };
-
   const [company, setCompany] = useState("Sotefin");
-
   useEffect(() => {
     const updatedCheckedState = checkedState.map(
       (item, position) =>
@@ -44,6 +35,13 @@ export function SubscriptionForm({ aps }) {
     );
     setCheckedState(updatedCheckedState);
   }, [company]);
+
+  const handleCheckboxChange = (aps, index) => {
+    const updatedCheckedState = checkedState.map((item, position) =>
+      index === position ? !item : item,
+    );
+    setCheckedState(updatedCheckedState);
+  };
 
   return (
     <FieldSet>
