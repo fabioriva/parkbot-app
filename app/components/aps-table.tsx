@@ -1,3 +1,5 @@
+import { MoreHorizontalIcon } from "lucide-react";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +18,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 
-export const ApsList = ({ aps }) => (
+export const ApsTable = ({ aps }) => (
   <Table>
     {/* <TableCaption>The number of active aps is {aps.length}</TableCaption> */}
     <TableHeader>

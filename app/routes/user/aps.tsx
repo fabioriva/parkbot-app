@@ -1,4 +1,4 @@
-import { MoreHorizontalIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { data, Form } from "react-router";
 import { Badge } from "~/components/ui/badge";

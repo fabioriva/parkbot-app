@@ -12,17 +12,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { CompanySelect } from "~/components/company-select";
 import { SubscriptionForm } from "~/components/subscription-form";
+import { SubscriptionTable } from "~/components/subscription-table";
 import { Success } from "~/components/success-alert";
 // import { aps } from "~/lib/aps";
 import { findSubscribedApsList } from "~/lib/aps.server";
@@ -73,45 +66,6 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
-const SubscriptionList = ({ subscriptions }) => (
-  <>
-    {subscriptions.length > 0 ? (
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Email</TableHead>
-            <TableHead>Company</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Aps</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {subscriptions
-            .sort((a, b) => a.email.localeCompare(b.email)) // sort alphabetically
-            .map((subscription) => (
-              <TableRow key={subscription.email}>
-                <TableCell className="font-semibold">
-                  {subscription.email}
-                </TableCell>
-                <TableCell>{subscription.company}</TableCell>
-                <TableCell>{subscription.role}</TableCell>
-                <TableCell className="uppercase">
-                  {subscription.subscribed.toString()}
-                </TableCell>
-                <TableCell>[{subscription.aps.join("], [")}]</TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-    ) : (
-      <div className="p-4 text-center text-sm text-muted-foreground">
-        No subscriptions found.
-      </div>
-    )}
-  </>
-);
-
 export default function Subscription({
   actionData,
   loaderData,
@@ -156,7 +110,7 @@ export default function Subscription({
           />
         )}
         <div className="overflow-hidden rounded-lg border">
-          <SubscriptionList
+          <SubscriptionTable
             subscriptions={subscriptions.filter(
               (item) => item.company === company || company === "Sotefin",
             )}
@@ -171,7 +125,7 @@ export default function Subscription({
           />
         )}
         <div className="overflow-hidden rounded-lg border">
-          <SubscriptionList subscriptions={inactiveSubscriptions} />
+          <SubscriptionTable subscriptions={inactiveSubscriptions} />
         </div>
       </TabsContent>
       <Dialog open={open} onOpenChange={setOpen}>
