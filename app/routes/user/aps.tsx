@@ -1,7 +1,17 @@
-import { MoreHorizontalIcon, PlusIcon, TableIcon } from "lucide-react";
+import { MoreHorizontalIcon, PlusIcon } from "lucide-react";
 import { useState, useEffect } from "react";
-import { data } from "react-router";
+import { data, Form } from "react-router";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +47,9 @@ import { auth } from "~/lib/auth.server";
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
+    console.log(formData);
+    return { success: true };
+
     const company = formData.get("company");
     const country = formData.get("country");
     const flag = formData.get("flag");
@@ -137,41 +150,74 @@ const ApsList = ({ aps }) => (
 
 export default function Aps({ actionData, loaderData }: Route.LoaderArgs) {
   const [company, setCompany] = useState("Sotefin");
+  const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   useEffect(() => setSuccess(actionData?.success), [actionData?.success]);
 
+  const handleOpen = () => {
+    setOpen(true);
+    setSuccess(false);
+  };
+
+  const apsByCompany = loaderData.aps.filter(
+    (item) => item.company === company || company === "Sotefin",
+  );
+
   return (
-    <Tabs className="max-w-6xl" defaultValue="aps">
-      <div className="flex gap-3">
+    <Tabs className="max-w-3xl" defaultValue="aps">
+      <div className="flex items-center gap-3">
         <div className="grow">
           <TabsList>
             <TabsTrigger value="aps">
-              <TableIcon />
-              Aps
+              Aps List<Badge variant="default">{apsByCompany.length}</Badge>
             </TabsTrigger>
-            <TabsTrigger value="aps-form">
-              <PlusIcon />
-              Add
+            <TabsTrigger value="aps-company" disabled>
+              Disabled
             </TabsTrigger>
           </TabsList>
         </div>
         <CompanySelect company={company} setCompany={setCompany} />
+        <Button onClick={handleOpen} variant="outline">
+          <PlusIcon /> New Aps
+        </Button>
       </div>
+      {success && (
+        <Success description="Aps successfully created" title="created!" />
+      )}
       <TabsContent value="aps">
         <div className="overflow-hidden rounded-lg border">
-          <ApsList
-            aps={loaderData.aps.filter(
-              (item) => item.company === company || company === "Sotefin",
-            )}
-          />
+          <ApsList aps={apsByCompany} />
         </div>
       </TabsContent>
-      <TabsContent value="aps-form">
-        {success && (
-          <Success description="Aps successfully created" title="created!" />
-        )}
-        <ApsForm user={loaderData.user} />
+      <TabsContent value="aps-company">
+        <p>Disabled</p>
       </TabsContent>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Edit Aps</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you&apos;re
+              done.
+            </DialogDescription>
+          </DialogHeader>
+          <Form
+            action={`/aps/${loaderData.user.aps}/user/aps`}
+            method="post"
+            onSubmit={() => setOpen(false)}
+          >
+            <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
+              <ApsForm aps={loaderData.aps} />
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button type="submit">Save changes</Button>
+            </DialogFooter>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </Tabs>
   );
 }
