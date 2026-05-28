@@ -37,9 +37,6 @@ import {
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    console.log(formData);
-    return { success: true };
-
     const email = formData.get("email");
     const company = formData.get("company");
     const role = formData.get("role");
