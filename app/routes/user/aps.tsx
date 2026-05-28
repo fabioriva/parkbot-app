@@ -161,7 +161,7 @@ export default function Aps({ actionData, loaderData }: Route.LoaderArgs) {
         <div className="overflow-hidden rounded-lg border">
           <ApsList
             aps={loaderData.aps.filter(
-              (a) => a.company === company || company === "Sotefin",
+              (item) => item.company === company || company === "Sotefin",
             )}
           />
         </div>
