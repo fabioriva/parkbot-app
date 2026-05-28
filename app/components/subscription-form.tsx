@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import { Form, useActionData } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import { Card, CardContent } from "~/components/ui/card";
 import {
   Field,
   FieldDescription,
-  FieldError,
+  // FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
+  // FieldLegend,
   FieldSeparator,
   FieldSet,
 } from "~/components/ui/field";
@@ -25,15 +23,12 @@ import {
 import { CompanySelect } from "~/components/company-select";
 import { roles } from "~/lib/roles";
 
-export function SubscriptionForm({ aps, user }) {
-  const actionData = useActionData();
-
+export function SubscriptionForm({ aps }) {
   const [checkedState, setCheckedState] = useState(
     new Array(aps.length).fill(false),
   );
 
   const handleCheckboxChange = (aps, index) => {
-    // console.log(aps, index);
     const updatedCheckedState = checkedState.map((item, position) =>
       index === position ? !item : item,
     );
@@ -51,13 +46,7 @@ export function SubscriptionForm({ aps, user }) {
   }, [company]);
 
   return (
-    // <Card className="w-full max-w-md">
-    // <Form action={`/aps/${user.aps}/user/subscription`} method="post">
-    <FieldGroup>
-      {/* <CardContent className="space-y-6"> */}
-      {/* <FieldSet>
-          <FieldLegend>Add subscrption</FieldLegend>
-          <FieldDescription>Add new subscription</FieldDescription> */}
+    <FieldSet>
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -91,40 +80,27 @@ export function SubscriptionForm({ aps, user }) {
           </Select>
         </Field>
       </FieldGroup>
-      {/* </FieldSet> */}
-      <FieldSet>
-        <FieldSeparator />
-        <FieldLegend variant="label">Aps list:</FieldLegend>
-        <FieldDescription>
-          Select the systems you want to assign to this subscription.
-        </FieldDescription>
-        <FieldGroup className="grid grid-cols-2 gap-3">
-          {aps.map((aps, index) => (
-            <Field orientation="horizontal" key={aps.ns}>
-              <Checkbox
-                id={aps.ns}
-                name="aps"
-                value={aps.ns}
-                // defaultChecked={aps.company === company}
-                checked={checkedState[index]}
-                onCheckedChange={() => handleCheckboxChange(aps, index)}
-              />
-              <FieldLabel htmlFor={aps.ns} className="font-normal">
-                {aps.name}
-              </FieldLabel>
-            </Field>
-          ))}
-        </FieldGroup>
-      </FieldSet>
-      {/* <Field orientation="vertical">
-        <Button className="w-full" type="submit">
-          Submit
-        </Button>
-        {actionData ? <FieldError>{actionData?.message}</FieldError> : null}
-      </Field> */}
-      {/* </CardContent> */}
-    </FieldGroup>
-    // </Form>
-    // </Card>
+      <FieldSeparator />
+      <FieldDescription>
+        Select the systems you want to assign to this subscription.
+      </FieldDescription>
+      <FieldGroup className="grid grid-cols-2 gap-3">
+        {aps.map((aps, index) => (
+          <Field orientation="horizontal" key={aps.ns}>
+            <Checkbox
+              id={aps.ns}
+              name="aps"
+              value={aps.ns}
+              // defaultChecked={aps.company === company}
+              checked={checkedState[index]}
+              onCheckedChange={() => handleCheckboxChange(aps, index)}
+            />
+            <FieldLabel htmlFor={aps.ns} className="font-normal">
+              {aps.name}
+            </FieldLabel>
+          </Field>
+        ))}
+      </FieldGroup>
+    </FieldSet>
   );
 }

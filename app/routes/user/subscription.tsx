@@ -15,9 +15,7 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -79,9 +77,6 @@ const SubscriptionList = ({ subscriptions }) => (
   <>
     {subscriptions.length > 0 ? (
       <Table>
-        <TableCaption>
-          The number of active subscriptions is {subscriptions.length}
-        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Email</TableHead>
@@ -121,6 +116,7 @@ export default function Subscription({
   actionData,
   loaderData,
 }: Route.LoaderArgs) {
+  const { aps, subscriptions, user } = loaderData;
   const [company, setCompany] = useState("Sotefin");
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -131,6 +127,10 @@ export default function Subscription({
     setSuccess(false);
   };
 
+  const inactiveSubscriptions = subscriptions.filter(
+    (item) => item.subscribed === false,
+  );
+
   return (
     <Tabs className="max-w-3xl" defaultValue="subscriptions">
       <div className="flex items-center gap-3">
@@ -139,7 +139,7 @@ export default function Subscription({
             <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
             <TabsTrigger value="inactives">
               Not activated
-              <Badge variant="default">{loaderData.subscriptions.length}</Badge>
+              <Badge variant="default">{inactiveSubscriptions.length}</Badge>
             </TabsTrigger>
           </TabsList>
         </div>
@@ -157,7 +157,7 @@ export default function Subscription({
         )}
         <div className="overflow-hidden rounded-lg border">
           <SubscriptionList
-            subscriptions={loaderData.subscriptions.filter(
+            subscriptions={subscriptions.filter(
               (item) => item.company === company || company === "Sotefin",
             )}
           />
@@ -170,13 +170,8 @@ export default function Subscription({
             title="created!"
           />
         )}
-        {/* <SubscriptionForm aps={loaderData.aps} user={loaderData.user} /> */}
         <div className="overflow-hidden rounded-lg border">
-          <SubscriptionList
-            subscriptions={loaderData.subscriptions.filter(
-              (item) => item.subscribed === false,
-            )}
-          />
+          <SubscriptionList subscriptions={inactiveSubscriptions} />
         </div>
       </TabsContent>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -189,12 +184,12 @@ export default function Subscription({
             </DialogDescription>
           </DialogHeader>
           <Form
-            action={`/aps/${loaderData.user.aps}/user/subscription`}
+            action={`/aps/${user.aps}/user/subscription`}
             method="post"
             onSubmit={() => setOpen(false)}
           >
             <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
-              <SubscriptionForm aps={loaderData.aps} user={loaderData.user} />
+              <SubscriptionForm aps={aps} />
             </div>
             <DialogFooter>
               <DialogClose asChild>
