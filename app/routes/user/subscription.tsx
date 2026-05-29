@@ -77,8 +77,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Subscription({ loaderData }: Route.LoaderArgs) {
-  const { aps, subscriptions } = loaderData;
-
   const fetcher = useFetcher();
 
   const [company, setCompany] = useState("Sotefin");
@@ -92,7 +90,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
     setOpen(true);
   };
 
-  const inactiveSubscriptions = subscriptions.filter(
+  const inactiveSubscriptions = loaderData.subscriptions.filter(
     (item) => item.subscribed === false,
   );
 
@@ -126,7 +124,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
         <div className="overflow-hidden rounded-lg border">
           <SubscriptionTable
             fetcher={fetcher}
-            subscriptions={subscriptions.filter(
+            subscriptions={loaderData.subscriptions.filter(
               (item) => item.company === company || company === "Sotefin",
             )}
           />
@@ -149,7 +147,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
           <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
             <input name="action" value="create" type="hidden" />
             <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
-              <SubscriptionForm aps={aps} />
+              <SubscriptionForm aps={loaderData.aps} />
             </div>
             <DialogFooter>
               <DialogClose asChild>
