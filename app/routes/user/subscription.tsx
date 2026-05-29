@@ -1,6 +1,6 @@
 import { PlusIcon } from "lucide-react";
 import { useState, useEffect } from "react";
-import { data, Form } from "react-router";
+import { data, Form, useFetcher } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -22,28 +22,42 @@ import { findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 import {
   createSubscription,
+  deleteSubscription,
   findSubscriptions,
 } from "~/lib/subscription.server";
 
-export async function action({ context, request }: Route.ActionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
+    const action = formData.get("action");
     const email = formData.get("email");
     const company = formData.get("company");
     const role = formData.get("role");
     const aps = formData.getAll("aps");
-    const result = await createSubscription({
-      aps,
-      email,
-      role,
-      subscribed: false,
-    });
-    if (result?.acknowledged) {
-      // console.log(`A document was inserted with the _id: ${result.insertedId}`);
-      return { success: true };
+    if (action === "create") {
+      const subscription = {
+        aps,
+        email,
+        role,
+        subscribed: false,
+      };
+      const result = await createSubscription(subscription);
+      return {
+        action: "Create subscription",
+        success: "Subscription created successfully.",
+      };
     }
+    if (action === "delete") {
+      const result = await deleteSubscription(email);
+      return {
+        action: "Delete subscription",
+        success: "Subscription successfully deleted.",
+      };
+    }
+    throw new Error("Non-existent action error.");
   } catch (error) {
-    return { message: error?.body?.message };
+    // console.log(error);
+    return { error: error?.message };
   }
 }
 
@@ -59,26 +73,23 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
   const aps = await findSubscribedApsList([]);
   const subscriptions = await findSubscriptions();
-  return {
-    aps,
-    subscriptions,
-    user: session.user,
-  };
+  return { aps, subscriptions };
 }
 
-export default function Subscription({
-  actionData,
-  loaderData,
-}: Route.LoaderArgs) {
-  const { aps, subscriptions, user } = loaderData;
+export default function Subscription({ loaderData }: Route.LoaderArgs) {
+  const { aps, subscriptions } = loaderData;
+
+  const fetcher = useFetcher();
+
   const [company, setCompany] = useState("Sotefin");
   const [open, setOpen] = useState(false);
-  const [success, setSuccess] = useState(false);
-  useEffect(() => setSuccess(actionData?.success), [actionData?.success]);
+
+  useEffect(() => {
+    console.log("fetcher.data", fetcher.data);
+  }, [fetcher.data]);
 
   const handleOpen = () => {
     setOpen(true);
-    setSuccess(false);
   };
 
   const inactiveSubscriptions = subscriptions.filter(
@@ -102,15 +113,19 @@ export default function Subscription({
           <PlusIcon /> New Subscription
         </Button>
       </div>
+      {fetcher.data?.error && (
+        <p style={{ color: "red" }}>{fetcher.data.error}</p>
+      )}
+      {fetcher.data?.success && (
+        <Success
+          description={fetcher.data.success}
+          title={fetcher.data.action}
+        />
+      )}
       <TabsContent value="subscriptions">
-        {success && (
-          <Success
-            description="Subscription successfully created"
-            title="created!"
-          />
-        )}
         <div className="overflow-hidden rounded-lg border">
           <SubscriptionTable
+            fetcher={fetcher}
             subscriptions={subscriptions.filter(
               (item) => item.company === company || company === "Sotefin",
             )}
@@ -118,12 +133,6 @@ export default function Subscription({
         </div>
       </TabsContent>
       <TabsContent value="inactives">
-        {success && (
-          <Success
-            description="Subscription successfully created"
-            title="created!"
-          />
-        )}
         <div className="overflow-hidden rounded-lg border">
           <SubscriptionTable subscriptions={inactiveSubscriptions} />
         </div>
@@ -137,11 +146,8 @@ export default function Subscription({
               done.
             </DialogDescription>
           </DialogHeader>
-          <Form
-            action={`/aps/${user.aps}/user/subscription`}
-            method="post"
-            onSubmit={() => setOpen(false)}
-          >
+          <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
+            <input name="action" value="create" type="hidden" />
             <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
               <SubscriptionForm aps={aps} />
             </div>
@@ -150,8 +156,9 @@ export default function Subscription({
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
               <Button type="submit">Save changes</Button>
+              {fetcher.state !== "idle" && <p>Saving...</p>}
             </DialogFooter>
-          </Form>
+          </fetcher.Form>
         </DialogContent>
       </Dialog>
     </Tabs>

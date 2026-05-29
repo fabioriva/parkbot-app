@@ -16,6 +16,14 @@ export async function createSubscription(subscription: Subscription) {
   return result;
 }
 
+export async function deleteSubscription(email) {
+  console.log(email);
+
+  const collection = db.collection(COLLECTION);
+  const result = await collection.deleteOne({ email });
+  return result;
+}
+
 export async function findSubscription(
   email: string,
 ): Promise<Subscription> | null {
@@ -28,7 +36,9 @@ export async function findSubscriptions(
   email: string,
 ): Promise<Subscription[]> | null {
   const subscription = db.collection(COLLECTION);
-  const result = await subscription.find().toArray();
+  const result = await subscription
+    .find({}, { projection: { _id: 0 } })
+    .toArray();
   return result;
 }
 

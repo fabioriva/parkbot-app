@@ -87,7 +87,7 @@ export function SubscriptionForm({ aps }) {
               id={aps.ns}
               name="aps"
               value={aps.ns}
-              // defaultChecked={aps.company === company}
+              // defaultChecked={aps.company === company} // uncontrolled
               checked={checkedState[index]}
               onCheckedChange={() => handleCheckboxChange(aps, index)}
             />
