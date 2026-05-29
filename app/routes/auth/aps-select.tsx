@@ -73,6 +73,13 @@ export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
                         <FieldContent>
                           <FieldTitle>{name}</FieldTitle>
                           <FieldDescription>
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: m.aps_parking_spaces({
+                                  count: parkingSpaces,
+                                }),
+                              }}
+                            />
                             {m.aps_location({ city, country, flag })}
                           </FieldDescription>
                         </FieldContent>
