@@ -1,5 +1,5 @@
 import { PlusIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { data, useFetcher } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -91,9 +91,9 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
   const [company, setCompany] = useState("Sotefin");
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("fetcher.data", fetcher.data);
-  }, [fetcher.data]);
+  // useEffect(() => {
+  //   console.log("fetcher.data", fetcher.data);
+  // }, [fetcher.data]);
 
   const handleOpen = () => {
     setOpen(true);
