@@ -1,6 +1,6 @@
 import { PlusIcon } from "lucide-react";
 import { useState, useEffect } from "react";
-import { data, Form } from "react-router";
+import { data, useFetcher } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -25,32 +25,49 @@ import { ApsForm } from "~/components/aps-form";
 import { ApsTable } from "~/components/aps-table";
 import { CompanySelect } from "~/components/company-select";
 import { Success } from "~/components/success-alert";
-import { createAps, findSubscribedApsList } from "~/lib/aps.server";
+import { createAps, deleteAps, findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 
-export async function action({ context, request }: Route.ActionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
+    const action = formData.get("action");
+    const city = formData.get("city");
     const company = formData.get("company");
     const country = formData.get("country");
     const flag = formData.get("flag");
     const name = formData.get("name");
-    const ns = formData.get("ns");
     const notifications = formData.get("notifications");
+    const ns = formData.get("ns");
     const parkingSpaces = formData.get("parkingSpaces");
-    const result = await createAps({
-      company,
-      country,
-      name,
-      ns,
-      parkingSpaces: Number(parkingSpaces),
-    });
-    if (result?.acknowledged) {
-      // console.log(`A document was inserted with the _id: ${result.insertedId}`);
-      return { success: true };
+    if (action === "create") {
+      const aps = {
+        city,
+        company,
+        country,
+        flag,
+        name,
+        notifications: notifications || "off",
+        ns,
+        parkingSpaces: Number(parkingSpaces),
+      };
+      const result = await createAps(aps);
+      return {
+        action: "Create Aps",
+        success: "Aps created successfully.",
+      };
     }
+    if (action === "delete") {
+      const result = await deleteAps(ns);
+      return {
+        action: "Delete Aps",
+        success: "Aps successfully deleted.",
+      };
+    }
+    throw new Error("Non-existent action error.");
   } catch (error) {
-    return { message: error?.body?.message };
+    // console.log(error);
+    return { error: error?.message };
   }
 }
 
@@ -65,21 +82,21 @@ export async function loader({ request }: Route.LoaderArgs) {
     throw data("Forbidden", { status: 403 });
   }
   const aps = await findSubscribedApsList([]);
-  return {
-    aps,
-    user: session.user,
-  };
+  return { aps };
 }
 
-export default function Aps({ actionData, loaderData }: Route.LoaderArgs) {
+export default function Aps({ loaderData }: Route.LoaderArgs) {
+  const fetcher = useFetcher();
+
   const [company, setCompany] = useState("Sotefin");
   const [open, setOpen] = useState(false);
-  const [success, setSuccess] = useState(false);
-  useEffect(() => setSuccess(actionData?.success), [actionData?.success]);
+
+  useEffect(() => {
+    console.log("fetcher.data", fetcher.data);
+  }, [fetcher.data]);
 
   const handleOpen = () => {
     setOpen(true);
-    setSuccess(false);
   };
 
   const apsByCompany = loaderData.aps.filter(
@@ -87,7 +104,7 @@ export default function Aps({ actionData, loaderData }: Route.LoaderArgs) {
   );
 
   return (
-    <Tabs className="max-w-3xl" defaultValue="aps">
+    <Tabs className="max-w-4xl" defaultValue="aps">
       <div className="flex items-center gap-3">
         <div className="grow">
           <TabsList>
@@ -104,12 +121,18 @@ export default function Aps({ actionData, loaderData }: Route.LoaderArgs) {
           <PlusIcon /> New Aps
         </Button>
       </div>
-      {success && (
-        <Success description="Aps successfully created" title="created!" />
+      {fetcher.data?.error && (
+        <p style={{ color: "red" }}>{fetcher.data.error}</p>
+      )}
+      {fetcher.data?.success && (
+        <Success
+          description={fetcher.data.success}
+          title={fetcher.data.action}
+        />
       )}
       <TabsContent value="aps">
         <div className="overflow-hidden rounded-lg border">
-          <ApsTable aps={apsByCompany} />
+          <ApsTable aps={apsByCompany} fetcher={fetcher} />
         </div>
       </TabsContent>
       <TabsContent value="aps-company">
@@ -124,11 +147,7 @@ export default function Aps({ actionData, loaderData }: Route.LoaderArgs) {
               done.
             </DialogDescription>
           </DialogHeader>
-          <Form
-            action={`/aps/${loaderData.user.aps}/user/aps`}
-            method="post"
-            onSubmit={() => setOpen(false)}
-          >
+          <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
             <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
               <ApsForm aps={loaderData.aps} />
             </div>
@@ -137,8 +156,9 @@ export default function Aps({ actionData, loaderData }: Route.LoaderArgs) {
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
               <Button type="submit">Save changes</Button>
+              {fetcher.state !== "idle" && <p>Saving...</p>}
             </DialogFooter>
-          </Form>
+          </fetcher.Form>
         </DialogContent>
       </Dialog>
     </Tabs>

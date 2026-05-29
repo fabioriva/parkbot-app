@@ -19,6 +19,12 @@ export async function createAps(aps: Aps) {
   return result;
 }
 
+export async function deleteAps(ns) {
+  const collection = db.collection(COLLECTION);
+  const result = await collection.deleteOne({ ns });
+  return result;
+}
+
 export async function findAps(ns: string): Promise<Aps> | null {
   const aps = db.collection(COLLECTION);
   const result = await aps.findOne({ ns }, { projection: { _id: 0, ns: 0 } });

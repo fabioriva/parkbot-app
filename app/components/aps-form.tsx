@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   Field,
@@ -11,10 +12,13 @@ import {
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 
-export function ApsForm({ user }) {
+export function ApsForm() {
+  const [checkedState, setCheckedState] = useState(false);
+
   return (
     <FieldSet>
       <FieldGroup>
+        <input name="action" value="create" type="hidden" />
         <Field>
           <FieldLabel htmlFor="company">Company</FieldLabel>
           <Input name="company" placeholder="Company Name" required />
@@ -53,7 +57,10 @@ export function ApsForm({ user }) {
         <Field orientation="horizontal">
           <Checkbox
             name="notifications"
+            // value="enabled"
             // defaultChecked
+            checked={checkedState}
+            onCheckedChange={(value) => setCheckedState(value === true)}
           />
           <FieldLabel htmlFor="notifications" className="font-normal">
             Enable notifications
