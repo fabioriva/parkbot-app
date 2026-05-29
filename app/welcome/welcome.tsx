@@ -1,24 +1,29 @@
-import botDark from "./bot-dark.svg";
-import botLight from "./bot-light.svg";
+// import botDark from "./bot-dark.svg";
+// import botLight from "./bot-light.svg";
 import { Button } from "~/components/ui/button";
-import { AuroraText } from "~/components/aurora-text";
+// import { AuroraText } from "~/components/aurora-text";
 import { ModeToggle } from "~/components/mode-toggle";
 import { m } from "@paraglide/messages.js";
 import { getLocale, setLocale } from "@paraglide/runtime.js";
 
-export function Welcome() {
+export function Welcome({ seed }) {
   return (
     <div className="flex items-center justify-center h-screen px-3">
       <div className="flex flex-col gap-4 items-center text-center">
         <h1 className="text-6xl font-extrabold tracking-tight">
-          <AuroraText>Parkbot</AuroraText>
+          {/* <AuroraText>Parkbot</AuroraText> */}
+          <span>Parkbot</span>
           <span className="inline md:hidden"> App</span>
           <span className="hidden md:inline"> Web Service</span>
         </h1>
         <h2 className="text-xl md:text-3xl">{m.welcome_text()}</h2>
         <div className="h-64 w-64">
-          <img src={botDark} alt="Parkbot" className="hidden dark:block" />
-          <img src={botLight} alt="Parkbot" className="block dark:hidden" />
+          <img
+            src={`https://api.dicebear.com/10.x/bottts/svg?seed=${seed}`}
+            alt="Parkbot"
+          />
+          {/* <img src={botDark} alt="Parkbot" className="hidden dark:block" /> */}
+          {/* <img src={botLight} alt="Parkbot" className="block dark:hidden" /> */}
         </div>
         <div className="flex flex-col gap-4">
           <Button className="w-48" size="lg" variant="outline" asChild>
