@@ -17,8 +17,8 @@ import { Input } from "~/components/ui/input";
 import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
 import {
-  findSubscription,
-  updateSubscription,
+  findSubscriptionByEmail,
+  subscribeByEmail,
 } from "~/lib/subscription.server";
 import { m } from "@paraglide/messages.js";
 
@@ -32,7 +32,7 @@ export async function action({ context, request }: Route.ActionArgs) {
     const email = formData.get("email");
     const password = formData.get("password");
     const confirm = formData.get("confirm");
-    const subscription = await findSubscription(email);
+    const subscription = await findSubscriptionByEmail(email);
     if (subscription === null) {
       return { error: m.signup_not_subscribed() };
     }
@@ -51,7 +51,7 @@ export async function action({ context, request }: Route.ActionArgs) {
         // image: "https://github.com/fabioriva.png", // optional
       },
     });
-    const result = await updateSubscription(email);
+    const result = await subscribeByEmail(email);
     return redirect(`/email-verification?email=${email}`, { headers });
   } catch (error) {
     return { error: error?.body?.message };

@@ -23,7 +23,7 @@ import { findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 import {
   createSubscription,
-  deleteSubscription,
+  deleteSubscriptionByEmail,
   findSubscriptions,
 } from "~/lib/subscription.server";
 
@@ -49,7 +49,7 @@ export async function action({ request }: Route.ActionArgs) {
       };
     }
     if (action === "delete") {
-      const result = await deleteSubscription(email);
+      const result = await deleteSubscriptionByEmail(email);
       return {
         action: "Delete subscription",
         success: "Subscription successfully deleted.",

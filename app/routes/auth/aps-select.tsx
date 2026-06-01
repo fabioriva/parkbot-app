@@ -15,7 +15,7 @@ import { Submit } from "~/components/submit-button";
 import { auth } from "~/lib/auth.server";
 // import { aps } from "~/lib/aps";
 import { findSubscribedApsList } from "~/lib/aps.server";
-import { findSubscription } from "~/lib/subscription.server";
+import { findSubscriptionByEmail } from "~/lib/subscription.server";
 import { m } from "@paraglide/messages.js";
 
 import type { Route } from "./+types/aps-select";
@@ -47,7 +47,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     if (process.env.TWO_FACTOR === "enabled" && !user.twoFactorEnabled) {
       return redirect("/2fa-setup");
     }
-    const subscription = await findSubscription(user?.email);
+    const subscription = await findSubscriptionByEmail(user?.email);
     const aps = await findSubscribedApsList(subscription?.aps);
     return aps;
     // return aps.filter((a) => subscription?.aps.includes(a.ns));
