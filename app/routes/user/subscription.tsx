@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { CompanySelect } from "~/components/company-select";
+import { Error } from "~/components/error-alert";
 import { SubscriptionForm } from "~/components/subscription-form";
 import { SubscriptionTable } from "~/components/subscription-table";
 import { Success } from "~/components/success-alert";
@@ -112,7 +113,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
         </Button>
       </div>
       {fetcher.data?.error && (
-        <p style={{ color: "red" }}>{fetcher.data.error}</p>
+        <Error description={fetcher.data.error} title="Error" />
       )}
       {fetcher.data?.success && (
         <Success

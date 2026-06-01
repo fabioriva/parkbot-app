@@ -24,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ApsForm } from "~/components/aps-form";
 import { ApsTable } from "~/components/aps-table";
 import { CompanySelect } from "~/components/company-select";
+import { Error } from "~/components/error-alert";
 import { Success } from "~/components/success-alert";
 import { createAps, deleteAps, findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
@@ -122,7 +123,7 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
         </Button>
       </div>
       {fetcher.data?.error && (
-        <p style={{ color: "red" }}>{fetcher.data.error}</p>
+        <Error description={fetcher.data.error} title="Error" />
       )}
       {fetcher.data?.success && (
         <Success
