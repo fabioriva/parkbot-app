@@ -43,6 +43,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   }
   const path = new URL(request.url).pathname.split("/")[3] || "";
   if (
+    path !== "admin" &&
     path !== "user" &&
     !roles[session.user.role]?.some((role) => role === path)
   ) {

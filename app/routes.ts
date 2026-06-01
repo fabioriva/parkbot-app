@@ -22,6 +22,9 @@ export default [
   ]),
   ...prefix("aps", [
     layout("routes/aps/layout.tsx", [
+      route(":aps/admin/aps", "routes/admin/aps.tsx"),
+      route(":aps/admin/subscription", "routes/admin/subscription.tsx"),
+      // route(":aps/admin/user", "routes/admin/user.tsx"),
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
       //     route(":aps/devices", "routes/aps/devices.tsx"),
       //     route(":aps/history", "routes/aps/history.tsx"),
@@ -31,9 +34,7 @@ export default [
       //     route(":aps/rack/:nr", "routes/aps/rack.tsx"),
       //     route(":aps/tags", "routes/aps/tags.tsx"),
       //     route(":aps/user/2fa", "routes/user/2fa.tsx"),
-      route(":aps/user/aps", "routes/user/aps.tsx"),
       route(":aps/user/password", "routes/user/password.tsx"),
-      route(":aps/user/subscription", "routes/user/subscription.tsx"),
     ]),
   ]),
   route("action/set-theme", "./routes/action.set-theme.ts"),

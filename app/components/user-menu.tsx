@@ -5,7 +5,8 @@ import {
   LogOut,
   ScanFace,
   Sparkles,
-  UserRoundCog,
+  UserCog,
+  Users,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -75,7 +76,28 @@ export function UserMenu({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>{m.sidebar_user_admin()}</DropdownMenuLabel>
+              <DropdownMenuItem disabled={user.role !== "admin"} asChild>
+                <a href={`/aps/${user.aps}/admin/aps`}>
+                  <SquareParking />
+                  Aps
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled={user.role !== "admin"} asChild>
+                <a href={`/aps/${user.aps}/admin/subscription`}>
+                  <UserCog />
+                  {m.sidebar_user_subscriptions()}
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled={user.role !== "admin"} asChild>
+                <a href={`/aps/${user.aps}/admin/user`}>
+                  <Users />
+                  {m.sidebar_user_users()}
+                </a>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuLabel>{m.sidebar_user_settings()}</DropdownMenuLabel>
               <DropdownMenuItem asChild>
@@ -88,22 +110,6 @@ export function UserMenu({
                 <a href={`/aps/${user.aps}/user/2fa`}>
                   <ScanFace />
                   {m.sidebar_user_twoFactor()}
-                </a>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>{m.sidebar_user_admin()}</DropdownMenuLabel>
-              <DropdownMenuItem disabled={user.role !== "admin"} asChild>
-                <a href={`/aps/${user.aps}/user/aps`}>
-                  <SquareParking />
-                  Aps
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem disabled={user.role !== "admin"} asChild>
-                <a href={`/aps/${user.aps}/user/subscription`}>
-                  <UserRoundCog />
-                  {m.sidebar_user_subscriptions()}
                 </a>
               </DropdownMenuItem>
             </DropdownMenuGroup>
