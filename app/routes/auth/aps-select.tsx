@@ -63,24 +63,38 @@ export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
         <Form method="post">
           <FieldGroup>
             <FieldSet>
-              <FieldLegend variant="label">{m.aps_card_title()}</FieldLegend>
-              <FieldDescription>{m.aps_card_description()}</FieldDescription>
+              <FieldLegend variant="label">
+                {m.aps_select_card_title()}
+              </FieldLegend>
+              <FieldDescription>
+                {m.aps_select_card_description()}
+              </FieldDescription>
               <RadioGroup defaultValue={loaderData[0].ns} name="aps">
                 {loaderData.map(
                   ({ city, country, flag, name, ns, parkingSpaces }, key) => (
                     <FieldLabel htmlFor={ns} key={key}>
                       <Field orientation="horizontal">
                         <FieldContent>
-                          <FieldTitle>{name}</FieldTitle>
-                          <FieldDescription>
-                            <p
+                          <FieldTitle>
+                            {name},{" "}
+                            <span
+                              className="text-sm font-normal"
                               dangerouslySetInnerHTML={{
-                                __html: m.aps_parking_spaces({
+                                __html: m.aps_select_parking_spaces({
                                   count: parkingSpaces,
                                 }),
                               }}
                             />
-                            {m.aps_location({ city, country, flag })}
+                          </FieldTitle>
+                          <FieldDescription>
+                            {/* <p
+                              dangerouslySetInnerHTML={{
+                                __html: m.aps_select_parking_spaces({
+                                  count: parkingSpaces,
+                                }),
+                              }}
+                            /> */}
+                            {m.aps_select_location({ city, country, flag })}
                           </FieldDescription>
                         </FieldContent>
                         <RadioGroupItem value={ns} id={ns} />
