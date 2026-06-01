@@ -26,7 +26,11 @@ import { ApsTable } from "~/components/aps-table";
 import { CompanySelect } from "~/components/company-select";
 import { Error } from "~/components/error-alert";
 import { Success } from "~/components/success-alert";
-import { createAps, deleteAps, findSubscribedApsList } from "~/lib/aps.server";
+import {
+  createAps,
+  deleteApsByNs,
+  findSubscribedApsList,
+} from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 
 export async function action({ request }: Route.ActionArgs) {
@@ -59,7 +63,7 @@ export async function action({ request }: Route.ActionArgs) {
       };
     }
     if (action === "delete") {
-      const result = await deleteAps(ns);
+      const result = await deleteApsByNs(ns);
       return {
         action: "Delete Aps",
         success: "Aps successfully deleted.",
