@@ -13,6 +13,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Success } from "~/components/success-alert";
 import { authClient } from "~/lib/auth";
+import { m } from "@paraglide/messages.js";
 
 // import type { Route } from "./+types/settings";
 
@@ -43,30 +44,35 @@ export default function Password() {
     <div className="w-full max-w-md space-y-6">
       <FieldGroup>
         <FieldSet>
-          <FieldLegend>Change password</FieldLegend>
+          <FieldLegend>{m.password_change_field_legend()}</FieldLegend>
           <FieldDescription>
-            Change your current password. The new password must be at least 8
-            characters long.
+            {m.password_change_field_description()}
           </FieldDescription>
           {error && <FieldError>{error}</FieldError>}
           {success && (
             <Success
-              description="Your profile information has been saved. Changes will be reflected immediately."
-              title="Password updated successfully"
+              description={m.password_change_success_description()}
+              title={m.password_change_success_title()}
             />
           )}
           <Field>
-            <FieldLabel htmlFor="currentPassword">Current password</FieldLabel>
+            <FieldLabel htmlFor="currentPassword">
+              {m.password_change_field_current()}
+            </FieldLabel>
             <Input
               name="currentPassword"
               type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
             />
-            <FieldDescription>Enter your current password.</FieldDescription>
+            <FieldDescription>
+              {m.password_change_field_description_current()}
+            </FieldDescription>
           </Field>
           <Field>
-            <FieldLabel htmlFor="newPassword">New password</FieldLabel>
+            <FieldLabel htmlFor="newPassword">
+              {m.password_change_field_new()}
+            </FieldLabel>
             <Input
               name="newPassword"
               type="password"
@@ -75,7 +81,9 @@ export default function Password() {
             />
           </Field>
           <Field>
-            <FieldLabel htmlFor="confirmPassword">Confirm password</FieldLabel>
+            <FieldLabel htmlFor="confirmPassword">
+              {m.password_change_field_confirm()}
+            </FieldLabel>
             <Input
               name="confirmPassword"
               type="password"
@@ -89,7 +97,7 @@ export default function Password() {
               onClick={changePassword}
               disabled={!currentPassword || !newPassword || !confirmPassword}
             >
-              Change password
+              {m.password_change_button()}
             </Button>
           </Field>
         </FieldSet>
