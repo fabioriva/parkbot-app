@@ -91,7 +91,7 @@ export default function TwoFactor() {
           </Field>
           <Field>
             <Button
-              className="w-full"
+              // className="w-full"
               onClick={twoFactorEnabled ? disable2FA : enable2FA}
               disabled={!password || totpURI !== ""}
             >
@@ -103,7 +103,7 @@ export default function TwoFactor() {
           {!success && totpURI && (
             <FieldSet>
               <Field>
-                <FieldContent className="bg-white p-4">
+                <FieldContent className="bg-white p-4 rounded-xl border max-w-fit">
                   <QRCode value={totpURI} />
                 </FieldContent>
               </Field>
@@ -126,7 +126,7 @@ export default function TwoFactor() {
                 </FieldDescription>
               </Field>
               <Field>
-                <Button className="w-full" onClick={verify2FA}>
+                <Button onClick={verify2FA}>
                   {m.two_factor_verify_submit()}
                 </Button>
               </Field>
