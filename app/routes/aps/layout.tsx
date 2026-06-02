@@ -31,6 +31,10 @@ import { roles } from "~/lib/roles";
 import { useInfo } from "~/hooks/use-ws";
 import { m } from "@paraglide/messages.js";
 
+export function headers({ loaderHeaders }: Route.HeadersArgs) {
+  return loaderHeaders;
+}
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   const session = await auth.api.getSession({
     headers: await request.headers,
@@ -53,11 +57,18 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     return redirect("/2fa-setup");
   }
   const sidebarState = getCookie(request, "sidebar_state");
-  return {
-    sidebarState,
-    user: session.user,
-    aps: session.aps,
-  };
+  return data(
+    {
+      sidebarState,
+      user: session.user,
+      aps: session.aps,
+    },
+    {
+      headers: {
+        "Cache-Control": "max-age=3600", // Cache for 1 hour
+      },
+    },
+  );
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
