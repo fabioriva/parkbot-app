@@ -21,15 +21,17 @@ import {
 import { CompanySelect } from "~/components/company-select";
 import { roles } from "~/lib/roles";
 
-export function SubscriptionForm({ aps }) {
+export function SubscriptionForm({ aps, companies = [] }) {
   const [checkedState, setCheckedState] = useState(
     new Array(aps.length).fill(false),
   );
-  const [company, setCompany] = useState("Sotefin");
+
+  const [company, setCompany] = useState("all");
+
   useEffect(() => {
     const updatedCheckedState = checkedState.map(
       (item, position) =>
-        company === aps[position].company || company === "Sotefin",
+        company === aps[position].company || company === "all",
     );
     setCheckedState(updatedCheckedState);
   }, [company]);
@@ -56,7 +58,11 @@ export function SubscriptionForm({ aps }) {
         </Field>
         <Field>
           <FieldLabel htmlFor="company">Company</FieldLabel>
-          <CompanySelect company={company} setCompany={setCompany} />
+          <CompanySelect
+            companies={companies}
+            company={company}
+            setCompany={setCompany}
+          />
         </Field>
         <Field>
           <FieldLabel htmlFor="role">User's role</FieldLabel>

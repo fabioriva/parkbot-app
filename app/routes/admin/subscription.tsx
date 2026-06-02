@@ -158,7 +158,12 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
           <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
             <input name="action" value="create" type="hidden" />
             <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
-              <SubscriptionForm aps={loaderData.aps} />
+              <SubscriptionForm
+                aps={loaderData.aps}
+                companies={loaderData.companies}
+                company={company}
+                setCompany={setCompany}
+              />
             </div>
             <DialogFooter>
               <DialogClose asChild>
