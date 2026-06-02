@@ -39,7 +39,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function User({ loaderData }: Route.LoaderArgs) {
-  console.log(loaderData);
   const fetcher = useFetcher();
 
   return (
