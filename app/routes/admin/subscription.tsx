@@ -73,8 +73,12 @@ export async function loader({ request }: Route.LoaderArgs) {
     throw data("Forbidden", { status: 403 });
   }
   const aps = await findSubscribedApsList([]);
+  const companies = await [
+    ...new Set(aps.map((a) => a.company)),
+    "Sotefin",
+  ].sort((a, b) => a.localeCompare(b));
   const subscriptions = await findSubscriptions();
-  return { aps, subscriptions };
+  return { aps, companies, subscriptions };
 }
 
 export default function Subscription({ loaderData }: Route.LoaderArgs) {
@@ -107,7 +111,11 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
             </TabsTrigger>
           </TabsList>
         </div>
-        <CompanySelect company={company} setCompany={setCompany} />
+        <CompanySelect
+          companies={loaderData.companies}
+          company={company}
+          setCompany={setCompany}
+        />
         <Button onClick={handleOpen} variant="outline">
           <PlusIcon /> New Subscription
         </Button>

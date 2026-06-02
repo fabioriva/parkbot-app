@@ -1,4 +1,3 @@
-// import { useState, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -7,9 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { companies } from "../../utils/companies";
 
-export function CompanySelect({ company, setCompany }) {
+export function CompanySelect({ companies = [], company, setCompany }) {
   return (
     <Select
       id="company"
@@ -23,8 +21,8 @@ export function CompanySelect({ company, setCompany }) {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {companies.map((company) => (
-            <SelectItem value={company} key={company}>
+          {companies.map((company, index) => (
+            <SelectItem value={company} key={index}>
               {company}
             </SelectItem>
           ))}
