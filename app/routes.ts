@@ -24,7 +24,7 @@ export default [
     layout("routes/aps/layout.tsx", [
       route(":aps/admin/aps", "routes/admin/aps.tsx"),
       route(":aps/admin/subscription", "routes/admin/subscription.tsx"),
-      // route(":aps/admin/user", "routes/admin/user.tsx"),
+      route(":aps/admin/user", "routes/admin/user.tsx"),
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
       //     route(":aps/devices", "routes/aps/devices.tsx"),
       //     route(":aps/history", "routes/aps/history.tsx"),

@@ -14,7 +14,7 @@ import {
 } from "~/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { CompanySelect } from "~/components/company-select";
-import { Error } from "~/components/error-alert";
+import { Error as ErrorAlert } from "~/components/error-alert";
 import { SubscriptionForm } from "~/components/subscription-form";
 import { SubscriptionTable } from "~/components/subscription-table";
 import { Success } from "~/components/success-alert";
@@ -32,7 +32,7 @@ export async function action({ request }: Route.ActionArgs) {
     const formData = await request.formData();
     const action = formData.get("action");
     const email = formData.get("email");
-    const company = formData.get("company");
+    // const company = formData.get("company");
     const role = formData.get("role");
     const aps = formData.getAll("aps");
     if (action === "create") {
@@ -113,7 +113,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
         </Button>
       </div>
       {fetcher.data?.error && (
-        <Error description={fetcher.data.error} title="Error" />
+        <ErrorAlert description={fetcher.data.error} title="Error" />
       )}
       {fetcher.data?.success && (
         <Success
@@ -133,7 +133,10 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
       </TabsContent>
       <TabsContent value="inactives">
         <div className="overflow-hidden rounded-lg border">
-          <SubscriptionTable subscriptions={inactiveSubscriptions} />
+          <SubscriptionTable
+            fetcher={fetcher}
+            subscriptions={inactiveSubscriptions}
+          />
         </div>
       </TabsContent>
       <Dialog open={open} onOpenChange={setOpen}>
