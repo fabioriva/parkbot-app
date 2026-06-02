@@ -17,11 +17,11 @@ import {
 import { Input } from "~/components/ui/input";
 import { Success } from "~/components/success-alert";
 import { authClient } from "~/lib/auth";
+import { m } from "@paraglide/messages.js";
 
 // import type { Route } from "./+types/settings";
 
 export default function TwoFactor() {
-  let t = (t) => t;
   const user = useOutletContext();
   const [backupCodes, setBackupCodes] = useState(null);
   const [error, setError] = useState(null);
@@ -37,7 +37,6 @@ export default function TwoFactor() {
     const { data, error } = await authClient.twoFactor.disable({
       password,
     });
-    // console.log(data, error);
     if (error) {
       return setError(error.message);
     }
@@ -47,21 +46,18 @@ export default function TwoFactor() {
     const { data, error } = await authClient.twoFactor.enable({
       password,
     });
-    // console.log(data, error);
     if (error) {
       return setError(error.message);
     }
     setError(null);
     setBackupCodes(data?.backupCodes);
     setTotpURI(data?.totpURI);
-    // setTwoFactorEnabled(true);
   };
   const verify2FA = async () => {
     const { data, error } = await authClient.twoFactor.verifyTotp({
       code: totp, // required
       trustDevice: true,
     });
-    // console.log(data, error);
     if (error) {
       return setError(error.message);
     }
@@ -73,12 +69,14 @@ export default function TwoFactor() {
     <div className="w-full max-w-md">
       <FieldGroup>
         <FieldSet>
-          <FieldLegend>Two-Factor Authentication (2FA)</FieldLegend>
+          <FieldLegend>{m.two_factor_field_legend()}</FieldLegend>
           <FieldDescription>
-            Enhance your app's security with two-factor authentication.
+            {m.two_factor_field_description()}
           </FieldDescription>
           <Field>
-            <FieldLabel htmlFor="password">Current password</FieldLabel>
+            <FieldLabel htmlFor="password">
+              {m.two_factor_password_field_label()}
+            </FieldLabel>
             <Input
               name="password"
               type="password"
@@ -86,14 +84,9 @@ export default function TwoFactor() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <FieldDescription>
-              {twoFactorEnabled ? (
-                <span>Enter your password to disable 2FA</span>
-              ) : (
-                <span>
-                  Enter your password to generate a QR code to scan with your
-                  authenticator app and enable 2FA.
-                </span>
-              )}
+              {twoFactorEnabled
+                ? m.two_factor_disable_field_description()
+                : m.two_factor_enable_field_description()}
             </FieldDescription>
           </Field>
           <Field>
@@ -102,20 +95,21 @@ export default function TwoFactor() {
               onClick={twoFactorEnabled ? disable2FA : enable2FA}
               disabled={!password || totpURI !== ""}
             >
-              {twoFactorEnabled ? <span>Disable</span> : <span>Enable</span>}{" "}
-              2FA
+              {twoFactorEnabled
+                ? m.two_factor_disable_button()
+                : m.two_factor_enable_button()}{" "}
             </Button>
           </Field>
           {!success && totpURI && (
             <FieldSet>
               <Field>
-                <FieldContent className="bg-white p-[16px]">
+                <FieldContent className="bg-white p-4">
                   <QRCode value={totpURI} />
                 </FieldContent>
               </Field>
               <Field>
                 <FieldLabel htmlFor="totp">
-                  {t("twoFA.verify.codeLabel")}
+                  {m.two_factor_verify_totp()}
                 </FieldLabel>
                 <Input
                   type="totp"
@@ -124,12 +118,16 @@ export default function TwoFactor() {
                   required
                 />
                 <FieldDescription>
-                  Enter the TOTP code from your authenticator app.
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: m.two_factor_verify_totp_field_description(),
+                    }}
+                  />
                 </FieldDescription>
               </Field>
               <Field>
                 <Button className="w-full" onClick={verify2FA}>
-                  {t("twoFA.verify.submit")}
+                  {m.two_factor_verify_submit()}
                 </Button>
               </Field>
             </FieldSet>
@@ -137,35 +135,33 @@ export default function TwoFactor() {
           {error && <FieldError>{error}</FieldError>}
           {success && (
             <Success
-              description="Save these codes in a secure location. This can be used to recover access to the account if the user loses access to their phone or email."
-              title="Two Factor Authenticaton updated successfully"
+              description={m.two_factor_success_description()}
+              title={m.two_factor_success_title()}
             />
           )}
           {success && (
-            <Alert className="max-w-md">
+            <Alert className="relative">
               <CheckCircle2Icon />
               <AlertTitle>Backup codes</AlertTitle>
               <AlertDescription>
-                <div className="pt-1 relative w-full">
-                  <pre className="grid grid-cols-1">
-                    {backupCodes.map((code, i) => (
-                      <code key={i}>{code}</code>
-                    ))}
-                  </pre>
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    className="absolute top-0 right-0 size-8 cursor-pointer"
-                    onClick={() =>
-                      navigator.clipboard.writeText(
-                        backupCodes.map((code) => code).join("\n"),
-                      )
-                    }
-                  >
-                    <CopyIcon size="20" />
-                  </Button>
-                </div>
+                <pre className="grid grid-cols-1">
+                  {backupCodes.map((code, i) => (
+                    <code key={i}>{code}</code>
+                  ))}
+                </pre>
               </AlertDescription>
+              <Button
+                variant="secondary"
+                size="icon"
+                className="absolute top-2 right-2 size-8 cursor-pointer"
+                onClick={() =>
+                  navigator.clipboard.writeText(
+                    backupCodes.map((code) => code).join("\n"),
+                  )
+                }
+              >
+                <CopyIcon size="20" />
+              </Button>
             </Alert>
           )}
         </FieldSet>
