@@ -26,7 +26,7 @@ export default function Password() {
 
   const changePassword = async () => {
     if (newPassword && newPassword !== confirmPassword) {
-      return setError("Password doesn't match");
+      return setError(m.password_change_error_match());
     }
     const { data, error } = await authClient.changePassword({
       newPassword, // required

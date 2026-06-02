@@ -94,6 +94,7 @@
   "occupancy_title": "Occupazione del sistema",
   "occupancy_total": "Totale posti",
   "password_change_button": "Cambia password",
+  "password_change_error_match": "La password non corrisponde",
   "password_change_field_description": "Cambia regolarmente la tua password per mantenere il tuo account sicuro.",
   "password_change_field_legend": "Cambia password",
   "password_change_field_confirm": "Conferma nuova password",

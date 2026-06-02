@@ -94,6 +94,7 @@
   "occupancy_title": "System occupancy",
   "occupancy_total": "Total spaces",
   "password_change_button": "Change password",
+  "password_change_error_match": "Password doesn't match",
   "password_change_field_description": "Change your password regularly to keep your account secure.",
   "password_change_field_legend": "Change password",
   "password_change_field_confirm": "Confirm new password",
