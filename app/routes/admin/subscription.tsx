@@ -19,7 +19,7 @@ import { SubscriptionForm } from "~/components/subscription-form";
 import { SubscriptionTable } from "~/components/subscription-table";
 import { Success } from "~/components/success-alert";
 // import { aps } from "~/lib/aps";
-import { findSubscribedApsList } from "~/lib/aps.server";
+import { findCompaniesFromAps, findSubscribedApsList } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 import {
   createSubscription,
@@ -73,10 +73,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     throw data("Forbidden", { status: 403 });
   }
   const aps = await findSubscribedApsList([]);
-  const companies = await [
-    ...new Set(aps.map((a) => a.company)),
-    "Sotefin",
-  ].sort((a, b) => a.localeCompare(b));
+  const companies = await findCompaniesFromAps(aps);
   const subscriptions = await findSubscriptions();
   return { aps, companies, subscriptions };
 }
@@ -84,7 +81,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Subscription({ loaderData }: Route.LoaderArgs) {
   const fetcher = useFetcher();
 
-  const [company, setCompany] = useState("Sotefin");
+  const [company, setCompany] = useState("all");
   const [open, setOpen] = useState(false);
 
   // useEffect(() => {
@@ -97,6 +94,10 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
 
   const inactiveSubscriptions = loaderData.subscriptions.filter(
     (item) => item.subscribed === false,
+  );
+
+  const subscriptionsByCompany = loaderData.subscriptions.filter(
+    (item) => item.company === company || company === "all",
   );
 
   return (
@@ -133,9 +134,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
         <div className="overflow-hidden rounded-lg border">
           <SubscriptionTable
             fetcher={fetcher}
-            subscriptions={loaderData.subscriptions.filter(
-              (item) => item.company === company || company === "Sotefin",
-            )}
+            subscriptions={subscriptionsByCompany}
           />
         </div>
       </TabsContent>

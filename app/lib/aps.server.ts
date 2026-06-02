@@ -31,6 +31,15 @@ export async function findApsByNs(ns: string): Promise<Aps> | null {
   return result;
 }
 
+export async function findCompaniesFromAps(
+  aps: Aps[],
+): Promise<string[]> | null {
+  const collection = db.collection(COLLECTION);
+  const fieldName = "company";
+  const result = await collection.distinct(fieldName);
+  return result;
+}
+
 export async function findSubscribedApsList(
   nsList: string[],
 ): Promise<Aps[]> | null {

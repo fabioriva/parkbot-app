@@ -21,6 +21,7 @@ import { Success } from "~/components/success-alert";
 import {
   createAps,
   deleteApsByNs,
+  findCompaniesFromAps,
   findSubscribedApsList,
 } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
@@ -79,17 +80,14 @@ export async function loader({ request }: Route.LoaderArgs) {
     throw data("Forbidden", { status: 403 });
   }
   const aps = await findSubscribedApsList([]);
-  const companies = await [
-    ...new Set(aps.map((a) => a.company)),
-    "Sotefin",
-  ].sort((a, b) => a.localeCompare(b));
+  const companies = await findCompaniesFromAps(aps);
   return { aps, companies };
 }
 
 export default function Aps({ loaderData }: Route.LoaderArgs) {
   const fetcher = useFetcher();
 
-  const [company, setCompany] = useState("Sotefin");
+  const [company, setCompany] = useState("all");
   const [open, setOpen] = useState(false);
 
   // useEffect(() => {
@@ -101,7 +99,7 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
   };
 
   const apsByCompany = loaderData.aps.filter(
-    (item) => item.company === company || company === "Sotefin",
+    (item) => item.company === company || company === "all",
   );
 
   return (
