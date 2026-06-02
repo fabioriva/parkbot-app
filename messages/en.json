@@ -147,6 +147,11 @@
   "signup_password_match": "The password doesn't match",
   "signup_registered": "Already registered?",
   "signup_signin_link": "Sign in",
+  "two_factor_verify_card_description": "Enter the TOTP code from your authenticator app",
+  "two_factor_verify_card_title": "Two Factor Authentication",
+  "two_factor_verify_link": "Use recovery code",
+  "two_factor_verify_totp": "Verification code",
+  "two_factor_verify_submit": "Verify code",
   "welcome_text": "The robotic parking monitoring tool",
   "welcome_login_button": "Signin to Parkbot"
 }

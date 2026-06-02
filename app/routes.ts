@@ -11,7 +11,7 @@ export default [
   layout("routes/auth/layout.tsx", [
     // route("2fa-reset", "routes/auth/2fa-reset.tsx"),
     // route("2fa-setup", "routes/auth/2fa-setup.tsx"),
-    // route("2fa-verify", "routes/auth/2fa-verify.tsx"),
+    route("2fa-verify", "routes/auth/two-factor-verify.tsx"),
     route("aps-select", "routes/auth/aps-select.tsx"),
     route("email-verification", "routes/auth/email-verification.tsx"),
     route("password-forgot", "routes/auth/password-forgot.tsx"),
@@ -33,7 +33,7 @@ export default [
       //     route(":aps/operations", "routes/aps/operations.tsx"),
       //     route(":aps/rack/:nr", "routes/aps/rack.tsx"),
       //     route(":aps/tags", "routes/aps/tags.tsx"),
-      //     route(":aps/user/2fa", "routes/user/2fa.tsx"),
+      route(":aps/user/2fa", "routes/user/two-factor.tsx"),
       route(":aps/user/password", "routes/user/password.tsx"),
     ]),
   ]),

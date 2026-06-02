@@ -1,6 +1,5 @@
 import { CheckCircle2Icon } from "lucide-react";
 import { useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
 import {
   Field,
@@ -12,8 +11,10 @@ import {
   FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { Success } from "~/components/success-alert";
 import { authClient } from "~/lib/auth";
-import type { Route } from "./+types/settings";
+
+// import type { Route } from "./+types/settings";
 
 export default function Password() {
   const [error, setError] = useState(null);
@@ -49,14 +50,10 @@ export default function Password() {
           </FieldDescription>
           {error && <FieldError>{error}</FieldError>}
           {success && (
-            <Alert className="max-w-md border-green-200 bg-green-50 text-green-900 dark:border-green-900 dark:bg-green-950 dark:text-green-50">
-              <CheckCircle2Icon />
-              <AlertTitle>Password updated successfully</AlertTitle>
-              <AlertDescription>
-                Your profile information has been saved. Changes will be
-                reflected immediately.
-              </AlertDescription>
-            </Alert>
+            <Success
+              description="Your profile information has been saved. Changes will be reflected immediately."
+              title="Password updated successfully"
+            />
           )}
           <Field>
             <FieldLabel htmlFor="currentPassword">Current password</FieldLabel>
