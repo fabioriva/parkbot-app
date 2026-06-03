@@ -20,7 +20,7 @@ export function CompanySelect({ companies = [], company, setCompany }) {
         <SelectValue placeholder="Select a company" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="all">All companies</SelectItem>
+        <SelectItem value="Sotefin">Sotefin</SelectItem>
         <SelectGroup>
           {companies.map((company, index) => (
             <SelectItem value={company} key={index}>

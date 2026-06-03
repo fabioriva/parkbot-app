@@ -3,15 +3,6 @@ import { useState } from "react";
 import { data, useFetcher } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ApsForm } from "~/components/aps-form";
 import { ApsTable } from "~/components/aps-table";
@@ -23,6 +14,7 @@ import {
   deleteApsByNs,
   findCompaniesFromAps,
   findSubscribedApsList,
+  updateApsByNs,
 } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
 
@@ -38,17 +30,17 @@ export async function action({ request }: Route.ActionArgs) {
     const notifications = formData.get("notifications");
     const ns = formData.get("ns");
     const parkingSpaces = formData.get("parkingSpaces");
+    const aps = {
+      city,
+      company,
+      country,
+      flag,
+      name,
+      notifications: notifications ? true : false,
+      ns,
+      parkingSpaces: Number(parkingSpaces),
+    };
     if (action === "create") {
-      const aps = {
-        city,
-        company,
-        country,
-        flag,
-        name,
-        notifications: notifications || "off",
-        ns,
-        parkingSpaces: Number(parkingSpaces),
-      };
       const result = await createAps(aps);
       return {
         action: "Create Aps",
@@ -60,6 +52,13 @@ export async function action({ request }: Route.ActionArgs) {
       return {
         action: "Delete Aps",
         success: "Aps successfully deleted.",
+      };
+    }
+    if (action === "update") {
+      const result = await updateApsByNs(aps, ns);
+      return {
+        action: "Update Aps",
+        success: "Aps successfully updated.",
       };
     }
     throw new Error("Non-existent action error.");
@@ -87,19 +86,15 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Aps({ loaderData }: Route.LoaderArgs) {
   const fetcher = useFetcher();
 
-  const [company, setCompany] = useState("all");
+  const [company, setCompany] = useState("Sotefin");
   const [open, setOpen] = useState(false);
 
   // useEffect(() => {
   //   console.log("fetcher.data", fetcher.data);
   // }, [fetcher.data]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
   const apsByCompany = loaderData.aps.filter(
-    (item) => item.company === company || company === "all",
+    (item) => item.company === company || company === "Sotefin",
   );
 
   return (
@@ -120,7 +115,7 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
           company={company}
           setCompany={setCompany}
         />
-        <Button onClick={handleOpen} variant="outline">
+        <Button onClick={() => setOpen(true)} variant="outline">
           <PlusIcon /> New System
         </Button>
       </div>
@@ -139,29 +134,12 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
         </div>
       </TabsContent>
       <TabsContent value="disabled" />
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Edit Aps</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
-            </DialogDescription>
-          </DialogHeader>
-          <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
-            <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
-              <ApsForm aps={loaderData.aps} />
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button type="submit">Save changes</Button>
-              {fetcher.state !== "idle" && <p>Saving...</p>}
-            </DialogFooter>
-          </fetcher.Form>
-        </DialogContent>
-      </Dialog>
+      <ApsForm
+        action="create"
+        fetcher={fetcher}
+        open={open}
+        setOpen={setOpen}
+      />
     </Tabs>
   );
 }

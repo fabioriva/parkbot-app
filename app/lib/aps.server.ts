@@ -49,3 +49,9 @@ export async function findSubscribedApsList(
     .toArray();
   return result;
 }
+
+export async function updateApsByNs(aps: Aps, ns: string) {
+  const collection = db.collection(COLLECTION);
+  const result = await collection.updateOne({ ns }, { $set: { ...aps } });
+  return result;
+}

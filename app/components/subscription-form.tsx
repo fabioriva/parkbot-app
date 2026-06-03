@@ -18,20 +18,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { CompanySelect } from "~/components/company-select";
 import { roles } from "~/lib/roles";
 
-export function SubscriptionForm({ aps, companies = [] }) {
+export function SubscriptionForm({ aps /*, companies = []*/ }) {
   const [checkedState, setCheckedState] = useState(
     new Array(aps.length).fill(false),
   );
 
-  const [company, setCompany] = useState("all");
+  const [company, setCompany] = useState("Sotefin");
 
   useEffect(() => {
     const updatedCheckedState = checkedState.map(
       (item, position) =>
-        company === aps[position].company || company === "all",
+        company === aps[position].company || company === "Sotefin",
     );
     setCheckedState(updatedCheckedState);
   }, [company]);
@@ -58,10 +57,12 @@ export function SubscriptionForm({ aps, companies = [] }) {
         </Field>
         <Field>
           <FieldLabel htmlFor="company">Company</FieldLabel>
-          <CompanySelect
-            companies={companies}
-            company={company}
-            setCompany={setCompany}
+          <Input
+            name="company"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            placeholder="Company Name"
+            required
           />
         </Field>
         <Field>

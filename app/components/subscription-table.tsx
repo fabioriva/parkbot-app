@@ -32,7 +32,7 @@ export function SubscriptionTable({ fetcher, subscriptions }) {
               <TableHead>Email</TableHead>
               <TableHead>Company</TableHead>
               <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Subscribed</TableHead>
               <TableHead>Aps</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -50,7 +50,6 @@ export function SubscriptionTable({ fetcher, subscriptions }) {
                   <TableCell className="uppercase">
                     {subscription.subscribed.toString()}
                   </TableCell>
-                  {/* <TableCell>[{subscription.aps.join("], [")}]</TableCell> */}
                   <TableCell>
                     [{subscription.aps.slice(0, 3).join("], [")}] ...
                   </TableCell>

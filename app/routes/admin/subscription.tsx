@@ -32,12 +32,13 @@ export async function action({ request }: Route.ActionArgs) {
     const formData = await request.formData();
     const action = formData.get("action");
     const email = formData.get("email");
-    // const company = formData.get("company");
+    const company = formData.get("company");
     const role = formData.get("role");
     const aps = formData.getAll("aps");
     if (action === "create") {
       const subscription = {
         aps,
+        company,
         email,
         role,
         subscribed: false,
@@ -81,23 +82,19 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Subscription({ loaderData }: Route.LoaderArgs) {
   const fetcher = useFetcher();
 
-  const [company, setCompany] = useState("all");
+  const [company, setCompany] = useState("Sotefin");
   const [open, setOpen] = useState(false);
 
   // useEffect(() => {
   //   console.log("fetcher.data", fetcher.data);
   // }, [fetcher.data]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
   const inactiveSubscriptions = loaderData.subscriptions.filter(
     (item) => item.subscribed === false,
   );
 
   const subscriptionsByCompany = loaderData.subscriptions.filter(
-    (item) => item.company === company || company === "all",
+    (item) => item.company === company || company === "Sotefin",
   );
 
   return (
@@ -117,7 +114,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
           company={company}
           setCompany={setCompany}
         />
-        <Button onClick={handleOpen} variant="outline">
+        <Button onClick={() => setOpen(true)} variant="outline">
           <PlusIcon /> New Subscription
         </Button>
       </div>
@@ -160,7 +157,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
             <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
               <SubscriptionForm
                 aps={loaderData.aps}
-                companies={loaderData.companies}
+                // companies={loaderData.companies}
                 company={company}
                 setCompany={setCompany}
               />

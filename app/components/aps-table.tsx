@@ -1,4 +1,5 @@
 import { MoreHorizontalIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -17,16 +18,29 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { ApsForm } from "~/components/aps-form";
 
 export function ApsTable({ aps, fetcher }) {
+  const [selectedAps, setSelectedAps] = useState();
+  const [open, setOpen] = useState(false);
+
   const handleDelete = async (aps) => {
     fetcher.submit({ action: "delete", ...aps }, { method: "post" });
   };
   const handleUpdate = async (aps) => {
-    fetcher.submit({ action: "update", ...aps }, { method: "post" });
+    // fetcher.submit({ action: "update", ...aps }, { method: "post" });
+    setOpen(true);
+    setSelectedAps(aps);
   };
   return (
     <Table>
+      <ApsForm
+        action="update"
+        aps={selectedAps}
+        fetcher={fetcher}
+        open={open}
+        setOpen={setOpen}
+      />
       {/* <TableCaption>The number of active aps is {aps.length}</TableCaption> */}
       <TableHeader>
         <TableRow>
@@ -35,7 +49,7 @@ export function ApsTable({ aps, fetcher }) {
           <TableHead>Country</TableHead>
           <TableHead>City</TableHead>
           <TableHead>Namespace</TableHead>
-          <TableHead className="text-right">Notifications</TableHead>
+          <TableHead>Notifications</TableHead>
           <TableHead className="text-right">Actions</TableHead>
           <TableHead className="text-right">Spaces</TableHead>
         </TableRow>
@@ -52,8 +66,8 @@ export function ApsTable({ aps, fetcher }) {
               </TableCell>
               <TableCell>{aps.city}</TableCell>
               <TableCell>{aps.ns}</TableCell>
-              <TableCell className="text-right uppercase">
-                {aps.notifications}
+              <TableCell className="uppercase">
+                {aps.notifications.toString()}
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
@@ -66,7 +80,7 @@ export function ApsTable({ aps, fetcher }) {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
                       onClick={() => handleUpdate(aps)}
-                      disabled
+                      // disabled
                     >
                       Edit
                     </DropdownMenuItem>
@@ -86,7 +100,7 @@ export function ApsTable({ aps, fetcher }) {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={6}>Total parking spaces</TableCell>
+          <TableCell colSpan={7}>Total parking spaces</TableCell>
           <TableCell className="text-right">
             {aps.reduce((accumulator, currentValue) => {
               return accumulator + Number(currentValue.parkingSpaces);
