@@ -1,4 +1,8 @@
+// import { PlusIcon } from "lucide-react";
 import { data, useFetcher } from "react-router";
+import { Badge } from "~/components/ui/badge";
+// import { Button } from "~/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Error as ErrorAlert } from "~/components/error-alert";
 import { Success } from "~/components/success-alert";
 import { UserTable } from "~/components/user-table";
@@ -42,19 +46,26 @@ export default function User({ loaderData }: Route.LoaderArgs) {
   const fetcher = useFetcher();
 
   return (
-    <>
-      {fetcher.data?.error && (
-        <ErrorAlert description={fetcher.data.error} title="Error" />
-      )}
-      {fetcher.data?.success && (
-        <Success
-          description={fetcher.data.success}
-          title={fetcher.data.action}
-        />
-      )}
-      <div className="overflow-hidden rounded-lg border">
-        <UserTable fetcher={fetcher} users={loaderData.users} />
+    <Tabs defaultValue="user">
+      <div className="flex items-center gap-3">
+        <div className="grow">
+          <TabsList>
+            <TabsTrigger value="user">
+              Users
+              <Badge variant="default">{loaderData.users.length}</Badge>
+            </TabsTrigger>
+            <TabsTrigger value="disabled" disabled>
+              Disabled
+            </TabsTrigger>
+          </TabsList>
+        </div>
       </div>
-    </>
+      <TabsContent value="user">
+        <div className="overflow-hidden rounded-lg border">
+          <UserTable fetcher={fetcher} users={loaderData.users} />
+        </div>
+      </TabsContent>
+      <TabsContent value="disabled" />
+    </Tabs>
   );
 }

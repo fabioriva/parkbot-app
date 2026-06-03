@@ -101,9 +101,9 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
   );
 
   return (
-    <Tabs className="max-w-3xl" defaultValue="subscriptions">
+    <Tabs defaultValue="subscriptions">
       <div className="flex items-center gap-3">
-        <div className="grow mb-3">
+        <div className="grow">
           <TabsList>
             <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
             <TabsTrigger value="inactives">

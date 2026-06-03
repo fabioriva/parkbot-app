@@ -103,14 +103,14 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
   );
 
   return (
-    <Tabs className="max-w-4xl" defaultValue="aps">
+    <Tabs defaultValue="aps">
       <div className="flex items-center gap-3">
         <div className="grow">
           <TabsList>
             <TabsTrigger value="aps">
               Aps List<Badge variant="default">{apsByCompany.length}</Badge>
             </TabsTrigger>
-            <TabsTrigger value="aps-company" disabled>
+            <TabsTrigger value="disabled" disabled>
               Disabled
             </TabsTrigger>
           </TabsList>
@@ -121,7 +121,7 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
           setCompany={setCompany}
         />
         <Button onClick={handleOpen} variant="outline">
-          <PlusIcon /> New Aps
+          <PlusIcon /> New System
         </Button>
       </div>
       {fetcher.data?.error && (
@@ -138,9 +138,7 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
           <ApsTable aps={apsByCompany} fetcher={fetcher} />
         </div>
       </TabsContent>
-      <TabsContent value="aps-company">
-        <p>Disabled</p>
-      </TabsContent>
+      <TabsContent value="disabled" />
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>

@@ -3,7 +3,7 @@ import { db } from "./db.server";
 const COLLECTION = "user";
 
 export interface User {
-  id: string;
+  id: string; // ObjectId;
   name: string;
   email: string;
   emailVerified: boolean;
@@ -28,6 +28,7 @@ export async function findUsers(): Promise<User[]> | null {
           _id: 0, // hide original ObjectId
         },
       },
+      { $sort: { email: 1 } },
     ])
     .toArray();
   return result;
