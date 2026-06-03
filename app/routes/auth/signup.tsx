@@ -39,16 +39,17 @@ export async function action({ context, request }: Route.ActionArgs) {
     if (password && password !== confirm) {
       return { error: m.signup_password_match() };
     }
+    const name = `${firstName} ${lastName}`;
     const { headers, response } = await auth.api.signUpEmail({
       // asResponse: true,
       returnHeaders: true,
       body: {
-        name: `${firstName} ${lastName}`,
+        name,
         email,
         password,
         role: subscription.role,
         callbackURL: "/aps-select", // optional
-        // image: "https://github.com/fabioriva.png", // optional
+        image: `https://api.dicebear.com/10.x/bottts/svg?seed=${name}`, // optional
       },
     });
     const result = await subscribeByEmail(email);

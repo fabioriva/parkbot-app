@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
+import { UserAvatar } from "~/components/user-avatar";
 import { UserMenu } from "~/components/user-menu";
 import { roles } from "~/lib/roles";
 import { m } from "@paraglide/messages.js";
@@ -66,12 +67,7 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href={`/aps/${user.aps}/dashboard`}>
-                <div className="flex aspect-square size-10 items-center justify-center rounded-lg mr-1">
-                  <img
-                    src={`https://api.dicebear.com/9.x/bottts/svg?seed=${user.aps}`} // src="/bot.svg"
-                    alt="Parkbot"
-                  />
-                </div>
+                <UserAvatar user={user} />
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-bold">
                     {import.meta.env.VITE_APP_NAME}
