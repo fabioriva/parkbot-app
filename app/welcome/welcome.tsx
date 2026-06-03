@@ -1,7 +1,7 @@
 // import botDark from "./bot-dark.svg";
 // import botLight from "./bot-light.svg";
 import { Button } from "~/components/ui/button";
-import { AuroraText } from "~/components/aurora-text";
+// import { AuroraText } from "~/components/aurora-text";
 import { ModeToggle } from "~/components/mode-toggle";
 import { m } from "@paraglide/messages.js";
 import { getLocale, setLocale } from "@paraglide/runtime.js";
@@ -11,7 +11,7 @@ export function Welcome({ seed }) {
     <div className="flex items-center justify-center h-screen px-3">
       <div className="flex flex-col gap-4 items-center text-center">
         <h1 className="text-6xl font-extrabold tracking-tight">
-          <AuroraText>Parkbot</AuroraText>
+          <span>Parkbot</span>
           <span className="inline md:hidden"> App</span>
           <span className="hidden md:inline"> Web Service</span>
         </h1>

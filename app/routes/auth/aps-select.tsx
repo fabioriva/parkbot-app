@@ -76,7 +76,7 @@ export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
                       <Field orientation="horizontal">
                         <FieldContent>
                           <FieldTitle>
-                            {name},{" "}
+                            {name},
                             <span
                               className="text-sm font-normal"
                               dangerouslySetInnerHTML={{
@@ -87,13 +87,6 @@ export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
                             />
                           </FieldTitle>
                           <FieldDescription>
-                            {/* <p
-                              dangerouslySetInnerHTML={{
-                                __html: m.aps_select_parking_spaces({
-                                  count: parkingSpaces,
-                                }),
-                              }}
-                            /> */}
                             {m.aps_select_location({ city, country, flag })}
                           </FieldDescription>
                         </FieldContent>

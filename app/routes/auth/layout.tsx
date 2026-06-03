@@ -7,7 +7,7 @@ export default function Auth() {
       <div className="flex w-full max-w-sm flex-col gap-6">
         <a href="/" className="flex items-center gap-2 self-center font-medium">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tighter">
-            <AuroraText>Parkbot</AuroraText> web service
+            <AuroraText>Parkbot</AuroraText> auth service
           </h1>
         </a>
         <Outlet />
