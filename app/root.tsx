@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  type MiddlewareFunction,
 } from "react-router";
 import {
   PreventFlashOnWrongTheme,
