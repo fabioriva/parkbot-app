@@ -90,10 +90,6 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
   const [company, setCompany] = useState("Sotefin");
   const [open, setOpen] = useState(false);
 
-  // useEffect(() => {
-  //   console.log("fetcher.data", fetcher.data);
-  // }, [fetcher.data]);
-
   const apsByCompany = loaderData.aps.filter(
     (item) => item.company === company || company === "Sotefin",
   );

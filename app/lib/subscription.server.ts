@@ -49,3 +49,15 @@ export async function subscribeByEmail(
   );
   return result;
 }
+
+export async function updateSubscriptionByEmail(
+  email: string,
+  subscription: Subscription,
+) {
+  const collection = db.collection(COLLECTION);
+  const result = await collection.updateOne(
+    { email },
+    { $set: { ...subscription } },
+  );
+  return result;
+}

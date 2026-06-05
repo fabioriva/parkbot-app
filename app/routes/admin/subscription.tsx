@@ -3,15 +3,6 @@ import { useState } from "react";
 import { data, useFetcher } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { CompanySelect } from "~/components/company-select";
 import { Error as ErrorAlert } from "~/components/error-alert";
@@ -25,7 +16,9 @@ import {
   createSubscription,
   deleteSubscriptionByEmail,
   findSubscriptions,
+  updateSubscriptionByEmail,
 } from "~/lib/subscription.server";
+import { m } from "@paraglide/messages.js";
 
 export async function action({ request }: Route.ActionArgs) {
   try {
@@ -45,18 +38,25 @@ export async function action({ request }: Route.ActionArgs) {
       };
       const result = await createSubscription(subscription);
       return {
-        action: "Create subscription",
-        success: "Subscription created successfully.",
+        action: m.subscription_action_create(),
+        success: m.subscription_action_create_success(),
       };
     }
     if (action === "delete") {
       const result = await deleteSubscriptionByEmail(email);
       return {
-        action: "Delete subscription",
-        success: "Subscription successfully deleted.",
+        action: m.subscription_action_delete(),
+        success: m.subscription_action_delete_success(),
       };
     }
-    throw new Error("Non-existent action error.");
+    if (action === "update") {
+      const result = await updateSubscriptionByEmail(email, subscription);
+      return {
+        action: m.subscription_action_update(),
+        success: m.subscription_action_update_success(),
+      };
+    }
+    throw new Error(m.subscription_action_error());
   } catch (error) {
     // console.log(error);
     return { error: error?.message };
@@ -85,10 +85,6 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
   const [company, setCompany] = useState("Sotefin");
   const [open, setOpen] = useState(false);
 
-  // useEffect(() => {
-  //   console.log("fetcher.data", fetcher.data);
-  // }, [fetcher.data]);
-
   const inactiveSubscriptions = loaderData.subscriptions.filter(
     (item) => item.subscribed === false,
   );
@@ -102,7 +98,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
       <div className="flex items-center gap-3">
         <div className="grow">
           <TabsList>
-            <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
+            <TabsTrigger value="subscriptions">{m.subscriptions()}</TabsTrigger>
             <TabsTrigger value="inactives">
               Not activated
               <Badge variant="default">{inactiveSubscriptions.length}</Badge>
@@ -115,7 +111,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
           setCompany={setCompany}
         />
         <Button onClick={() => setOpen(true)} variant="outline">
-          <PlusIcon /> New Subscription
+          <PlusIcon /> {m.subscription_action_add()}
         </Button>
       </div>
       {fetcher.data?.error && (
@@ -130,6 +126,7 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
       <TabsContent value="subscriptions">
         <div className="overflow-hidden rounded-lg border">
           <SubscriptionTable
+            aps={loaderData.aps}
             fetcher={fetcher}
             subscriptions={subscriptionsByCompany}
           />
@@ -138,40 +135,19 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
       <TabsContent value="inactives">
         <div className="overflow-hidden rounded-lg border">
           <SubscriptionTable
+            aps={loaderData.aps}
             fetcher={fetcher}
             subscriptions={inactiveSubscriptions}
           />
         </div>
       </TabsContent>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
-            </DialogDescription>
-          </DialogHeader>
-          <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
-            <input name="action" value="create" type="hidden" />
-            <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
-              <SubscriptionForm
-                aps={loaderData.aps}
-                // companies={loaderData.companies}
-                company={company}
-                setCompany={setCompany}
-              />
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button type="submit">Save changes</Button>
-              {fetcher.state !== "idle" && <p>Saving...</p>}
-            </DialogFooter>
-          </fetcher.Form>
-        </DialogContent>
-      </Dialog>
+      <SubscriptionForm
+        aps={loaderData.aps}
+        action="create"
+        fetcher={fetcher}
+        open={open}
+        setOpen={setOpen}
+      />
     </Tabs>
   );
 }

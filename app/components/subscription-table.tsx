@@ -1,4 +1,5 @@
 import { MoreHorizontalIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -15,26 +16,43 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { SubscriptionForm } from "~/components/subscription-form";
+import { m } from "@paraglide/messages.js";
 
-export function SubscriptionTable({ fetcher, subscriptions }) {
+export function SubscriptionTable({ aps, fetcher, subscriptions }) {
+  const [open, setOpen] = useState(false);
+  const [selectedSubscription, setSelectedSubscription] = useState();
+
   const handleDelete = async (subscription) => {
     fetcher.submit({ action: "delete", ...subscription }, { method: "post" });
   };
   const handleUpdate = async (subscription) => {
-    fetcher.submit({ action: "update", ...subscription }, { method: "post" });
+    // fetcher.submit({ action: "update", ...subscription }, { method: "post" });
+    setOpen(true);
+    setSelectedSubscription(subscription);
   };
   return (
     <>
+      <SubscriptionForm
+        aps={aps}
+        action="update"
+        fetcher={fetcher}
+        open={open}
+        setOpen={setOpen}
+        selectedSubscription={selectedSubscription}
+      />
       {subscriptions.length > 0 ? (
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Email</TableHead>
-              <TableHead>Company</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Subscribed</TableHead>
-              <TableHead>Aps</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{m.subscription_field_company()}</TableHead>
+              <TableHead>{m.subscription_field_role()}</TableHead>
+              <TableHead>{m.subscription_field_subscribed()}</TableHead>
+              <TableHead>{m.subscription_field_selected_aps()}</TableHead>
+              <TableHead className="text-right">
+                {m.subscription_field_actions()}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -64,16 +82,15 @@ export function SubscriptionTable({ fetcher, subscriptions }) {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
                           onClick={() => handleUpdate(subscription)}
-                          disabled
                         >
-                          Edit
+                          {m.subscription_action_update()}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           onClick={() => handleDelete(subscription)}
                           variant="destructive"
                         >
-                          Delete
+                          {m.subscription_action_delete()}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

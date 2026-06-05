@@ -22,7 +22,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { m } from "@paraglide/messages.js";
 
-export function ApsForm({ action, aps, fetcher, open, setOpen }) {
+export function ApsForm({ action, fetcher, open, setOpen, selectedAps }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">
@@ -41,7 +41,11 @@ export function ApsForm({ action, aps, fetcher, open, setOpen }) {
                   <FieldLabel htmlFor="company">
                     {m.aps_field_company()}
                   </FieldLabel>
-                  <Input name="company" defaultValue={aps?.company} required />
+                  <Input
+                    name="company"
+                    defaultValue={selectedAps?.company}
+                    required
+                  />
                 </Field>
                 <div className="grid grid-cols-3 gap-3">
                   <Field>
@@ -50,26 +54,38 @@ export function ApsForm({ action, aps, fetcher, open, setOpen }) {
                     </FieldLabel>
                     <Input
                       name="country"
-                      defaultValue={aps?.country}
+                      defaultValue={selectedAps?.country}
                       required
                     />
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="flag">{m.aps_field_flag()}</FieldLabel>
-                    <Input name="flag" defaultValue={aps?.flag} required />
+                    <Input
+                      name="flag"
+                      defaultValue={selectedAps?.flag}
+                      required
+                    />
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="city">{m.aps_field_city()}</FieldLabel>
-                    <Input name="city" defaultValue={aps?.city} required />
+                    <Input
+                      name="city"
+                      defaultValue={selectedAps?.city}
+                      required
+                    />
                   </Field>
                 </div>
                 <Field>
                   <FieldLabel htmlFor="name">{m.aps_field_name()}</FieldLabel>
-                  <Input name="name" defaultValue={aps?.name} required />
+                  <Input
+                    name="name"
+                    defaultValue={selectedAps?.name}
+                    required
+                  />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="ns">{m.aps_field_ns()}</FieldLabel>
-                  <Input name="ns" defaultValue={aps?.ns} required />
+                  <Input name="ns" defaultValue={selectedAps?.ns} required />
                 </Field>
                 <div className="grid grid-cols-2 gap-6 items-start justify-between">
                   <Field>
@@ -79,14 +95,14 @@ export function ApsForm({ action, aps, fetcher, open, setOpen }) {
                     <Input
                       type="number"
                       name="parkingSpaces"
-                      defaultValue={aps?.parkingSpaces}
+                      defaultValue={selectedAps?.parkingSpaces}
                       required
                     />
                   </Field>
                   <Field orientation="horizontal">
                     <Checkbox
                       name="notifications"
-                      defaultChecked={aps?.notifications}
+                      defaultChecked={selectedAps?.notifications}
                     />
                     <FieldLabel htmlFor="notifications" className="font-normal">
                       {m.aps_field_notifications()}

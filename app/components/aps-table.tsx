@@ -22,8 +22,8 @@ import { ApsForm } from "~/components/aps-form";
 import { m } from "@paraglide/messages.js";
 
 export function ApsTable({ aps, fetcher }) {
-  const [selectedAps, setSelectedAps] = useState();
   const [open, setOpen] = useState(false);
+  const [selectedAps, setSelectedAps] = useState();
 
   const handleDelete = async (aps) => {
     fetcher.submit({ action: "delete", ...aps }, { method: "post" });
@@ -37,10 +37,10 @@ export function ApsTable({ aps, fetcher }) {
     <Table>
       <ApsForm
         action="update"
-        aps={selectedAps}
         fetcher={fetcher}
         open={open}
         setOpen={setOpen}
+        selectedAps={selectedAps}
       />
       {/* <TableCaption>The number of active aps is {aps.length}</TableCaption> */}
       <TableHeader>
@@ -81,10 +81,7 @@ export function ApsTable({ aps, fetcher }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => handleUpdate(aps)}
-                      // disabled
-                    >
+                    <DropdownMenuItem onClick={() => handleUpdate(aps)}>
                       {m.aps_action_update()}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
