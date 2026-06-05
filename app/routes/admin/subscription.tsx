@@ -28,14 +28,14 @@ export async function action({ request }: Route.ActionArgs) {
     const company = formData.get("company");
     const role = formData.get("role");
     const aps = formData.getAll("aps");
+    const subscription = {
+      aps,
+      company,
+      email,
+      role,
+      subscribed: false,
+    };
     if (action === "create") {
-      const subscription = {
-        aps,
-        company,
-        email,
-        role,
-        subscribed: false,
-      };
       const result = await createSubscription(subscription);
       return {
         action: m.subscription_action_create(),
