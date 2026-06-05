@@ -1,5 +1,5 @@
 import * as React from "react";
-import { data, Outlet, redirect, useLocation } from "react-router";
+import { data, Outlet, redirect } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import {
   Breadcrumb,
@@ -45,7 +45,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (session.user.aps !== params.aps) {
     throw data("Forbidden", { status: 403 });
   }
-  const path = new URL(request.url).pathname.split("/")[3] || "";
+  const pathname = new URL(request.url).pathname;
+  const path = pathname.split("/")[3] || "";
   if (
     path !== "admin" &&
     path !== "user" &&
@@ -59,6 +60,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const sidebarState = getCookie(request, "sidebar_state");
   return data(
     {
+      pathname,
       sidebarState,
       user: session.user,
       aps: session.aps,
@@ -77,7 +79,6 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   } = useInfo(
     `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.user.aps}/info`,
   );
-  const location = useLocation();
   return (
     <TooltipProvider>
       <SidebarProvider
@@ -90,7 +91,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
       >
         <AppSidebar
           aps={loaderData?.aps.name}
-          pathname={location.pathname}
+          pathname={loaderData.pathname}
           user={loaderData?.user}
         />
         <SidebarInset>
@@ -110,7 +111,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
                 <BreadcrumbSeparator className="hidden lg:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage className="capitalize w-16 lg:w-full truncate">
-                    {m[`sidebar_main.${location.pathname.split("/")[3]}`]()}
+                    {m[`sidebar_main.${loaderData.pathname.split("/")[3]}`]()}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>

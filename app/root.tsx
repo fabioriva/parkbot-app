@@ -35,8 +35,10 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const pathname = new URL(request.url).pathname;
   const { getTheme } = await themeSessionResolver(request);
   return {
+    pathname,
     theme: getTheme(),
   };
 };
@@ -58,7 +60,12 @@ export function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
   return (
-    <html lang={getLocale()} dir={getTextDirection()} className={clsx(theme)}>
+    // <html lang={getLocale()} dir={getTextDirection()} className={clsx(theme)}>
+    <html
+      lang={getLocale()}
+      dir={getTextDirection()}
+      className={data.pathname === "/" ? "dark" : clsx(theme)}
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
