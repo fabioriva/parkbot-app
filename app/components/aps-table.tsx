@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { ApsForm } from "~/components/aps-form";
+import { m } from "@paraglide/messages.js";
 
 export function ApsTable({ aps, fetcher }) {
   const [selectedAps, setSelectedAps] = useState();
@@ -44,14 +45,16 @@ export function ApsTable({ aps, fetcher }) {
       {/* <TableCaption>The number of active aps is {aps.length}</TableCaption> */}
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Company</TableHead>
-          <TableHead>Country</TableHead>
-          <TableHead>City</TableHead>
-          <TableHead>Namespace</TableHead>
-          <TableHead>Notifications</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
-          <TableHead className="text-right">Spaces</TableHead>
+          <TableHead>{m.aps_field_name()}</TableHead>
+          <TableHead>{m.aps_field_company()}</TableHead>
+          <TableHead>{m.aps_field_country()}</TableHead>
+          <TableHead>{m.aps_field_city()}</TableHead>
+          <TableHead>{m.aps_field_ns()}</TableHead>
+          <TableHead>{m.aps_field_notifications()}</TableHead>
+          <TableHead className="text-right">{m.aps_field_actions()}</TableHead>
+          <TableHead className="text-right">
+            {m.aps_field_parking_spaces()}
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -82,14 +85,14 @@ export function ApsTable({ aps, fetcher }) {
                       onClick={() => handleUpdate(aps)}
                       // disabled
                     >
-                      Edit
+                      {m.aps_action_update()}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={() => handleDelete(aps)}
                       variant="destructive"
                     >
-                      Delete
+                      {m.aps_action_delete()}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -100,7 +103,9 @@ export function ApsTable({ aps, fetcher }) {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={7}>Total parking spaces</TableCell>
+          <TableCell colSpan={7}>
+            {m.aps_field_total_parking_spaces()}
+          </TableCell>
           <TableCell className="text-right">
             {aps.reduce((accumulator, currentValue) => {
               return accumulator + Number(currentValue.parkingSpaces);

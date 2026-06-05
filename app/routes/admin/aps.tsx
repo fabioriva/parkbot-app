@@ -17,6 +17,7 @@ import {
   updateApsByNs,
 } from "~/lib/aps.server";
 import { auth } from "~/lib/auth.server";
+import { m } from "@paraglide/messages.js";
 
 export async function action({ request }: Route.ActionArgs) {
   try {
@@ -43,25 +44,25 @@ export async function action({ request }: Route.ActionArgs) {
     if (action === "create") {
       const result = await createAps(aps);
       return {
-        action: "Create Aps",
-        success: "Aps created successfully.",
+        action: m.aps_action_create(),
+        success: m.aps_action_create_success(),
       };
     }
     if (action === "delete") {
       const result = await deleteApsByNs(ns);
       return {
-        action: "Delete Aps",
-        success: "Aps successfully deleted.",
+        action: m.aps_action_delete(),
+        success: m.aps_action_delete_success(),
       };
     }
     if (action === "update") {
       const result = await updateApsByNs(aps, ns);
       return {
-        action: "Update Aps",
-        success: "Aps successfully updated.",
+        action: m.aps_action_update(),
+        success: m.aps_action_update_success(),
       };
     }
-    throw new Error("Non-existent action error.");
+    throw new Error(m.aps_action_error());
   } catch (error) {
     // console.log(error);
     return { error: error?.message };
@@ -103,7 +104,7 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
         <div className="grow">
           <TabsList>
             <TabsTrigger value="aps">
-              Aps List<Badge variant="default">{apsByCompany.length}</Badge>
+              Aps<Badge variant="default">{apsByCompany.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="disabled" disabled>
               Disabled
@@ -116,7 +117,7 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
           setCompany={setCompany}
         />
         <Button onClick={() => setOpen(true)} variant="outline">
-          <PlusIcon /> New System
+          <PlusIcon /> {m.aps_action_add()}
         </Button>
       </div>
       {fetcher.data?.error && (
