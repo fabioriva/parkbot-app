@@ -1,3 +1,4 @@
+import { NoDataAlert } from "~/components/no-data-alert";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch.server";
 
@@ -17,11 +18,6 @@ export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
-  if (!loaderData)
-    return (
-      <h1 className="text-lg dark:text-red-500 font-semibold">
-        Data not available!
-      </h1>
-    );
+  if (loaderData) return <NoDataAlert />;
   return <h1>Dashboard</h1>;
 }
