@@ -1,7 +1,6 @@
 // import botDark from "./bot-dark.svg";
 // import botLight from "./bot-light.svg";
 import { Button } from "~/components/ui/button";
-// import { AuroraText } from "~/components/aurora-text";
 import { ModeToggle } from "~/components/mode-toggle";
 import { m } from "@paraglide/messages.js";
 import { getLocale, setLocale } from "@paraglide/runtime.js";
@@ -20,6 +19,7 @@ export function Welcome({ seed }) {
           <img
             src={`https://api.dicebear.com/10.x/bottts/svg?seed=${seed}`}
             alt="Parkbot"
+            onError={(e) => (e.target.src = "/bot.svg")}
           />
           {/* <img src={botDark} alt="Parkbot" className="hidden dark:block" /> */}
           {/* <img src={botLight} alt="Parkbot" className="block dark:hidden" /> */}
