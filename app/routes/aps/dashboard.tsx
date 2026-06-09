@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
+import { useFetcher } from "react-router";
+import { ExitQueue } from "~/components/exit-queue";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { getCookie } from "~/lib/cookie.server";
-import fetcher from "~/lib/fetch.server";
+import fetcher from "~/lib/fetch";
 
 import type { Route } from "./+types/dashboard";
 
@@ -18,6 +21,61 @@ export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
-  if (loaderData) return <NoDataAlert />;
-  return <h1>Dashboard</h1>;
+  if (!loaderData) return <NoDataAlert />;
+  const [data, setData] = useState(loaderData);
+  const fetcher = useFetcher();
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetcher.load(`/aps/${params.aps}/dashboard`);
+    }, 1000);
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
+  useEffect(() => {
+    if (fetcher.data) {
+      setData(fetcher.data);
+    }
+  }, [fetcher.data]);
+
+  const { activity, exitQueue, occupancy, operations, system } = data;
+  const [busy, free, lock] = occupancy;
+
+  return (
+    <div className="flex flex-col gap-4">
+      {/* <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
+        {system.map((item, key) => (
+          <Device device={item} link={`/aps/${params.aps}/devices`} key={key} />
+        ))}
+      </div> */}
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
+        <ExitQueue
+          exit={exitQueue.exitButton}
+          queue={exitQueue.queueList.filter((item) => item.card !== 0)}
+        />
+        {/* <Occupancy occupancy={occupancy} link={`/aps/${params.aps}/map`} /> */}
+        {/* <Card size="sm">
+          <CardHeader>
+            <CardTitle>{t("dashboard.activity-title")}</CardTitle>
+            <CardDescription>
+              {t("dashboard.activity-description")}
+            </CardDescription>
+            <CardAction className="flex items-center gap-2">
+              <ExternalLink link={`/aps/${params.aps}/history`} />
+            </CardAction>
+          </CardHeader>
+          <CardContent>
+            <HistoryList query={activity.documents} />
+          </CardContent>
+        </Card> */}
+        {/* <Operations
+          operations={operations[0].data}
+          link={`/aps/${params.aps}/operations`}
+          title={t("dashboard.operations-title")}
+          description={t("dashboard.operations-description", {
+            date: format(new Date(), "MM/dd/yyyy"),
+            interpolation: { escapeValue: false },
+          })}
+        /> */}
+      </div>
+    </div>
+  );
 }

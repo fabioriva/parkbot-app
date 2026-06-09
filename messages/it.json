@@ -92,6 +92,23 @@
   "email_verification_card_content": "Controlla la tua casella di posta e clicca sul link per attivare il tuo account.",
   "email_verification_card_description": "Ti abbiamo inviato un'email per verificare il tuo indirizzo. Clicca sul link nell'email per completare la verifica.",
   "email_verification_card_title": "Verifica il tuo indirizzo email",
+  "exit_queue_calls": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "C'é un'uscita in attesa",
+        "countPlural=other": "Ci sono {count} uscite in attesa"
+      }
+    }
+  ],
+  "exit_queue_card_title": "Coda di uscita",
+  "exit_queue_dialog_title": "Cancellazione uscita",
+  "exit_queue_dialog_description": "Sei sicuro di voler eliminare il tag {card} dalla coda di uscita?",
+  "exit_queue_no_calls": "La coda di uscita è vuota",
+  "exit_queue_item_description": "Tag {card} stallo {stall}",
+  "exit_queue_item_next": "Prossima uscita",
+  "exit_queue_item_title": "{position}° chiamata",
   "log_id_1": "Allarme {id} attivo",
   "log_id_2": "Allarme {id} annullato",
   "log_id_3": "Cambio funzione {id}",
