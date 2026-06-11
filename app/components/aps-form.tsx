@@ -27,9 +27,13 @@ export function ApsForm({ action, fetcher, open, setOpen, selectedAps }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>{m.aps_action_add()}</DialogTitle>
+          <DialogTitle>
+            {action === "create" ? m.aps_action_add() : m.aps_action_update()}
+          </DialogTitle>
           <DialogDescription>
-            {m.aps_action_add_description()}
+            {action === "create"
+              ? m.aps_action_add_description()
+              : m.aps_action_update_description()}
           </DialogDescription>
         </DialogHeader>
         <fetcher.Form method="post" onSubmit={() => setOpen(false)}>

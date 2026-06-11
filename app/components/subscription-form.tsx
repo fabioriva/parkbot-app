@@ -64,9 +64,15 @@ export function SubscriptionForm({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>{m.subscription_action_update()}</DialogTitle>
+          <DialogTitle>
+            {action === "create"
+              ? m.subscription_action_add()
+              : m.subscription_action_update()}
+          </DialogTitle>
           <DialogDescription>
-            {m.subscription_action_add_description()}
+            {action === "create"
+              ? m.subscription_action_add_description()
+              : m.subscription_action_update_description()}
           </DialogDescription>
         </DialogHeader>
         <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
