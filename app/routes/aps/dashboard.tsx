@@ -3,6 +3,7 @@ import { useFetcher } from "react-router";
 import { CardWrapper } from "~/components/card-wrapper";
 import { ExitCall } from "~/components/exit-call";
 import { ExitQueue } from "~/components/exit-queue";
+import { HistoryList } from "~/components/history-list";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
@@ -67,7 +68,9 @@ export default function Dashboard({
         <CardWrapper
           title={m.dashboard_recent_activity_title()}
           description={m.dashboard_recent_activity_description()}
-        ></CardWrapper>
+        >
+          <HistoryList query={activity.documents} />
+        </CardWrapper>
 
         {/* <Occupancy occupancy={occupancy} link={`/aps/${params.aps}/map`} /> */}
         {/* <Card size="sm">
