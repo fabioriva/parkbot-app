@@ -3,6 +3,7 @@ import { useFetcher } from "react-router";
 import { CardWrapper } from "~/components/card-wrapper";
 import { ExitCall } from "~/components/exit-call";
 import { ExitQueue } from "~/components/exit-queue";
+import { ExternalLink } from "~/components/external-link";
 import { HistoryList } from "~/components/history-list";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { getCookie } from "~/lib/cookie.server";
@@ -68,25 +69,12 @@ export default function Dashboard({
         <CardWrapper
           title={m.dashboard_recent_activity_title()}
           description={m.dashboard_recent_activity_description()}
+          action={<ExternalLink link={`/aps/${params.aps}/history`} />}
         >
           <HistoryList query={activity.documents} />
         </CardWrapper>
 
         {/* <Occupancy occupancy={occupancy} link={`/aps/${params.aps}/map`} /> */}
-        {/* <Card size="sm">
-          <CardHeader>
-            <CardTitle>{t("dashboard.activity-title")}</CardTitle>
-            <CardDescription>
-              {t("dashboard.activity-description")}
-            </CardDescription>
-            <CardAction className="flex items-center gap-2">
-              <ExternalLink link={`/aps/${params.aps}/history`} />
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <HistoryList query={activity.documents} />
-          </CardContent>
-        </Card> */}
         {/* <Operations
           operations={operations[0].data}
           link={`/aps/${params.aps}/operations`}
