@@ -75,7 +75,7 @@
   "aps_field_notifications": "Abilita notifiche",
   "aps_field_ns": "Namespace",
   "aps_field_parking_spaces": "Posti auto",
-  "aps_field_total_parking_spaces": "Totale posti auto",
+  "aps_field_total_parking_spaces": "Totale posti auto {count}",
   "aps_select_card_description": "Seleziona il sistema che vuoi monitorare.",
   "aps_select_card_title": "Seleziona Aps",
   "aps_select_location": "Sito in {city}, {country}, {flag}",

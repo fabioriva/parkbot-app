@@ -75,7 +75,7 @@
   "aps_field_notifications": "Enable notifications",
   "aps_field_ns": "Namespace",
   "aps_field_parking_spaces": "Parking spaces",
-  "aps_field_total_parking_spaces": "Total parking spaces",
+  "aps_field_total_parking_spaces": "Total parking spaces {count}",
   "aps_select_card_description": "Select the system you want to monitor.",
   "aps_select_card_title": "Select Aps",
   "aps_select_location": "Located in {city}, {country}, {flag}",

@@ -100,13 +100,20 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
         <div className="grow">
           <TabsList>
             <TabsTrigger value="aps">
-              Aps<Badge variant="default">{apsByCompany.length}</Badge>
+              Aps <Badge variant="default">{apsByCompany.length}</Badge>
             </TabsTrigger>
             <TabsTrigger value="disabled" disabled>
               Disabled
             </TabsTrigger>
           </TabsList>
         </div>
+        <Badge className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+          {m.aps_field_total_parking_spaces({
+            count: apsByCompany.reduce((accumulator, currentValue) => {
+              return accumulator + Number(currentValue.parkingSpaces);
+            }, 0),
+          })}
+        </Badge>
         <CompanySelect
           companies={loaderData.companies}
           company={company}

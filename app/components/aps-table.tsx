@@ -13,7 +13,7 @@ import {
   TableBody,
   // TableCaption,
   TableCell,
-  TableFooter,
+  // TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -50,11 +50,12 @@ export function ApsTable({ aps, fetcher }) {
           <TableHead>{m.aps_field_country()}</TableHead>
           <TableHead>{m.aps_field_city()}</TableHead>
           <TableHead>{m.aps_field_ns()}</TableHead>
+          <TableHead>{m.aps_field_parking_spaces()}</TableHead>
           <TableHead>{m.aps_field_notifications()}</TableHead>
           <TableHead className="text-right">{m.aps_field_actions()}</TableHead>
-          <TableHead className="text-right">
+          {/* <TableHead className="text-right">
             {m.aps_field_parking_spaces()}
-          </TableHead>
+          </TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -69,6 +70,7 @@ export function ApsTable({ aps, fetcher }) {
               </TableCell>
               <TableCell>{aps.city}</TableCell>
               <TableCell>{aps.ns}</TableCell>
+              <TableCell>{aps.parkingSpaces}</TableCell>
               <TableCell className="uppercase">
                 {aps.notifications.toString()}
               </TableCell>
@@ -94,11 +96,11 @@ export function ApsTable({ aps, fetcher }) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
-              <TableCell className="text-right">{aps.parkingSpaces}</TableCell>
+              {/* <TableCell className="text-right">{aps.parkingSpaces}</TableCell> */}
             </TableRow>
           ))}
       </TableBody>
-      <TableFooter>
+      {/* <TableFooter>
         <TableRow>
           <TableCell colSpan={7}>
             {m.aps_field_total_parking_spaces()}
@@ -109,7 +111,7 @@ export function ApsTable({ aps, fetcher }) {
             }, 0)}
           </TableCell>
         </TableRow>
-      </TableFooter>
+      </TableFooter> */}
     </Table>
   );
 }
