@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useFetcher } from "react-router";
+import { CardWrapper } from "~/components/card-wrapper";
+import { ExitCall } from "~/components/exit-call";
 import { ExitQueue } from "~/components/exit-queue";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
+import { m } from "@paraglide/messages.js";
 
 import type { Route } from "./+types/dashboard";
 
@@ -47,10 +50,25 @@ export default function Dashboard({
         ))}
       </div> */}
       <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
-        <ExitQueue
-          exit={exitQueue.exitButton}
-          queue={exitQueue.queueList.filter((item) => item.card !== 0)}
-        />
+        <CardWrapper
+          title={m.exit_queue_card_title()}
+          description={
+            exitQueue.queueList.length === 0
+              ? m.exit_queue_no_calls()
+              : m.exit_queue_calls({ count: exitQueue.queueList.length })
+          }
+          footer={<ExitCall exit={exitQueue.exitButton} />}
+        >
+          <ExitQueue
+            exit={exitQueue.exitButton}
+            queue={exitQueue.queueList.filter((item) => item.card !== 0)}
+          />
+        </CardWrapper>
+        <CardWrapper
+          title={m.dashboard_recent_activity_title()}
+          description={m.dashboard_recent_activity_description()}
+        ></CardWrapper>
+
         {/* <Occupancy occupancy={occupancy} link={`/aps/${params.aps}/map`} /> */}
         {/* <Card size="sm">
           <CardHeader>

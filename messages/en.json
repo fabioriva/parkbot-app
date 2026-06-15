@@ -90,6 +90,8 @@
   "auth_reset_password_html": "Click the link to reset your password: <a href='{url}'>{url}</a>",
   "cancel": "Cancel",
   "confirm": "Confirm",
+  "dashboard_recent_activity_title": "Recent activity",
+  "dashboard_recent_activity_description": "List of the most recent operations",
   "email_verification_card_content": "Please check your inbox and click the link to activate your account.",
   "email_verification_card_description": "We've sent you an email to verify your address. Click the link in the email to complete verification.",
   "email_verification_card_title": "Verify your email address",
