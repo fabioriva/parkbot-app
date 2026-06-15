@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -22,10 +21,9 @@ import {
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 // import { useConfirmDialog } from "~/components/confirm-dialog";
+import { m } from "@paraglide/messages.js";
 
 export function ExitCall({ exit }) {
-  // const { t } = useTranslation();
-  const t = (t) => t;
   // const { showConfirmDialog } = useConfirmDialog();
 
   const { enable, max, min } = exit;
@@ -62,19 +60,19 @@ export function ExitCall({ exit }) {
           disabled={!enable.status}
           onClick={handleOpen}
         >
-          {t("exit-call.dialogButton")}
+          {m.exit_call()}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("exit-call.dialogTitle")}</DialogTitle>
+          <DialogTitle>{m.exit_call_dialog_title()}</DialogTitle>
           <DialogDescription>
-            {t("exit-call.dialogDescription")}
+            {m.exit_call_dialog_description({ card, stall: exit.stall })}
           </DialogDescription>
         </DialogHeader>
         <Field>
           <FieldLabel htmlFor="card">
-            {t("exit-call.fieldLabel", { min, max })}
+            {m.exit_call_dialog_field_label({ min, max })}
           </FieldLabel>
           <Input
             id="card"
@@ -85,20 +83,22 @@ export function ExitCall({ exit }) {
             value={card}
             onChange={handleChange}
           />
-          {error && (
-            <FieldError>{t("exit-call.fieldError", { min, max })}</FieldError>
-          )}
           <FieldDescription>
-            {t("exit-call.fieldDescription", { min, max })}
+            {m.exit_call_dialog_field_description({ min, max })}
           </FieldDescription>
+          {error && (
+            <FieldError>
+              {m.exit_call_dialog_field_error({ min, max })}
+            </FieldError>
+          )}
         </Field>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">{t("exit-call.dialogCancel")}</Button>
+            <Button variant="outline">{m.cancel()}</Button>
           </DialogClose>
           <DialogClose asChild>
             <Button onClick={handleConfirm} disabled={error}>
-              {t("exit-call.dialogConfirm")}
+              {m.confirm()}
             </Button>
           </DialogClose>
         </DialogFooter>

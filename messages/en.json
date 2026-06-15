@@ -93,6 +93,12 @@
   "email_verification_card_content": "Please check your inbox and click the link to activate your account.",
   "email_verification_card_description": "We've sent you an email to verify your address. Click the link in the email to complete verification.",
   "email_verification_card_title": "Verify your email address",
+  "exit_call": "Exit call",
+  "exit_call_dialog_title": "Exit request",
+  "exit_call_dialog_description": "Are you sure you want to request exit for card {card} from stall {stall}?",
+  "exit_call_dialog_field_label": "Card number",
+  "exit_call_dialog_field_description": "Cards range: {min} - {max}",
+  "exit_call_dialog_field_error": "Please enter a valid card number.",
   "exit_queue_calls": [
     {
       "declarations": ["input count", "local countPlural = count: plural"],
