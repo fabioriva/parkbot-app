@@ -5,7 +5,8 @@ export function logT(log) {
   switch (operation.id) {
     case 1:
     case 2:
-      return m["alarms." + alarm.key]({ ...alarm.query });
+      // return m["alarms." + alarm.key]({ ...alarm.query });
+      return m[`alarms.${alarm.key}`]({ ...alarm.query });
     case 3:
       return m.log_id_3({ id: mode.id });
     case 4:
