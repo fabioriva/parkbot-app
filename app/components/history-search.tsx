@@ -7,7 +7,7 @@ import {
 
 export function HistorySearch({ search, placeholder, handleSearch }) {
   return (
-    <InputGroup className="w-auto">
+    <InputGroup>
       <InputGroupInput
         placeholder={placeholder}
         onChange={(e) => handleSearch(e)}
