@@ -186,7 +186,7 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
           {/* <TableCaption>
           {t("history.description", { from: dateFrom, to: dateTo, count })}
         </TableCaption> */}
-          <TableHeader className="bg-neutral-100 dark:bg-neutral-800 text-muted-foreground">
+          <TableHeader>
             <TableRow className="rounded-lg">
               <TableHead>{m.history_table_head_date()}</TableHead>
               <TableHead>{m.history_table_head_device()}</TableHead>
