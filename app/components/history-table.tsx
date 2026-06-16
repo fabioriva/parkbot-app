@@ -169,8 +169,6 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
 };
 
 export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
-  const t = (t) => t;
-
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPages] = useState(15);

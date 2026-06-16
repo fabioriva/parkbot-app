@@ -178,6 +178,7 @@
   "occupancy_parked": "Parked",
   "occupancy_title": "System occupancy",
   "occupancy_total": "Total spaces",
+  "occupancy_total_count": "Total spaces {count}",
   "operator": "Operator",
   "password_change_button": "Change password",
   "password_change_error_match": "Password doesn't match",

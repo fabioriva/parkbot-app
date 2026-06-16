@@ -6,6 +6,7 @@ import { ExitQueue } from "~/components/exit-queue";
 import { ExternalLink } from "~/components/external-link";
 import { HistoryList } from "~/components/history-list";
 import { NoDataAlert } from "~/components/no-data-alert";
+import { Occupancy } from "~/components/occupancy-chart";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 import { m } from "@paraglide/messages.js";
@@ -43,6 +44,7 @@ export default function Dashboard({
 
   const { activity, exitQueue, occupancy, operations, system } = data;
   const [busy, free, lock] = occupancy;
+  const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0);
 
   return (
     <div className="flex flex-col gap-4">
@@ -73,8 +75,13 @@ export default function Dashboard({
         >
           <HistoryList query={activity.documents} />
         </CardWrapper>
-
-        {/* <Occupancy occupancy={occupancy} link={`/aps/${params.aps}/map`} /> */}
+        <CardWrapper
+          title={m.occupancy_title()}
+          description={m.occupancy_total_count({ count: total(occupancy) })}
+          action={<ExternalLink link={`/aps/${params.aps}/map`} />}
+        >
+          <Occupancy occupancy={occupancy} />
+        </CardWrapper>
         {/* <Operations
           operations={operations[0].data}
           link={`/aps/${params.aps}/operations`}
