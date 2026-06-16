@@ -11,7 +11,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 export function OperationsAvatar({ device, operation }) {
-  // console.log(device, operation);
   return (
     <Avatar size="smdefault">
       {device.id !== 0 ? (
