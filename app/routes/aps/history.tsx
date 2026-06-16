@@ -2,6 +2,7 @@ import { format, endOfDay, startOfDay, subDays } from "date-fns";
 import { useState } from "react";
 import {
   Item,
+  ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
@@ -63,7 +64,19 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   return (
     <>
       <div className="block xl:hidden">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 mb-3">
+          <Item variant="outline">
+            <ItemContent>
+              <ItemTitle>{m.history_title()}</ItemTitle>
+              <ItemDescription className="text-xs">
+                {m.history_description({
+                  from: dateFrom,
+                  to: dateTo,
+                  count,
+                })}
+              </ItemDescription>
+            </ItemContent>
+          </Item>
           <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
           <HistorySearch
             search={search}
@@ -71,18 +84,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
             handleSearch={handleSearch}
           />
         </div>
-        <Item className="my-3" variant="outline">
-          <ItemContent>
-            <ItemTitle>{m.history_title()}</ItemTitle>
-            <ItemDescription className="text-xs">
-              {m.history_description({
-                from: dateFrom,
-                to: dateTo,
-                count,
-              })}
-            </ItemDescription>
-          </ItemContent>
-        </Item>
+
         {search.length > 0 ? (
           <HistoryList
             query={search.map((obj) => obj["item"]).flat()}
@@ -93,6 +95,26 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
         )}
       </div>
       <div className="hidden xl:block">
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{m.history_title()}</ItemTitle>
+            <ItemDescription className="text-xs">
+              {m.history_description({
+                from: dateFrom,
+                to: dateTo,
+                count,
+              })}
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+            <HistorySearch
+              search={search}
+              placeholder={"Fuzzy search!"}
+              handleSearch={handleSearch}
+            />
+          </ItemActions>
+        </Item>
         {/* <Tabs defaultValue="system">
           <div className="flex gap-3">
             <div className="grow-1">
