@@ -9,6 +9,7 @@ import { CardWrapper } from "~/components/card-wrapper";
 import { Drive } from "~/components/drive";
 import { Garage } from "~/components/garage";
 import { IoTooltip } from "~/components/io-tooltip";
+import { Motion } from "~/components/motion";
 import { Silomat } from "~/components/silomat";
 import { deviceT } from "~/lib/trans";
 import { cn } from "~/lib/utils";
@@ -105,7 +106,7 @@ export function Device({ device, advanced = false }) {
                 ))}
                 {view.motors.map((motor, key) => (
                   <AccordionItem value={`motor-${key}`} key={key}>
-                    {/* <Motion motor={motor} /> */}
+                    <Motion motor={motor} />
                   </AccordionItem>
                 ))}
               </Accordion>
