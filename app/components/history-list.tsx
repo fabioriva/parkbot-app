@@ -52,9 +52,9 @@ export function HistoryList({ query, media = false }: any) {
                 {item.device.id === 0 && m.operator()}
                 {item.device.id !== 0 && item.device.key}
                 {item.device.id !== 0 && (
-                  <span className="Capitalize">
+                  <span className="text-normal">
                     {" "}
-                    [{m[`mode.${item.mode.key}`]()}]
+                    {m[`mode.${item.mode.key}`]()}
                   </span>
                 )}
               </ItemTitle>
