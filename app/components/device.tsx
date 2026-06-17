@@ -1,12 +1,15 @@
 import clsx from "clsx";
+import { Accordion, AccordionItem } from "~/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { CardWrapper } from "~/components/card-wrapper";
+import { Drive } from "~/components/drive";
 import { Garage } from "~/components/garage";
 import { IoTooltip } from "~/components/io-tooltip";
+import { Silomat } from "~/components/silomat";
 import { deviceT } from "~/lib/trans";
 import { cn } from "~/lib/utils";
 import { m } from "@paraglide/messages.js";
@@ -94,7 +97,20 @@ export function Device({ device, advanced = false }) {
               >
                 {deviceT(device)}
               </p>
+              <Accordion type="multiple" collapsible="true">
+                {view.drives.map((drive, key) => (
+                  <AccordionItem value={`drive-${key}`} key={key}>
+                    <Drive drive={drive} />
+                  </AccordionItem>
+                ))}
+                {view.motors.map((motor, key) => (
+                  <AccordionItem value={`motor-${key}`} key={key}>
+                    {/* <Motion motor={motor} /> */}
+                  </AccordionItem>
+                ))}
+              </Accordion>
               {view.name === "view-garage" && <Garage sensors={view.sensors} />}
+              {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
             </CardWrapper>
           </TabsContent>
         ))}
