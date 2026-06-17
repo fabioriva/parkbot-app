@@ -1,9 +1,14 @@
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { data, useFetcher } from "react-router";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "~/components/ui/item";
 import { ApsForm } from "~/components/aps-form";
 import { ApsTable } from "~/components/aps-table";
 import { CompanySelect } from "~/components/company-select";
@@ -95,34 +100,29 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
   );
 
   return (
-    <Tabs defaultValue="aps">
-      <div className="flex items-center gap-3">
-        <div className="grow">
-          <TabsList>
-            <TabsTrigger value="aps">
-              Aps <Badge variant="default">{apsByCompany.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="disabled" disabled>
-              Disabled
-            </TabsTrigger>
-          </TabsList>
-        </div>
-        <Badge className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
-          {m.aps_field_total_parking_spaces({
-            count: apsByCompany.reduce((accumulator, currentValue) => {
-              return accumulator + Number(currentValue.parkingSpaces);
-            }, 0),
-          })}
-        </Badge>
-        <CompanySelect
-          companies={loaderData.companies}
-          company={company}
-          setCompany={setCompany}
-        />
-        <Button onClick={() => setOpen(true)} variant="outline">
-          <PlusIcon /> {m.aps_action_add()}
-        </Button>
-      </div>
+    <>
+      <Item className="mb-3" variant="outline">
+        <ItemContent>
+          <ItemTitle>{m.aps_title()}</ItemTitle>
+          <ItemDescription className="text-xs">
+            {m.aps_total_parking_spaces({
+              count: apsByCompany.reduce((accumulator, currentValue) => {
+                return accumulator + Number(currentValue.parkingSpaces);
+              }, 0),
+            })}
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <CompanySelect
+            companies={loaderData.companies}
+            company={company}
+            setCompany={setCompany}
+          />
+          <Button onClick={() => setOpen(true)} variant="outline">
+            <PlusIcon /> {m.aps_action_add()}
+          </Button>
+        </ItemActions>
+      </Item>
       {fetcher.data?.error && (
         <ErrorAlert description={fetcher.data.error} title="Error" />
       )}
@@ -132,18 +132,15 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
           title={fetcher.data.action}
         />
       )}
-      <TabsContent value="aps">
-        <div className="overflow-hidden rounded-lg border">
-          <ApsTable aps={apsByCompany} fetcher={fetcher} />
-        </div>
-      </TabsContent>
-      <TabsContent value="disabled" />
+      <div className="overflow-hidden rounded-lg border">
+        <ApsTable aps={apsByCompany} fetcher={fetcher} />
+      </div>
       <ApsForm
         action="create"
         fetcher={fetcher}
         open={open}
         setOpen={setOpen}
       />
-    </Tabs>
+    </>
   );
 }
