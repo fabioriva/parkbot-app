@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useFetcher } from "react-router";
+import { Label } from "~/components/ui/label";
+import { Switch } from "~/components/ui/switch";
 import { CardWrapper } from "~/components/card-wrapper";
 import { Device } from "~/components/device";
 import { ExitCall } from "~/components/exit-call";
@@ -8,10 +10,10 @@ import { ExternalLink } from "~/components/external-link";
 import { HistoryList } from "~/components/history-list";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { Occupancy } from "~/components/occupancy-chart";
+import { Operations } from "~/components/operations-chart";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 import useSWR from "swr";
-
 import { m } from "@paraglide/messages.js";
 
 import type { Route } from "./+types/dashboard";
@@ -33,16 +35,18 @@ export default function Dashboard({
   if (!loaderData) return <NoDataAlert />;
 
   const [dashboard, setDashboard] = useState(loaderData);
+  const [stacked, setStacked] = useState(true);
+
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/dashboard`;
   const { data } = useSWR(url, fetcher, {
     fallbackData: dashboard,
     refreshInterval: 1000,
   });
   useEffect(() => setDashboard(data), [data]);
-
   const { activity, exitQueue, occupancy, operations, system } = dashboard;
-  const [busy, free, lock] = occupancy;
 
+  const daily = operations[0];
+  const [busy, free, lock] = occupancy;
   const queue = exitQueue.queueList.filter((item) => item.card !== 0);
   const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0);
 
@@ -79,15 +83,25 @@ export default function Dashboard({
         >
           <Occupancy occupancy={occupancy} />
         </CardWrapper>
-        {/* <Operations
-          operations={operations[0].data}
-          link={`/aps/${params.aps}/operations`}
-          title={t("dashboard.operations-title")}
-          description={t("dashboard.operations-description", {
-            date: format(new Date(), "MM/dd/yyyy"),
-            interpolation: { escapeValue: false },
+        <CardWrapper
+          title={m.operations_card_title()}
+          description={m.operations_daily_card_description({
+            date: daily.query.date,
           })}
-        /> */}
+          action={<ExternalLink link={`/aps/${params.aps}/operations`} />}
+          footer={
+            <div className="flex items-center justify-end gap-2 w-full">
+              <Label htmlFor="stacked">Stacked</Label>
+              <Switch
+                id="stacked"
+                checked={stacked}
+                onCheckedChange={setStacked}
+              />
+            </div>
+          }
+        >
+          <Operations operations={daily.data} stacked={stacked} />
+        </CardWrapper>
       </div>
     </div>
   );
