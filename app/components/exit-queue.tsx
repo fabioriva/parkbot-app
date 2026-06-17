@@ -24,14 +24,10 @@ import { m } from "@paraglide/messages.js";
 
 export const ExitQueue = ({ queue }) => {
   const loaderData = useLoaderData();
-  // console.log(loaderData);
-
   const params = useParams();
-  // console.log(params);
 
   const [queueItem, setQueueItem] = useState({ card: 0, index: 0 });
   const handleConfirm = async () => {
-    console.log(queueItem);
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/queue/delete`;
     const result = await fetcher(url, {
       method: "POST",
