@@ -1,6 +1,5 @@
 "use client";
 
-// import { useMemo } from "react";
 import { Pie, PieChart } from "recharts";
 import {
   ChartContainer,
@@ -31,10 +30,6 @@ export function Occupancy({ occupancy }) {
     ...item,
     fill: `var(--color-${item.id})`,
   }));
-  // const [busy, free, lock] = occupancy;
-  // const totalSpaces = useMemo(() => {
-  //   return chartData.reduce((acc, curr) => acc + curr.value, 0);
-  // }, []);
   return (
     <ChartContainer config={chartConfig}>
       <PieChart>
