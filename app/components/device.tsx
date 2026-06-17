@@ -5,8 +5,10 @@ import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { CardWrapper } from "~/components/card-wrapper";
+import { Garage } from "~/components/garage";
 import { IoTooltip } from "~/components/io-tooltip";
 import { deviceT } from "~/lib/trans";
+import { cn } from "~/lib/utils";
 import { m } from "@paraglide/messages.js";
 
 const Lamp = ({ bit, color }) => (
@@ -83,14 +85,16 @@ export function Device({ device, advanced = false }) {
               }
             >
               <p
-                className={
+                className={cn(
+                  "mb-1",
                   device.operation !== 0
                     ? "text-normal"
-                    : "text-muted-foreground"
-                }
+                    : "text-muted-foreground",
+                )}
               >
                 {deviceT(device)}
               </p>
+              {view.name === "view-garage" && <Garage sensors={view.sensors} />}
             </CardWrapper>
           </TabsContent>
         ))}
