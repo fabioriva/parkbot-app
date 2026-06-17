@@ -9,6 +9,8 @@ import { NoDataAlert } from "~/components/no-data-alert";
 import { Occupancy } from "~/components/occupancy-chart";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
+import useSWR from "swr";
+
 import { m } from "@paraglide/messages.js";
 
 import type { Route } from "./+types/dashboard";
@@ -28,21 +30,16 @@ export default function Dashboard({
   params,
 }: Route.ComponentProps) {
   if (!loaderData) return <NoDataAlert />;
-  const [data, setData] = useState(loaderData);
-  const fetcher = useFetcher();
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetcher.load(`/aps/${params.aps}/dashboard`);
-    }, 1000);
-    return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
-  useEffect(() => {
-    if (fetcher.data) {
-      setData(fetcher.data);
-    }
-  }, [fetcher.data]);
 
-  const { activity, exitQueue, occupancy, operations, system } = data;
+  const [dashboard, setDashboard] = useState(loaderData);
+  const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/dashboard`;
+  const { data } = useSWR(url, fetcher, {
+    fallbackData: dashboard,
+    refreshInterval: 1000,
+  });
+  useEffect(() => setDashboard(data), [data]);
+
+  const { activity, exitQueue, occupancy, operations, system } = dashboard;
   const [busy, free, lock] = occupancy;
   const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0);
 
