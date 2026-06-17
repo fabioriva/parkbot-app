@@ -42,8 +42,6 @@ const Step = ({ step }) => (
 );
 
 export function Device({ device, advanced = false }) {
-  const t = (t) => t;
-
   const [LS, LC, LA] = device.c;
   const action = (
     <div className="flex items-center gap-1">
@@ -54,6 +52,7 @@ export function Device({ device, advanced = false }) {
       <Lamp bit={LS} color="green" />
     </div>
   );
+  const bg = device.operation !== 0 ? "bg-blue-50 dark:bg-blue-950" : undefined;
 
   if (advanced) {
     return (
@@ -74,11 +73,7 @@ export function Device({ device, advanced = false }) {
         {device.views.map((view, key) => (
           <TabsContent key={key} value={`tab-${key}`}>
             <CardWrapper
-              className={
-                device.operation !== 0
-                  ? "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-                  : undefined
-              }
+              className={bg}
               title={device.name}
               action={action}
               footer={
@@ -101,11 +96,7 @@ export function Device({ device, advanced = false }) {
         ))}
         <TabsContent value="diagnostic">
           <CardWrapper
-            className={
-              device.operation !== 0
-                ? "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-                : undefined
-            }
+            className={bg}
             title={device.name}
             action={action}
             footer={
@@ -131,15 +122,7 @@ export function Device({ device, advanced = false }) {
     );
   } else {
     return (
-      <CardWrapper
-        className={
-          device.operation !== 0
-            ? "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-            : undefined
-        }
-        title={device.name}
-        action={action}
-      >
+      <CardWrapper className={bg} title={device.name} action={action}>
         <p
           className={
             device.operation !== 0 ? "text-normal" : "text-muted-foreground"
