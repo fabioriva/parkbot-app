@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useFetcher } from "react-router";
 import { CardWrapper } from "~/components/card-wrapper";
+import { Device } from "~/components/device";
 import { ExitCall } from "~/components/exit-call";
 import { ExitQueue } from "~/components/exit-queue";
 import { ExternalLink } from "~/components/external-link";
@@ -45,11 +46,11 @@ export default function Dashboard({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
         {system.map((item, key) => (
-          <Device device={item} link={`/aps/${params.aps}/devices`} key={key} />
+          <Device device={item} key={key} />
         ))}
-      </div> */}
+      </div>
       <div className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 items-start">
         <CardWrapper
           title={m.exit_queue_card_title()}
