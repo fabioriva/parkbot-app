@@ -105,8 +105,9 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
         <ItemContent>
           <ItemTitle>{m.aps_title()}</ItemTitle>
           <ItemDescription className="text-xs">
-            {m.aps_total_parking_spaces({
-              count: apsByCompany.reduce((accumulator, currentValue) => {
+            {m.aps_description({
+              aps: apsByCompany.length,
+              spaces: apsByCompany.reduce((accumulator, currentValue) => {
                 return accumulator + Number(currentValue.parkingSpaces);
               }, 0),
             })}

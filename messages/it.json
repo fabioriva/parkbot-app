@@ -80,7 +80,7 @@
   "aps_select_location": "Sito in {city}, {country}, {flag}",
   "aps_select_parking_spaces": "<strong>{count}</strong> posti auto.",
   "aps_title": "Lista degli Aps",
-  "aps_total_parking_spaces": "Totale posti auto {count}",
+  "aps_description": "Totale sistemi {aps}, per un totale di {spaces} posti auto.",
   "auth_email_resend": "Reinvia email di verifica",
   "auth_email_sent": "Email inviata",
   "auth_email_verification_html": "Segui il link per verificare la tua email: <a href='{url}'>{url}</a>",
@@ -308,7 +308,8 @@
   "subscription_field_selected_aps": "Aps selezionati",
   "subscription_field_selected_aps_description": "Aps assegnati a questa iscrizione.",
   "subscription_field_subscribed": "Iscritto",
-  "subscriptions": "Iscrizioni",
+  "subscriptions_title": "Iscrizioni",
+  "subscriptions_description": "Totale iscrizioni {subscriptions}, iscriziona ancora non attivate {inactives}.",
   "two_factor_field_description": "Migliora la sicurezza della tua app con l'autenticazione a due fattori.",
   "two_factor_field_legend": "Autenticazione a Due Fattori",
   "two_factor_disable_button": "Disabilita 2FA",
@@ -324,6 +325,8 @@
   "two_factor_verify_totp": "Codice di verifica",
   "two_factor_verify_totp_field_description": "Inserisci il codice TOTP generato dalla tua app di autenticazione. Se non hai accesso alla tua app, puoi utilizzare un <a class='underline' href='/2fa-recovery'>codice di recupero</a>.",
   "two_factor_verify_submit": "Verifica codice",
+  "users_title": "Lista degli utenti",
+  "users_description": "Totale utenti {count}",
   "welcome_text": "Supervisione dei sistemi di parcheggio automatizzati",
   "welcome_login_button": "Accedi a Parkbot"
 }

@@ -1,13 +1,17 @@
-// import { PlusIcon } from "lucide-react";
 import { data, useFetcher } from "react-router";
-import { Badge } from "~/components/ui/badge";
-// import { Button } from "~/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "~/components/ui/item";
 import { Error as ErrorAlert } from "~/components/error-alert";
 import { Success } from "~/components/success-alert";
 import { UserTable } from "~/components/user-table";
 import { auth } from "~/lib/auth.server";
 import { findUsers, deleteUserByEmail } from "~/lib/user.server";
+import { m } from "@paraglide/messages.js";
 
 export async function action({ request }: Route.ActionArgs) {
   try {
@@ -46,26 +50,29 @@ export default function User({ loaderData }: Route.LoaderArgs) {
   const fetcher = useFetcher();
 
   return (
-    <Tabs defaultValue="user">
-      <div className="flex items-center gap-3">
-        <div className="grow">
-          <TabsList>
-            <TabsTrigger value="user">
-              Users
-              <Badge variant="default">{loaderData.users.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="disabled" disabled>
-              Disabled
-            </TabsTrigger>
-          </TabsList>
-        </div>
+    <>
+      <Item className="mb-3" variant="outline">
+        <ItemContent>
+          <ItemTitle>{m.users_title()}</ItemTitle>
+          <ItemDescription className="text-xs">
+            {m.users_description({
+              count: loaderData.users.length,
+            })}
+          </ItemDescription>
+        </ItemContent>
+      </Item>
+      {fetcher.data?.error && (
+        <ErrorAlert description={fetcher.data.error} title="Error" />
+      )}
+      {fetcher.data?.success && (
+        <Success
+          description={fetcher.data.success}
+          title={fetcher.data.action}
+        />
+      )}
+      <div className="overflow-hidden rounded-lg border">
+        <UserTable fetcher={fetcher} users={loaderData.users} />
       </div>
-      <TabsContent value="user">
-        <div className="overflow-hidden rounded-lg border">
-          <UserTable fetcher={fetcher} users={loaderData.users} />
-        </div>
-      </TabsContent>
-      <TabsContent value="disabled" />
-    </Tabs>
+    </>
   );
 }

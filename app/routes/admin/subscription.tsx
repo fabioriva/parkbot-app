@@ -3,7 +3,13 @@ import { useState } from "react";
 import { data, useFetcher } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "~/components/ui/item";
 import { CompanySelect } from "~/components/company-select";
 import { Error as ErrorAlert } from "~/components/error-alert";
 import { SubscriptionForm } from "~/components/subscription-form";
@@ -94,26 +100,28 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
   );
 
   return (
-    <Tabs defaultValue="subscriptions">
-      <div className="flex items-center gap-3">
-        <div className="grow">
-          <TabsList>
-            <TabsTrigger value="subscriptions">{m.subscriptions()}</TabsTrigger>
-            <TabsTrigger value="inactives">
-              Not activated
-              <Badge variant="default">{inactiveSubscriptions.length}</Badge>
-            </TabsTrigger>
-          </TabsList>
-        </div>
-        <CompanySelect
-          companies={loaderData.companies}
-          company={company}
-          setCompany={setCompany}
-        />
-        <Button onClick={() => setOpen(true)} variant="outline">
-          <PlusIcon /> {m.subscription_action_add()}
-        </Button>
-      </div>
+    <>
+      <Item className="mb-3" variant="outline">
+        <ItemContent>
+          <ItemTitle>{m.subscriptions_title()}</ItemTitle>
+          <ItemDescription className="text-xs">
+            {m.subscriptions_description({
+              inactives: inactiveSubscriptions.length,
+              subscriptions: subscriptionsByCompany.length,
+            })}
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <CompanySelect
+            companies={loaderData.companies}
+            company={company}
+            setCompany={setCompany}
+          />
+          <Button onClick={() => setOpen(true)} variant="outline">
+            <PlusIcon /> {m.subscription_action_add()}
+          </Button>
+        </ItemActions>
+      </Item>
       {fetcher.data?.error && (
         <ErrorAlert description={fetcher.data.error} title="Error" />
       )}
@@ -123,24 +131,13 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
           title={fetcher.data.action}
         />
       )}
-      <TabsContent value="subscriptions">
-        <div className="overflow-hidden rounded-lg border">
-          <SubscriptionTable
-            aps={loaderData.aps}
-            fetcher={fetcher}
-            subscriptions={subscriptionsByCompany}
-          />
-        </div>
-      </TabsContent>
-      <TabsContent value="inactives">
-        <div className="overflow-hidden rounded-lg border">
-          <SubscriptionTable
-            aps={loaderData.aps}
-            fetcher={fetcher}
-            subscriptions={inactiveSubscriptions}
-          />
-        </div>
-      </TabsContent>
+      <div className="overflow-hidden rounded-lg border">
+        <SubscriptionTable
+          aps={loaderData.aps}
+          fetcher={fetcher}
+          subscriptions={subscriptionsByCompany}
+        />
+      </div>
       <SubscriptionForm
         aps={loaderData.aps}
         action="create"
@@ -148,6 +145,64 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
         open={open}
         setOpen={setOpen}
       />
-    </Tabs>
+    </>
   );
+
+  // return (
+  //   <Tabs defaultValue="subscriptions">
+  //     <div className="flex items-center gap-3">
+  //       <div className="grow">
+  //         <TabsList>
+  //           <TabsTrigger value="subscriptions">{m.subscriptions()}</TabsTrigger>
+  //           <TabsTrigger value="inactives">
+  //             Not activated
+  //             <Badge variant="default">{inactiveSubscriptions.length}</Badge>
+  //           </TabsTrigger>
+  //         </TabsList>
+  //       </div>
+  //       <CompanySelect
+  //         companies={loaderData.companies}
+  //         company={company}
+  //         setCompany={setCompany}
+  //       />
+  //       <Button onClick={() => setOpen(true)} variant="outline">
+  //         <PlusIcon /> {m.subscription_action_add()}
+  //       </Button>
+  //     </div>
+  //     {fetcher.data?.error && (
+  //       <ErrorAlert description={fetcher.data.error} title="Error" />
+  //     )}
+  //     {fetcher.data?.success && (
+  //       <Success
+  //         description={fetcher.data.success}
+  //         title={fetcher.data.action}
+  //       />
+  //     )}
+  //     <TabsContent value="subscriptions">
+  //       <div className="overflow-hidden rounded-lg border">
+  //         <SubscriptionTable
+  //           aps={loaderData.aps}
+  //           fetcher={fetcher}
+  //           subscriptions={subscriptionsByCompany}
+  //         />
+  //       </div>
+  //     </TabsContent>
+  //     <TabsContent value="inactives">
+  //       <div className="overflow-hidden rounded-lg border">
+  //         <SubscriptionTable
+  //           aps={loaderData.aps}
+  //           fetcher={fetcher}
+  //           subscriptions={inactiveSubscriptions}
+  //         />
+  //       </div>
+  //     </TabsContent>
+  //     <SubscriptionForm
+  //       aps={loaderData.aps}
+  //       action="create"
+  //       fetcher={fetcher}
+  //       open={open}
+  //       setOpen={setOpen}
+  //     />
+  //   </Tabs>
+  // );
 }
