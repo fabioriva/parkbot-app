@@ -42,6 +42,8 @@ export default function Dashboard({
 
   const { activity, exitQueue, occupancy, operations, system } = dashboard;
   const [busy, free, lock] = occupancy;
+
+  const queue = exitQueue.queueList.filter((item) => item.card !== 0);
   const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0);
 
   return (
@@ -55,16 +57,13 @@ export default function Dashboard({
         <CardWrapper
           title={m.exit_queue_card_title()}
           description={
-            exitQueue.queueList.length === 0
+            queue.length === 0
               ? m.exit_queue_no_calls()
-              : m.exit_queue_calls({ count: exitQueue.queueList.length })
+              : m.exit_queue_calls({ count: queue.length })
           }
           footer={<ExitCall exit={exitQueue.exitButton} />}
         >
-          <ExitQueue
-            exit={exitQueue.exitButton}
-            queue={exitQueue.queueList.filter((item) => item.card !== 0)}
-          />
+          <ExitQueue exit={exitQueue.exitButton} queue={queue} />
         </CardWrapper>
         <CardWrapper
           title={m.dashboard_recent_activity_title()}
