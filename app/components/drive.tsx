@@ -10,7 +10,6 @@ const Item = ({ title, value }) => (
 );
 
 export function Drive({ drive }) {
-  const t = (t) => t;
   return (
     <>
       <AccordionTrigger className="hover:no-underline py-1.5 flex items-center gap-1.5">

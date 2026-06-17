@@ -7,7 +7,6 @@ import { Sensor } from "~/components/sensor-svg";
 
 // export function Garage({ sensors }: VgProps) {
 export function Garage({ sensors }) {
-  // console.log(sensors);
   const [FRE, FPE, FLA, FLP, FDR, FDL] = sensors;
   return (
     <div className="svg-container border">
