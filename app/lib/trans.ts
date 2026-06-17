@@ -4,42 +4,42 @@ export function deviceT(device) {
   const t = (t) => t;
   const { card, mode, operation, stall } = device;
   const ce = (card, stall) => {
-    if (card === 0 && stall === 0) return t("device.operation.ce-0");
-    if (stall === 0) return t("device.operation.ce-1", { card });
-    return t("device.operation.ce-2", { card, stall });
+    if (card === 0 && stall === 0) return m.device_ce0();
+    if (stall === 0) return m.device_ce1({ card });
+    return m.device_ce2({ card, stall });
   };
   const cu = (card, stall) => {
-    if (card === 0 && stall === 0) return t("device.operation.cu-0");
-    if (stall === 0) return t("device.operation.cu-1", { card });
-    return t("device.operation.cu-2", { card, stall });
+    if (card === 0 && stall === 0) return m.device_cu0();
+    if (stall === 0) return m.device_cu1({ card });
+    return m.device_cu2({ card, stall });
   };
   const mv = (card, stall) => {
-    if (card === 0 && stall === 0) return t("device.operation.mv-0");
-    if (stall === 0) return t("device.operation.mv-1", { card });
-    return t("device.operation.mv-2", { card, stall });
+    if (card === 0 && stall === 0) return m.device_mv0();
+    if (stall === 0) return m.device_mv1({ card });
+    return m.device_mv2({ card, stall });
   };
   const pp = (stall) => {
-    if (stall === 0) return t("device.operation.pp-0");
-    return t("device.operation.pp-1", { stall });
+    if (stall === 0) return m.device_pp0();
+    return m.device_pp1({ stall });
   };
   if (!device.c[0].status) {
-    return t("device.operation.off");
+    return m.device_off();
   } else if (mode.id === 0) {
-    return t("mode.mode-no");
+    return m["mode.mode-no"]();
   } else if (mode.id === 6) {
-    return t("device.operation.off");
+    return m.device_off();
   } else if (mode.id === 8 && operation === 1) {
     return ce(card, stall);
   } else if (mode.id === 8 && operation === 2) {
     return cu(card, stall);
   } else if (mode.id === 8 && operation === 3) {
-    return t("device.operation.idle-0");
+    return m.device_idle0();
   } else if (mode.id === 8 && operation === 4) {
     return mv(card, stall);
   } else if (mode.id === 8) {
-    return t("device.operation.ready");
+    return m.device_ready();
   } else {
-    return t("mode.mode-man");
+    return m["mode.mode-man"]();
   }
 }
 

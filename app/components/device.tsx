@@ -61,11 +61,11 @@ export function Device({ device, advanced = false }) {
         <TabsList>
           {device?.views.map((item, key) => (
             <TabsTrigger value={`tab-${key}`} key={key}>
-              {t("device.view." + item.name)}
+              {m[`device.${item.name}`]()}
             </TabsTrigger>
           ))}
           <TabsTrigger value="diagnostic" disabled={!device.alarms.length}>
-            {t("device.view.view-diag")}{" "}
+            {m["device.view-diag"]()}{" "}
             {device.alarms.length > 0 && (
               <Badge variant="destructive">{device.alarms.length}</Badge>
             )}
