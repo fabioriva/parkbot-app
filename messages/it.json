@@ -222,7 +222,7 @@
   "occupancy_title": "Occupazione del sistema",
   "occupancy_total": "Totale posti",
   "occupancy_total_count": "Totale posti {count}",
-  "operations_card_title": "Operazioni del sistem",
+  "operations_card_title": "Operazioni del sistema",
   "operations_card_description": "Periodo dal {dateFrom} al {dateTo}",
   "operations_entries": "Ingressi",
   "operations_exits": "Uscite",
