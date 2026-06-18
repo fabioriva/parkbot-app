@@ -2,9 +2,9 @@ import clsx from "clsx";
 import { Accordion, AccordionItem } from "~/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { ActionPP } from "~/components/action-pp";
 import { CardWrapper } from "~/components/card-wrapper";
 import { Drive } from "~/components/drive";
 import { Garage } from "~/components/garage";
@@ -48,6 +48,7 @@ const Step = ({ step }) => (
 );
 
 export function Device({ device, advanced = false }) {
+  // console.log(device);
   const [LS, LC, LA] = device.c;
   const action = (
     <div className="flex items-center gap-1">
@@ -56,6 +57,17 @@ export function Device({ device, advanced = false }) {
       <Lamp bit={LA} color="red" />
       <Lamp bit={LC} color="yellow" />
       <Lamp bit={LS} color="green" />
+    </div>
+  );
+  const actions = (
+    <div className={`grid grid-cols-${device.d.length} gap-3 w-full`}>
+      {device.d.map((action, key) => {
+        switch (action.key) {
+          case "action-pp":
+          case "action-pp-reset":
+            return <ActionPP action={action} disabled={false} key={key} />;
+        }
+      })}
     </div>
   );
   const bg = device.operation !== 0 ? "bg-blue-50 dark:bg-blue-950" : undefined;
@@ -82,11 +94,7 @@ export function Device({ device, advanced = false }) {
               className={bg}
               title={device.name}
               action={action}
-              footer={
-                <Button variant="outline" size="sm" className="w-full">
-                  Action
-                </Button>
-              }
+              footer={actions}
             >
               <p
                 className={cn(
@@ -98,6 +106,8 @@ export function Device({ device, advanced = false }) {
               >
                 {deviceT(device)}
               </p>
+              {view.name === "view-garage" && <Garage sensors={view.sensors} />}
+              {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
               <Accordion type="multiple" collapsible="true">
                 {view.drives.map((drive, key) => (
                   <AccordionItem value={`drive-${key}`} key={key}>
@@ -110,8 +120,6 @@ export function Device({ device, advanced = false }) {
                   </AccordionItem>
                 ))}
               </Accordion>
-              {view.name === "view-garage" && <Garage sensors={view.sensors} />}
-              {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
             </CardWrapper>
           </TabsContent>
         ))}
@@ -120,11 +128,7 @@ export function Device({ device, advanced = false }) {
             className={bg}
             title={device.name}
             action={action}
-            footer={
-              <Button variant="outline" size="sm" className="w-full">
-                Action
-              </Button>
-            }
+            footer={actions}
           >
             <div className="flex flex-col gap-1">
               {device.alarms.map((alarm) => (
