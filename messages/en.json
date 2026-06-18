@@ -143,6 +143,8 @@
   "email_verification_card_description": "We've sent you an email to verify your address. Click the link in the email to complete verification.",
   "email_verification_card_title": "Verify your email address",
   "exit_call": "Exit call",
+  "exit_call_confirm_dialog_title": "Exit call",
+  "exit_call_confirm_dialog_description": "Click confirm to request exit for tag number {card}.",
   "exit_call_dialog_title": "Exit request",
   "exit_call_dialog_description": "Are you sure you want to request exit for card {card} from stall {stall}?",
   "exit_call_dialog_field_label": "Card number",

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -20,11 +21,13 @@ import {
   // FieldSet,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-// import { useConfirmDialog } from "~/components/confirm-dialog";
+import { useConfirmDialog } from "~/components/confirm-dialog";
+import fetcher from "~/lib/fetch";
 import { m } from "@paraglide/messages.js";
 
 export function ExitCall({ exit }) {
-  // const { showConfirmDialog } = useConfirmDialog();
+  const params = useParams();
+  const { showConfirmDialog } = useConfirmDialog();
 
   const { enable, max, min } = exit;
   const [card, setCard] = useState(min);
@@ -41,12 +44,22 @@ export function ExitCall({ exit }) {
     }
   };
   const handleConfirm = async () => {
-    // showConfirmDialog({
-    //   title: t("exit-call.confirmDialog.title"),
-    //   description: t("exit-call.confirmDialog.description", { card }),
-    //   onConfirm: (value) =>
-    //     console.log(`Exit request sent for card nr ${card}`),
-    // });
+    showConfirmDialog({
+      title: m.exit_call_confirm_dialog_title(),
+      description: m.exit_call_confirm_dialog_description({ card }),
+      onConfirm: async (value) => {
+        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/exit`;
+        const result = await fetcher(url, {
+          method: "POST",
+          headers: {
+            // Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ card }),
+        });
+        console.log(result);
+      },
+    });
   };
   const handleOpen = () => {
     setError(false);

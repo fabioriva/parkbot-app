@@ -21,7 +21,7 @@ import { TooltipProvider } from "~/components/ui/tooltip";
 import { AlarmInfo } from "~/components/alarm-info";
 import { AppSidebar } from "~/components/app-sidebar";
 import { CommInfo } from "~/components/comm-info";
-// import { ConfirmDialogProvider } from "~/components/confirm-dialog";
+import { ConfirmDialogProvider } from "~/components/confirm-dialog";
 import { LocaleToggle } from "~/components/locale-toggle";
 import { ParkInfo } from "~/components/park-info";
 import { ModeToggle } from "~/components/mode-toggle";
@@ -133,9 +133,9 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             <ModeToggle />
           </header>
           <div className="px-3 pr-6 py-3">
-            {/* <ConfirmDialogProvider> */}
-            <Outlet context={loaderData?.user} />
-            {/* </ConfirmDialogProvider> */}
+            <ConfirmDialogProvider>
+              <Outlet context={loaderData?.user} />
+            </ConfirmDialogProvider>
           </div>
         </SidebarInset>
       </SidebarProvider>
