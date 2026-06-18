@@ -141,11 +141,12 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
       </SidebarProvider>
       <Toaster
         position="bottom-right"
-        toastOptions={{
-          classNames: {
-            description: "!text-muted-foreground !dark:text-muted",
-          },
-        }}
+        richColors
+        // toastOptions={{
+        //   classNames: {
+        //     description: "!text-muted-foreground !dark:text-muted",
+        //   },
+        // }}
       />
     </TooltipProvider>
   );

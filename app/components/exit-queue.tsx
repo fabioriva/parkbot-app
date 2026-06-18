@@ -20,6 +20,7 @@ import {
   ItemTitle,
 } from "~/components/ui/item";
 import fetcher from "~/lib/fetch";
+import toast from "~/lib/toast";
 import { m } from "@paraglide/messages.js";
 
 export const ExitQueue = ({ queue }) => {
@@ -29,7 +30,7 @@ export const ExitQueue = ({ queue }) => {
   const [queueItem, setQueueItem] = useState({ card: 0, index: 0 });
   const handleConfirm = async () => {
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/queue/delete`;
-    const result = await fetcher(url, {
+    const res = await fetcher(url, {
       method: "POST",
       headers: {
         // Authorization: `Bearer ${token}`,
@@ -37,7 +38,7 @@ export const ExitQueue = ({ queue }) => {
       },
       body: JSON.stringify(queueItem),
     });
-    console.log(result);
+    toast(res);
   };
   return (
     <Dialog>

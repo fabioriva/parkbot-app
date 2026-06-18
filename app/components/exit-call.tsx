@@ -23,6 +23,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { useConfirmDialog } from "~/components/confirm-dialog";
 import fetcher from "~/lib/fetch";
+import toast from "~/lib/toast";
 import { m } from "@paraglide/messages.js";
 
 export function ExitCall({ exit }) {
@@ -49,7 +50,7 @@ export function ExitCall({ exit }) {
       description: m.exit_call_confirm_dialog_description({ card }),
       onConfirm: async (value) => {
         const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/exit`;
-        const result = await fetcher(url, {
+        const res = await fetcher(url, {
           method: "POST",
           headers: {
             // Authorization: `Bearer ${token}`,
@@ -57,7 +58,7 @@ export function ExitCall({ exit }) {
           },
           body: JSON.stringify({ card }),
         });
-        console.log(result);
+        toast(res);
       },
     });
   };
@@ -80,7 +81,7 @@ export function ExitCall({ exit }) {
         <DialogHeader>
           <DialogTitle>{m.exit_call_dialog_title()}</DialogTitle>
           <DialogDescription>
-            {m.exit_call_dialog_description({ card, stall: exit.stall })}
+            {m.exit_call_dialog_description({ card })}
           </DialogDescription>
         </DialogHeader>
         <Field>

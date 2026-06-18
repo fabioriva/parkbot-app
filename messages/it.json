@@ -144,7 +144,7 @@
   "email_verification_card_title": "Verifica il tuo indirizzo email",
   "exit_call": "Uscita vettura",
   "exit_call_confirm_dialog_title": "Richiesta di uscita",
-  "exit_call_confirm_dialog_description": "Premi conferma per chiamare l'uscita per la tessera {card}.",
+  "exit_call_confirm_dialog_description": "Sei sicuro di voler chiamare l'uscita per la tessera {card}?",
   "exit_call_dialog_title": "Richiesta di uscita",
   "exit_call_dialog_description": "Inserisci il numero di tesssera e conferma",
   "exit_call_dialog_field_label": "Numero di tesssera",
