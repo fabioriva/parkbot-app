@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { AlertCircleIcon } from "lucide-react";
 import { Accordion, AccordionItem } from "~/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Badge } from "~/components/ui/badge";
@@ -81,7 +82,7 @@ export function Device({ device, advanced = false }) {
               {m[`device.${item.name}`]()}
             </TabsTrigger>
           ))}
-          <TabsTrigger value="diagnostic" disabled={!device.alarms.length}>
+          <TabsTrigger value="diagnostic">
             {m["device.view-diag"]()}{" "}
             {device.alarms.length > 0 && (
               <Badge variant="destructive">{device.alarms.length}</Badge>
@@ -136,7 +137,7 @@ export function Device({ device, advanced = false }) {
                   <AlertCircleIcon />
                   <AlertTitle>{alarm.date}</AlertTitle>
                   <AlertDescription>
-                    AL{alarm.id} {t("alarms." + alarm.key, alarm.query)}
+                    {`AL${alarm.id} ${m["alarm." + alarm.key]({ ...alarm.query })}`}
                   </AlertDescription>
                 </Alert>
               ))}
