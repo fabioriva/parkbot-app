@@ -18,11 +18,10 @@ export const ExitQueue = ({ queue }) => {
   const { showConfirmDialog } = useConfirmDialog();
 
   const handleConfirm = async (item) => {
-    console.log(item);
     showConfirmDialog({
       title: m.exit_queue_dialog_title(),
       description: m.exit_queue_dialog_description({ card: item.card }),
-      onConfirm: async (value) => {
+      onConfirm: async () => {
         const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/queue/delete`;
         const res = await fetcher(url, {
           method: "POST",
