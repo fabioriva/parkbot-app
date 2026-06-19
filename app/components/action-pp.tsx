@@ -83,7 +83,7 @@ export function ActionPP({ action, disabled = true }) {
             {action.buttons.map((item, key) => {
               if (item.key === "A" || item.key === "B")
                 return (
-                  <Item variant="outline" key={key}>
+                  <Item variant="outline" size="xs" key={key}>
                     <ItemContent>
                       <ItemTitle className="capitalize">
                         {item.tooltip}
