@@ -1,5 +1,9 @@
 {
   "$schema": "https://inlang.com/schema/inlang_message_format",
+  "action_pp_dialog_title": "Step By Step operations",
+  "action_pp_dialog_description": "Select a step-by-step operation to perform.",
+  "action_pp_confirm_dialog_title": "Confirm operation",
+  "action_pp_confirm_dialog_description": "Are you sure you want to perform the operation {value} + {key}?",
   "alarm.alarm.al-fallback": "No description",
   "alarm.al-fc": "Sensors {fc1} {fc2}",
   "alarm.al-iv": "Inverter {nr}",

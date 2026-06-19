@@ -1,5 +1,9 @@
 {
   "$schema": "https://inlang.com/schema/inlang_message_format",
+  "action_pp_dialog_title": "Operazioni di passo-passo",
+  "action_pp_dialog_description": "Seleziona un'operazione di passo-passo da eseguire.",
+  "action_pp_confirm_dialog_title": "Conferma operazione",
+  "action_pp_confirm_dialog_description": "Sei sicuro di voler eseguire l'operazione {value} + {key}?",
   "alarm.al-fallback": "Nessuna descrizione",
   "alarm.al-fc": "Sensori {fc1} {fc2}",
   "alarm.al-iv": "Inverter {nr}",
