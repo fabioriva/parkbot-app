@@ -19,14 +19,8 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemMedia,
   ItemTitle,
 } from "~/components/ui/item";
-// import {
-//   Tooltip,
-//   TooltipContent,
-//   TooltipTrigger,
-// } from "~/components/ui/tooltip";
 import { useConfirmDialog } from "~/components/confirm-dialog";
 import fetcher from "~/lib/fetch";
 import toast from "~/lib/toast";
@@ -167,36 +161,10 @@ export function ActionPP({ action, disabled = true }) {
             </div>
           </>
         )}
-
-        {/* {action.buttons.some((b) => b.key === "A" || b.key === "B") && (
-          <div className="grid grid-cols-8 gap-1">
-            {action.buttons.map((item, key) => {
-              if (item.key === "A" || item.key === "B")
-                return (
-                  <Tooltip key={key}>
-                    <TooltipTrigger asChild>
-                      <Button onClick={() => handleConfirm(item)}>
-                        {item.value}+{item.key}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{item.tooltip}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                );
-            })}
-          </div>
-        )} */}
-
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">{m.close()}</Button>
           </DialogClose>
-          {/* <DialogClose asChild>
-            <Button onClick={handleConfirm} disabled={error}>
-              {m.confirm()}
-            </Button>
-          </DialogClose> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>
