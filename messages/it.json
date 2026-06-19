@@ -94,6 +94,7 @@
   "auth_reset_password_text": "Clicca sul link per resettare la tua password: {url}",
   "auth_reset_password_html": "Clicca sul link per resettare la tua password: <a href='{url}'>{url}</a>",
   "cancel": "Annulla",
+  "close": "Chiudi",
   "confirm": "Conferma",
   "dashboard_recent_activity_title": "Attività recente",
   "dashboard_recent_activity_description": "Elenco delle operazioni più recenti",

@@ -190,7 +190,7 @@ export function ActionPP({ action, disabled = true }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">{m.cancel()}</Button>
+            <Button variant="outline">{m.close()}</Button>
           </DialogClose>
           {/* <DialogClose asChild>
             <Button onClick={handleConfirm} disabled={error}>
