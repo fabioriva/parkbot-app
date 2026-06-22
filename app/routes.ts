@@ -28,7 +28,7 @@ export default [
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
       route(":aps/devices", "routes/aps/devices.tsx"),
       route(":aps/history", "routes/aps/history.tsx"),
-      //     route(":aps/map", "routes/aps/map.tsx"),
+      route(":aps/map", "routes/aps/map.tsx"),
       //     route(":aps/nodes", "routes/aps/nodes.tsx"),
       //     route(":aps/operations", "routes/aps/operations.tsx"),
       //     route(":aps/rack/:nr", "routes/aps/rack.tsx"),
