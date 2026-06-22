@@ -81,7 +81,7 @@ const Operation = ({ item }) => {
           {operation.id === 1 && <BadgeAlert data-icon="inline-start" />}
           {operation.id === 2 && <BadgeCheck data-icon="inline-start" />}
           <span>AL{alarm.id}</span>
-          {t("alarms." + alarm.key, alarm.query)}
+          {m["alarm." + alarm.key]({ ...alarm.query })}
         </Badge>
       ) : (
         <Badge
@@ -182,8 +182,12 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
       <div className="overflow-hidden rounded-lg border">
         <Table className="">
           {/* <TableCaption>
-          {t("history.description", { from: dateFrom, to: dateTo, count })}
-        </TableCaption> */}
+            {m.history_description({
+              from: dateFrom,
+              to: dateTo,
+              count,
+            })}
+          </TableCaption> */}
           <TableHeader>
             <TableRow className="rounded-lg">
               <TableHead>{m.history_table_head_date()}</TableHead>
