@@ -12,7 +12,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { CardWrapper } from "~/components/card-wrapper";
-// import { EditStallDialogProvider } from "~/components/edit-stall-dialog";
+import { EditStallDialogProvider } from "~/components/map-edit";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { Occupancy } from "~/components/occupancy-chart";
 import { useData } from "~/hooks/use-ws";
@@ -91,9 +91,9 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
       </div>
       <TabsContent value="map">
         <Suspense fallback={<p className="py-3">Loading...</p>}>
-          {/* <EditStallDialogProvider> */}
-          <DynamicComponent data={data} view={view} />
-          {/* </EditStallDialogProvider> */}
+          <EditStallDialogProvider>
+            <DynamicComponent data={data} view={view} />
+          </EditStallDialogProvider>
         </Suspense>
       </TabsContent>
       <TabsContent value="occupancy" className="max-w-xl">

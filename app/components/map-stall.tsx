@@ -4,13 +4,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-// import { useEditStallDialog } from "~/components/edit-stall-dialog";
+import { useEditStallDialog } from "~/components/map-edit";
 import { m } from "@paraglide/messages.js";
 
 export function Stall({ definitions, stall, view }) {
   const { date, nr, size, status } = stall;
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
-  // const { showEditDialog } = useEditStallDialog();
+  const { showEditDialog } = useEditStallDialog();
   const handleConfirm = (value) => {
     console.log(`Stall nr ${nr} changed from ${status} to ${value}`);
   };
@@ -37,13 +37,13 @@ export function Stall({ definitions, stall, view }) {
             },
           )}
           id={"s-" + nr}
-          // onClick={() =>
-          //   showEditDialog({
-          //     definitions,
-          //     stall,
-          //     onConfirm: (value) => handleConfirm(value),
-          //   })
-          // }
+          onClick={() =>
+            showEditDialog({
+              definitions,
+              stall,
+              onConfirm: (value) => handleConfirm(value),
+            })
+          }
         >
           {view === "view0" && status === LOCK && (
             <span className="text-xl">🔒</span>
