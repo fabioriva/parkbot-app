@@ -101,6 +101,79 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
 
   return (
     <>
+      <div className="flex flex-col gap-3 mb-3 xl:hidden ">
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{m.aps_title()}</ItemTitle>
+            <ItemDescription className="text-xs">
+              {m.aps_description({
+                aps: apsByCompany.length,
+                spaces: apsByCompany.reduce((accumulator, currentValue) => {
+                  return accumulator + Number(currentValue.parkingSpaces);
+                }, 0),
+              })}
+            </ItemDescription>
+          </ItemContent>
+        </Item>
+        <div className="flex gap-3">
+          <CompanySelect
+            companies={loaderData.companies}
+            company={company}
+            setCompany={setCompany}
+          />
+          <Button onClick={() => setOpen(true)} variant="outline">
+            <PlusIcon /> {m.aps_action_add()}
+          </Button>
+        </div>
+      </div>
+      <div className="hidden xl:block mb-3">
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{m.aps_title()}</ItemTitle>
+            <ItemDescription className="text-xs">
+              {m.aps_description({
+                aps: apsByCompany.length,
+                spaces: apsByCompany.reduce((accumulator, currentValue) => {
+                  return accumulator + Number(currentValue.parkingSpaces);
+                }, 0),
+              })}
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <CompanySelect
+              companies={loaderData.companies}
+              company={company}
+              setCompany={setCompany}
+            />
+            <Button onClick={() => setOpen(true)} variant="outline">
+              <PlusIcon /> {m.aps_action_add()}
+            </Button>
+          </ItemActions>
+        </Item>
+      </div>
+      {fetcher.data?.error && (
+        <ErrorAlert description={fetcher.data.error} title="Error" />
+      )}
+      {fetcher.data?.success && (
+        <Success
+          description={fetcher.data.success}
+          title={fetcher.data.action}
+        />
+      )}
+      <div className="overflow-hidden rounded-lg border">
+        <ApsTable aps={apsByCompany} fetcher={fetcher} />
+      </div>
+      <ApsForm
+        action="create"
+        fetcher={fetcher}
+        open={open}
+        setOpen={setOpen}
+      />
+    </>
+  );
+
+  return (
+    <>
       <Item className="mb-3" variant="outline">
         <ItemContent>
           <ItemTitle>{m.aps_title()}</ItemTitle>
