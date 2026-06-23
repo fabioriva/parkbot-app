@@ -19,7 +19,7 @@ function stringToHslColor(str: string, s = 65, l = 55) {
 
 export function UserAvatar({ user }) {
   const initials = getInitials(user.name);
-  const bg = stringToHslColor(initials);
+  // const bg = stringToHslColor(initials);
   return (
     <div className="flex aspect-square size-10 items-center justify-center rounded-lg">
       <img
