@@ -101,6 +101,80 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
 
   return (
     <>
+      <div className="flex flex-col gap-3 mb-3 xl:hidden ">
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{m.subscriptions_title()}</ItemTitle>
+            <ItemDescription className="text-xs">
+              {m.subscriptions_description({
+                inactives: inactiveSubscriptions.length,
+                subscriptions: subscriptionsByCompany.length,
+              })}
+            </ItemDescription>
+          </ItemContent>
+        </Item>
+        <div className="flex gap-3">
+          <CompanySelect
+            companies={loaderData.companies}
+            company={company}
+            setCompany={setCompany}
+          />
+          <Button onClick={() => setOpen(true)} variant="outline">
+            <PlusIcon /> {m.subscription_action_add()}
+          </Button>
+        </div>
+      </div>
+      <div className="hidden xl:block mb-3">
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{m.subscriptions_title()}</ItemTitle>
+            <ItemDescription className="text-xs">
+              {m.subscriptions_description({
+                inactives: inactiveSubscriptions.length,
+                subscriptions: subscriptionsByCompany.length,
+              })}
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <CompanySelect
+              companies={loaderData.companies}
+              company={company}
+              setCompany={setCompany}
+            />
+            <Button onClick={() => setOpen(true)} variant="outline">
+              <PlusIcon /> {m.subscription_action_add()}
+            </Button>
+          </ItemActions>
+        </Item>
+      </div>
+      {fetcher.data?.error && (
+        <ErrorAlert description={fetcher.data.error} title="Error" />
+      )}
+      {fetcher.data?.success && (
+        <Success
+          description={fetcher.data.success}
+          title={fetcher.data.action}
+        />
+      )}
+      <div className="overflow-hidden rounded-lg border">
+        <SubscriptionTable
+          aps={loaderData.aps}
+          fetcher={fetcher}
+          subscriptions={subscriptionsByCompany}
+        />
+      </div>
+      <SubscriptionForm
+        aps={loaderData.aps}
+        action="create"
+        fetcher={fetcher}
+        open={open}
+        setOpen={setOpen}
+      />
+    </>
+  );
+
+  return (
+    <>
       <Item className="mb-3" variant="outline">
         <ItemContent>
           <ItemTitle>{m.subscriptions_title()}</ItemTitle>
@@ -117,7 +191,11 @@ export default function Subscription({ loaderData }: Route.LoaderArgs) {
             company={company}
             setCompany={setCompany}
           />
-          <Button onClick={() => setOpen(true)} variant="outline">
+          <Button
+            className="w-full"
+            onClick={() => setOpen(true)}
+            variant="outline"
+          >
             <PlusIcon /> {m.subscription_action_add()}
           </Button>
         </ItemActions>

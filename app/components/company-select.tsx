@@ -16,7 +16,7 @@ export function CompanySelect({ companies = [], company, setCompany }) {
       value={company}
       onValueChange={setCompany}
     >
-      <SelectTrigger className="w-48">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a company" />
       </SelectTrigger>
       <SelectContent>
