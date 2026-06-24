@@ -23,7 +23,7 @@ import { m } from "@paraglide/messages.js";
 import type { Route } from "./+types/map";
 
 const components = {
-  // bugrashov: lazy(() => import("~/components/maps/bugrashov")),
+  bugrashov: lazy(() => import("~/components/maps/bugrashov")),
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
   // menloa: lazy(() => import("~/components/maps/menlo-a")),
   // menlob: lazy(() => import("~/components/maps/menlo-b")),
