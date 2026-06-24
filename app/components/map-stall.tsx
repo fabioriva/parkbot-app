@@ -1,18 +1,34 @@
 import clsx from "clsx";
+import { useParams } from "react-router";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { useEditStallDialog } from "~/components/map-edit";
+import fetcher from "~/lib/fetch";
+import toast from "~/lib/toast";
 import { m } from "@paraglide/messages.js";
 
 export function Stall({ definitions, stall, view }) {
+  const params = useParams();
+  const { showEditDialog } = useEditStallDialog();
   const { date, nr, size, status } = stall;
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus;
-  const { showEditDialog } = useEditStallDialog();
-  const handleConfirm = (value) => {
-    console.log(`Stall nr ${nr} changed from ${status} to ${value}`);
+  const handleConfirm = async (value) => {
+    // console.log(`Stall nr ${nr} changed from ${status} to ${value}`);
+    const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/map/edit`;
+    const res = await fetcher(url, {
+      method: "POST",
+      headers: {
+        // Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ card: value, stall: nr }),
+    });
+    console.log(res);
+
+    toast(res);
   };
   return (
     <Tooltip>
