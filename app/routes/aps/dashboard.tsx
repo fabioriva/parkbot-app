@@ -21,20 +21,21 @@ import type { Route } from "./+types/dashboard";
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getCookie(request, "parkbot.session_token").split(".")[0];
   const url = `${process.env.BACKEND_URL}/${params?.aps}/dashboard`;
-  return await fetcher(url, {
+  const data = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  return { data, token };
 }
 
 export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
-  if (!loaderData) return <NoDataAlert />;
+  if (!loaderData.data) return <NoDataAlert />;
 
-  const [dashboard, setDashboard] = useState(loaderData);
+  const [dashboard, setDashboard] = useState(loaderData.data);
   const [stacked, setStacked] = useState(true);
 
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/dashboard`;

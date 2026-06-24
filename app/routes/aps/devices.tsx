@@ -11,17 +11,18 @@ import type { Route } from "./+types/devices";
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getCookie(request, "parkbot.session_token").split(".")[0];
   const url = `${process.env.BACKEND_URL}/${params?.aps}/overview`;
-  return await fetcher(url, {
+  const data = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  return { data, token };
 }
 
 export default function Devices({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData) return <NoDataAlert />;
+  if (!loaderData.data) return <NoDataAlert />;
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/overview`;
-  const { data } = useData(url, { initialData: loaderData });
+  const { data } = useData(url, { initialData: loaderData.data });
   const COLS = data.devices[0].length;
   return (
     <div

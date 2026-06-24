@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -27,6 +27,7 @@ import toast from "~/lib/toast";
 import { m } from "@paraglide/messages.js";
 
 export function ExitCall({ exit }) {
+  const data = useLoaderData();
   const params = useParams();
   const { showConfirmDialog } = useConfirmDialog();
 
@@ -48,12 +49,12 @@ export function ExitCall({ exit }) {
     showConfirmDialog({
       title: m.exit_call_confirm_dialog_title(),
       description: m.exit_call_confirm_dialog_description({ card }),
-      onConfirm: async (value) => {
+      onConfirm: async () => {
         const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/exit`;
         const res = await fetcher(url, {
           method: "POST",
           headers: {
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${data.token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ card }),

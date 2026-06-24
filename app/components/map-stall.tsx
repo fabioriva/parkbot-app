@@ -27,8 +27,6 @@ export function Stall({ definitions, stall, view }) {
       },
       body: JSON.stringify({ card: value, stall: nr }),
     });
-    console.log(res);
-
     toast(res);
   };
   return (

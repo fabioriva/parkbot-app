@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -27,8 +27,10 @@ import toast from "~/lib/toast";
 import { m } from "@paraglide/messages.js";
 
 export function ActionPP({ action, disabled = true }) {
+  const data = useLoaderData();
   const params = useParams();
   const { showConfirmDialog } = useConfirmDialog();
+
   const [destination, setDestination] = useState(undefined);
   const [error, setError] = useState(false);
 
@@ -57,7 +59,7 @@ export function ActionPP({ action, disabled = true }) {
         const res = await fetcher(url, {
           method: "POST",
           headers: {
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${data.token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

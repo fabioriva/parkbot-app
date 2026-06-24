@@ -1,5 +1,5 @@
 import { Trash } from "lucide-react";
-import { useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import { Button } from "~/components/ui/button";
 import {
   Item,
@@ -14,6 +14,7 @@ import toast from "~/lib/toast";
 import { m } from "@paraglide/messages.js";
 
 export const ExitQueue = ({ queue }) => {
+  const data = useLoaderData();
   const params = useParams();
   const { showConfirmDialog } = useConfirmDialog();
 
@@ -26,7 +27,7 @@ export const ExitQueue = ({ queue }) => {
         const res = await fetcher(url, {
           method: "POST",
           headers: {
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${data.token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ ...item, index: item.id }),
