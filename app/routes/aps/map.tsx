@@ -35,19 +35,20 @@ const components = {
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getCookie(request, "parkbot.session_token").split(".")[0];
   const url = `${process.env.BACKEND_URL}/${params?.aps}/map`;
-  return await fetcher(url, {
+  const data = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  return { data, token };
 }
 
 export default function Map({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData) return <NoDataAlert />;
+  if (!loaderData.data) return <NoDataAlert />;
 
   const DynamicComponent = components[params.aps];
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
-  const { data } = useData(url, { initialData: loaderData });
+  const { data } = useData(url, { initialData: loaderData.data });
   const [tab, setTab] = useState("view2");
   const onTabChange = (value) => {
     setTab(value);

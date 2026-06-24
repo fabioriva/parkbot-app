@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useParams } from "react-router";
+import { useLoaderData, useParams } from "react-router";
 import {
   Tooltip,
   TooltipContent,
@@ -11,6 +11,7 @@ import toast from "~/lib/toast";
 import { m } from "@paraglide/messages.js";
 
 export function Stall({ definitions, stall, view }) {
+  const data = useLoaderData();
   const params = useParams();
   const { showEditDialog } = useEditStallDialog();
   const { date, nr, size, status } = stall;
@@ -21,7 +22,7 @@ export function Stall({ definitions, stall, view }) {
     const res = await fetcher(url, {
       method: "POST",
       headers: {
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${data.token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ card: value, stall: nr }),
