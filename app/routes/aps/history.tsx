@@ -28,23 +28,28 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const filter = "a";
   const query = `system=0&dateFrom=${from}&dateTo=${to}&filter=${filter}&device=0&number=0`;
   const url = `${process.env.BACKEND_URL}/${params?.aps}/history?${query}`;
-  return await fetcher(url, {
+  const data = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  return { data, token };
 }
 
 export default function History({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData) return <NoDataAlert />;
-  const [history, setHistory] = useState(loaderData);
+  if (!loaderData.data) return <NoDataAlert />;
+  const [history, setHistory] = useState(loaderData.data);
   const { count, dateFrom, dateTo, query } = history;
   const handleQuery = async ({ from, to }) => {
     const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss");
     const strTo = format(endOfDay(to), "yyyy-MM-dd HH:mm:ss");
     const query = `system=0&dateFrom=${strFrom}&dateTo=${strTo}&filter=a&device=0&number=0`;
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}`;
-    const res = await fetch(url);
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${loaderData.token}`,
+      },
+    });
     if (res.ok) {
       const json = await res.json();
       setHistory(json);

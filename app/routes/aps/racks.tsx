@@ -20,23 +20,31 @@ import type { Route } from "./+types/racks";
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getCookie(request, "parkbot.session_token").split(".")[0];
   const url = `${process.env.BACKEND_URL}/${params?.aps}/racks`;
-  return await fetcher(url, {
+  const data = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+  return { data, token };
 }
 
 export default function Nodes({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData) return <NoDataAlert />;
+  if (!loaderData.data) return <NoDataAlert />;
 
-  const [racks, setRacks] = useState(loaderData);
+  const [racks, setRacks] = useState(loaderData.data);
 
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/racks`;
-  const { data } = useSWR(url, fetcher, {
-    fallbackData: racks,
-    refreshInterval: 1000,
-  });
+  const { data } = useSWR(
+    loaderData.token ? [url, loaderData.token] : null,
+    ([url, token]) =>
+      fetcher(url, {
+        headers: { Authorization: `Bearer ${loaderData.token}` },
+      }),
+    {
+      fallbackData: racks,
+      refreshInterval: 1000,
+    },
+  );
   useEffect(() => setRacks(data), [data]);
 
   return (

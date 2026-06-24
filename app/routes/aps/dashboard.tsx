@@ -34,18 +34,25 @@ export default function Dashboard({
   params,
 }: Route.ComponentProps) {
   if (!loaderData.data) return <NoDataAlert />;
-
   const [dashboard, setDashboard] = useState(loaderData.data);
   const [stacked, setStacked] = useState(true);
 
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/dashboard`;
-  const { data } = useSWR(url, fetcher, {
-    fallbackData: dashboard,
-    refreshInterval: 1000,
-  });
+  // const { data } = useSWR(url, fetcher, {
+  const { data } = useSWR(
+    loaderData.token ? [url, loaderData.token] : null,
+    ([url, token]) =>
+      fetcher(url, {
+        headers: { Authorization: `Bearer ${loaderData.token}` },
+      }),
+    {
+      fallbackData: dashboard,
+      refreshInterval: 1000,
+    },
+  );
   useEffect(() => setDashboard(data), [data]);
-  const { activity, exitQueue, occupancy, operations, system } = dashboard;
 
+  const { activity, exitQueue, occupancy, operations, system } = dashboard;
   const daily = operations[0];
   const [busy, free, lock] = occupancy;
   const queue = exitQueue.queueList.filter((item) => item.card !== 0);
