@@ -5,7 +5,7 @@ import {
   InputGroupInput,
 } from "~/components/ui/input-group";
 
-export function HistorySearch({ search, placeholder, handleSearch }) {
+export function SearchInput({ search, placeholder, handleSearch }) {
   return (
     <InputGroup>
       <InputGroupInput

@@ -9,9 +9,9 @@ import {
 } from "~/components/ui/item";
 import { DateRange } from "~/components/date-range";
 import { HistoryList } from "~/components/history-list";
-import { HistorySearch } from "~/components/history-search";
 import { HistoryTable } from "~/components/history-table";
 import { NoDataAlert } from "~/components/no-data-alert";
+import { SearchInput } from "~/components/search-input";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 import { m } from "@paraglide/messages.js";
@@ -82,7 +82,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
           </ItemContent>
         </Item>
         <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
-        <HistorySearch
+        <SearchInput
           search={search}
           placeholder={"Fuzzy search!"}
           handleSearch={handleSearch}
