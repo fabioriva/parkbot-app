@@ -1,6 +1,5 @@
 import { Tag as TagIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-// import { useTranslation } from "react-i18next";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Button } from "~/components/ui/button";
 import {
@@ -13,13 +12,14 @@ import {
   ItemTitle,
 } from "~/components/ui/item";
 import { SearchInput } from "~/components/search-input";
-// import { EditTagDialog } from "~/components/edit-tag-dialog";
-// import { useConfirmDialog } from "~/components/confirm-dialog";
+import { EditTagDialog } from "~/components/tag-edit";
+import { useConfirmDialog } from "~/components/confirm-dialog";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { useData } from "~/hooks/use-ws";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
-
+import toast from "~/lib/toast";
+import { m } from "@paraglide/messages.js";
 import type { Route } from "./+types/tags";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
@@ -36,21 +36,29 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 export default function Tags({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData.data) return <NoDataAlert />;
 
-  const t = (t) => t;
-
   const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`;
   const { data } = useData(url, { initialData: loaderData.data });
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState({ code: "" });
-  // const { showConfirmDialog } = useConfirmDialog();
+
+  const { showConfirmDialog } = useConfirmDialog();
   const handleConfirm = (pin) => {
-    // console.log(tag);
-    // setOpen(false);
-    // showConfirmDialog({
-    //   title: "Do you confirm?",
-    //   description: `Click confirm to change the PIN code for tag number ${tag.nr}`,
-    //   onConfirm: () => console.log(pin, tag),
-    // });
+    showConfirmDialog({
+      title: "Do you confirm?",
+      description: `Click confirm to change the PIN code for tag number ${tag.nr}`,
+      onConfirm: async () => {
+        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/card/edit`;
+        const res = await fetcher(url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${loaderData.token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ card: tag.nr, code: pin }),
+        });
+        toast(res);
+      },
+    });
   };
   const handleEdit = (tag) => {
     setOpen(true);
@@ -98,12 +106,12 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
 
   return (
     <div className="w-full lg:max-w-sm space-y-3">
-      {/* <EditTagDialog
+      <EditTagDialog
         open={open}
         onConfirm={handleConfirm}
         onOpenChange={setOpen}
         tag={tag}
-      /> */}
+      />
       <SearchInput
         search={search}
         placeholder={"Search by number, pin..."}
