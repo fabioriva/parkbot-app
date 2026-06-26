@@ -359,6 +359,8 @@
   "subscription_field_subscribed": "Subscribed",
   "subscriptions_title": "Subscriptions",
   "subscriptions_description": "Subscriptions count {subscriptions}, inactive subscriptions {inactives}.",
+  "tags_confirm_dialog_title": "Edit Tag",
+  "tags_confirm_dialog_description": "Are you sure you want to modify the PIN code for tag {nr}?",
   "tags_edit_dialog_title": "Edit Tag {nr}",
   "tags_edit_dialog_description": "Change PIN code for Tag {nr}.",
   "tags_edit_dialog_field_label": "PIN code",

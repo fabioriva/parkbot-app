@@ -45,8 +45,8 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   const { showConfirmDialog } = useConfirmDialog();
   const handleConfirm = (pin) => {
     showConfirmDialog({
-      title: "Do you confirm?",
-      description: `Click confirm to change the PIN code for tag number ${tag.nr}`,
+      title: m.tags_confirm_dialog_title(),
+      description: m.tags_edit_dialog_description({ nr: tag.nr }),
       onConfirm: async () => {
         const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/card/edit`;
         const res = await fetcher(url, {
