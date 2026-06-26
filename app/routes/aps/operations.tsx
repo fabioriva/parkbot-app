@@ -76,8 +76,6 @@ export default function Operations({
             </ItemDescription>
           </ItemContent>
         </Item>
-        {/* <div className="flex flex-col xl:flex-row xl:items-center gap-3 mb-3">
-        <p className="grow hidden xl:block" /> */}
         <DateRange
           from={dateFrom + " 00:00"}
           to={dateTo + " 00:00"}
