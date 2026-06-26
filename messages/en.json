@@ -271,6 +271,7 @@
   "occupancy_total": "Total spaces",
   "occupancy_total_count": "Total spaces {count}",
   "operations_card_title": "System operations",
+  "operations_card_title_by_device": "System operations grouped by device",
   "operations_card_description": "Date range from {dateFrom} to {dateTo}",
   "operations_entries": "Entries",
   "operations_exits": "Exits",

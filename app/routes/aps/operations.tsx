@@ -8,6 +8,7 @@ import { Operations as Statistics } from "~/components/operations-chart";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
+import { m } from "@paraglide/messages.js";
 
 import type { Route } from "./+types/operations";
 
@@ -34,12 +35,10 @@ export default function Operations({
 }: Route.ComponentProps) {
   if (!loaderData.data) return <NoDataAlert />;
 
-  const t = (t) => t;
   const [data, setData] = useState(loaderData.data);
   const [stacked, setStacked] = useState(true);
-
   const { cards, devices, operations } = data;
-  const [dateFrom, dateTo] = devices.query.date.split(" ");
+  const [dateFrom, dateTo] = operations.query.date.split(" ");
   const handleQuery = async ({ from, to }) => {
     const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss");
     const strTo = format(endOfDay(to), "yyyy-MM-dd HH:mm:ss");
@@ -68,8 +67,8 @@ export default function Operations({
       </div>
       <div className="grid 2xl:grid-cols-2 gap-6">
         <CardWrapper
-          title={t("operations.title")}
-          description={t("operations.description", { dateFrom, dateTo })}
+          title={m.operations_card_title()}
+          description={m.operations_card_description({ dateFrom, dateTo })}
           footer={
             <div className="flex items-center justify-end gap-2 w-full">
               <Label htmlFor="stacked">Stacked</Label>
@@ -84,8 +83,8 @@ export default function Operations({
           <Statistics operations={operations.data} stacked={stacked} />
         </CardWrapper>
         <CardWrapper
-          title={t("operations.titleDevice")}
-          description={t("operations.description", { dateFrom, dateTo })}
+          title={m.operations_card_title_by_device()}
+          description={m.operations_card_description({ dateFrom, dateTo })}
           footer={
             <div className="flex items-center justify-end gap-2 w-full">
               <Label htmlFor="stacked">Stacked</Label>
