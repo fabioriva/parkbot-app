@@ -20,6 +20,7 @@ import { getCookie } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 import toast from "~/lib/toast";
 import { m } from "@paraglide/messages.js";
+
 import type { Route } from "./+types/tags";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
@@ -136,12 +137,12 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
               </ItemMedia>
               <ItemContent>
                 <ItemTitle>
-                  Tag {tag.nr} {tag.code !== "0" && `PIN ${tag.code}`}
+                  {m.tags_item_title({ nr: tag.nr, pin: tag.code })}
                 </ItemTitle>
                 <ItemDescription>
                   {tag.status === 0
-                    ? "Valid for entry"
-                    : `Parked in slot ${tag.status}`}
+                    ? m.tags_item_description_valid()
+                    : m.tags_item_description_parked({ nr: tag.status })}
                 </ItemDescription>
               </ItemContent>
               <ItemActions>

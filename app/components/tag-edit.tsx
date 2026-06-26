@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -19,6 +18,7 @@ import {
   FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { m } from "@paraglide/messages.js";
 
 export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
   const t = (t) => t;
@@ -46,13 +46,17 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
   };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>Change PIN code</DialogTitle>
-          <DialogDescription>{`Change PIN code for tag ${tag.nr}`}</DialogDescription>
+          <DialogTitle>{m.tags_edit_dialog_title({ nr: tag.nr })}</DialogTitle>
+          <DialogDescription>
+            {m.tags_edit_dialog_description({ nr: value })}
+          </DialogDescription>
         </DialogHeader>
         <Field>
-          <FieldLabel htmlFor="pin">PIN code</FieldLabel>
+          <FieldLabel htmlFor="pin">
+            {m.tags_edit_dialog_field_label()}
+          </FieldLabel>
           <Input
             className="uppercase"
             minLength={3}
@@ -61,9 +65,9 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
             value={value}
             onChange={handleChange}
           />
-          {error && <FieldError>{t("aps.tags.edit-error")}</FieldError>}
+          {error && <FieldError>{m.tags_edit_dialog_field_error()}</FieldError>}
           <FieldDescription>
-            {t("aps.tags.edit-field-description")}
+            {m.tags_edit_dialog_field_description()}
           </FieldDescription>
         </Field>
         <DialogFooter>
@@ -74,12 +78,12 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
                 setError(false);
               }}
             >
-              Cancel
+              {m.cancel()}
             </Button>
           </DialogClose>
           <DialogClose asChild>
             <Button onClick={handleConfirm} disabled={error}>
-              Confirm
+              {m.confirm()}
             </Button>
           </DialogClose>
         </DialogFooter>
