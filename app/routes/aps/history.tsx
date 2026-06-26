@@ -110,7 +110,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
           </ItemContent>
           <ItemActions>
             <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
-            <HistorySearch
+            <SearchInput
               search={search}
               placeholder={"Fuzzy search!"}
               handleSearch={handleSearch}
