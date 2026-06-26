@@ -355,7 +355,7 @@
   "subscription_field_subscribed": "Iscritto",
   "subscriptions_title": "Iscrizioni",
   "subscriptions_description": "Totale iscrizioni {subscriptions}, iscriziona ancora non attivate {inactives}.",
-  "tags_edit_dialog_title": "Modifica il Tag {nr}",
+  "tags_edit_dialog_title": "Modifica Tag {nr}",
   "tags_edit_dialog_description": "Cambia il codice PIN per il Tag {nr}.",
   "tags_edit_dialog_field_label": "Codice PIN",
   "tags_edit_dialog_field_description": "Inserici un PIN valido, pattern: 3 digits, [a-fA-F0-9]}",

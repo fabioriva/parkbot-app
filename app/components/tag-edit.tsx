@@ -21,7 +21,6 @@ import { Input } from "~/components/ui/input";
 import { m } from "@paraglide/messages.js";
 
 export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
-  const t = (t) => t;
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
   useEffect(() => {
@@ -50,7 +49,7 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
         <DialogHeader>
           <DialogTitle>{m.tags_edit_dialog_title({ nr: tag.nr })}</DialogTitle>
           <DialogDescription>
-            {m.tags_edit_dialog_description({ nr: value })}
+            {m.tags_edit_dialog_description({ nr: tag.nr })}
           </DialogDescription>
         </DialogHeader>
         <Field>
