@@ -1,5 +1,12 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns";
 import { useState } from "react";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "~/components/ui/item";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { CardWrapper } from "~/components/card-wrapper";
@@ -57,18 +64,50 @@ export default function Operations({
 
   return (
     <>
-      <div className="flex flex-col xl:flex-row xl:items-center gap-3 mb-3">
-        <p className="grow hidden xl:block" />
+      <div className="flex flex-col gap-3 mb-3 xl:hidden ">
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{m.operations_title()}</ItemTitle>
+            <ItemDescription className="text-xs">
+              {m.operations_description({
+                from: dateFrom,
+                to: dateTo,
+              })}
+            </ItemDescription>
+          </ItemContent>
+        </Item>
+        {/* <div className="flex flex-col xl:flex-row xl:items-center gap-3 mb-3">
+        <p className="grow hidden xl:block" /> */}
         <DateRange
           from={dateFrom + " 00:00"}
           to={dateTo + " 00:00"}
           handleQuery={handleQuery}
         />
       </div>
+      <div className="hidden xl:block">
+        <Item className="mb-3" variant="outline">
+          <ItemContent>
+            <ItemTitle>{m.operations_title()}</ItemTitle>
+            <ItemDescription className="text-xs">
+              {m.operations_description({
+                from: dateFrom,
+                to: dateTo,
+              })}
+            </ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <DateRange
+              from={dateFrom + " 00:00"}
+              to={dateTo + " 00:00"}
+              handleQuery={handleQuery}
+            />
+          </ItemActions>
+        </Item>
+      </div>
       <div className="grid 2xl:grid-cols-2 gap-6">
         <CardWrapper
           title={m.operations_card_title()}
-          description={m.operations_card_description({ dateFrom, dateTo })}
+          // description={m.operations_card_description({ dateFrom, dateTo })}
           footer={
             <div className="flex items-center justify-end gap-2 w-full">
               <Label htmlFor="stacked">Stacked</Label>
@@ -84,7 +123,7 @@ export default function Operations({
         </CardWrapper>
         <CardWrapper
           title={m.operations_card_title_by_device()}
-          description={m.operations_card_description({ dateFrom, dateTo })}
+          // description={m.operations_card_description({ dateFrom, dateTo })}
           footer={
             <div className="flex items-center justify-end gap-2 w-full">
               <Label htmlFor="stacked">Stacked</Label>
