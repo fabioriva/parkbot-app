@@ -53,7 +53,7 @@ export default function Dashboard({
   useEffect(() => setDashboard(data), [data]);
 
   const { activity, exitQueue, occupancy, operations, system } = dashboard;
-  const daily = operations[0];
+  const [daily] = operations;
   const [busy, free, lock] = occupancy;
   const queue = exitQueue.queueList.filter((item) => item.card !== 0);
   const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0);
