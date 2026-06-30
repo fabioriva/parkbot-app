@@ -29,7 +29,7 @@ const components = {
   // menlob: lazy(() => import("~/components/maps/menlo-b")),
   // muse: lazy(() => import("~/components/maps/muse")),
   // wallstreet: lazy(() => import("~/components/maps/spire")),
-  // washingtonblvd: lazy(() => import("~/components/maps/8888")),
+  washingtonblvd: lazy(() => import("~/components/maps/8888")),
 };
 
 export async function loader({ params, request }: Route.LoaderArgs) {
