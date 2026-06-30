@@ -60,7 +60,14 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const Fuse = (await import("fuse.js")).default;
     const fuse = new Fuse(query, {
-      keys: ["alarm.id", "card", "device.key", "operation.key", "stall"],
+      keys: [
+        "alarm.id",
+        "card",
+        "device.key",
+        "operation.key",
+        "stall",
+        "user",
+      ],
     });
     const result = fuse.search(e.target.value);
     setSearch(result);

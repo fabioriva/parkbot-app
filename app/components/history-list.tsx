@@ -49,7 +49,8 @@ export function HistoryList({ query, media = false }: any) {
             )}
             <ItemContent className="gap-0.5">
               <ItemTitle className="line-clamp-1">
-                {item.device.id === 0 && m.operator()}
+                {item.device.id === 0 && !item.user ? m.operator() : item.user}
+                {/* {item.device.id === 0 &&  m.operator()} */}
                 {item.device.id !== 0 && item.device.key}
                 {item.device.id !== 0 && (
                   <span className="text-normal">
