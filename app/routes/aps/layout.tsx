@@ -45,12 +45,17 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (session.user.aps !== params.aps) {
     throw data("Forbidden", { status: 403 });
   }
-  const pathname = new URL(request.url).pathname;
-  const path = pathname.split("/")[3] || "";
+  // const pathname = new URL(request.url).pathname;
+  // const path = pathname.split("/")[3] || "";
+  const url = new URL(request.url);
+  // Normalize RR8 data request path
+  const pathname = url.pathname.replace(/\.data$/, "");
+  const [, aps, route] = pathname.split("/").filter(Boolean);
+
   if (
-    path !== "admin" &&
-    path !== "user" &&
-    !roles[session.user.role]?.some((role) => role === path)
+    route !== "admin" &&
+    route !== "user" &&
+    !roles[session.user.role]?.some((role) => role === route)
   ) {
     throw data("Forbidden", { status: 403 });
   }
@@ -60,10 +65,11 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const sidebarState = getCookie(request, "sidebar_state");
   return data(
     {
+      aps: session.aps,
       pathname,
+      route,
       sidebarState,
       user: session.user,
-      aps: session.aps,
     },
     {
       headers: {
@@ -74,26 +80,22 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
+  const { aps, pathname, route, sidebarState, user } = loaderData;
   const {
     info: { comm, diag, map },
-  } = useInfo(
-    `${import.meta.env.VITE_WEBSOCK_URL}/${loaderData?.user.aps}/info`,
-  );
+  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`);
+
   return (
     <TooltipProvider>
       <SidebarProvider
-        defaultOpen={loaderData?.sidebarState === "true"}
+        defaultOpen={sidebarState === "true"}
         style={
           {
             "--sidebar-width": "19rem",
           } as React.CSSProperties
         }
       >
-        <AppSidebar
-          aps={loaderData?.aps.name}
-          pathname={loaderData.pathname}
-          user={loaderData?.user}
-        />
+        <AppSidebar aps={aps.name} pathname={pathname} user={user} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
@@ -104,14 +106,12 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             <Breadcrumb className="grow">
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden lg:block">
-                  <BreadcrumbLink href="/aps-select">
-                    {loaderData?.aps.name}
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="/aps-select">{aps.name}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden lg:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage className="capitalize w-16 lg:w-full truncate">
-                    {m[`sidebar_main.${loaderData.pathname.split("/")[3]}`]()}
+                    {m[`sidebar_main.${route}`]()}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -121,7 +121,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             ) : (
               <React.Fragment>
                 <AlarmInfo active={diag || 0} />
-                <ParkInfo occupancy={map} user={loaderData?.user} />
+                <ParkInfo occupancy={map} user={user} />
                 <CommInfo status={comm} />
               </React.Fragment>
             )}
@@ -134,7 +134,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
           </header>
           <div className="px-3 pr-6 py-3">
             <ConfirmDialogProvider>
-              <Outlet context={loaderData?.user} />
+              <Outlet context={user} />
             </ConfirmDialogProvider>
           </div>
         </SidebarInset>

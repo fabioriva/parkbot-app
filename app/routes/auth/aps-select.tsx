@@ -21,7 +21,6 @@ import { m } from "@paraglide/messages.js";
 import type { Route } from "./+types/aps-select";
 
 export async function action({ request }: Route.ActionArgs) {
-  // TODO: trycatch
   const formData = await request.formData();
   const aps = formData.get("aps");
   const data = await auth.api.updateUser({
