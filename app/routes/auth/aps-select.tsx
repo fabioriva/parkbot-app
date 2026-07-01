@@ -35,24 +35,19 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  try {
-    const data = await auth.api.getSession({
-      headers: await request.headers,
-    });
-    if (!data) {
-      return redirect("/");
-    }
-    const { session, user } = data;
-    if (process.env.TWO_FACTOR === "enabled" && !user.twoFactorEnabled) {
-      return redirect("/2fa-setup");
-    }
-    const subscription = await findSubscriptionByEmail(user?.email);
-    const aps = await findSubscribedApsList(subscription?.aps);
-    return aps;
-    // return aps.filter((a) => subscription?.aps.includes(a.ns));
-  } catch (error) {
-    console.log("getSession error:", error);
+  const data = await auth.api.getSession({
+    headers: await request.headers,
+  });
+  if (!data) {
+    return redirect("/");
   }
+  const { session, user } = data;
+  if (process.env.TWO_FACTOR === "enabled" && !user.twoFactorEnabled) {
+    return redirect("/2fa-setup");
+  }
+  const subscription = await findSubscriptionByEmail(user?.email);
+  const aps = await findSubscribedApsList(subscription?.aps);
+  return aps;
 }
 
 export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
