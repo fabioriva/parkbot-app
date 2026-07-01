@@ -41,7 +41,7 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
         headers: { Authorization: `Bearer ${loaderData.token}` },
       }),
     {
-      fallbackData: racks,
+      fallbackData: loaderData.data,
       refreshInterval: 1000,
     },
   );

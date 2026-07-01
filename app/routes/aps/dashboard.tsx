@@ -46,7 +46,7 @@ export default function Dashboard({
         headers: { Authorization: `Bearer ${loaderData.token}` },
       }),
     {
-      fallbackData: dashboard,
+      fallbackData: loaderData.data,
       refreshInterval: 1000,
     },
   );
