@@ -208,7 +208,10 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
                   {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
                 </TableCell>
                 <TableCell>
-                  {item.device.id === 0 && m.operator()}
+                  {item.device.id === 0 && !item.user
+                    ? m.operator()
+                    : item.user}
+                  {/* {item.device.id === 0 && m.operator()} */}
                   {item.device.id !== 0 && item.device.key}
                 </TableCell>
                 <TableCell>
