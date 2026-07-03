@@ -24,6 +24,7 @@ import type { Route } from "./+types/map";
 
 const components = {
   bugrashov: lazy(() => import("~/components/maps/bugrashov")),
+  chiattone: lazy(() => import("~/components/maps/chiattone")),
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
   ironbank: lazy(() => import("~/components/maps/ironbank")),
   menloa: lazy(() => import("~/components/maps/menlo-a")),
