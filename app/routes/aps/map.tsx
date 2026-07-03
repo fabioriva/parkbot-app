@@ -26,6 +26,7 @@ const components = {
   bugrashov: lazy(() => import("~/components/maps/bugrashov")),
   chiattone: lazy(() => import("~/components/maps/chiattone")),
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
+  donini: lazy(() => import("~/components/maps/donini")),
   ironbank: lazy(() => import("~/components/maps/ironbank")),
   menloa: lazy(() => import("~/components/maps/menlo-a")),
   menlob: lazy(() => import("~/components/maps/menlo-b")),
