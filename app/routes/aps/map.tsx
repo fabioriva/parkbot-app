@@ -27,7 +27,7 @@ const components = {
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
   menloa: lazy(() => import("~/components/maps/menlo-a")),
   menlob: lazy(() => import("~/components/maps/menlo-b")),
-  // muse: lazy(() => import("~/components/maps/muse")),
+  muse: lazy(() => import("~/components/maps/muse")),
   wallstreet: lazy(() => import("~/components/maps/spire")),
   washingtonblvd: lazy(() => import("~/components/maps/8888")),
 };
