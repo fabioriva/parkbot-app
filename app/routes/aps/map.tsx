@@ -32,6 +32,7 @@ const components = {
   menloa: lazy(() => import("~/components/maps/menlo-a")),
   menlob: lazy(() => import("~/components/maps/menlo-b")),
   muse: lazy(() => import("~/components/maps/muse")),
+  smoritz: lazy(() => import("~/components/maps/smoritz")),
   wallstreet: lazy(() => import("~/components/maps/spire")),
   washingtonblvd: lazy(() => import("~/components/maps/8888")),
 };
