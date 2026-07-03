@@ -82,7 +82,7 @@ export function Device({ device, advanced = false }) {
               {m[`device.${item.name}`]()}
             </TabsTrigger>
           ))}
-          <TabsTrigger value="diagnostic">
+          <TabsTrigger value="diagnostic" disabled={device.alarms.length === 0}>
             {m["device.view-diag"]()}{" "}
             {device.alarms.length > 0 && (
               <Badge variant="destructive">{device.alarms.length}</Badge>
