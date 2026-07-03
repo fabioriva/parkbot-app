@@ -33,6 +33,8 @@ export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
+  console.log("(3)", loaderData);
+
   if (!loaderData.data) return <NoDataAlert />;
   const [dashboard, setDashboard] = useState(loaderData.data);
   const [stacked, setStacked] = useState(true);

@@ -33,7 +33,7 @@ export async function action({ request }: Route.ActionArgs) {
     });
     if (response.ok) {
       const headers = new Headers(response.headers);
-      console.log(headers);
+      // console.log(headers);
       return redirect("/aps-select", { headers });
     } else {
       return { message: response.statusText };

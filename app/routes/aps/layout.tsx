@@ -49,8 +49,11 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   // const path = pathname.split("/")[3] || "";
   const url = new URL(request.url);
   // Normalize RR8 data request path
+  console.log("(0)", url.pathname);
+
   const pathname = url.pathname.replace(/\.data$/, "");
   const [, aps, route] = pathname.split("/").filter(Boolean);
+  console.log("(1)", pathname);
 
   if (
     route !== "admin" &&
@@ -80,6 +83,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
+  console.log("(2)", loaderData);
+
   const { aps, pathname, route, sidebarState, user } = loaderData;
   const {
     info: { comm, diag, map },
