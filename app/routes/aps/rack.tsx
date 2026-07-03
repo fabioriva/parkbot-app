@@ -1,13 +1,13 @@
 import { IoTooltip } from "~/components/io-tooltip";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { useData } from "~/hooks/use-ws";
-import { getCookie } from "~/lib/cookie.server";
+import { getToken } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 
 import type { Route } from "./+types/rack";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getCookie(request, "parkbot.session_token").split(".")[0];
+  const token = getToken(request);
   const url = `${process.env.BACKEND_URL}/${params?.aps}/racks/${params?.nr}`;
   return await fetcher(url, {
     headers: {

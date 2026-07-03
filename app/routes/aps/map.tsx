@@ -16,7 +16,7 @@ import { EditStallDialogProvider } from "~/components/map-edit";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { Occupancy } from "~/components/occupancy-chart";
 import { useData } from "~/hooks/use-ws";
-import { getCookie } from "~/lib/cookie.server";
+import { getToken } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 import { m } from "@paraglide/messages.js";
 
@@ -38,7 +38,7 @@ const components = {
 };
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getCookie(request, "parkbot.session_token").split(".")[0];
+  const token = getToken(request);
   const url = `${process.env.BACKEND_URL}/${params?.aps}/map`;
   const data = await fetcher(url, {
     headers: {

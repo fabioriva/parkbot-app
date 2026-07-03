@@ -12,14 +12,14 @@ import { HistoryList } from "~/components/history-list";
 import { HistoryTable } from "~/components/history-table";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { SearchInput } from "~/components/search-input";
-import { getCookie } from "~/lib/cookie.server";
+import { getToken } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 import { m } from "@paraglide/messages.js";
 
 import type { Route } from "./+types/history";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getCookie(request, "parkbot.session_token").split(".")[0];
+  const token = getToken(request);
   const from = format(
     subDays(startOfDay(new Date()), 1),
     "yyyy-MM-dd HH:mm:ss",

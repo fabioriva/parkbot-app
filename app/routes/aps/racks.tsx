@@ -11,14 +11,14 @@ import {
   ItemTitle,
 } from "~/components/ui/item";
 import { NoDataAlert } from "~/components/no-data-alert";
-import { getCookie } from "~/lib/cookie.server";
+import { getToken } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 import useSWR from "swr";
 
 import type { Route } from "./+types/racks";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getCookie(request, "parkbot.session_token").split(".")[0];
+  const token = getToken(request);
   const url = `${process.env.BACKEND_URL}/${params?.aps}/racks`;
   const data = await fetcher(url, {
     headers: {

@@ -6,8 +6,6 @@ export function getCookie(request, name) {
       .map((cookie) => cookie.split("="))
       .map(([key, value]) => [key, decodeURIComponent(value)]) || [],
   );
-  console.log("!!!!!!!!!!", cookies);
-
   return cookies[name] || null;
 }
 
@@ -20,4 +18,12 @@ export function getCookies(request) {
       .map(([key, value]) => [key, decodeURIComponent(value)]) || [],
   );
   return cookies;
+}
+
+export function getToken(request) {
+  const raw =
+    getCookie(request, "__Secure-parkbot.session_token") ??
+    getCookie(request, "parkbot.session_token"); // fallback for localhost
+  const token = raw?.split(".")[0] ?? null;
+  return token;
 }

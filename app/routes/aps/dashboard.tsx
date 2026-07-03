@@ -11,7 +11,7 @@ import { HistoryList } from "~/components/history-list";
 import { NoDataAlert } from "~/components/no-data-alert";
 import { Occupancy } from "~/components/occupancy-chart";
 import { Operations } from "~/components/operations-chart";
-import { getCookie } from "~/lib/cookie.server";
+import { getToken } from "~/lib/cookie.server";
 import fetcher from "~/lib/fetch";
 import useSWR from "swr";
 import { m } from "@paraglide/messages.js";
@@ -19,9 +19,10 @@ import { m } from "@paraglide/messages.js";
 import type { Route } from "./+types/dashboard";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getCookie(request, "__Secure-parkbot.session_token").split(
-    ".",
-  )[0];
+  // const token =
+  //   getCookie(request, "__Securee-parkbot.session_token")?.split(".")[0] ??
+  //   null;
+  const token = getToken(request);
   const url = `${process.env.BACKEND_URL}/${params?.aps}/dashboard`;
   const data = await fetcher(url, {
     headers: {
@@ -35,8 +36,6 @@ export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
-  console.log("(3)", loaderData);
-
   if (!loaderData.data) return <NoDataAlert />;
   const [dashboard, setDashboard] = useState(loaderData.data);
   const [stacked, setStacked] = useState(true);

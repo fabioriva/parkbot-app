@@ -16,7 +16,7 @@ export const auth = betterAuth({
   baseURL: {
     allowedHosts: [
       "localhost:*", // allow all localhost ports
-      "sotefinservice.com", // your production domain
+      "sotefinservice.com:*", // production domain
     ],
     protocol: "https",
     fallback: "https://sotefinservice.com",
