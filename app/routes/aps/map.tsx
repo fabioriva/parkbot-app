@@ -27,6 +27,7 @@ const components = {
   chiattone: lazy(() => import("~/components/maps/chiattone")),
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
   donini: lazy(() => import("~/components/maps/donini")),
+  hdante: lazy(() => import("~/components/maps/hotel-dante")),
   ironbank: lazy(() => import("~/components/maps/ironbank")),
   menloa: lazy(() => import("~/components/maps/menlo-a")),
   menlob: lazy(() => import("~/components/maps/menlo-b")),
