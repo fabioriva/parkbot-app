@@ -19,7 +19,9 @@ import { m } from "@paraglide/messages.js";
 import type { Route } from "./+types/dashboard";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getCookie(request, "parkbot.session_token").split(".")[0];
+  const token = getCookie(request, "__Secure-parkbot.session_token").split(
+    ".",
+  )[0];
   const url = `${process.env.BACKEND_URL}/${params?.aps}/dashboard`;
   const data = await fetcher(url, {
     headers: {

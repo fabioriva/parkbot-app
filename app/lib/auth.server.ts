@@ -13,6 +13,14 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: "parkbot",
   },
+  baseURL: {
+    allowedHosts: [
+      "localhost:*", // allow all localhost ports
+      "sotefinservice.com", // your production domain
+    ],
+    protocol: "https",
+    fallback: "https://sotefinservice.com",
+  },
   database: mongodbAdapter(db),
   emailAndPassword: {
     enabled: true,
