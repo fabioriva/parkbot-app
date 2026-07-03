@@ -58,13 +58,14 @@ export default function AppWithProviders() {
 
 export function App() {
   const data = useLoaderData<typeof loader>();
+  const pathname = data.pathname.replace(/\_.data$/, "");
   const [theme] = useTheme();
   return (
     // <html lang={getLocale()} dir={getTextDirection()} className={clsx(theme)}>
     <html
       lang={getLocale()}
       dir={getTextDirection()}
-      className={data.pathname === "/" ? "dark" : clsx(theme)}
+      className={pathname === "/" ? "dark" : clsx(theme)}
     >
       <head>
         <meta charSet="utf-8" />

@@ -1,5 +1,6 @@
-import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
+
+import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -19,6 +20,6 @@ function generateRandomString(length) {
   return result;
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function Home({}: Route.ComponentProps) {
   return <Welcome seed={generateRandomString(8)} />;
 }
