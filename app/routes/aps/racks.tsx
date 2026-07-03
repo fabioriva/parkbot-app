@@ -47,6 +47,8 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
   );
   useEffect(() => setRacks(data), [data]);
 
+  if (!racks) return <NoDataAlert />;
+
   return (
     <ItemGroup className="w-full lg:max-w-sm gap-3">
       {data.map((item) => (

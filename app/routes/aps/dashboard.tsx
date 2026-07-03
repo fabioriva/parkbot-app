@@ -55,6 +55,8 @@ export default function Dashboard({
   );
   useEffect(() => setDashboard(data), [data]);
 
+  if (!dashboard) return <NoDataAlert />;
+
   const { activity, exitQueue, occupancy, operations, system } = dashboard;
   const [daily] = operations;
   const [busy, free, lock] = occupancy;
