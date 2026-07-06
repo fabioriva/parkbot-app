@@ -23,18 +23,29 @@ import { m } from "@paraglide/messages.js";
 import type { Route } from "./+types/map";
 
 const components = {
+  alumim: lazy(() => import("~/components/maps/alumim")),
+  aminadav16: lazy(() => import("~/components/maps/aminadav-16")),
+  aminadav1820: lazy(() => import("~/components/maps/aminadav-1820")),
   bugrashov: lazy(() => import("~/components/maps/bugrashov")),
   chiattone: lazy(() => import("~/components/maps/chiattone")),
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
   donini: lazy(() => import("~/components/maps/donini")),
+  ehad: lazy(() => import("~/components/maps/ehad")),
+  gazit: lazy(() => import("~/components/maps/gazit")),
   hdante: lazy(() => import("~/components/maps/hotel-dante")),
+  herzel: lazy(() => import("~/components/maps/herzel")),
   ironbank: lazy(() => import("~/components/maps/ironbank")),
+  kg: lazy(() => import("~/components/maps/kaveri-gold")),
+  matalon: lazy(() => import("~/components/maps/matalon")),
   menloa: lazy(() => import("~/components/maps/menlo-a")),
   menlob: lazy(() => import("~/components/maps/menlo-b")),
   muse: lazy(() => import("~/components/maps/muse")),
+  ruth: lazy(() => import("~/components/maps/ruth")),
   smoritz: lazy(() => import("~/components/maps/smoritz")),
   wallstreet: lazy(() => import("~/components/maps/spire")),
   washingtonblvd: lazy(() => import("~/components/maps/8888")),
+  wblvd: lazy(() => import("~/components/maps/wblvd")),
+  wolfson: lazy(() => import("~/components/maps/wolfson")),
 };
 
 export async function loader({ params, request }: Route.LoaderArgs) {
