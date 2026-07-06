@@ -42,6 +42,7 @@ const components = {
   muse: lazy(() => import("~/components/maps/muse")),
   ruth: lazy(() => import("~/components/maps/ruth")),
   smoritz: lazy(() => import("~/components/maps/smoritz")),
+  trumpeldor: lazy(() => import("~/components/maps/trumpeldor")),
   wallstreet: lazy(() => import("~/components/maps/spire")),
   washingtonblvd: lazy(() => import("~/components/maps/8888")),
   wblvd: lazy(() => import("~/components/maps/wblvd")),
