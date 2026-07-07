@@ -12,7 +12,7 @@ import { Garage } from "~/components/garage";
 import { IoTooltip } from "~/components/io-tooltip";
 import { Motion } from "~/components/motion";
 import { Silomat } from "~/components/silomat";
-import { deviceT } from "~/lib/trans";
+import { deviceT, logT } from "~/lib/trans";
 import { cn } from "~/lib/utils";
 import { m } from "@paraglide/messages.js";
 
@@ -137,7 +137,10 @@ export function Device({ device, advanced = false }) {
                   <AlertCircleIcon />
                   <AlertTitle>{alarm.date}</AlertTitle>
                   <AlertDescription>
-                    {`AL${alarm.id} ${m["alarm." + alarm.key]({ ...alarm.query })}`}
+                    {/* {`AL${alarm.id} ${m["alarm." + alarm.key]({ ...alarm.query })}`} */}
+                    {`AL${alarm.id}`}{" "}
+                    {alarm.key &&
+                      `${m["alarm." + alarm.key]({ ...alarm.query })}`}
                   </AlertDescription>
                 </Alert>
               ))}
