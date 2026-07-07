@@ -1,0 +1,454 @@
+import { Level } from "~/components/map-level";
+
+export default function Map({ data, view }) {
+  const levels = [...data.levels].reverse(); // Creates a copy and reverses it
+  return (
+    <div className="overflow-auto flex flex-wrap gap-3">
+      {levels.map((level) => (
+        <Level
+          definitions={data?.definitions}
+          level={level}
+          view={view}
+          key={level.nr}
+        />
+      ))}
+      <style jsx="true">{`
+        .level {
+          height: 98px;
+          width: 867px;
+        }
+        #el-1 {
+          top: 64px;
+          left: 658px;
+        }
+        #el-2 {
+          top: 64px;
+          left: 43px;
+        }
+        /* P1 */
+        #s-1 {
+          top: 2px;
+          left: 2px;
+        }
+        #s-4 {
+          top: 2px;
+          left: 84px;
+        }
+        #s-103 {
+          top: 64px;
+          left: 84px;
+        }
+        #s-7 {
+          top: 2px;
+          left: 125px;
+        }
+        #s-100 {
+          top: 64px;
+          left: 125px;
+        }
+        #s-10 {
+          top: 2px;
+          left: 166px;
+        }
+        #s-97 {
+          top: 64px;
+          left: 166px;
+        }
+        #s-13 {
+          top: 2px;
+          left: 207px;
+        }
+        #s-94 {
+          top: 64px;
+          left: 207px;
+        }
+        #s-16 {
+          top: 2px;
+          left: 248px;
+        }
+        #s-91 {
+          top: 64px;
+          left: 248px;
+        }
+        #s-19 {
+          top: 2px;
+          left: 289px;
+        }
+        #s-88 {
+          top: 64px;
+          left: 289px;
+        }
+        #s-22 {
+          top: 2px;
+          left: 330px;
+        }
+        #s-85 {
+          top: 64px;
+          left: 330px;
+        }
+        #s-25 {
+          top: 2px;
+          left: 371px;
+        }
+        #s-82 {
+          top: 64px;
+          left: 371px;
+        }
+        #s-28 {
+          top: 2px;
+          left: 412px;
+        }
+        #s-79 {
+          top: 64px;
+          left: 412px;
+        }
+        #s-31 {
+          top: 2px;
+          left: 453px;
+        }
+        #s-76 {
+          top: 64px;
+          left: 453px;
+        }
+        #s-34 {
+          top: 2px;
+          left: 494px;
+        }
+        #s-73 {
+          top: 64px;
+          left: 494px;
+        }
+        #s-37 {
+          top: 2px;
+          left: 535px;
+        }
+        #s-70 {
+          top: 64px;
+          left: 535px;
+        }
+        #s-40 {
+          top: 2px;
+          left: 576px;
+        }
+        #s-43 {
+          top: 2px;
+          left: 617px;
+        }
+        #s-46 {
+          top: 2px;
+          left: 658px;
+        }
+        #s-49 {
+          top: 2px;
+          left: 699px;
+        }
+        #s-67 {
+          top: 64px;
+          left: 699px;
+        }
+        #s-52 {
+          top: 2px;
+          left: 740px;
+        }
+        #s-64 {
+          top: 64px;
+          left: 740px;
+        }
+        #s-55 {
+          top: 2px;
+          left: 781px;
+        }
+        #s-61 {
+          top: 64px;
+          left: 781px;
+        }
+        #s-58 {
+          top: 64px;
+          left: 822px;
+        }
+        /* P2 */
+        #s-2 {
+          top: 2px;
+          left: 2px;
+        }
+        #s-5 {
+          top: 2px;
+          left: 84px;
+        }
+        #s-104 {
+          top: 64px;
+          left: 84px;
+        }
+        #s-8 {
+          top: 2px;
+          left: 125px;
+        }
+        #s-101 {
+          top: 64px;
+          left: 125px;
+        }
+        #s-11 {
+          top: 2px;
+          left: 166px;
+        }
+        #s-98 {
+          top: 64px;
+          left: 166px;
+        }
+        #s-14 {
+          top: 2px;
+          left: 207px;
+        }
+        #s-95 {
+          top: 64px;
+          left: 207px;
+        }
+        #s-17 {
+          top: 2px;
+          left: 248px;
+        }
+        #s-92 {
+          top: 64px;
+          left: 248px;
+        }
+        #s-20 {
+          top: 2px;
+          left: 289px;
+        }
+        #s-89 {
+          top: 64px;
+          left: 289px;
+        }
+        #s-23 {
+          top: 2px;
+          left: 330px;
+        }
+        #s-86 {
+          top: 64px;
+          left: 330px;
+        }
+        #s-26 {
+          top: 2px;
+          left: 371px;
+        }
+        #s-83 {
+          top: 64px;
+          left: 371px;
+        }
+        #s-29 {
+          top: 2px;
+          left: 412px;
+        }
+        #s-80 {
+          top: 64px;
+          left: 412px;
+        }
+        #s-32 {
+          top: 2px;
+          left: 453px;
+        }
+        #s-77 {
+          top: 64px;
+          left: 453px;
+        }
+        #s-35 {
+          top: 2px;
+          left: 494px;
+        }
+        #s-74 {
+          top: 64px;
+          left: 494px;
+        }
+        #s-38 {
+          top: 2px;
+          left: 535px;
+        }
+        #s-71 {
+          top: 64px;
+          left: 535px;
+        }
+        #s-41 {
+          top: 2px;
+          left: 576px;
+        }
+        #s-44 {
+          top: 2px;
+          left: 617px;
+        }
+        #s-47 {
+          top: 2px;
+          left: 658px;
+        }
+        #s-50 {
+          top: 2px;
+          left: 699px;
+        }
+        #s-68 {
+          top: 64px;
+          left: 699px;
+        }
+        #s-53 {
+          top: 2px;
+          left: 740px;
+        }
+        #s-65 {
+          top: 64px;
+          left: 740px;
+        }
+        #s-56 {
+          top: 2px;
+          left: 781px;
+        }
+        #s-62 {
+          top: 64px;
+          left: 781px;
+        }
+        #s-59 {
+          top: 64px;
+          left: 822px;
+        }
+        /* P3 */
+        #s-3 {
+          top: 2px;
+          left: 2px;
+        }
+        #s-6 {
+          top: 2px;
+          left: 84px;
+        }
+        #s-105 {
+          top: 64px;
+          left: 84px;
+        }
+        #s-9 {
+          top: 2px;
+          left: 125px;
+        }
+        #s-102 {
+          top: 64px;
+          left: 125px;
+        }
+        #s-12 {
+          top: 2px;
+          left: 166px;
+        }
+        #s-99 {
+          top: 64px;
+          left: 166px;
+        }
+        #s-15 {
+          top: 2px;
+          left: 207px;
+        }
+        #s-96 {
+          top: 64px;
+          left: 207px;
+        }
+        #s-18 {
+          top: 2px;
+          left: 248px;
+        }
+        #s-93 {
+          top: 64px;
+          left: 248px;
+        }
+        #s-21 {
+          top: 2px;
+          left: 289px;
+        }
+        #s-90 {
+          top: 64px;
+          left: 289px;
+        }
+        #s-24 {
+          top: 2px;
+          left: 330px;
+        }
+        #s-87 {
+          top: 64px;
+          left: 330px;
+        }
+        #s-27 {
+          top: 2px;
+          left: 371px;
+        }
+        #s-84 {
+          top: 64px;
+          left: 371px;
+        }
+        #s-30 {
+          top: 2px;
+          left: 412px;
+        }
+        #s-81 {
+          top: 64px;
+          left: 412px;
+        }
+        #s-33 {
+          top: 2px;
+          left: 453px;
+        }
+        #s-78 {
+          top: 64px;
+          left: 453px;
+        }
+        #s-36 {
+          top: 2px;
+          left: 494px;
+        }
+        #s-75 {
+          top: 64px;
+          left: 494px;
+        }
+        #s-39 {
+          top: 2px;
+          left: 535px;
+        }
+        #s-72 {
+          top: 64px;
+          left: 535px;
+        }
+        #s-42 {
+          top: 2px;
+          left: 576px;
+        }
+        #s-45 {
+          top: 2px;
+          left: 617px;
+        }
+        #s-48 {
+          top: 2px;
+          left: 658px;
+        }
+        #s-51 {
+          top: 2px;
+          left: 699px;
+        }
+        #s-69 {
+          top: 64px;
+          left: 699px;
+        }
+        #s-54 {
+          top: 2px;
+          left: 740px;
+        }
+        #s-66 {
+          top: 64px;
+          left: 740px;
+        }
+        #s-57 {
+          top: 2px;
+          left: 781px;
+        }
+        #s-63 {
+          top: 64px;
+          left: 781px;
+        }
+        #s-60 {
+          top: 64px;
+          left: 822px;
+        }
+      `}</style>
+    </div>
+  );
+}
