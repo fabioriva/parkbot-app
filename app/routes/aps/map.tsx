@@ -48,6 +48,7 @@ const components = {
   matalon: lazy(() => import("~/components/maps/matalon")),
   menloa: lazy(() => import("~/components/maps/menlo-a")),
   menlob: lazy(() => import("~/components/maps/menlo-b")),
+  mesacon: lazy(() => import("~/components/maps/mesacon")),
   muse: lazy(() => import("~/components/maps/muse")),
   nhidcl: lazy(() => import("~/components/maps/nhidcl")),
   parshvnath: lazy(() => import("~/components/maps/parshvnath")),
