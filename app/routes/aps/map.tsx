@@ -29,6 +29,7 @@ const components = {
   aminadav16: lazy(() => import("~/components/maps/aminadav-16")),
   aminadav1820: lazy(() => import("~/components/maps/aminadav-1820")),
   amore: lazy(() => import("~/components/maps/amore-edge")),
+  // avigail: lazy(() => import("~/components/maps/avigail")),
   boi: lazy(() => import("~/components/maps/boi")),
   bugrashov: lazy(() => import("~/components/maps/bugrashov")),
   chandan: lazy(() => import("~/components/maps/chandan")),
