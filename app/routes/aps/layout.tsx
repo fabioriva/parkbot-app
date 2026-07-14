@@ -131,7 +131,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             <LocaleToggle />
             <ModeToggle />
           </header>
-          <div className="px-3 pr-6 py-3">
+          <div className="px-3 py-3">
             <ConfirmDialogProvider>
               <Outlet context={user} />
             </ConfirmDialogProvider>
