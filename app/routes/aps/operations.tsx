@@ -119,22 +119,24 @@ export default function Operations({
         >
           <Statistics operations={operations.data} stacked={stacked} />
         </CardWrapper>
-        <CardWrapper
-          title={m.operations_card_title_by_device()}
-          // description={m.operations_card_description({ dateFrom, dateTo })}
-          footer={
-            <div className="flex items-center justify-end gap-2 w-full">
-              <Label htmlFor="stacked">Stacked</Label>
-              <Switch
-                id="stacked"
-                checked={stacked}
-                onCheckedChange={setStacked}
-              />
-            </div>
-          }
-        >
-          <Statistics operations={devices.data} stacked={stacked} />
-        </CardWrapper>
+        {devices.data.length > 1 && (
+          <CardWrapper
+            title={m.operations_card_title_by_device()}
+            // description={m.operations_card_description({ dateFrom, dateTo })}
+            footer={
+              <div className="flex items-center justify-end gap-2 w-full">
+                <Label htmlFor="stacked">Stacked</Label>
+                <Switch
+                  id="stacked"
+                  checked={stacked}
+                  onCheckedChange={setStacked}
+                />
+              </div>
+            }
+          >
+            <Statistics operations={devices.data} stacked={stacked} />
+          </CardWrapper>
+        )}
       </div>
     </>
   );
