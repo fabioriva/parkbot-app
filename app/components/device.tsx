@@ -153,9 +153,10 @@ export function Device({ device, advanced = false }) {
     return (
       <CardWrapper className={bg} title={device.name} action={action}>
         <p
-          className={
-            device.operation !== 0 ? "text-normal" : "text-muted-foreground"
-          }
+          className={cn(
+            "font-bold",
+            device.operation !== 0 ? "text-normal" : "text-muted-foreground",
+          )}
         >
           {deviceT(device)}
         </p>
