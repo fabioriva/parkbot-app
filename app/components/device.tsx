@@ -99,7 +99,7 @@ export function Device({ device, advanced = false }) {
             >
               <p
                 className={cn(
-                  "mb-0",
+                  "mb-1.5",
                   device.operation !== 0
                     ? "text-normal"
                     : "text-muted-foreground",
