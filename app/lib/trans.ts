@@ -27,7 +27,7 @@ export function deviceT(device) {
   } else if (mode.id === 0) {
     return m["mode.mode-no"]();
   } else if (mode.id === 6) {
-    return m.device_off();
+    return pp(stall);
   } else if (mode.id === 8 && operation === 1) {
     return ce(card, stall);
   } else if (mode.id === 8 && operation === 2) {
