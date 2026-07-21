@@ -215,7 +215,12 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
                   {item.device.id !== 0 && item.device.key}
                 </TableCell>
                 <TableCell>
-                  {item.mode.id} - {m[`mode.${item.mode.key}`]()}
+                  {/* {item.mode.id} - {m[`mode.${item.mode.key}`]()} */}
+                  {item.device.id !== 0 && (
+                    <span className="text-normal">
+                      {item.mode.id} - {m[`mode.${item.mode.key}`]()}
+                    </span>
+                  )}
                 </TableCell>
                 <TableCell>
                   <Operation item={item} />
