@@ -29,7 +29,6 @@ export default function Map({ data, view }) {
           top: 2px;
           left: 330px;
         }
-        // P1
         #s-1 {
           top: 2px;
           left: 2px;
@@ -118,7 +117,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P2
         #s-23 {
           top: 2px;
           left: 2px;
@@ -207,7 +205,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P3
         #s-45 {
           top: 2px;
           left: 2px;
@@ -296,7 +293,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P4
         #s-67 {
           top: 2px;
           left: 2px;
@@ -385,7 +381,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P5
         #s-89 {
           top: 2px;
           left: 2px;
@@ -474,7 +469,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P6
         #s-111 {
           top: 2px;
           left: 2px;
@@ -563,7 +557,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P7
         #s-133 {
           top: 2px;
           left: 2px;
@@ -652,7 +645,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P8
         #s-155 {
           top: 2px;
           left: 2px;
@@ -741,7 +733,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P9
         #s-177 {
           top: 2px;
           left: 2px;
@@ -830,7 +821,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P10
         #s-199 {
           top: 2px;
           left: 2px;
@@ -919,7 +909,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P11
         #s-221 {
           top: 2px;
           left: 2px;
@@ -1008,7 +997,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P12
         #s-243 {
           top: 2px;
           left: 2px;
@@ -1097,7 +1085,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 412px;
         }
-        // P13
         #s-265 {
           top: 2px;
           left: 2px;
