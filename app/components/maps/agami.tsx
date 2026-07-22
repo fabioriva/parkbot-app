@@ -47,7 +47,7 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 2px;
         }
-        // P1
+        {* P1 *}
         #s-1 {
           top: 2px;
           left: 2px;
@@ -56,7 +56,7 @@ export default function Map({ data, view }) {
           top: 2px;
           left: 43px;
         }
-        // P2 - P28
+        {* P2 - P28 *}
         ${jsx()}
       `}</style>
     </div>
