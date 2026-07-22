@@ -17,24 +17,7 @@ export default function Map({ data, view }) {
           height: 580px;
           width: 776px;
         }
-        // .el {
-        //   background-color: #c0c0c0;
-        //   font-size: 12px;
-        //   font-weight: bold;
-        //   height: 50px;
-        //   width: 35px;
-        //   text-align: center;
-        //   vertical-align: middle;
-        //   line-height: 50px;
-        // }
-        // .s {
-        //   font-size: 11px;
-        //   height: 50px !important;
-        //   width: 35px !important;
-        //   text-align: center;
-        //   vertical-align: middle;
-        //   line-height: 50px !important;
-        // }
+
         #sh-1L {
           top: 367px;
           left: 90px;
