@@ -37,7 +37,6 @@ export default function Map({ data, view }) {
           top: 64px;
           left: 740px;
         }
-        // P1
         #s-1 {
           top: 126px;
           left: 2px;
@@ -270,7 +269,6 @@ export default function Map({ data, view }) {
           top: 2px;
           left: 740px;
         }
-        // P2
         #s-59 {
           top: 126px;
           left: 2px;
@@ -503,7 +501,6 @@ export default function Map({ data, view }) {
           top: 2px;
           left: 740px;
         }
-        // P3
         #s-117 {
           top: 126px;
           left: 2px;
@@ -736,7 +733,6 @@ export default function Map({ data, view }) {
           top: 2px;
           left: 740px;
         }
-        // P4
         #s-175 {
           top: 126px;
           left: 2px;
@@ -969,7 +965,6 @@ export default function Map({ data, view }) {
           top: 2px;
           left: 740px;
         }
-        // P5
         #s-233 {
           top: 126px;
           left: 2px;
@@ -1202,7 +1197,6 @@ export default function Map({ data, view }) {
           top: 2px;
           left: 740px;
         }
-        // P6
         #s-291 {
           top: 126px;
           left: 2px;
@@ -1435,7 +1429,6 @@ export default function Map({ data, view }) {
           top: 2px;
           left: 740px;
         }
-        // P7
         #s-349 {
           top: 126px;
           left: 2px;
