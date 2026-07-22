@@ -178,45 +178,6 @@ export default function Map({ data, view }) {
           top: 33px;
           left: 2px;
         }
-
-        // #s-32 {
-        //   top: 162px;
-        //   left: 80px;
-        //   transform: rotate(-80deg);
-        // }
-        // #s-33 {
-        //   top: 204px;
-        //   left: 73px;
-        //   transform: rotate(-80deg);
-        // }
-
-        // #s-34 {
-        //   top: 88px;
-        //   left: 77px;
-        //   transform: rotate(75deg);
-        // }
-        // #s-35 {
-        //   top: 48px;
-        //   left: 66px;
-        //   transform: rotate(75deg);
-        // }
-        // #s-36 {
-        //   top: 8px;
-        //   left: 55px;
-        //   transform: rotate(75deg);
-        // }
-
-        // #s-37 {
-        //   top: 108px;
-        //   left: 38px;
-        //   transform: rotate(45deg);
-        // }
-        // #s-38 {
-        //   top: 78px;
-        //   left: 9px;
-        //   transform: rotate(45deg);
-        // }
-
         /* P2 */
         #s-39 {
           top: 64px;
