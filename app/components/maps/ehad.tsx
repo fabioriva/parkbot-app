@@ -25,7 +25,6 @@ export default function Map({ data, view }) {
           top: 64px;
           left: 412px;
         }
-        // P1
         #s-22 {
           top: 95px;
           left: 2px;
@@ -114,7 +113,6 @@ export default function Map({ data, view }) {
           top: 95px;
           left: 371px;
         }
-        // P2
         #s-42 {
           top: 95px;
           left: 2px;
@@ -195,7 +193,6 @@ export default function Map({ data, view }) {
           top: 95px;
           left: 371px;
         }
-        // P3
         #s-62 {
           top: 33px;
           left: 2px;
@@ -276,7 +273,6 @@ export default function Map({ data, view }) {
           top: 95px;
           left: 371px;
         }
-        // P4
         #s-83 {
           top: 33px;
           left: 2px;
