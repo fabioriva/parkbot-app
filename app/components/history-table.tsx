@@ -66,8 +66,6 @@ function getPageNumbers(
 
 const Operation = ({ item }) => {
   const { alarm, device, operation } = item;
-  console.log(item.alarm);
-
   return (
     <>
       {alarm !== undefined ? (
