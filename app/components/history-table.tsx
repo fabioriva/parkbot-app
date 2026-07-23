@@ -66,6 +66,8 @@ function getPageNumbers(
 
 const Operation = ({ item }) => {
   const { alarm, device, operation } = item;
+  console.log(item.alarm);
+
   return (
     <>
       {alarm !== undefined ? (
@@ -81,7 +83,7 @@ const Operation = ({ item }) => {
           {operation.id === 1 && <BadgeAlert data-icon="inline-start" />}
           {operation.id === 2 && <BadgeCheck data-icon="inline-start" />}
           <span>AL{alarm.id}</span>
-          {m["alarm." + alarm.key]({ ...alarm.query })}
+          {alarm.key !== "" && m["alarm." + alarm.key]({ ...alarm.query })}
         </Badge>
       ) : (
         <Badge
