@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
-    "@react-router/node": "8.2.0",
-    "@react-router/serve": "8.2.0",
+    "@react-router/node": "8.3.0",
+    "@react-router/serve": "8.3.0",
     "@sendgrid/mail": "^8.1.6",
     "better-auth": "^1.6.25",
     "class-variance-authority": "^0.7.1",
@@ -29,7 +29,7 @@
     "react-dom": "^19.2.8",
     "react-infinite-scroll-component": "^7.2.1",
     "react-qr-code": "^2.2.0",
-    "react-router": "8.2.0",
+    "react-router": "8.3.0",
     "recharts": "^3.10.0",
     "remix-themes": "^2.0.4",
     "shadcn": "^3.8.3",
@@ -41,7 +41,7 @@
   "devDependencies": {
     "@inlang/cli": "^3.2.0",
     "@inlang/paraglide-js": "^2.22.0",
-    "@react-router/dev": "8.2.0",
+    "@react-router/dev": "8.3.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22",
     "@types/react": "^19.2.17",
