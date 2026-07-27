@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { AlertCircleIcon } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Accordion, AccordionItem } from "~/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Badge } from "~/components/ui/badge";
@@ -72,10 +73,12 @@ export function Device({ device, advanced = false }) {
     </div>
   );
   const bg = device.operation !== 0 ? "bg-blue-50 dark:bg-blue-950" : undefined;
+  const [tab, setTab] = useState("tab-0");
+  useEffect(() => setTab(`tab-${device.motor}`), [device.motor]);
 
   if (advanced) {
     return (
-      <Tabs defaultValue="tab-0">
+      <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
           {device?.views.map((item, key) => (
             <TabsTrigger value={`tab-${key}`} key={key}>
