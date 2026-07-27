@@ -25,7 +25,7 @@ export function Motion({ motor }) {
         </Badge>
       </AccordionTrigger>
       <AccordionContent className="space-y-3">
-        <div className="flex flex-col gap-1.5 ">
+        <div className="flex flex-col gap-1.5">
           {motor.encoders !== undefined &&
             motor.encoders.map((encoder, key) => (
               <Position encoder={encoder} key={key} />
