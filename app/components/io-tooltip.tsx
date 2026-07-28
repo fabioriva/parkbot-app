@@ -3,6 +3,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { safeMessageT } from "~/lib/trans";
 
 function get(label) {
   switch (label) {
@@ -53,14 +54,12 @@ function get(label) {
           return { key: label, query: {} };
         }
       } else {
-        return { key: "label", query: {} };
+        return { key: "", query: {} };
       }
   }
 }
 
 export function IoTooltip({ io, children }) {
-  // const { t } = useTranslation();
-  const t = (t) => t;
   const { key, query } = get(io?.label);
   return (
     <Tooltip>
@@ -96,7 +95,7 @@ export function IoTooltip({ io, children }) {
           </tbody>
           <tfoot>
             <tr>
-              <td>{io?.label ? key && t("io." + key, query) : ""}</td>
+              <td>{io?.label ? safeMessageT("io", key, query) : ""}</td>
             </tr>
           </tfoot>
         </table>

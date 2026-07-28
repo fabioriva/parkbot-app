@@ -81,3 +81,14 @@ export function logT(log) {
     return null;
   }
 }
+
+export function safeMessageT(prefix, key, params = {}) {
+  const fn = m[`${prefix}.${key}`] || m[`${prefix}_${key}`];
+
+  if (typeof fn !== "function") {
+    // Chiave non presente → ritorna fallback
+    return `Missing translation: ${prefix}.${key}`;
+  }
+
+  return fn(params);
+}
