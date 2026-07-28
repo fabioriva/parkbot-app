@@ -1,7 +1,6 @@
 import { m } from "@paraglide/messages.js";
 
 export function deviceT(device) {
-  const t = (t) => t;
   const { card, mode, operation, stall } = device;
   const ce = (card, stall) => {
     if (card === 0 && stall === 0) return m.device_ce0();
