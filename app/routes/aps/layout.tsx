@@ -121,7 +121,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
               <React.Fragment>
                 <AlarmInfo active={diag || 0} />
                 <ParkInfo occupancy={map} user={user} />
-                <CommInfo status={comm} />
+                <CommInfo status={comm} user={user} />
               </React.Fragment>
             )}
             <Separator
