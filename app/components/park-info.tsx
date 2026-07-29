@@ -5,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { safeMessageT } from "~/lib/trans";
 import { m } from "@paraglide/messages.js";
 
 interface OccupancyItem {
@@ -41,7 +42,7 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
           <tbody>
             {occupancy.map((item, key) => (
               <tr className="capitalize" key={key}>
-                <td>{m[`occupancy.${item.id}`]()}</td>
+                <td>{safeMessageT("occupancy", item.id)}</td>
                 <td className="w-16 text-right">{item.value}</td>
               </tr>
             ))}

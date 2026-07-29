@@ -558,7 +558,6 @@
   "password_reset_success_title": "Password reimpostata con successo",
   "password_reset_success_description": "La tua password è stata reimpostata con successo. Ora puoi <a href='/signin'>accedere</a>.",
   "password_reset_success_button": "Vai alla pagina di accesso",
-  "sidebar_main": "Menu Principale",
   "sidebar_main.admin": "Amministratore",
   "sidebar_main.dashboard": "Dashboard",
   "sidebar_main.devices": "Dispositivi",

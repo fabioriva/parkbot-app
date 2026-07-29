@@ -29,7 +29,7 @@ import { auth } from "~/lib/auth.server";
 import { getCookie } from "~/lib/cookie.server";
 import { roles } from "~/lib/roles";
 import { useInfo } from "~/hooks/use-ws";
-import { m } from "@paraglide/messages.js";
+import { safeMessageT } from "~/lib/trans";
 
 export function headers({ loaderHeaders }: Route.HeadersArgs) {
   return loaderHeaders;
@@ -110,7 +110,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
                 <BreadcrumbSeparator className="hidden lg:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage className="capitalize w-16 lg:w-full truncate">
-                    {m[`sidebar_main.${route}`]()}
+                    {safeMessageT("sidebar_main", route)}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>

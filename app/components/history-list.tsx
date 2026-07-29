@@ -10,7 +10,7 @@ import {
   ItemTitle,
 } from "~/components/ui/item";
 import { OperationsAvatar } from "~/components/operation-avatar";
-import { logT } from "~/lib/trans";
+import { logT, safeMessageT } from "~/lib/trans";
 import { m } from "@paraglide/messages.js";
 
 export function HistoryList({ query, media = false }: any) {
@@ -50,12 +50,11 @@ export function HistoryList({ query, media = false }: any) {
             <ItemContent className="gap-0.5">
               <ItemTitle className="line-clamp-1">
                 {item.device.id === 0 && !item.user ? m.operator() : item.user}
-                {/* {item.device.id === 0 &&  m.operator()} */}
                 {item.device.id !== 0 && item.device.key}
                 {item.device.id !== 0 && (
                   <span className="text-normal">
                     {" "}
-                    {m[`mode.${item.mode.key}`]()}
+                    {safeMessageT("mode", item.mode.key)}
                   </span>
                 )}
               </ItemTitle>

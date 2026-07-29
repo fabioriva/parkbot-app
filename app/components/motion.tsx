@@ -3,7 +3,7 @@ import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
 import { IoTooltip } from "~/components/io-tooltip";
 import { Position } from "~/components/position";
-import { m } from "@paraglide/messages.js";
+import { safeMessageT } from "~/lib/trans";
 
 export function Motion({ motor }) {
   const id = motor.name.query?.id !== 0 ? motor.name.query?.id : "";
@@ -11,7 +11,9 @@ export function Motion({ motor }) {
   return (
     <>
       <AccordionTrigger className="hover:no-underline py-1.5 flex items-center gap-1.5">
-        <div className="grow">{m[`device.${motor.name.key}`]({ id })}</div>
+        <div className="grow">
+          {safeMessageT("device", motor.name.key, { id })}
+        </div>
         <Badge
           className={
             isRunning
@@ -21,7 +23,7 @@ export function Motion({ motor }) {
           variant="ghost"
         >
           {isRunning !== 0 && <Loader className="animate-spin" />}
-          {m[`device.${motor.message}`]()}
+          {safeMessageT("device", motor.message)}
         </Badge>
       </AccordionTrigger>
       <AccordionContent className="space-y-3">

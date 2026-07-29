@@ -13,9 +13,8 @@ import { Garage } from "~/components/garage";
 import { IoTooltip } from "~/components/io-tooltip";
 import { Motion } from "~/components/motion";
 import { Silomat } from "~/components/silomat";
-import { deviceT, logT } from "~/lib/trans";
+import { deviceT, logT, safeMessageT } from "~/lib/trans";
 import { cn } from "~/lib/utils";
-import { m } from "@paraglide/messages.js";
 
 const Lamp = ({ bit, color }) => (
   <IoTooltip io={bit}>
@@ -38,7 +37,7 @@ const Mode = ({ mode }) => (
         : "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
     }
   >
-    {m[`mode.${mode.key}`]()}
+    {safeMessageT("mode", mode.key)}
   </Badge>
 );
 
@@ -82,11 +81,11 @@ export function Device({ device, advanced = false }) {
         <TabsList>
           {device?.views.map((item, key) => (
             <TabsTrigger value={`tab-${key}`} key={key}>
-              {m[`device.${item.name}`]()}
+              {safeMessageT("device", item.name)}
             </TabsTrigger>
           ))}
           <TabsTrigger value="diagnostic" disabled={device.alarms.length === 0}>
-            {m["device.view-diag"]()}{" "}
+            {safeMessageT("device", "view-diag")}{" "}
             {device.alarms.length > 0 && (
               <Badge variant="destructive">{device.alarms.length}</Badge>
             )}
@@ -140,10 +139,8 @@ export function Device({ device, advanced = false }) {
                   <AlertCircleIcon />
                   <AlertTitle>{alarm.date}</AlertTitle>
                   <AlertDescription>
-                    {/* {`AL${alarm.id} ${m["alarm." + alarm.key]({ ...alarm.query })}`} */}
                     {`AL${alarm.id}`}{" "}
-                    {alarm.key &&
-                      `${m["alarm." + alarm.key]({ ...alarm.query })}`}
+                    {safeMessageT("alarm", alarm.key, { ...alarm.query })}
                   </AlertDescription>
                 </Alert>
               ))}

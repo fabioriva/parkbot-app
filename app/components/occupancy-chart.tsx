@@ -9,20 +9,20 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "~/components/ui/chart";
-import { m } from "@paraglide/messages.js";
+import { safeMessageT } from "~/lib/trans";
 
 export function Occupancy({ occupancy }) {
   const chartConfig = {
     busy: {
-      label: m["occupancy.busy"](),
+      label: safeMessageT("occupancy", "busy"),
       color: "var(--chart-5)",
     },
     free: {
-      label: m["occupancy.free"](),
+      label: safeMessageT("occupancy", "free"),
       color: "var(--chart-2)",
     },
     lock: {
-      label: m["occupancy.lock"](),
+      label: safeMessageT("occupancy", "lock"),
       color: "var(--chart-4)",
     },
   } satisfies ChartConfig;

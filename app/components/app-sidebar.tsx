@@ -12,7 +12,7 @@ import {
 import { UserAvatar } from "~/components/user-avatar";
 import { UserMenu } from "~/components/user-menu";
 import { roles } from "~/lib/roles";
-import { m } from "@paraglide/messages.js";
+import { safeMessageT } from "~/lib/trans";
 
 import type { Aps } from "~/lib/aps.server";
 import type { User } from "~/lib/user.server";
@@ -24,39 +24,38 @@ interface SidebarProps {
 }
 export function AppSidebar({ aps, pathname, user }: SidebarProps) {
   const navMain = {
-    title: m.sidebar_main(),
     items: [
       {
         pathname: `/aps/${user.aps}/dashboard`,
-        title: m["sidebar_main.dashboard"](),
+        title: safeMessageT("sidebar_main", "dashboard"),
       },
       {
         pathname: `/aps/${user.aps}/devices`,
-        title: m["sidebar_main.devices"](),
+        title: safeMessageT("sidebar_main", "devices"),
       },
       {
         pathname: `/aps/${user.aps}/history`,
-        title: m["sidebar_main.history"](),
+        title: safeMessageT("sidebar_main", "history"),
       },
       {
         pathname: `/aps/${user.aps}/map`,
-        title: m["sidebar_main.map"](),
+        title: safeMessageT("sidebar_main", "map"),
       },
       {
         pathname: `/aps/${user.aps}/nodes`,
-        title: m["sidebar_main.nodes"](),
+        title: safeMessageT("sidebar_main", "nodes"),
       },
       {
         pathname: `/aps/${user.aps}/operations`,
-        title: m["sidebar_main.operations"](),
+        title: safeMessageT("sidebar_main", "operations"),
       },
       {
         pathname: `/aps/${user.aps}/racks`,
-        title: m["sidebar_main.racks"](),
+        title: safeMessageT("sidebar_main", "racks"),
       },
       {
         pathname: `/aps/${user.aps}/tags`,
-        title: m["sidebar_main.tags"](),
+        title: safeMessageT("sidebar_main", "tags"),
       },
     ],
   };
@@ -83,7 +82,6 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          {/* <SidebarGroupLabel>{navMain.title}</SidebarGroupLabel> */}
           <SidebarGroupLabel>{aps}</SidebarGroupLabel>
           <SidebarMenu className="gap-0.5">
             {navMain.items.map((item) => (

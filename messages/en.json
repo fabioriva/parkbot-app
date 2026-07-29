@@ -562,7 +562,6 @@
   "password_reset_success_title": "Password reset successful",
   "password_reset_success_description": "Your password has been reset successfully. You can now <a href='/signin'>sign in</a>.",
   "password_reset_success_button": "Go to signin",
-  "sidebar_main": "Main Menu",
   "sidebar_main.admin": "Administrator",
   "sidebar_main.dashboard": "Dashboard",
   "sidebar_main.devices": "Devices",

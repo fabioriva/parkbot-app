@@ -39,6 +39,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { safeMessageT } from "~/lib/trans";
 import { m } from "@paraglide/messages.js";
 
 // utils/pagination.ts
@@ -81,7 +82,7 @@ const Operation = ({ item }) => {
           {operation.id === 1 && <BadgeAlert data-icon="inline-start" />}
           {operation.id === 2 && <BadgeCheck data-icon="inline-start" />}
           <span>AL{alarm.id}</span>
-          {alarm.key !== "" && m["alarm." + alarm.key]({ ...alarm.query })}
+          {safeMessageT("alarm", alarm.key, alarm.query)}
         </Badge>
       ) : (
         <Badge
@@ -94,7 +95,7 @@ const Operation = ({ item }) => {
           {device.id === 0 ? (
             <>
               <User data-icon="inline-start" />
-              {m[`history_table.${operation.key}`]()}
+              {safeMessageT("history_table", operation.key)}
             </>
           ) : (
             <>
@@ -104,7 +105,7 @@ const Operation = ({ item }) => {
               {operation.id === 6 && <ArrowLeft data-icon="inline-start" />}
               {operation.id === 7 && <ArrowRight data-icon="inline-start" />}
               {operation.id === 8 && <ArrowLeft data-icon="inline-start" />}
-              {m[`history_table.${operation.key}`]()}
+              {safeMessageT("history_table", operation.key)}
             </>
           )}
         </Badge>
@@ -215,11 +216,11 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
                   {item.device.id !== 0 && item.device.key}
                 </TableCell>
                 <TableCell>
-                  {/* {item.mode.id} - {m[`mode.${item.mode.key}`]()} */}
                   {item.device.id !== 0 && (
-                    <span className="text-normal">
-                      {item.mode.id} - {m[`mode.${item.mode.key}`]()}
-                    </span>
+                    <>
+                      <span className="font-mono">[{item.mode.id}]</span>{" "}
+                      {safeMessageT("mode", item.mode.key)}
+                    </>
                   )}
                 </TableCell>
                 <TableCell>
