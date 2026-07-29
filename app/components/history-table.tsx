@@ -212,13 +212,12 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
                   {item.device.id === 0 && !item.user
                     ? m.operator()
                     : item.user}
-                  {/* {item.device.id === 0 && m.operator()} */}
                   {item.device.id !== 0 && item.device.key}
                 </TableCell>
                 <TableCell>
                   {item.device.id !== 0 && (
                     <>
-                      <span className="font-mono">[{item.mode.id}]</span>{" "}
+                      [<span className="font-mono">{item.mode.id}</span>]{" "}
                       {safeMessageT("mode", item.mode.key)}
                     </>
                   )}
