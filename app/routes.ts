@@ -8,6 +8,7 @@ import {
 
 export default [
   index("routes/home.tsx"),
+  route("test", "routes/aps/test.tsx"),
   layout("routes/auth/layout.tsx", [
     // route("2fa-reset", "routes/auth/2fa-reset.tsx"),
     // route("2fa-setup", "routes/auth/2fa-setup.tsx"),
@@ -28,6 +29,7 @@ export default [
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
       route(":aps/devices", "routes/aps/devices.tsx"),
       route(":aps/history", "routes/aps/history.tsx"),
+      route(":aps/logs", "routes/aps/logs.tsx"),
       route(":aps/map", "routes/aps/map.tsx"),
       //     route(":aps/nodes", "routes/aps/nodes.tsx"),
       route(":aps/operations", "routes/aps/operations.tsx"),

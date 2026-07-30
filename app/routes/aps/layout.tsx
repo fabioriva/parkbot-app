@@ -51,13 +51,13 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   // Normalize RR8 data request path
   const pathname = url.pathname.replace(/\.data$/, "");
   const [, aps, route] = pathname.split("/").filter(Boolean);
-  if (
-    route !== "admin" &&
-    route !== "user" &&
-    !roles[session.user.role]?.some((role) => role === route)
-  ) {
-    throw data("Forbidden", { status: 403 });
-  }
+  // if (
+  //   route !== "admin" &&
+  //   route !== "user" &&
+  //   !roles[session.user.role]?.some((role) => role === route)
+  // ) {
+  //   throw data("Forbidden", { status: 403 });
+  // }
   if (process.env.TWO_FACTOR === "enabled" && !session.user.twoFactorEnabled) {
     return redirect("/2fa-setup");
   }
