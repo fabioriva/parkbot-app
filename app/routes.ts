@@ -8,7 +8,6 @@ import {
 
 export default [
   index("routes/home.tsx"),
-  route("test", "routes/aps/test.tsx"),
   layout("routes/auth/layout.tsx", [
     // route("2fa-reset", "routes/auth/2fa-reset.tsx"),
     // route("2fa-setup", "routes/auth/2fa-setup.tsx"),
