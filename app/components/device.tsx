@@ -94,7 +94,7 @@ export function Device({ device, advanced = false }) {
         {device.views.map((view, key) => (
           <TabsContent key={key} value={`tab-${key}`}>
             <CardWrapper
-              className={bg}
+              className={cn("max-w-sm", bg)}
               title={device.name}
               action={action}
               footer={actions}
