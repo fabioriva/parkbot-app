@@ -143,7 +143,7 @@ export default function Logs({ loaderData, params }) {
               {m.history_description({
                 from: dateFrom,
                 to: dateTo,
-                count,
+                count: total,
               })}
             </ItemDescription>
           </ItemContent>
