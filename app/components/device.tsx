@@ -1,7 +1,12 @@
 import clsx from "clsx";
 import { AlertCircleIcon } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Accordion, AccordionItem } from "~/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Badge } from "~/components/ui/badge";
 import { Spinner } from "~/components/ui/spinner";
@@ -94,7 +99,7 @@ export function Device({ device, advanced = false }) {
         {device.views.map((view, key) => (
           <TabsContent key={key} value={`tab-${key}`}>
             <CardWrapper
-              className={cn("max-w-sm", bg)}
+              className={cn("", bg)}
               title={device.name}
               action={action}
               footer={actions}
@@ -112,6 +117,31 @@ export function Device({ device, advanced = false }) {
               {view.name === "view-garage" && <Garage sensors={view.sensors} />}
               {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
               <Accordion type="multiple" collapsible="true">
+                {view.name === "view-garage" && (
+                  <AccordionItem value="garage-sensors">
+                    <AccordionTrigger className="hover:no-underline py-1.5 flex items-center gap-1.5">
+                      Garage sensors
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex gap-1 max-w-xs sm:max-w-none overflow-auto">
+                        {view.sensors.slice(6).map((item, key) => (
+                          <IoTooltip io={item} key={key}>
+                            <Badge
+                              className={
+                                item.status
+                                  ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                                  : "bg-slate-50 text-slate-700 dark:bg-slate-600 dark:text-slate-300"
+                              }
+                              key={key}
+                            >
+                              {item.label}
+                            </Badge>
+                          </IoTooltip>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                )}
                 {view.drives.map((drive, key) => (
                   <AccordionItem value={`drive-${key}`} key={key}>
                     <Drive drive={drive} />

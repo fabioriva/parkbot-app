@@ -1,9 +1,3 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
 import { IoTooltip } from "~/components/io-tooltip";
 import { Sensor } from "~/components/sensor-svg";
@@ -26,31 +20,6 @@ export function Garage({ sensors }) {
         <Sensor x="45" y="45" sensor={FDR} />
         <Sensor x="45" y="5" sensor={FDL} />
       </svg>
-      <Accordion collapsible="true">
-        <AccordionItem value="garage-sensors">
-          <AccordionTrigger className="hover:no-underline py-1.5 flex items-center gap-1.5">
-            Garage sensors
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="flex gap-1.5 overflow-auto">
-              {sensors.map((item, key) => (
-                <IoTooltip io={item} key={key}>
-                  <Badge
-                    className={
-                      item.status
-                        ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-                        : "bg-slate-50 text-slate-700 dark:bg-slate-600 dark:text-slate-300"
-                    }
-                    key={key}
-                  >
-                    {item.label}
-                  </Badge>
-                </IoTooltip>
-              ))}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
     </div>
   );
 }

@@ -34,7 +34,7 @@ export function Motion({ motor }) {
             ))}
         </div>
 
-        <div className="flex gap-1.5 overflow-auto">
+        <div className="flex gap-1 max-w-xs sm:max-w-none overflow-auto">
           {motor.io.map((item, key) => (
             <IoTooltip io={item} key={key}>
               <Badge
