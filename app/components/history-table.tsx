@@ -8,7 +8,7 @@ import {
   User,
   Wrench,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Field, FieldLabel } from "~/components/ui/field";
 import {
@@ -169,15 +169,22 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
   );
 };
 
-export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
+// export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
+export function HistoryTable({
+  currentPage,
+  pages,
+  paginate,
+  query,
+  rowsPerPage,
+}) {
   // pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPages] = useState(15);
-  const indexOfLastPost = currentPage * rowsPerPage;
-  const indexOfFirstPost = indexOfLastPost - rowsPerPage;
-  const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
-  const pages = Math.ceil(query.length / rowsPerPage);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsPerPage, setRowsPerPages] = useState(15);
+  // const indexOfLastPost = currentPage * rowsPerPage;
+  // const indexOfFirstPost = indexOfLastPost - rowsPerPage;
+  // const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
+  // const pages = Math.ceil(query.length / rowsPerPage);
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
       <div className="overflow-hidden rounded-lg border">
@@ -203,7 +210,8 @@ export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentRows.map((item, key) => (
+            {/* {currentRows.map((item, key) => ( */}
+            {query.map((item, key) => (
               <TableRow key={key}>
                 <TableCell>
                   {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
