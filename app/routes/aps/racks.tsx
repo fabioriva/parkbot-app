@@ -67,7 +67,12 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button size="sm" variant="outline" onClick={() => handleEdit(tag)}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleEdit(tag)}
+              asChild
+            >
               <a
                 className="flex items-center justify-center"
                 href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
