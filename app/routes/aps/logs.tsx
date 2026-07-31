@@ -73,7 +73,7 @@ export default function Logs({ loaderData, params }) {
     });
     if (res.ok) {
       const json = await res.json();
-      console.log(pageNumber, "Data json:", json);
+      // console.log(pageNumber, "Data json:", json);
       return json;
     }
   };
