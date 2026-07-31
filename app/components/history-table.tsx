@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 // import { useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
-import { Field, FieldLabel } from "~/components/ui/field";
+// import { Field, FieldLabel } from "~/components/ui/field";
 import {
   Pagination,
   PaginationContent,
@@ -20,15 +20,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectLabel,
+//   SelectTrigger,
+//   SelectValue,
+// } from "~/components/ui/select";
 import {
   Table,
   TableBody,
@@ -244,7 +244,7 @@ export function HistoryTable({
 
       <div className="flex items-center gap-6 py-6">
         <div className="grow text-muted-foreground" />
-        <Field orientation="horizontal" className="w-fit">
+        {/* <Field orientation="horizontal" className="w-fit">
           <FieldLabel htmlFor="select-rows-per-page">
             {m.history_pagination_rows_per_page()}
           </FieldLabel>
@@ -265,7 +265,7 @@ export function HistoryTable({
               </SelectGroup>
             </SelectContent>
           </Select>
-        </Field>
+        </Field> */}
         <p className="text-sm">
           {m.history_pagination_current_page({
             current: currentPage,
