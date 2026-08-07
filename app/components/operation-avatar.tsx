@@ -13,48 +13,48 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 export function OperationsAvatar({ device, operation }) {
   return (
     <Avatar size="smdefault">
-      {device.id !== 0 ? (
+      {device?.id !== 0 ? (
         <AvatarFallback>
-          {operation.id === 1 && (
+          {operation?.id === 1 && (
             <BadgeAlert
               data-icon="inline-start"
               className="size-5 text-red-500"
             />
           )}
-          {operation.id === 2 && (
+          {operation?.id === 2 && (
             <BadgeCheck
               data-icon="inline-start"
               className="size-5 text-green-500"
             />
           )}
-          {operation.id === 3 && (
+          {operation?.id === 3 && (
             <Wrench
               data-icon="inline-start"
               className="size-5 text-amber-500"
             />
           )}
-          {operation.id === 4 && (
+          {operation?.id === 4 && (
             <Tag data-icon="inline-start" className="size-5 text-blue-500" />
           )}
-          {operation.id === 5 && (
+          {operation?.id === 5 && (
             <ArrowRight
               data-icon="inline-start"
               className="size-5 text-muted-foreground"
             />
           )}
-          {operation.id === 6 && (
+          {operation?.id === 6 && (
             <ArrowLeft
               data-icon="inline-start"
               className="size-5 text-muted-foreground"
             />
           )}
-          {operation.id === 7 && (
+          {operation?.id === 7 && (
             <ArrowRight
               data-icon="inline-start"
               className="size-5 text-muted-foreground"
             />
           )}
-          {operation.id === 8 && (
+          {operation?.id === 8 && (
             <ArrowLeft
               data-icon="inline-start"
               className="size-5 text-muted-foreground"

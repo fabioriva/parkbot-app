@@ -73,14 +73,14 @@ const Operation = ({ item }) => {
         <Badge
           className={clsx({
             "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300":
-              operation.id === 1,
+              operation?.id === 1,
             "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300":
-              operation.id === 2,
+              operation?.id === 2,
           })}
           variant="outline"
         >
-          {operation.id === 1 && <BadgeAlert data-icon="inline-start" />}
-          {operation.id === 2 && <BadgeCheck data-icon="inline-start" />}
+          {operation?.id === 1 && <BadgeAlert data-icon="inline-start" />}
+          {operation?.id === 2 && <BadgeCheck data-icon="inline-start" />}
           <span>AL{alarm.id}</span>
           {safeMessageT("alarm", alarm.key, alarm.query)}
         </Badge>
@@ -88,7 +88,7 @@ const Operation = ({ item }) => {
         <Badge
           className={clsx("text-muted-foreground", {
             "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300":
-              operation.id === 3,
+              operation?.id === 3,
           })}
           variant="outline"
         >
@@ -99,13 +99,13 @@ const Operation = ({ item }) => {
             </>
           ) : (
             <>
-              {operation.id === 3 && <Wrench data-icon="inline-start" />}
-              {operation.id === 4 && <Tag data-icon="inline-start" />}
-              {operation.id === 5 && <ArrowRight data-icon="inline-start" />}
-              {operation.id === 6 && <ArrowLeft data-icon="inline-start" />}
-              {operation.id === 7 && <ArrowRight data-icon="inline-start" />}
-              {operation.id === 8 && <ArrowLeft data-icon="inline-start" />}
-              {safeMessageT("history_table", operation.key)}
+              {operation?.id === 3 && <Wrench data-icon="inline-start" />}
+              {operation?.id === 4 && <Tag data-icon="inline-start" />}
+              {operation?.id === 5 && <ArrowRight data-icon="inline-start" />}
+              {operation?.id === 6 && <ArrowLeft data-icon="inline-start" />}
+              {operation?.id === 7 && <ArrowRight data-icon="inline-start" />}
+              {operation?.id === 8 && <ArrowLeft data-icon="inline-start" />}
+              {safeMessageT("history_table", operation?.key)}
             </>
           )}
         </Badge>
