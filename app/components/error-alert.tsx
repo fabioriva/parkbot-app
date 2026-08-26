@@ -1,13 +1,13 @@
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon } from "lucide-react"
 
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 
 export function Error({
   description,
   title,
 }: {
-  description: string;
-  title: string;
+  description: string
+  title: string
 }) {
   return (
     <Alert variant="destructive" className="my-3">
@@ -17,5 +17,5 @@ export function Error({
         <div dangerouslySetInnerHTML={{ __html: description }} />
       </AlertDescription>
     </Alert>
-  );
+  )
 }

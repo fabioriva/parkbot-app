@@ -1,30 +1,31 @@
-import { Loader2Icon } from "lucide-react";
-import { Form, Link, redirect, useNavigate, useNavigation } from "react-router";
-import { Button } from "~/components/ui/button";
+import { Loader2Icon } from "lucide-react"
+import { Form, Link, redirect, useNavigate, useNavigation } from "react-router"
+import { Button, buttonVariants } from "~/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
-import { auth } from "~/lib/auth.server";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/card"
+import { auth } from "~/lib/auth.server"
+import { cn } from "~/lib/utils"
+import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/signout";
+import type { Route } from "./+types/signout"
 
 export async function action({ request }: Route.ActionArgs) {
   const data = await auth.api.signOut({
     asResponse: true,
     headers: await request.headers,
-  });
-  const headers = new Headers(data.headers);
-  return redirect("/", { headers });
+  })
+  const headers = new Headers(data.headers)
+  return redirect("/", { headers })
 }
 
 export default function Signout() {
-  const navigate = useNavigate();
-  const navigation = useNavigation();
+  const navigate = useNavigate()
+  const navigation = useNavigation()
   return (
     <Card>
       <CardHeader>
@@ -33,16 +34,15 @@ export default function Signout() {
       </CardHeader>
       <CardContent>
         <Form method="post" className="flex gap-3">
-          <Button className="flex-1" variant="secondary" asChild>
-            <Link
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(-1);
-              }}
-            >
-              {m.cancel()}
-            </Link>
-          </Button>
+          <Link
+            className={cn(buttonVariants({ variant: "secondary" }), "flex-1")}
+            onClick={(e) => {
+              e.preventDefault()
+              navigate(-1)
+            }}
+          >
+            {m.cancel()}
+          </Link>
           {navigation.formAction === "/signout" ? (
             <Button className="flex-1" disabled>
               <Loader2Icon className="animate-spin" />
@@ -56,5 +56,5 @@ export default function Signout() {
         </Form>
       </CardContent>
     </Card>
-  );
+  )
 }

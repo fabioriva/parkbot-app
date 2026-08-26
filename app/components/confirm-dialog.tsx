@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,27 +11,27 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   // AlertDialogTrigger,
-} from "~/components/ui/alert-dialog";
+} from "~/components/ui/alert-dialog"
 
-const ConfirmDialogContext = createContext();
+const ConfirmDialogContext = createContext()
 
 export const useConfirmDialog = () => {
-  const context = useContext(ConfirmDialogContext);
+  const context = useContext(ConfirmDialogContext)
   if (!context) {
     throw new Error(
-      "useConfirmDialog must be used within ConfirmDialogProvider",
-    );
+      "useConfirmDialog must be used within ConfirmDialogProvider"
+    )
   }
-  return context;
-};
+  return context
+}
 
 export function ConfirmDialogProvider({ children }) {
-  const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState({});
+  const [open, setOpen] = useState(false)
+  const [options, setOptions] = useState({})
   const showConfirmDialog = (opts) => {
-    setOptions(opts);
-    setOpen(true);
-  };
+    setOptions(opts)
+    setOpen(true)
+  }
   return (
     <ConfirmDialogContext.Provider value={{ showConfirmDialog }}>
       {children}
@@ -49,8 +49,8 @@ export function ConfirmDialogProvider({ children }) {
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                setOpen(false);
-                options?.onConfirm?.();
+                setOpen(false)
+                options?.onConfirm?.()
               }}
             >
               Confirm
@@ -59,5 +59,5 @@ export function ConfirmDialogProvider({ children }) {
         </AlertDialogContent>
       </AlertDialog>
     </ConfirmDialogContext.Provider>
-  );
+  )
 }

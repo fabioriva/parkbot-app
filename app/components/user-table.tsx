@@ -1,12 +1,12 @@
-import { MoreHorizontalIcon } from "lucide-react";
-import { Button } from "~/components/ui/button";
+import { MoreHorizontalIcon } from "lucide-react"
+import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+} from "~/components/ui/dropdown-menu"
 import {
   Table,
   TableBody,
@@ -14,15 +14,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table";
+} from "~/components/ui/table"
 
 export function UserTable({ fetcher, users }) {
   const handleDelete = async (user) => {
-    fetcher.submit({ action: "delete", ...user }, { method: "post" });
-  };
+    fetcher.submit({ action: "delete", ...user }, { method: "post" })
+  }
   const handleUpdate = async (user) => {
-    fetcher.submit({ action: "update", ...user }, { method: "post" });
-  };
+    fetcher.submit({ action: "update", ...user }, { method: "post" })
+  }
   return (
     <>
       {users.length > 0 ? (
@@ -65,12 +65,18 @@ export function UserTable({ fetcher, users }) {
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="size-6">
-                          <MoreHorizontalIcon />
-                          <span className="sr-only">Open menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
+                      <DropdownMenuTrigger
+                        render={
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-6"
+                          >
+                            <MoreHorizontalIcon />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        }
+                      />
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
                           onClick={() => handleUpdate(use)}
@@ -98,5 +104,5 @@ export function UserTable({ fetcher, users }) {
         </div>
       )}
     </>
-  );
+  )
 }

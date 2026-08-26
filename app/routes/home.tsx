@@ -1,25 +1,25 @@
-import { Welcome } from "../welcome/welcome";
+import { Welcome } from "../welcome/welcome"
 
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/home"
 
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Parkbot App" },
     { name: "Parkbot", content: "Parkbot Web Service" },
-  ];
+  ]
 }
 
 function generateRandomString(length) {
   const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  const charactersLength = characters.length;
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  let result = ""
+  const charactersLength = characters.length
   for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
-  return result;
+  return result
 }
 
 export default function Home({}: Route.ComponentProps) {
-  return <Welcome seed={generateRandomString(8)} />;
+  return <Welcome seed={generateRandomString(8)} />
 }

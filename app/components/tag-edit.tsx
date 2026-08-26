@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { z } from "zod";
-import { Button } from "~/components/ui/button";
+import { useState, useEffect } from "react"
+import { z } from "zod"
+import { Button } from "~/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -10,39 +10,39 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
+} from "~/components/ui/dialog"
 import {
   Field,
   FieldError,
   FieldDescription,
   FieldLabel,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { m } from "@paraglide/messages.js"
 
 export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
-  const [error, setError] = useState(false);
-  const [value, setValue] = useState("");
+  const [error, setError] = useState(false)
+  const [value, setValue] = useState("")
   useEffect(() => {
-    setValue(tag?.code);
-  }, [tag]);
+    setValue(tag?.code)
+  }, [tag])
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const schema = z.coerce
       .string()
       .length(3)
-      .regex(/^[a-fA-F0-9]{3}$/);
-    const result = schema.safeParse(e.target.value);
+      .regex(/^[a-fA-F0-9]{3}$/)
+    const result = schema.safeParse(e.target.value)
     if (!result.success) {
-      setError(true);
+      setError(true)
     } else {
-      setError(false);
+      setError(false)
     }
-    setValue(e.target.value);
-  };
+    setValue(e.target.value)
+  }
   const handleConfirm = () => {
-    setError(false);
-    onConfirm(value);
-  };
+    setError(false)
+    onConfirm(value)
+  }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -74,7 +74,7 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
             <Button
               variant="outline"
               onClick={() => {
-                setError(false);
+                setError(false)
               }}
             >
               {m.cancel()}
@@ -88,5 +88,5 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

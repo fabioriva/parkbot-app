@@ -1,32 +1,32 @@
-import { IoTooltip } from "~/components/io-tooltip";
-import { NoDataAlert } from "~/components/no-data-alert";
-import { useData } from "~/hooks/use-ws";
-import { getToken } from "~/lib/cookie.server";
-import fetcher from "~/lib/fetch";
+import { IoTooltip } from "~/components/io-tooltip"
+import { NoDataAlert } from "~/components/no-data-alert"
+import { useData } from "~/hooks/use-ws"
+import { getToken } from "~/lib/cookie.server"
+import fetcher from "~/lib/fetch"
 
-import type { Route } from "./+types/rack";
+import type { Route } from "./+types/rack"
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getToken(request);
-  const url = `${process.env.BACKEND_URL}/${params?.aps}/racks/${params?.nr}`;
+  const token = getToken(request)
+  const url = `${process.env.BACKEND_URL}/${params?.aps}/racks/${params?.nr}`
   return await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  })
 }
 
 export default function Rack({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData) return <NoDataAlert />;
+  if (!loaderData) return <NoDataAlert />
 
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/racks/${params.nr}`;
-  const { data } = useData(url, { initialData: loaderData });
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/racks/${params.nr}`
+  const { data } = useData(url, { initialData: loaderData })
 
   return (
-    <div className="flex overflow-scroll gap-0.5 py-3">
+    <div className="flex gap-0.5 overflow-scroll py-3">
       {data.cards.map((card) => (
         <div
-          className="flex flex-col gap-0.5 bg-card border rounded-xs p-1 text-xs"
+          className="flex flex-col gap-0.5 rounded-xs border bg-card p-1 text-xs"
           key={card.nr}
         >
           <p className="text-[0.625rem]">{card.type}</p>
@@ -53,5 +53,5 @@ export default function Rack({ loaderData, params }: Route.ComponentProps) {
         </div>
       ))}
     </div>
-  );
+  )
 }

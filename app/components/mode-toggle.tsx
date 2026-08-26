@@ -1,12 +1,12 @@
-import { Moon, Sun } from "lucide-react";
-import { Theme, useTheme } from "remix-themes";
-import { Button } from "./ui/button";
+import { Moon, Sun } from "lucide-react"
+import { Theme, useTheme } from "remix-themes"
+import { Button } from "./ui/button"
 
 export function ModeToggle() {
-  const [theme, setTheme] = useTheme();
+  const [theme, setTheme] = useTheme()
 
   const toggleTheme = () =>
-    theme === "dark" ? setTheme(Theme.LIGHT) : setTheme(Theme.DARK);
+    theme === "dark" ? setTheme(Theme.LIGHT) : setTheme(Theme.DARK)
 
   return (
     <Button variant="ghost" size="icon" onClick={toggleTheme}>
@@ -14,5 +14,5 @@ export function ModeToggle() {
       <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
       <span className="sr-only">Toggle theme</span>
     </Button>
-  );
+  )
 }

@@ -1,6 +1,6 @@
-import * as React from "react";
-import { data, Outlet, redirect } from "react-router";
-import { Badge } from "~/components/ui/badge";
+import * as React from "react"
+import { data, Outlet, redirect } from "react-router"
+import { Badge } from "~/components/ui/badge"
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -9,59 +9,57 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb";
-import { Separator } from "~/components/ui/separator";
+} from "~/components/ui/breadcrumb"
+import { Separator } from "~/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "~/components/ui/sidebar";
-import { Toaster } from "~/components/ui/sonner";
-import { TooltipProvider } from "~/components/ui/tooltip";
-import { AlarmInfo } from "~/components/alarm-info";
-import { AppSidebar } from "~/components/app-sidebar";
-import { CommInfo } from "~/components/comm-info";
-import { ConfirmDialogProvider } from "~/components/confirm-dialog";
-import { LocaleToggle } from "~/components/locale-toggle";
-import { ParkInfo } from "~/components/park-info";
-import { ModeToggle } from "~/components/mode-toggle";
-import { auth } from "~/lib/auth.server";
-import { getCookie } from "~/lib/cookie.server";
-import { roles } from "~/lib/roles";
-import { useInfo } from "~/hooks/use-ws";
-import { safeMessageT } from "~/lib/trans";
+} from "~/components/ui/sidebar"
+import { Toaster } from "~/components/ui/toast"
+import { TooltipProvider } from "~/components/ui/tooltip"
+import { AlarmInfo } from "~/components/alarm-info"
+import { AppSidebar } from "~/components/app-sidebar"
+import { CommInfo } from "~/components/comm-info"
+import { ConfirmDialogProvider } from "~/components/confirm-dialog"
+import { LocaleToggle } from "~/components/locale-toggle"
+import { ParkInfo } from "~/components/park-info"
+import { ModeToggle } from "~/components/mode-toggle"
+import { auth } from "~/lib/auth.server"
+import { getCookie } from "~/lib/cookie.server"
+import { roles } from "~/lib/roles"
+import { useInfo } from "~/hooks/use-ws"
+import { safeMessageT } from "~/lib/trans"
 
 export function headers({ loaderHeaders }: Route.HeadersArgs) {
-  return loaderHeaders;
+  return loaderHeaders
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const session = await auth.api.getSession({
     headers: await request.headers,
-  });
+  })
   if (!session) {
-    return redirect("/signin");
+    return redirect("/signin")
   }
   if (session.user.aps !== params.aps) {
-    throw data("Forbidden", { status: 403 });
+    throw data(`Forbidden: route /aps/${params.aps}`, { status: 403 })
   }
-  // const pathname = new URL(request.url).pathname;
-  // const path = pathname.split("/")[3] || "";
-  const url = new URL(request.url);
+  const url = new URL(request.url)
   // Normalize RR8 data request path
-  const pathname = url.pathname.replace(/\.data$/, "");
-  const [, aps, route] = pathname.split("/").filter(Boolean);
-  // if (
-  //   route !== "admin" &&
-  //   route !== "user" &&
-  //   !roles[session.user.role]?.some((role) => role === route)
-  // ) {
-  //   throw data("Forbidden", { status: 403 });
-  // }
-  if (process.env.TWO_FACTOR === "enabled" && !session.user.twoFactorEnabled) {
-    return redirect("/2fa-setup");
+  const pathname = url.pathname.replace(/\.data$/, "")
+  const [, aps, route] = pathname.split("/").filter(Boolean)
+  if (
+    route !== "admin" &&
+    route !== "user" &&
+    !roles[session.user.role]?.some((role) => role === route)
+  ) {
+    throw data("Forbidden", { status: 403 })
   }
-  const sidebarState = getCookie(request, "sidebar_state");
+  if (process.env.TWO_FACTOR === "enabled" && !session.user.twoFactorEnabled) {
+    return redirect("/2fa-setup")
+  }
+  const sidebarState = getCookie(request, "sidebar_state")
   return data(
     {
       aps: session.aps,
@@ -74,15 +72,15 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       headers: {
         "Cache-Control": "max-age=3600", // Cache for 1 hour
       },
-    },
-  );
+    }
+  )
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
-  const { aps, pathname, route, sidebarState, user } = loaderData;
+  const { aps, pathname, route, sidebarState, user } = loaderData
   const {
     info: { comm, diag, map },
-  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`);
+  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`)
 
   return (
     <TooltipProvider>
@@ -96,57 +94,47 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
       >
         <AppSidebar aps={aps.name} pathname={pathname} user={user} />
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator
-              orientation="vertical"
-              className="data-[orientation=vertical]:h-4 mr-2"
-            />
-            <Breadcrumb className="grow">
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden lg:block">
-                  <BreadcrumbLink href="/aps-select">{aps.name}</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden lg:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="capitalize w-16 lg:w-full truncate">
-                    {safeMessageT("sidebar_main", route)}
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-            {!comm ? (
-              <Badge variant="destructive">Data not available!</Badge>
-            ) : (
-              <React.Fragment>
-                <AlarmInfo active={diag || 0} />
-                <ParkInfo occupancy={map} user={user} />
-                <CommInfo status={comm} user={user} />
-              </React.Fragment>
-            )}
-            <Separator
-              orientation="vertical"
-              className="data-[orientation=vertical]:h-4"
-            />
-            <LocaleToggle />
-            <ModeToggle />
+          <header className="flex h-16 items-center px-4">
+            <div className="flex h-6 grow items-center gap-1.5">
+              <SidebarTrigger className="-ml-1.5" />
+              <Separator className="mr-2.5" orientation="vertical" />
+              <Breadcrumb className="grow">
+                <BreadcrumbList>
+                  <BreadcrumbItem className="hidden lg:block">
+                    <BreadcrumbLink href="/aps-select">
+                      {aps.name}
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator className="hidden lg:block" />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="w-16 truncate capitalize lg:w-full">
+                      {safeMessageT("sidebar_main", route)}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+              {!comm ? (
+                <Badge variant="destructive">Data not available!</Badge>
+              ) : (
+                <React.Fragment>
+                  <AlarmInfo active={diag || 0} />
+                  <ParkInfo occupancy={map} user={user} />
+                  <CommInfo status={comm} user={user} />
+                </React.Fragment>
+              )}
+              <Separator orientation="vertical" />
+              <LocaleToggle />
+              <ModeToggle />
+            </div>
           </header>
-          <div className="px-3 py-3">
+          <div className="p-3">
             <ConfirmDialogProvider>
               <Outlet context={user} />
             </ConfirmDialogProvider>
           </div>
         </SidebarInset>
       </SidebarProvider>
-      <Toaster
-        position="bottom-right"
-        richColors
-        // toastOptions={{
-        //   classNames: {
-        //     description: "!text-muted-foreground !dark:text-muted",
-        //   },
-        // }}
-      />
+      <Toaster />
     </TooltipProvider>
-  );
+  )
 }

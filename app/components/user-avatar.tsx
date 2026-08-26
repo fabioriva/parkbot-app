@@ -5,20 +5,20 @@ function getInitials(name: string) {
     .split(" ")
     .map((n) => n[0])
     .join("")
-    .toUpperCase();
+    .toUpperCase()
 }
 
 function stringToHslColor(str: string, s = 65, l = 55) {
-  let hash = 0;
+  let hash = 0
   for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    hash = str.charCodeAt(i) + ((hash << 5) - hash)
   }
-  const h = Math.abs(hash) % 360;
-  return `hsl(${h}, ${s}%, ${l}%)`;
+  const h = Math.abs(hash) % 360
+  return `hsl(${h}, ${s}%, ${l}%)`
 }
 
 export function UserAvatar({ user }) {
-  const initials = getInitials(user.name);
+  const initials = getInitials(user.name)
   // const bg = stringToHslColor(initials);
   return (
     <div className="flex aspect-square size-10 items-center justify-center rounded-lg">
@@ -30,7 +30,7 @@ export function UserAvatar({ user }) {
         alt={initials}
       />
     </div>
-  );
+  )
   // return (
   //   <Avatar className="rounded-full">
   //     <AvatarImage

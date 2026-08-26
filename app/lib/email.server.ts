@@ -1,5 +1,5 @@
-import sgMail from "@sendgrid/mail";
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+import sgMail from "@sendgrid/mail"
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 export async function sendEmail({ to, subject, text, html }): Promise<void> {
   try {
@@ -9,13 +9,13 @@ export async function sendEmail({ to, subject, text, html }): Promise<void> {
       subject,
       text,
       html,
-    };
-    console.log(msg);
-    await sgMail.send(msg);
+    }
+    console.log(msg)
+    await sgMail.send(msg)
   } catch (error) {
-    console.error(error);
+    console.error(error)
     if (error.response) {
-      console.error(error.response.body);
+      console.error(error.response.body)
     }
   }
 }

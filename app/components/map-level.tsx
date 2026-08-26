@@ -1,19 +1,19 @@
-import { Stall } from "~/components/map-stall";
+import { Stall } from "~/components/map-stall"
 
 export function Level({ definitions, level, view }) {
   return (
-    <div className="flex flex-col gap-0.5 w-fit">
+    <div className="flex w-fit flex-col gap-0.5">
       <div className="flex text-xs">
         <h1 className="grow">{level.label}</h1>
         <p className="text-muted-foreground">
           {level.min} - {level.max}
         </p>
       </div>
-      <div className="level relative bg-card border" id={"l-" + level.nr}>
+      <div className="level relative border bg-card" id={"l-" + level.nr}>
         {level?.elevators !== undefined &&
           level.elevators.map((el, i) => (
             <div
-              className="absolute h-[30px] w-[40px] leading-[30px] bg-muted text-center text-sm el"
+              className="el absolute h-[30px] w-[40px] bg-muted text-center text-sm leading-[30px]"
               id={el.id}
               key={i}
             >
@@ -30,5 +30,5 @@ export function Level({ definitions, level, view }) {
         ))}
       </div>
     </div>
-  );
+  )
 }

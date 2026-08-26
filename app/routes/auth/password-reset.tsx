@@ -1,53 +1,53 @@
-import { Form, redirect } from "react-router";
+import { Form, redirect } from "react-router"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "~/components/ui/card"
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { Submit } from "~/components/submit-button";
-import { Success } from "~/components/success-alert";
-import { auth } from "~/lib/auth.server";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { Submit } from "~/components/submit-button"
+import { Success } from "~/components/success-alert"
+import { auth } from "~/lib/auth.server"
+import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/password-reset";
+import type { Route } from "./+types/password-reset"
 
 export async function action({ request }: Route.ActionArgs) {
   try {
-    const formData = await request.formData();
-    const newPassword = formData.get("newPassword");
-    const token = formData.get("token");
+    const formData = await request.formData()
+    const newPassword = formData.get("newPassword")
+    const token = formData.get("token")
     const data = await auth.api.resetPassword({
       body: {
         newPassword, // required
         token, // required
       },
-    });
+    })
     if (data) {
-      return { success: true };
+      return { success: true }
     }
-    return { message: "Password changed!!!" };
+    return { message: "Password changed!!!" }
   } catch (error) {
-    return { message: error?.body?.message };
+    return { message: error?.body?.message }
   }
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const searchParams = url.searchParams;
-  const token = searchParams.get("token");
+  const url = new URL(request.url)
+  const searchParams = url.searchParams
+  const token = searchParams.get("token")
   if (!token) {
-    throw data("Forbidden", { status: 403 });
+    throw data("Forbidden", { status: 403 })
   }
-  return { token };
+  return { token }
 }
 
 export default function PasswordReset({
@@ -91,5 +91,5 @@ export default function PasswordReset({
         </Form>
       </CardContent>
     </Card>
-  );
+  )
 }

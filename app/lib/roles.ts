@@ -22,4 +22,4 @@ export const roles = {
     "tags",
   ],
   valet: ["dashboard", "map", "tags"],
-};
+}

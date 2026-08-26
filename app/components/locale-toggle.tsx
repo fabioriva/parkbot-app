@@ -1,31 +1,42 @@
-import { Button } from "~/components/ui/button";
+import { Languages } from "lucide-react"
+import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuGroup,
+  // DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { locales, getLocale, setLocale } from "@paraglide/runtime.js";
+} from "~/components/ui/dropdown-menu"
+import { locales, getLocale, setLocale } from "@paraglide/runtime.js"
 
 export function LocaleToggle() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <span className="uppercase">{getLocale()}</span>
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={
+          <Button variant="ghost" size="icon">
+            <Languages />
+          </Button>
+        }
+      />
       <DropdownMenuContent align="center">
-        <DropdownMenuLabel>Language</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {locales.map((locale) => (
-          <DropdownMenuItem onClick={() => setLocale(locale)} key={locale}>
-            <span className="uppercase">{locale}</span>
-          </DropdownMenuItem>
-        ))}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Language</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {locales.map((locale) => (
+            <DropdownMenuCheckboxItem
+              checked={locale === getLocale()}
+              onClick={() => setLocale(locale)}
+              key={locale}
+            >
+              <span className="uppercase">{locale}</span>
+            </DropdownMenuCheckboxItem>
+          ))}
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

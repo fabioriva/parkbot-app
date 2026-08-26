@@ -17,58 +17,54 @@ import { Submit } from "~/components/submit-button"
 import { auth } from "~/lib/auth.server"
 import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/two-factor-verify"
+import type { Route } from "./+types/two-factor-reset"
 
 export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData()
-    const totp = formData.get("totp")
-    const response = await auth.api.verifyTOTP({
+    const code = formData.get("code")
+    const response = await auth.api.verifyBackupCode({
       asResponse: true,
       body: {
-        code: totp,
-        // trustDevice: true, // optional, defaults to false
+        code, // required
+        disableSession: false,
+        // trustDevice: true,
       },
       headers: await request.headers,
     })
     if (response.ok) {
       const headers = new Headers(response.headers)
-      return redirect("/aps-select", { headers })
+      return redirect("/2fa-setup", { headers })
     } else {
       return { message: response.statusText }
     }
   } catch (error) {
-    // console.log(error);
+    // console.log(error)
     return { message: error?.body?.message }
   }
 }
 
-export default function TwoFactorVerify({
+export default function TwoFactorReset({
   actionData,
   loaderData,
 }: Route.ComponentProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{m.two_factor_verify_card_title()}</CardTitle>
-        <CardDescription>
-          {m.two_factor_verify_card_description()}
-        </CardDescription>
+        <CardTitle>{m.two_factor_reset_title()}</CardTitle>
+        <CardDescription>{m.two_factor_reset_description()}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form method="post">
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="totp">
-                {m.two_factor_verify_totp()}
+                {m.two_factor_reset_label()}
               </FieldLabel>
-              <Input type="totp" name="totp" required />
+              <Input type="text" name="code" required />
             </Field>
             <Field>
-              <Submit
-                action="/2fa-verify"
-                title={m.two_factor_verify_submit()}
-              />
+              <Submit action="/2fa-reset" title={m.two_factor_reset_button()} />
               {actionData ? (
                 <FieldError>{actionData.message}</FieldError>
               ) : null}
@@ -76,8 +72,8 @@ export default function TwoFactorVerify({
           </FieldGroup>
         </Form>
         <div className="mt-6 text-sm">
-          <a className="underline underline-offset-4" href="/2fa-reset">
-            {m.two_factor_verify_link()}
+          <a className="underline underline-offset-4" href="/2fa-verify">
+            {m.two_factor_reset_link()}
           </a>
         </div>
       </CardContent>

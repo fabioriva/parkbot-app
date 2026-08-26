@@ -1,9 +1,9 @@
-import { Badge } from "~/components/ui/badge";
-import { IoTooltip } from "~/components/io-tooltip";
-import { Sensor } from "~/components/sensor-svg";
+import { Badge } from "~/components/ui/badge"
+import { IoTooltip } from "~/components/io-tooltip"
+import { Sensor } from "~/components/sensor-svg"
 
 export function Garage({ sensors }) {
-  const [FRE, FPE, FLA, FLP, FDR, FDL] = sensors;
+  const [FRE, FPE, FLA, FLP, FDR, FDL] = sensors
   return (
     <div className="svg-container">
       <svg
@@ -12,7 +12,7 @@ export function Garage({ sensors }) {
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 100 50"
       >
-        <image width="100%" height="100%" href="/car.png" />
+        <image width="100%" height="100%" href="/garage.png" />
         <Sensor x="80" y="45" sensor={FRE} />
         <Sensor x="45" y="25" sensor={FPE} />
         <Sensor x="97" y="25" sensor={FLA} />
@@ -21,5 +21,5 @@ export function Garage({ sensors }) {
         <Sensor x="45" y="5" sensor={FDL} />
       </svg>
     </div>
-  );
+  )
 }

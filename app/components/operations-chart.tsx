@@ -1,14 +1,7 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  LabelList,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { useState } from "react"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 import {
   ChartContainer,
   ChartLegend,
@@ -16,8 +9,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "~/components/ui/chart";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/chart"
+import { m } from "@paraglide/messages.js"
 
 export function Operations({ operations, stacked = false }) {
   const chartConfig = {
@@ -29,12 +22,12 @@ export function Operations({ operations, stacked = false }) {
       label: m.operations_exits(),
       color: "var(--chart-2)",
     },
-  } satisfies ChartConfig;
+  } satisfies ChartConfig
   const chartData = operations.map((item) => ({
     name: item.name,
     entries: item.entries,
     exits: item.exits,
-  }));
+  }))
 
   return (
     <ChartContainer config={chartConfig} className="min-h-50 w-full">
@@ -63,5 +56,5 @@ export function Operations({ operations, stacked = false }) {
         />
       </BarChart>
     </ChartContainer>
-  );
+  )
 }

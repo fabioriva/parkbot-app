@@ -1,6 +1,7 @@
-import { CircleCheck, CircleX } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Button } from "~/components/ui/button";
+import { CircleCheck, CircleX } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Link } from "react-router"
+import { Button } from "~/components/ui/button"
 import {
   Item,
   ItemActions,
@@ -9,31 +10,31 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "~/components/ui/item";
-import { NoDataAlert } from "~/components/no-data-alert";
-import { getToken } from "~/lib/cookie.server";
-import fetcher from "~/lib/fetch";
-import useSWR from "swr";
+} from "~/components/ui/item"
+import { NoDataAlert } from "~/components/no-data-alert"
+import { getToken } from "~/lib/cookie.server"
+import fetcher from "~/lib/fetch"
+import useSWR from "swr"
 
-import type { Route } from "./+types/racks";
+import type { Route } from "./+types/racks"
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getToken(request);
-  const url = `${process.env.BACKEND_URL}/${params?.aps}/racks`;
+  const token = getToken(request)
+  const url = `${process.env.BACKEND_URL}/${params?.aps}/racks`
   const data = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
-  return { data, token };
+  })
+  return { data, token }
 }
 
 export default function Nodes({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData.data) return <NoDataAlert />;
+  if (!loaderData.data) return <NoDataAlert />
 
-  const [racks, setRacks] = useState(loaderData.data);
+  const [racks, setRacks] = useState(loaderData.data)
 
-  const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/racks`;
+  const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/racks`
   const { data } = useSWR(
     loaderData.token ? [url, loaderData.token] : null,
     ([url, token]) =>
@@ -43,14 +44,14 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
     {
       fallbackData: loaderData.data,
       refreshInterval: 1000,
-    },
-  );
-  useEffect(() => setRacks(data), [data]);
+    }
+  )
+  useEffect(() => setRacks(data), [data])
 
-  if (!racks) return <NoDataAlert />;
+  if (!racks) return <NoDataAlert />
 
   return (
-    <ItemGroup className="w-full lg:max-w-sm gap-3">
+    <ItemGroup className="w-full gap-3 lg:max-w-sm">
       {data.map((item) => (
         <Item variant="outline" key={item.deviceNr}>
           <ItemMedia variant="icon">
@@ -70,19 +71,17 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
             <Button
               size="sm"
               variant="outline"
-              onClick={() => handleEdit(tag)}
-              asChild
+              render={
+                <Link
+                  to={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
+                />
+              }
             >
-              <a
-                className="flex items-center justify-center"
-                href={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
-              >
-                View
-              </a>
+              View
             </Button>
           </ItemActions>
         </Item>
       ))}
     </ItemGroup>
-  );
+  )
 }

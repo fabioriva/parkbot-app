@@ -1,37 +1,46 @@
-import { User as Car } from "lucide-react";
-import { Badge } from "~/components/ui/badge";
+import { User as Car } from "lucide-react"
+import { Badge } from "~/components/ui/badge"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { safeMessageT } from "~/lib/trans";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/tooltip"
+import { safeMessageT } from "~/lib/trans"
+import { m } from "@paraglide/messages.js"
 
 interface OccupancyItem {
-  id: string;
-  value: number;
+  id: string
+  value: number
 }
 
 interface OccupancyInfoProps {
-  occupancy: OccupancyItem[];
+  occupancy: OccupancyItem[]
 }
 
 export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
-  const [busy, ,] = occupancy;
-  const cars = busy && busy.value > 0 ? true : false;
-  const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0);
+  const [busy, ,] = occupancy
+  const cars = busy && busy.value > 0 ? true : false
+  const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0)
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Badge variant="outline" asChild>
-          <a href={`/aps/${user.aps}/map`}>
-            <span className="hidden sm:block">{m.occupancy_parked()}</span>
-            <Car className="block sm:hidden" data-icon="inline-start" />{" "}
-            {busy.value}
-          </a>
-        </Badge>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Badge
+            variant="outline"
+            render={
+              <a href={`/aps/${user.aps}/map`}>
+                <span className="hidden sm:block">{m.occupancy_parked()}</span>
+                <Car
+                  className="block sm:hidden"
+                  data-icon="inline-start"
+                />{" "}
+                {busy.value}
+              </a>
+            }
+          />
+        }
+      />
+
       <TooltipContent className="flex flex-col">
         <table className="m-0 p-0">
           <thead>
@@ -56,5 +65,5 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
         </table>
       </TooltipContent>
     </Tooltip>
-  );
+  )
 }

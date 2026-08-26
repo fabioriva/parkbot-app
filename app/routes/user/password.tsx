@@ -1,6 +1,6 @@
-import { CheckCircle2Icon } from "lucide-react";
-import { useState } from "react";
-import { Button } from "~/components/ui/button";
+import { CheckCircle2Icon } from "lucide-react"
+import { useState } from "react"
+import { Button } from "~/components/ui/button"
 import {
   Field,
   FieldDescription,
@@ -9,36 +9,36 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { Success } from "~/components/success-alert";
-import { authClient } from "~/lib/auth";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { Success } from "~/components/success-alert"
+import { authClient } from "~/lib/auth"
+import { m } from "@paraglide/messages.js"
 
 // import type { Route } from "./+types/settings";
 
 export default function Password() {
-  const [error, setError] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(null)
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [success, setSuccess] = useState(false)
 
   const changePassword = async () => {
     if (newPassword && newPassword !== confirmPassword) {
-      return setError(m.password_change_error_match());
+      return setError(m.password_change_error_match())
     }
     const { data, error } = await authClient.changePassword({
       newPassword, // required
       currentPassword, // required
       revokeOtherSessions: true,
-    });
+    })
     if (error) {
-      return setError(error.message);
+      return setError(error.message)
     }
-    setError(null);
-    setSuccess(true);
-  };
+    setError(null)
+    setSuccess(true)
+  }
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -103,5 +103,5 @@ export default function Password() {
         </FieldSet>
       </FieldGroup>
     </div>
-  );
+  )
 }

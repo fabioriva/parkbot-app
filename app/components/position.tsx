@@ -1,7 +1,7 @@
-import { useState, useEffect, useReducer } from "react";
-import { Field, FieldLabel } from "~/components/ui/field";
-import { Progress } from "~/components/ui/progress";
-import { m } from "@paraglide/messages.js";
+import { useState, useEffect, useReducer } from "react"
+import { Field, FieldLabel } from "~/components/ui/field"
+import { Progress } from "~/components/ui/progress"
+import { m } from "@paraglide/messages.js"
 
 const initialState = {
   isRunning: false,
@@ -9,7 +9,7 @@ const initialState = {
   position: 0,
   distance: 0,
   percent: 0,
-};
+}
 
 function reducer(state, action) {
   switch (action.type) {
@@ -21,44 +21,44 @@ function reducer(state, action) {
         destination: action.destination,
         position: action.position,
         percent: 0,
-      };
+      }
     case "reset":
-      return initialState;
+      return initialState
 
     case "tick":
-      const actual = Math.abs(state.destination - action.position);
+      const actual = Math.abs(state.destination - action.position)
       const percent =
-        actual <= 10 ? 100 : 100 - Math.round((actual * 100) / state.distance);
+        actual <= 10 ? 100 : 100 - Math.round((actual * 100) / state.distance)
       return {
         ...state,
         percent,
-      };
+      }
     default:
-      throw new Error();
+      throw new Error()
   }
 }
 
 const Item = ({ title, value }) => (
   <div className="flex flex-col">
-    <span className="text-muted-foreground text-xs">{title}</span>
+    <span className="text-xs text-muted-foreground">{title}</span>
     <span className="font-bold">{value}</span>
   </div>
-);
+)
 
 export function Position({ encoder }) {
-  const { destination, name, position } = encoder;
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { destination, name, position } = encoder
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(
     () => dispatch({ type: "start", destination, position }),
-    [destination],
-  );
+    [destination]
+  )
 
   useEffect(() => {
     position === 0
       ? dispatch({ type: "reset" })
-      : dispatch({ type: "tick", position });
-  }, [position]);
+      : dispatch({ type: "tick", position })
+  }, [position])
 
   return (
     <div className="grid grid-cols-3 items-start">
@@ -67,10 +67,10 @@ export function Position({ encoder }) {
       {/* <Item title={m.device_pos_progress()} value={`${Math.round(percent)} %`} /> */}
       <Field className="gap-1">
         <FieldLabel htmlFor="progress">
-          <span className="text-muted-foreground text-xs">
+          <span className="text-xs text-muted-foreground">
             {m.device_pos_progress()}
           </span>
-          <span className="font-bold ml-auto">{state?.percent}%</span>
+          <span className="ml-auto font-bold">{state?.percent}%</span>
         </FieldLabel>
         <Progress
           className="*:data-[slot=progress-indicator]:bg-green-700"
@@ -79,5 +79,5 @@ export function Position({ encoder }) {
         />
       </Field>
     </div>
-  );
+  )
 }

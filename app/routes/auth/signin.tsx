@@ -1,30 +1,30 @@
-import { Form, redirect } from "react-router";
+import { Form, redirect } from "react-router"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "~/components/ui/card"
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { Submit } from "~/components/submit-button";
-import { auth } from "~/lib/auth.server";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { Submit } from "~/components/submit-button"
+import { auth } from "~/lib/auth.server"
+import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/signin";
+import type { Route } from "./+types/signin"
 
 export async function action({ request }: Route.ActionArgs) {
   try {
-    const formData = await request.formData();
-    const name = formData.get("name");
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const formData = await request.formData()
+    const name = formData.get("name")
+    const email = formData.get("email")
+    const password = formData.get("password")
     const { headers, response } = await auth.api.signInEmail({
       // asResponse: true, // returns a response object instead of data
       returnHeaders: true,
@@ -35,13 +35,19 @@ export async function action({ request }: Route.ActionArgs) {
         callbackURL: "/aps-select",
       },
       headers: await request.headers,
-    });
+    })
     if ("twoFactorRedirect" in response) {
-      return redirect("/2fa-verify", { headers });
+      return redirect("/2fa-verify", { headers })
     }
-    return redirect(response?.url, { headers });
+    if (!response.user.emailVerified) {
+      return redirect(`/email-verification?email=${response.user.email}`, {
+        headers,
+      })
+    }
+    return redirect(response?.url, { headers })
   } catch (error) {
-    return { message: error?.body?.message };
+    // console.log(error)
+    return { message: error?.body?.message }
   }
 }
 
@@ -98,5 +104,5 @@ export default function Signin({ actionData }: Route.ComponentProps) {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

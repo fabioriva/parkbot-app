@@ -1,5 +1,3 @@
-// import { useEffect, useState } from "react";
-// import InfiniteScroll from "react-infinite-scroll-component";
 import {
   Item,
   ItemActions,
@@ -8,38 +6,16 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "~/components/ui/item";
-import { OperationsAvatar } from "~/components/operation-avatar";
-import { logT, safeMessageT } from "~/lib/trans";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/item"
+import { OperationsAvatar } from "~/components/operation-avatar"
+import { logT, safeMessageT } from "~/lib/trans"
+import { m } from "@paraglide/messages.js"
 
 export function HistoryList({ query, media = false }: any) {
-  // Infinite scroll
-  // const chunkSize = 25;
-  // const [logs, setLogs] = useState([]);
-  // const [hasMore, setHasMore] = useState(true);
-  // useEffect(() => {
-  //   setLogs(query.slice(0, chunkSize));
-  //   setHasMore(true);
-  // }, [query]);
-  // const loadMore = () => {
-  //   const nextLength = logs.length + chunkSize;
-  //   const nextSlice = query.slice(0, nextLength);
-  //   setLogs(nextSlice);
-  //   if (nextSlice.length >= query.length) setHasMore(false);
-  // };
   return (
-    // <InfiniteScroll
-    //   dataLength={logs.length}
-    //   next={loadMore}
-    //   hasMore={hasMore}
-    //   // loader={<p className="pt-6">Loading more records…</p>}
-    //   endMessage={<p className="pt-6">All records loaded.</p>}
-    // >
     <ItemGroup className="gap-0">
-      {/* {logs.map((item, key) => ( */}
       {query.map((item, key) => (
-        <Item className="px-0 py-1.5 gap-3" key={key}>
+        <Item className="gap-3 px-0 py-1.5" key={key}>
           {media && (
             <ItemMedia>
               <OperationsAvatar
@@ -72,6 +48,5 @@ export function HistoryList({ query, media = false }: any) {
         </Item>
       ))}
     </ItemGroup>
-    // </InfiniteScroll>
-  );
+  )
 }

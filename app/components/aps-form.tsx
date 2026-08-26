@@ -1,5 +1,5 @@
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
+import { Button } from "~/components/ui/button"
+import { Checkbox } from "~/components/ui/checkbox"
 import {
   Dialog,
   DialogClose,
@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "~/components/ui/dialog";
+} from "~/components/ui/dialog"
 import {
   Field,
   FieldDescription,
@@ -18,9 +18,9 @@ import {
   FieldLegend,
   // FieldSeparator,
   FieldSet,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { m } from "@paraglide/messages.js"
 
 export function ApsForm({ action, fetcher, open, setOpen, selectedAps }) {
   return (
@@ -91,7 +91,7 @@ export function ApsForm({ action, fetcher, open, setOpen, selectedAps }) {
                   <FieldLabel htmlFor="ns">{m.aps_field_ns()}</FieldLabel>
                   <Input name="ns" defaultValue={selectedAps?.ns} required />
                 </Field>
-                <div className="grid grid-cols-2 gap-6 items-start justify-between">
+                <div className="grid grid-cols-2 items-start justify-between gap-6">
                   <Field>
                     <FieldLabel htmlFor="parkingSpaces">
                       {m.aps_field_parking_spaces()}
@@ -117,14 +117,12 @@ export function ApsForm({ action, fetcher, open, setOpen, selectedAps }) {
             </FieldSet>
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
+            <DialogClose render={<Button variant="outline">Cancel</Button>} />
             <Button type="submit">Save changes</Button>
             {fetcher.state !== "idle" && <p>Saving...</p>}
           </DialogFooter>
         </fetcher.Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

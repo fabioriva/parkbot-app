@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import {
   ArrowLeft,
   ArrowRight,
@@ -7,8 +6,8 @@ import {
   Tag,
   User,
   Wrench,
-} from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+} from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 
 export function OperationsAvatar({ device, operation }) {
   return (
@@ -67,5 +66,5 @@ export function OperationsAvatar({ device, operation }) {
         </AvatarFallback>
       )}
     </Avatar>
-  );
+  )
 }

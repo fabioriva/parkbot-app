@@ -1,13 +1,13 @@
-import { MoreHorizontalIcon } from "lucide-react";
-import { useState } from "react";
-import { Button } from "~/components/ui/button";
+import { MoreHorizontalIcon } from "lucide-react"
+import { useState } from "react"
+import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+} from "~/components/ui/dropdown-menu"
 import {
   Table,
   TableBody,
@@ -17,22 +17,22 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table";
-import { ApsForm } from "~/components/aps-form";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/table"
+import { ApsForm } from "~/components/aps-form"
+import { m } from "@paraglide/messages.js"
 
 export function ApsTable({ aps, fetcher }) {
-  const [open, setOpen] = useState(false);
-  const [selectedAps, setSelectedAps] = useState();
+  const [open, setOpen] = useState(false)
+  const [selectedAps, setSelectedAps] = useState()
 
   const handleDelete = async (aps) => {
-    fetcher.submit({ action: "delete", ...aps }, { method: "post" });
-  };
+    fetcher.submit({ action: "delete", ...aps }, { method: "post" })
+  }
   const handleUpdate = async (aps) => {
     // fetcher.submit({ action: "update", ...aps }, { method: "post" });
-    setOpen(true);
-    setSelectedAps(aps);
-  };
+    setOpen(true)
+    setSelectedAps(aps)
+  }
   return (
     <Table>
       <ApsForm
@@ -76,12 +76,14 @@ export function ApsTable({ aps, fetcher }) {
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="size-6">
-                      <MoreHorizontalIcon />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
+                  <DropdownMenuTrigger
+                    render={
+                      <Button variant="ghost" size="icon" className="size-6">
+                        <MoreHorizontalIcon />
+                        <span className="sr-only">Open menu</span>
+                      </Button>
+                    }
+                  />
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => handleUpdate(aps)}>
                       {m.aps_action_update()}
@@ -113,5 +115,5 @@ export function ApsTable({ aps, fetcher }) {
         </TableRow>
       </TableFooter> */}
     </Table>
-  );
+  )
 }

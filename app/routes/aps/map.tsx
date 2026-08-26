@@ -1,6 +1,6 @@
-import { EyeIcon } from "lucide-react";
-import { lazy, Suspense, useState } from "react";
-import { Button } from "~/components/ui/button";
+import { EyeIcon } from "lucide-react"
+import { lazy, Suspense, useState } from "react"
+import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,18 +9,18 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { CardWrapper } from "~/components/card-wrapper";
-import { EditStallDialogProvider } from "~/components/map-edit";
-import { NoDataAlert } from "~/components/no-data-alert";
-import { Occupancy } from "~/components/occupancy-chart";
-import { useData } from "~/hooks/use-ws";
-import { getToken } from "~/lib/cookie.server";
-import fetcher from "~/lib/fetch";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/dropdown-menu"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { CardWrapper } from "~/components/card-wrapper"
+import { EditStallDialogProvider } from "~/components/map-edit"
+import { NoDataAlert } from "~/components/no-data-alert"
+import { Occupancy } from "~/components/occupancy-chart"
+import { useData } from "~/hooks/use-ws"
+import { getToken } from "~/lib/cookie.server"
+import fetcher from "~/lib/fetch"
+import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/map";
+import type { Route } from "./+types/map"
 
 const components = {
   aa: lazy(() => import("~/components/maps/aa")),
@@ -63,31 +63,31 @@ const components = {
   washingtonblvd: lazy(() => import("~/components/maps/8888")),
   wblvd: lazy(() => import("~/components/maps/wblvd")),
   wolfson: lazy(() => import("~/components/maps/wolfson")),
-};
+}
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getToken(request);
-  const url = `${process.env.BACKEND_URL}/${params?.aps}/map`;
+  const token = getToken(request)
+  const url = `${process.env.BACKEND_URL}/${params?.aps}/map`
   const data = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
-  return { data, token };
+  })
+  return { data, token }
 }
 
 export default function Map({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData.data) return <NoDataAlert />;
+  if (!loaderData.data) return <NoDataAlert />
 
-  const DynamicComponent = components[params.aps];
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`;
-  const { data } = useData(url, { initialData: loaderData.data });
-  const [tab, setTab] = useState("view2");
+  const DynamicComponent = components[params.aps]
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`
+  const { data } = useData(url, { initialData: loaderData.data })
+  const [tab, setTab] = useState("view2")
   const onTabChange = (value) => {
-    setTab(value);
-  };
-  const [view, setView] = useState("view2");
-  const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0);
+    setTab(value)
+  }
+  const [view, setView] = useState("view2")
+  const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0)
 
   return (
     <Tabs defaultValue="map">
@@ -97,11 +97,13 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
           <TabsTrigger value="occupancy">{m.map_tabs_occupancy()}</TabsTrigger>
         </TabsList>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              <EyeIcon /> {m.map_view()}
-            </Button>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={
+              <Button variant="outline">
+                <EyeIcon /> {m.map_view()}
+              </Button>
+            }
+          />
           <DropdownMenuContent className="w-32">
             <DropdownMenuGroup>
               <DropdownMenuLabel>{m.map_view_label()}</DropdownMenuLabel>
@@ -141,5 +143,5 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
         </CardWrapper>
       </TabsContent>
     </Tabs>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { createThemeSessionResolver } from "remix-themes";
-import { createCookieSessionStorage } from "react-router";
+import { createThemeSessionResolver } from "remix-themes"
+import { createCookieSessionStorage } from "react-router"
 
 export const themeSessionResolver = createThemeSessionResolver(
   createCookieSessionStorage({
@@ -12,5 +12,5 @@ export const themeSessionResolver = createThemeSessionResolver(
       secrets: ["s3cr3t"],
       // secure: true,
     },
-  }),
-);
+  })
+)

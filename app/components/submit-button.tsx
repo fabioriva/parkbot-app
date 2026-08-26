@@ -1,9 +1,9 @@
-import { Loader2Icon } from "lucide-react";
-import { useNavigation } from "react-router";
-import { Button } from "~/components/ui/button";
+import { Loader2Icon } from "lucide-react"
+import { useNavigation } from "react-router"
+import { Button } from "~/components/ui/button"
 
 export function Submit({ action, title }: SubmitButtonProps) {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
   return (
     <>
       {navigation.formAction === action ? (
@@ -15,10 +15,10 @@ export function Submit({ action, title }: SubmitButtonProps) {
         <Button type="submit">{title}</Button>
       )}
     </>
-  );
+  )
 }
 
 interface SubmitButtonProps {
-  action: string;
-  title: string;
+  action: string
+  title: string
 }

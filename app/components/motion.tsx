@@ -1,16 +1,16 @@
-import { Loader } from "lucide-react";
-import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
-import { Badge } from "~/components/ui/badge";
-import { IoTooltip } from "~/components/io-tooltip";
-import { Position } from "~/components/position";
-import { safeMessageT } from "~/lib/trans";
+import { Loader } from "lucide-react"
+import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion"
+import { Badge } from "~/components/ui/badge"
+import { IoTooltip } from "~/components/io-tooltip"
+import { Position } from "~/components/position"
+import { safeMessageT } from "~/lib/trans"
 
 export function Motion({ motor }) {
-  const id = motor.name.query?.id !== 0 ? motor.name.query?.id : "";
-  const isRunning = motor.run.status;
+  const id = motor.name.query?.id !== 0 ? motor.name.query?.id : ""
+  const isRunning = motor.run.status
   return (
     <>
-      <AccordionTrigger className="hover:no-underline py-1.5 flex items-center gap-1.5">
+      <AccordionTrigger className="flex items-center gap-1.5 py-1.5 hover:no-underline">
         <div className="grow">
           {safeMessageT("device", motor.name.key, { id })}
         </div>
@@ -34,7 +34,7 @@ export function Motion({ motor }) {
             ))}
         </div>
 
-        <div className="flex gap-1 max-w-xs sm:max-w-none overflow-auto">
+        <div className="flex max-w-xs gap-1 overflow-auto sm:max-w-none">
           {motor.io.map((item, key) => (
             <IoTooltip io={item} key={key}>
               <Badge
@@ -52,5 +52,5 @@ export function Motion({ motor }) {
         </div>
       </AccordionContent>
     </>
-  );
+  )
 }

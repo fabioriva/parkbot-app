@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import clsx from "clsx"
 
 // export type Bit = {
 //   addr: string;
@@ -28,5 +28,5 @@ export const Sensor = ({ x, y, sensor }) => {
     >
       <title className="uppercase">{`${sensor.label} ${sensor.addr} ${sensor.status ? "ON" : "OFF"}`}</title>
     </circle>
-  );
-};
+  )
+}

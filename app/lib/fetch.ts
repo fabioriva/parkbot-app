@@ -1,11 +1,11 @@
 export default async function fetcher(...args) {
   try {
-    const res = await fetch(...args);
+    const res = await fetch(...args)
     if (res.ok) {
-      return await res.json();
+      return await res.json()
     }
-    throw new Error(res);
+    throw new Error(res)
   } catch (error) {
-    return null;
+    return null
   }
 }

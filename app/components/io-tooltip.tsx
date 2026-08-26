@@ -2,8 +2,8 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { safeMessageT } from "~/lib/trans";
+} from "~/components/ui/tooltip"
+import { safeMessageT } from "~/lib/trans"
 
 function get(label) {
   switch (label) {
@@ -27,43 +27,43 @@ function get(label) {
     case "S2":
     case "T10":
     case "T2":
-      return { key: label, query: {} };
+      return { key: label, query: {} }
 
     default:
       if (label) {
-        let array = label.split("");
-        const dash = array[array.length - 2];
+        let array = label.split("")
+        const dash = array[array.length - 2]
         if (dash === "-") {
-          const last = parseInt(array[array.length - 3]);
+          const last = parseInt(array[array.length - 3])
           if (!isNaN(last)) {
             return {
               key: array.slice(0, -3).join("").concat("x"),
               query: { nr: last },
-            };
+            }
           } else {
-            return { key: label.slice(0, -2), query: {} };
+            return { key: label.slice(0, -2), query: {} }
           }
         }
-        const last = parseInt(array[array.length - 1]);
+        const last = parseInt(array[array.length - 1])
         if (!isNaN(last)) {
           return {
             key: array.slice(0, -1).join("").concat("x"),
             query: { nr: last },
-          };
+          }
         } else {
-          return { key: label, query: {} };
+          return { key: label, query: {} }
         }
       } else {
-        return { key: "", query: {} };
+        return { key: "", query: {} }
       }
   }
 }
 
 export function IoTooltip({ io, children }) {
-  const { key, query } = get(io?.label);
+  const { key, query } = get(io?.label)
   return (
     <Tooltip>
-      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipTrigger>{children}</TooltipTrigger>
       <TooltipContent>
         <table className="m-0 p-0 text-sm">
           <thead>
@@ -101,5 +101,5 @@ export function IoTooltip({ io, children }) {
         </table>
       </TooltipContent>
     </Tooltip>
-  );
+  )
 }

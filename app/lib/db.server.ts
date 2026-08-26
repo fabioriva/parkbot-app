@@ -1,5 +1,5 @@
-import { MongoClient, ObjectId, type UpdateResult } from "mongodb";
+import { MongoClient, ObjectId, type UpdateResult } from "mongodb"
 
-const client = new MongoClient(process.env.MONGODB_URI);
+const client = new MongoClient(process.env.MONGODB_URI)
 
-export const db = client.db();
+export const db = client.db()

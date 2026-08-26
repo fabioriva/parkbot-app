@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useLoaderData, useParams } from "react-router";
-import { z } from "zod";
-import { Button } from "~/components/ui/button";
+import { useState } from "react"
+import { useLoaderData, useParams } from "react-router"
+import { z } from "zod"
+import { Button } from "~/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -11,43 +11,42 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
-import { Field, FieldDescription, FieldLabel } from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
+} from "~/components/ui/dialog"
+import { Field, FieldDescription, FieldLabel } from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "~/components/ui/item";
-import { useConfirmDialog } from "~/components/confirm-dialog";
-import fetcher from "~/lib/fetch";
-import toast from "~/lib/toast";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/item"
+import { useConfirmDialog } from "~/components/confirm-dialog"
+import { actionResponse } from "~/lib/action"
+import { m } from "@paraglide/messages.js"
 
 export function ActionPP({ action, disabled = true }) {
-  const data = useLoaderData();
-  const params = useParams();
-  const { showConfirmDialog } = useConfirmDialog();
+  const data = useLoaderData()
+  const params = useParams()
+  const { showConfirmDialog } = useConfirmDialog()
 
-  const [destination, setDestination] = useState(undefined);
-  const [error, setError] = useState(false);
+  const [destination, setDestination] = useState(undefined)
+  const [error, setError] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const schema = z.coerce.number().min(action.min).max(action.max);
-    const result = schema.safeParse(e.target.value);
+    const schema = z.coerce.number().min(action.min).max(action.max)
+    const result = schema.safeParse(e.target.value)
     if (!result.success) {
-      setError(true);
-      setDestination(undefined);
+      setError(true)
+      setDestination(undefined)
     } else {
-      setError(false);
-      setDestination(result.data);
+      setError(false)
+      setDestination(result.data)
     }
-  };
+  }
   const handleConfirm = (item) => {
     const value =
-      item.key === "A" || item.key === "B" ? item.value : destination;
+      item.key === "A" || item.key === "B" ? item.value : destination
     showConfirmDialog({
       title: m.action_pp_confirm_dialog_title(),
       description: m.action_pp_confirm_dialog_description({
@@ -55,8 +54,8 @@ export function ActionPP({ action, disabled = true }) {
         value,
       }),
       onConfirm: async () => {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/pp`;
-        const res = await fetcher(url, {
+        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/pp`
+        const res = await fetch(url, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${data.token}`,
@@ -67,30 +66,28 @@ export function ActionPP({ action, disabled = true }) {
             key: item.key,
             value,
           }),
-        });
-        toast(res);
+        })
+        actionResponse(res)
       },
-    });
-  };
-  const handleOpen = () => {};
+    })
+  }
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          disabled={disabled || !action.enable.status}
-          onClick={handleOpen}
-        >
-          {action.key}
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
+      <DialogTrigger
+        render={
+          <Button disabled={disabled || !action.enable.status}>
+            {action.key}
+          </Button>
+        }
+      />
+      <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>{m.action_pp_dialog_title()}</DialogTitle>
           <DialogDescription>
             {m.action_pp_dialog_description()}
           </DialogDescription>
         </DialogHeader>
-
+        {/* A or B */}
         {action.buttons.some((b) => b.key === "A" || b.key === "B") && (
           <div className="flex flex-col gap-3">
             {action.buttons.map((item, key) => {
@@ -112,11 +109,11 @@ export function ActionPP({ action, disabled = true }) {
                       </Button>
                     </ItemActions>
                   </Item>
-                );
+                )
             })}
           </div>
         )}
-
+        {/* E or F or D */}
         {action.buttons.some((b) => b.key !== "A" && b.key !== "B") && (
           <>
             <Field>
@@ -158,17 +155,17 @@ export function ActionPP({ action, disabled = true }) {
                         </Button>
                       </ItemActions>
                     </Item>
-                  );
+                  )
               })}
             </div>
           </>
         )}
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">{m.close()}</Button>
-          </DialogClose>
+          <DialogClose
+            render={<Button variant="outline">{m.close()}</Button>}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

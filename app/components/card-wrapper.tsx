@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import {
   Card,
   CardAction,
@@ -7,15 +7,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "~/components/ui/card"
 
 interface CardWrapperProps {
-  action?: React.ReactNode;
-  children: React.ReactNode;
-  className?: string;
-  description?: string;
-  footer?: React.ReactNode;
-  title?: string;
+  action?: React.ReactNode
+  children: React.ReactNode
+  className?: string
+  description?: string
+  footer?: React.ReactNode
+  title?: string
 }
 
 export const CardWrapper: React.FC<CardWrapperProps> = ({
@@ -38,5 +38,5 @@ export const CardWrapper: React.FC<CardWrapperProps> = ({
       <CardContent>{children}</CardContent>
       {footer && <CardFooter>{footer}</CardFooter>}
     </Card>
-  );
-};
+  )
+}

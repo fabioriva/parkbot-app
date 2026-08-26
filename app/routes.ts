@@ -1,16 +1,16 @@
 import {
   type RouteConfig,
-  index,
   layout,
   prefix,
+  index,
   route,
-} from "@react-router/dev/routes";
+} from "@react-router/dev/routes"
 
 export default [
   index("routes/home.tsx"),
   layout("routes/auth/layout.tsx", [
-    // route("2fa-reset", "routes/auth/2fa-reset.tsx"),
-    // route("2fa-setup", "routes/auth/2fa-setup.tsx"),
+    route("2fa-reset", "routes/auth/two-factor-reset.tsx"),
+    route("2fa-setup", "routes/auth/two-factor-setup.tsx"),
     route("2fa-verify", "routes/auth/two-factor-verify.tsx"),
     route("aps-select", "routes/auth/aps-select.tsx"),
     route("email-verification", "routes/auth/email-verification.tsx"),
@@ -27,8 +27,7 @@ export default [
       route(":aps/admin/user", "routes/admin/user.tsx"),
       route(":aps/dashboard", "routes/aps/dashboard.tsx"),
       route(":aps/devices", "routes/aps/devices.tsx"),
-      // route(":aps/history", "routes/aps/history.tsx"),
-      route(":aps/history", "routes/aps/logs.tsx"),
+      route(":aps/history", "routes/aps/history.tsx"),
       route(":aps/map", "routes/aps/map.tsx"),
       //     route(":aps/nodes", "routes/aps/nodes.tsx"),
       route(":aps/operations", "routes/aps/operations.tsx"),
@@ -42,4 +41,4 @@ export default [
   route("action/set-theme", "./routes/action.set-theme.ts"),
   route("api/auth/*", "routes/api.auth.$.ts"),
   route("*", "./routes/catchall.tsx"),
-] satisfies RouteConfig;
+] satisfies RouteConfig

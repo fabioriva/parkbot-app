@@ -1,18 +1,18 @@
-import clsx from "clsx";
-import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion";
-import { m } from "@paraglide/messages.js";
+import clsx from "clsx"
+import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion"
+import { m } from "@paraglide/messages.js"
 
 const Item = ({ title, value }) => (
   <div className="flex flex-col">
-    <span className="text-muted-foreground text-xs">{title}</span>
+    <span className="text-xs text-muted-foreground">{title}</span>
     <span className="font-bold">{value}</span>
   </div>
-);
+)
 
 export function Drive({ drive }) {
   return (
     <>
-      <AccordionTrigger className="hover:no-underline py-1.5 flex items-center gap-1.5">
+      <AccordionTrigger className="flex items-center gap-1.5 py-1.5 hover:no-underline">
         <div
           className={clsx("grow", {
             "text-green-500": drive.enable.status,
@@ -22,7 +22,7 @@ export function Drive({ drive }) {
           {drive.name}&nbsp;
           {drive.enable.status ? m.drive_ready() : m.drive_not_ready()}
         </div>
-        <div className="flex gap-1.5 mr-2 text-xs">
+        <div className="mr-2 flex gap-1.5 text-xs">
           <span>{drive.speed}&nbsp;Hz</span>
           <span>{drive.current}&nbsp;A</span>
         </div>
@@ -36,5 +36,5 @@ export function Drive({ drive }) {
         </div>
       </AccordionContent>
     </>
-  );
+  )
 }

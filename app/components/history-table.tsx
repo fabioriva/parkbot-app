@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import clsx from "clsx"
 import {
   ArrowLeft,
   ArrowRight,
@@ -7,10 +7,8 @@ import {
   Tag,
   User,
   Wrench,
-} from "lucide-react";
-// import { useEffect, useState } from "react";
-import { Badge } from "~/components/ui/badge";
-// import { Field, FieldLabel } from "~/components/ui/field";
+} from "lucide-react"
+import { Badge } from "~/components/ui/badge"
 import {
   Pagination,
   PaginationContent,
@@ -19,7 +17,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "~/components/ui/pagination";
+} from "~/components/ui/pagination"
 // import {
 //   Select,
 //   SelectContent,
@@ -38,35 +36,35 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table";
-import { safeMessageT } from "~/lib/trans";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/table"
+import { safeMessageT } from "~/lib/trans"
+import { m } from "@paraglide/messages.js"
 
 // utils/pagination.ts
 function getPageNumbers(
   currentPage: number,
   totalPages: number,
-  delta: number = 1,
+  delta: number = 1
 ): (number | string)[] {
-  const range: (number | string)[] = [];
-  const left = Math.max(2, currentPage - delta);
-  const right = Math.min(totalPages - 1, currentPage + delta);
+  const range: (number | string)[] = []
+  const left = Math.max(2, currentPage - delta)
+  const right = Math.min(totalPages - 1, currentPage + delta)
 
-  range.push(1);
-  if (left > 2) range.push("...");
+  range.push(1)
+  if (left > 2) range.push("...")
 
   for (let i = left; i <= right; i++) {
-    range.push(i);
+    range.push(i)
   }
 
-  if (right < totalPages - 1) range.push("...");
-  if (totalPages > 1) range.push(totalPages);
+  if (right < totalPages - 1) range.push("...")
+  if (totalPages > 1) range.push(totalPages)
 
-  return range;
+  return range
 }
 
 const Operation = ({ item }) => {
-  const { alarm, device, operation } = item;
+  const { alarm, device, operation } = item
   return (
     <>
       {alarm !== undefined ? (
@@ -111,11 +109,11 @@ const Operation = ({ item }) => {
         </Badge>
       )}
     </>
-  );
-};
+  )
+}
 
 const TablePagination = ({ currentPage, pages, paginate }) => {
-  const pageNumbers = getPageNumbers(currentPage, pages);
+  const pageNumbers = getPageNumbers(currentPage, pages)
   return (
     <Pagination>
       <PaginationContent>
@@ -137,7 +135,7 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
               <PaginationItem key={key}>
                 <PaginationEllipsis />
               </PaginationItem>
-            );
+            )
           } else {
             return (
               <PaginationItem key={key}>
@@ -149,7 +147,7 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
                   {number}
                 </PaginationLink>
               </PaginationItem>
-            );
+            )
           }
         })}
         <PaginationItem>
@@ -166,8 +164,8 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
         </PaginationItem>
       </PaginationContent>
     </Pagination>
-  );
-};
+  )
+}
 
 // export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
 export function HistoryTable({
@@ -177,14 +175,6 @@ export function HistoryTable({
   query,
   rowsPerPage,
 }) {
-  // pagination
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [rowsPerPage, setRowsPerPages] = useState(15);
-  // const indexOfLastPost = currentPage * rowsPerPage;
-  // const indexOfFirstPost = indexOfLastPost - rowsPerPage;
-  // const currentRows = query.slice(indexOfFirstPost, indexOfLastPost);
-  // const pages = Math.ceil(query.length / rowsPerPage);
-  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
       <div className="overflow-hidden rounded-lg border">
@@ -281,5 +271,5 @@ export function HistoryTable({
         </div>
       </div>
     </>
-  );
+  )
 }

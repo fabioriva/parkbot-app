@@ -1,7 +1,7 @@
-import { Tag as TagIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Button } from "~/components/ui/button";
+import { Tag as TagIcon } from "lucide-react"
+import { useEffect, useState } from "react"
+import InfiniteScroll from "react-infinite-scroll-component"
+import { Button } from "~/components/ui/button"
 import {
   Item,
   ItemActions,
@@ -10,103 +10,103 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "~/components/ui/item";
-import { SearchInput } from "~/components/search-input";
-import { EditTagDialog } from "~/components/tag-edit";
-import { useConfirmDialog } from "~/components/confirm-dialog";
-import { NoDataAlert } from "~/components/no-data-alert";
-import { useData } from "~/hooks/use-ws";
-import { getToken } from "~/lib/cookie.server";
-import fetcher from "~/lib/fetch";
-import toast from "~/lib/toast";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/item"
+import { useConfirmDialog } from "~/components/confirm-dialog"
+import { SearchInput } from "~/components/search-input"
+import { EditTagDialog } from "~/components/tag-edit"
+import { NoDataAlert } from "~/components/no-data-alert"
+import { useData } from "~/hooks/use-ws"
+import { getToken } from "~/lib/cookie.server"
+import { actionResponse } from "~/lib/action"
+import fetcher from "~/lib/fetch"
+import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/tags";
+import type { Route } from "./+types/tags"
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = getToken(request);
-  const url = `${process.env.BACKEND_URL}/${params?.aps}/cards`;
+  const token = getToken(request)
+  const url = `${process.env.BACKEND_URL}/${params?.aps}/cards`
   const data = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
-  return { data, token };
+  })
+  return { data, token }
 }
 
 export default function Tags({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData.data) return <NoDataAlert />;
+  if (!loaderData.data) return <NoDataAlert />
 
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`;
-  const { data } = useData(url, { initialData: loaderData.data });
-  const [open, setOpen] = useState(false);
-  const [tag, setTag] = useState({ code: "" });
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/cards`
+  const { data } = useData(url, { initialData: loaderData.data })
+  const [open, setOpen] = useState(false)
+  const [tag, setTag] = useState({ code: "" })
 
-  const { showConfirmDialog } = useConfirmDialog();
+  const { showConfirmDialog } = useConfirmDialog()
   const handleConfirm = (pin) => {
     showConfirmDialog({
       title: m.tags_confirm_dialog_title(),
       description: m.tags_edit_dialog_description({ nr: tag.nr }),
       onConfirm: async () => {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/card/edit`;
-        const res = await fetcher(url, {
+        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/card/edit`
+        const res = await fetch(url, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${loaderData.token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ card: tag.nr, code: pin }),
-        });
-        toast(res);
+        })
+        actionResponse(res)
       },
-    });
-  };
+    })
+  }
   const handleEdit = (tag) => {
-    setOpen(true);
-    setTag(tag);
-  };
+    setOpen(true)
+    setTag(tag)
+  }
   // Fuzzy search
-  const [search, setSearch] = useState([]);
+  const [search, setSearch] = useState([])
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const Fuse = (await import("fuse.js")).default;
+    const Fuse = (await import("fuse.js")).default
     const fuse = new Fuse(data, {
       keys: ["code", "nr", "type", "uid"],
-    });
-    const result = fuse.search(e.target.value);
-    setSearch(result.map((obj) => obj["item"]).flat());
-  };
+    })
+    const result = fuse.search(e.target.value)
+    setSearch(result.map((obj) => obj["item"]).flat())
+  }
   // Infinite scroll
-  const chunkSize = 20;
-  const [tags, setTags] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
+  const chunkSize = 20
+  const [tags, setTags] = useState([])
+  const [hasMore, setHasMore] = useState(true)
   useEffect(() => {
     setTags(
       search.length === 0
         ? data.slice(0, chunkSize)
-        : search.slice(0, chunkSize),
-    );
+        : search.slice(0, chunkSize)
+    )
     if (search.length !== 0 && search.length <= chunkSize) {
-      setHasMore(false);
+      setHasMore(false)
     } else {
-      setHasMore(true);
+      setHasMore(true)
     }
-  }, [data, search]);
+  }, [data, search])
   const loadMore = () => {
-    const nextLength = tags.length + chunkSize;
+    const nextLength = tags.length + chunkSize
     const nextSlice =
       search.length === 0
         ? data.slice(0, nextLength)
-        : search.slice(0, nextLength);
-    setTags(nextSlice);
+        : search.slice(0, nextLength)
+    setTags(nextSlice)
     if (
       nextSlice.length >= data.length ||
       (search.length > 0 && nextSlice.length >= search.length)
     )
-      setHasMore(false);
-  };
+      setHasMore(false)
+  }
 
   return (
-    <div className="w-full lg:max-w-sm space-y-3">
+    <div className="w-full space-y-3 lg:max-w-sm">
       <EditTagDialog
         open={open}
         onConfirm={handleConfirm}
@@ -159,5 +159,5 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
         </ItemGroup>
       </InfiniteScroll>
     </div>
-  );
+  )
 }

@@ -1,14 +1,14 @@
-import { BadgeAlert } from "lucide-react";
-import { Badge } from "~/components/ui/badge";
+import { BadgeAlert } from "lucide-react"
+import { Badge } from "~/components/ui/badge"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/tooltip"
+import { m } from "@paraglide/messages.js"
 
 interface AlarmInfoProps {
-  active: number;
+  active: number
 }
 
 export function AlarmInfo({ active }: AlarmInfoProps) {
@@ -16,21 +16,23 @@ export function AlarmInfo({ active }: AlarmInfoProps) {
     <>
       {active > 0 && (
         <Tooltip>
-          <TooltipTrigger asChild>
-            <Badge className="bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300">
-              <span className="hidden sm:block">{m.alarms()}</span>
-              <BadgeAlert
-                className="block sm:hidden"
-                data-icon="inline-start"
-              />{" "}
-              {active}
-            </Badge>
-          </TooltipTrigger>
+          <TooltipTrigger
+            render={
+              <Badge className="bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300">
+                <span className="hidden sm:block">{m.alarms()}</span>
+                <BadgeAlert
+                  className="block sm:hidden"
+                  data-icon="inline-start"
+                />{" "}
+                {active}
+              </Badge>
+            }
+          />
           <TooltipContent>
             <p>{m.alarms_active({ active })}</p>
           </TooltipContent>
         </Tooltip>
       )}
     </>
-  );
+  )
 }

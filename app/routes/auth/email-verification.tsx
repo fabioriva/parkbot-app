@@ -1,37 +1,37 @@
-import { useState } from "react";
-import { Button } from "~/components/ui/button";
+import { useState } from "react"
+import { Button } from "~/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
-import { Field, FieldGroup } from "~/components/ui/field";
-import { authClient } from "~/lib/auth";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/card"
+import { Field, FieldGroup } from "~/components/ui/field"
+import { authClient } from "~/lib/auth"
+import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/verify-email";
+import type { Route } from "./+types/verify-email"
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-  const searchParams = url.searchParams;
-  const email = searchParams.get("email");
-  return { email };
+  const url = new URL(request.url)
+  const searchParams = url.searchParams
+  const email = searchParams.get("email")
+  return { email }
 }
 
 export default function EmailVerification({
   actionData,
   loaderData,
 }: Route.ComponentProps) {
-  const [emailSent, setEmailSent] = useState(false);
+  const [emailSent, setEmailSent] = useState(false)
   const resendEmail = async () => {
     const { data, error } = await authClient.sendVerificationEmail({
       email: loaderData.email,
       callbackURL: "/aps-select", // The redirect URL after verification
-    });
-    setEmailSent(data?.status);
-  };
+    })
+    setEmailSent(data?.status)
+  }
   return (
     <Card>
       <CardHeader>
@@ -48,10 +48,12 @@ export default function EmailVerification({
           </Field>
           <Field>
             <Button onClick={resendEmail}>{m.auth_email_resend()}</Button>
-            {emailSent ? <p>{m.auth_email_sent()}</p> : null}
+            {emailSent ? (
+              <p className="text-center">{m.auth_email_sent()}!</p>
+            ) : null}
           </Field>
         </FieldGroup>
       </CardContent>
     </Card>
-  );
+  )
 }

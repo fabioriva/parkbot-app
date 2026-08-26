@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useLoaderData, useParams } from "react-router";
-import { z } from "zod";
-import { Button } from "~/components/ui/button";
+import { useState } from "react"
+import { useLoaderData, useParams } from "react-router"
+import { z } from "zod"
+import { Button } from "~/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
+} from "~/components/ui/dialog"
 import {
   Field,
   FieldError,
@@ -19,66 +19,67 @@ import {
   // FieldGroup,
   FieldLabel,
   // FieldSet,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { useConfirmDialog } from "~/components/confirm-dialog";
-import fetcher from "~/lib/fetch";
-import toast from "~/lib/toast";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { useConfirmDialog } from "~/components/confirm-dialog"
+import { actionResponse } from "~/lib/action"
+import { m } from "@paraglide/messages.js"
 
-export function ExitCall({ exit }) {
-  const data = useLoaderData();
-  const params = useParams();
-  const { showConfirmDialog } = useConfirmDialog();
+export function ActionExit({ exit }) {
+  const data = useLoaderData()
+  const params = useParams()
+  const { showConfirmDialog } = useConfirmDialog()
 
-  const { enable, max, min } = exit;
-  const [card, setCard] = useState(min);
-  const [error, setError] = useState(false);
+  const { enable, max, min } = exit
+  const [card, setCard] = useState(min)
+  const [error, setError] = useState(false)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const schema = z.coerce.number().min(min).max(max);
-    const result = schema.safeParse(e.target.value);
+    const schema = z.coerce.number().min(min).max(max)
+    const result = schema.safeParse(e.target.value)
     if (!result.success) {
-      setError(true);
-      setCard(Number(e.target.value));
+      setError(true)
+      setCard(Number(e.target.value))
     } else {
-      setError(false);
-      setCard(result.data);
+      setError(false)
+      setCard(result.data)
     }
-  };
+  }
   const handleConfirm = async () => {
     showConfirmDialog({
       title: m.exit_call_confirm_dialog_title(),
       description: m.exit_call_confirm_dialog_description({ card }),
       onConfirm: async () => {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/exit`;
-        const res = await fetcher(url, {
+        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/exit`
+        const res = await fetch(url, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${data.token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ card }),
-        });
-        toast(res);
+        })
+        actionResponse(res)
       },
-    });
-  };
+    })
+  }
   const handleOpen = () => {
-    setError(false);
-    setCard(min);
-  };
+    setError(false)
+    setCard(min)
+  }
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          className="w-full"
-          disabled={!enable.status}
-          onClick={handleOpen}
-        >
-          {m.exit_call()}
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
+      <DialogTrigger
+        render={
+          <Button
+            className="w-full"
+            disabled={!enable.status}
+            onClick={handleOpen}
+          >
+            {m.exit_call()}
+          </Button>
+        }
+      />
+      <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>{m.exit_call_dialog_title()}</DialogTitle>
           <DialogDescription>
@@ -108,16 +109,19 @@ export function ExitCall({ exit }) {
           )}
         </Field>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">{m.cancel()}</Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button onClick={handleConfirm} disabled={error}>
-              {m.confirm()}
-            </Button>
-          </DialogClose>
+          <DialogClose
+            render={<Button variant="outline">{m.cancel()}</Button>}
+          />
+
+          <DialogClose
+            render={
+              <Button onClick={handleConfirm} disabled={error}>
+                {m.confirm()}
+              </Button>
+            }
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

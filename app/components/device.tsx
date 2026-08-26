@@ -1,30 +1,37 @@
-import clsx from "clsx";
-import { AlertCircleIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import clsx from "clsx"
+import { AlertCircleIcon, ArrowUpRightIcon } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Link, useParams } from "react-router"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "~/components/ui/accordion";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import { Badge } from "~/components/ui/badge";
-import { Spinner } from "~/components/ui/spinner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { ActionPP } from "~/components/action-pp";
-import { CardWrapper } from "~/components/card-wrapper";
-import { Drive } from "~/components/drive";
-import { Garage } from "~/components/garage";
-import { IoTooltip } from "~/components/io-tooltip";
-import { Motion } from "~/components/motion";
-import { Silomat } from "~/components/silomat";
-import { deviceT, logT, safeMessageT } from "~/lib/trans";
-import { cn } from "~/lib/utils";
+} from "~/components/ui/accordion"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { Badge } from "~/components/ui/badge"
+import { Spinner } from "~/components/ui/spinner"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { ActionPP } from "~/components/action-pp"
+import { CardWrapper } from "~/components/card-wrapper"
+import { Drive } from "~/components/drive"
+import { Garage } from "~/components/garage"
+import { IoTooltip } from "~/components/io-tooltip"
+import { Motion } from "~/components/motion"
+import { Silomat } from "~/components/silomat"
+import { deviceT, logT, safeMessageT } from "~/lib/trans"
+import { cn } from "~/lib/utils"
+
+const ExternalLink = ({ link }) => (
+  <Link to={link} aria-label={link}>
+    <ArrowUpRightIcon className="size-4 hover:text-blue-500" />
+  </Link>
+)
 
 const Lamp = ({ bit, color }) => (
   <IoTooltip io={bit}>
     <div
-      className={clsx("w-4 h-4 rounded-full", {
+      className={clsx("h-4 w-4 rounded-full", {
         "bg-slate-100 dark:bg-slate-600": bit.status === 0,
         "bg-red-500": bit.status === 1 && color === "red",
         "bg-yellow-500": bit.status === 1 && color === "yellow",
@@ -32,7 +39,7 @@ const Lamp = ({ bit, color }) => (
       })}
     />
   </IoTooltip>
-);
+)
 
 const Mode = ({ mode }) => (
   <Badge
@@ -44,18 +51,19 @@ const Mode = ({ mode }) => (
   >
     {safeMessageT("mode", mode.key)}
   </Badge>
-);
+)
 
 const Step = ({ step }) => (
   <Badge variant="outline">
     <Spinner data-icon="inline-start" />
     {step}
   </Badge>
-);
+)
 
 export function Device({ device, advanced = false }) {
   // console.log(device);
-  const [LS, LC, LA] = device.c;
+  const params = useParams()
+  const [LS, LC, LA] = device.c
   const action = (
     <div className="flex items-center gap-1">
       {device.step !== 0 && <Step step={device.step} />}
@@ -63,22 +71,23 @@ export function Device({ device, advanced = false }) {
       <Lamp bit={LA} color="red" />
       <Lamp bit={LC} color="yellow" />
       <Lamp bit={LS} color="green" />
+      {!advanced && <ExternalLink link={`/aps/${params.aps}/devices`} />}
     </div>
-  );
+  )
   const actions = (
-    <div className={`grid grid-cols-${device.d.length} gap-3 w-full`}>
+    <div className={`grid grid-cols-${device.d.length} w-full gap-3`}>
       {device.d.map((action, key) => {
         switch (action.key) {
           case "action-pp":
           case "action-pp-reset":
-            return <ActionPP action={action} disabled={false} key={key} />;
+            return <ActionPP action={action} disabled={false} key={key} />
         }
       })}
     </div>
-  );
-  const bg = device.operation !== 0 ? "bg-blue-50 dark:bg-blue-950" : undefined;
-  const [tab, setTab] = useState("tab-0");
-  useEffect(() => setTab(`tab-${device.motor}`), [device.motor]);
+  )
+  const bg = device.operation !== 0 ? "bg-blue-50 dark:bg-blue-950" : undefined
+  const [tab, setTab] = useState("tab-0")
+  useEffect(() => setTab(`tab-${device.motor}`), [device.motor])
 
   if (advanced) {
     return (
@@ -106,10 +115,10 @@ export function Device({ device, advanced = false }) {
             >
               <p
                 className={cn(
-                  "font-bold mb-1.5",
+                  "mb-1.5 font-bold",
                   device.operation !== 0
                     ? "text-normal"
-                    : "text-muted-foreground",
+                    : "text-muted-foreground"
                 )}
               >
                 {deviceT(device)}
@@ -119,11 +128,11 @@ export function Device({ device, advanced = false }) {
               <Accordion type="multiple" collapsible="true">
                 {view.name === "view-garage" && (
                   <AccordionItem value="garage-sensors">
-                    <AccordionTrigger className="hover:no-underline py-1.5 flex items-center gap-1.5">
+                    <AccordionTrigger className="flex items-center gap-1.5 py-1.5 hover:no-underline">
                       Garage sensors
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="flex gap-1 max-w-xs sm:max-w-none overflow-auto">
+                      <div className="flex max-w-xs gap-1 overflow-auto sm:max-w-none">
                         {view.sensors.slice(6).map((item, key) => (
                           <IoTooltip io={item} key={key}>
                             <Badge
@@ -178,19 +187,19 @@ export function Device({ device, advanced = false }) {
           </CardWrapper>
         </TabsContent>
       </Tabs>
-    );
+    )
   } else {
     return (
       <CardWrapper className={bg} title={device.name} action={action}>
         <p
           className={cn(
             "font-bold",
-            device.operation !== 0 ? "text-normal" : "text-muted-foreground",
+            device.operation !== 0 ? "text-normal" : "text-muted-foreground"
           )}
         >
           {deviceT(device)}
         </p>
       </CardWrapper>
-    );
+    )
   }
 }

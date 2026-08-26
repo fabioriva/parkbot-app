@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
+import { useState, useEffect } from "react"
+import { Button } from "~/components/ui/button"
+import { Checkbox } from "~/components/ui/checkbox"
 import {
   Dialog,
   DialogClose,
@@ -9,7 +9,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "~/components/ui/dialog";
+} from "~/components/ui/dialog"
 import {
   Field,
   FieldDescription,
@@ -18,8 +18,8 @@ import {
   FieldLabel,
   FieldSeparator,
   FieldSet,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -27,9 +27,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select";
-import { roles } from "~/lib/roles";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/select"
+import { roles } from "~/lib/roles"
+import { m } from "@paraglide/messages.js"
 
 export function SubscriptionForm({
   action,
@@ -40,25 +40,25 @@ export function SubscriptionForm({
   selectedSubscription,
 }) {
   const [checkedState, setCheckedState] = useState(
-    new Array(aps.length).fill(false),
-  );
+    new Array(aps.length).fill(false)
+  )
 
-  const [company, setCompany] = useState("Sotefin");
+  const [company, setCompany] = useState("Sotefin")
 
   useEffect(() => {
     const updatedCheckedState = checkedState.map(
       (item, position) =>
-        company === aps[position].company || company === "Sotefin",
-    );
-    setCheckedState(updatedCheckedState);
-  }, [company]);
+        company === aps[position].company || company === "Sotefin"
+    )
+    setCheckedState(updatedCheckedState)
+  }, [company])
 
   const handleCheckboxChange = (aps, index) => {
     const updatedCheckedState = checkedState.map((item, position) =>
-      index === position ? !item : item,
-    );
-    setCheckedState(updatedCheckedState);
-  };
+      index === position ? !item : item
+    )
+    setCheckedState(updatedCheckedState)
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -149,14 +149,12 @@ export function SubscriptionForm({
             </FieldSet>
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
+            <DialogClose render={<Button variant="outline">Cancel</Button>} />
             <Button type="submit">Save changes</Button>
             {fetcher.state !== "idle" && <p>Saving...</p>}
           </DialogFooter>
         </fetcher.Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,45 +1,45 @@
-import { Form, redirect } from "react-router";
+import { Form, redirect } from "react-router"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "~/components/ui/card"
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { Submit } from "~/components/submit-button";
-import { auth } from "~/lib/auth.server";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { Submit } from "~/components/submit-button"
+import { auth } from "~/lib/auth.server"
 import {
   findSubscriptionByEmail,
   subscribeByEmail,
-} from "~/lib/subscription.server";
-import { m } from "@paraglide/messages.js";
+} from "~/lib/subscription.server"
+import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/signup";
+import type { Route } from "./+types/signup"
 
 export async function action({ context, request }: Route.ActionArgs) {
   try {
-    const formData = await request.formData();
-    const firstName = formData.get("first-name");
-    const lastName = formData.get("last-name");
-    const email = formData.get("email");
-    const password = formData.get("password");
-    const confirm = formData.get("confirm");
-    const subscription = await findSubscriptionByEmail(email);
+    const formData = await request.formData()
+    const firstName = formData.get("first-name")
+    const lastName = formData.get("last-name")
+    const email = formData.get("email")
+    const password = formData.get("password")
+    const confirm = formData.get("confirm")
+    const subscription = await findSubscriptionByEmail(email)
     if (subscription === null) {
-      return { error: m.signup_not_subscribed() };
+      return { error: m.signup_not_subscribed() }
     }
     if (password && password !== confirm) {
-      return { error: m.signup_password_match() };
+      return { error: m.signup_password_match() }
     }
-    const name = `${firstName} ${lastName}`;
+    const name = `${firstName} ${lastName}`
     const { headers, response } = await auth.api.signUpEmail({
       // asResponse: true,
       returnHeaders: true,
@@ -48,14 +48,14 @@ export async function action({ context, request }: Route.ActionArgs) {
         email,
         password,
         role: subscription.role,
-        callbackURL: "/aps-select", // optional
+        // callbackURL: "/aps-select", // optional
         image: `https://api.dicebear.com/10.x/bottts/svg?seed=${name}`, // optional
       },
-    });
-    const result = await subscribeByEmail(email);
-    return redirect(`/email-verification?email=${email}`, { headers });
+    })
+    const result = await subscribeByEmail(email)
+    return redirect(`/email-verification?email=${email}`, { headers })
   } catch (error) {
-    return { error: error?.body?.message };
+    return { error: error?.body?.message }
   }
 }
 
@@ -131,5 +131,5 @@ export default function Signup({ actionData }: Route.ComponentProps) {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

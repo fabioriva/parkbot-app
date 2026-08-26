@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select";
+} from "~/components/ui/select"
 
 export function CompanySelect({ companies = [], company, setCompany }) {
   return (
@@ -30,5 +30,5 @@ export function CompanySelect({ companies = [], company, setCompany }) {
         </SelectGroup>
       </SelectContent>
     </Select>
-  );
+  )
 }

@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Pie, PieChart } from "recharts";
+import { Pie, PieChart } from "recharts"
 import {
   ChartContainer,
   ChartLegend,
@@ -8,8 +8,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "~/components/ui/chart";
-import { safeMessageT } from "~/lib/trans";
+} from "~/components/ui/chart"
+import { safeMessageT } from "~/lib/trans"
 
 export function Occupancy({ occupancy }) {
   const chartConfig = {
@@ -25,11 +25,11 @@ export function Occupancy({ occupancy }) {
       label: safeMessageT("occupancy", "lock"),
       color: "var(--chart-4)",
     },
-  } satisfies ChartConfig;
+  } satisfies ChartConfig
   const chartData = occupancy.map((item) => ({
     ...item,
     fill: `var(--color-${item.id})`,
-  }));
+  }))
   return (
     <ChartContainer config={chartConfig}>
       <PieChart>
@@ -44,5 +44,5 @@ export function Occupancy({ occupancy }) {
         />
       </PieChart>
     </ChartContainer>
-  );
+  )
 }

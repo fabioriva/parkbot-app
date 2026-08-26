@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { createContext, useContext, useState } from "react";
-import { z } from "zod";
-import { Button } from "~/components/ui/button";
+import { createContext, useContext, useState } from "react"
+import { z } from "zod"
+import { Button } from "~/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -12,61 +12,61 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog";
+} from "~/components/ui/dialog"
 import {
   Field,
   FieldError,
   FieldDescription,
   FieldLabel,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { m } from "@paraglide/messages.js"
 
-const EditStallDialogContext = createContext();
+const EditStallDialogContext = createContext()
 
 export const useEditStallDialog = () => {
-  const context = useContext(EditStallDialogContext);
+  const context = useContext(EditStallDialogContext)
   if (!context) {
-    throw new Error("useEditDialog must be used within EditDialogProvider");
+    throw new Error("useEditDialog must be used within EditDialogProvider")
   }
-  return context;
-};
+  return context
+}
 
 export function EditStallDialogProvider({ children }) {
-  const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState({});
+  const [open, setOpen] = useState(false)
+  const [options, setOptions] = useState({})
   const showEditDialog = (opts) => {
-    setOptions(opts);
-    setOpen(true);
-    setValue(opts.stall.status);
-  };
-  const min = 1;
-  const max = options?.definitions?.cards || 1;
-  const stall = options?.stall;
-  const stallStatus = options?.definitions?.stallStatus;
-  const [error, setError] = useState(false);
-  const [value, setValue] = useState(options?.stall?.status || 0);
+    setOptions(opts)
+    setOpen(true)
+    setValue(opts.stall.status)
+  }
+  const min = 1
+  const max = options?.definitions?.cards || 1
+  const stall = options?.stall
+  const stallStatus = options?.definitions?.stallStatus
+  const [error, setError] = useState(false)
+  const [value, setValue] = useState(options?.stall?.status || 0)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const schema = z.coerce.number().min(min).max(max);
-    const result = schema.safeParse(e.target.value);
+    const schema = z.coerce.number().min(min).max(max)
+    const result = schema.safeParse(e.target.value)
     if (!result.success) {
-      setError(true);
-      setValue(Number(e.target.value));
+      setError(true)
+      setValue(Number(e.target.value))
     } else {
-      setError(false);
-      setValue(result.data);
+      setError(false)
+      setValue(result.data)
     }
-  };
+  }
   const handleConfirm = (status) => {
-    setOpen(false);
-    options?.onConfirm?.(status);
-  };
+    setOpen(false)
+    options?.onConfirm?.(status)
+  }
 
   return (
     <EditStallDialogContext.Provider value={{ showEditDialog }}>
       {children}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent className="sm:max-w-sm" showCloseButton={false}>
           <DialogHeader>
             <DialogTitle>
               {m.map_edit_dialog_title({ nr: stall?.nr })}
@@ -97,9 +97,9 @@ export function EditStallDialogProvider({ children }) {
             </FieldDescription>
           </Field>
           <DialogFooter className="sm:flex-col-reverse">
-            <DialogClose asChild>
-              <Button variant="outline">{m.cancel()}</Button>
-            </DialogClose>
+            <DialogClose
+              render={<Button variant="outline">{m.cancel()}</Button>}
+            />
             <Button onClick={() => handleConfirm(stallStatus.FREE)}>
               {m.map_edit_dialog_button_clear()}
             </Button>
@@ -113,5 +113,5 @@ export function EditStallDialogProvider({ children }) {
         </DialogContent>
       </Dialog>
     </EditStallDialogContext.Provider>
-  );
+  )
 }

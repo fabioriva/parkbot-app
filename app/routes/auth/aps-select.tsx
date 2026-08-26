@@ -1,5 +1,7 @@
-import { Form, redirect } from "react-router";
-import { Card, CardContent } from "~/components/ui/card";
+import { Loader2Icon } from "lucide-react"
+import { Form, redirect, useNavigation } from "react-router"
+import { Button } from "~/components/ui/button"
+import { Card, CardContent } from "~/components/ui/card"
 import {
   Field,
   FieldContent,
@@ -9,48 +11,86 @@ import {
   FieldLegend,
   FieldSet,
   FieldTitle,
-} from "~/components/ui/field";
-import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
-import { Submit } from "~/components/submit-button";
-import { auth } from "~/lib/auth.server";
+} from "~/components/ui/field"
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
+import { Submit } from "~/components/submit-button"
+import { auth } from "~/lib/auth.server"
 // import { aps } from "~/lib/aps";
-import { findSubscribedApsList } from "~/lib/aps.server";
-import { findSubscriptionByEmail } from "~/lib/subscription.server";
-import { m } from "@paraglide/messages.js";
+import { findSubscribedApsList } from "~/lib/aps.server"
+import { findSubscriptionByEmail } from "~/lib/subscription.server"
+import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/aps-select";
+import type { Route } from "./+types/aps-select"
 
 export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const aps = formData.get("aps");
+  const formData = await request.formData()
+  const intent = formData.get("intent")
+  if (intent === "signout") {
+    const data = await auth.api.signOut({
+      asResponse: true,
+      headers: await request.headers,
+    })
+    const headers = new Headers(data.headers)
+    return redirect("/", { headers })
+  }
+
+  const aps = formData.get("aps")
   const data = await auth.api.updateUser({
     body: {
       aps,
     },
     headers: await request.headers,
-  });
+  })
   if (data.status) {
-    return redirect(`/aps/${aps}/dashboard`);
+    return redirect(`/aps/${aps}/dashboard`)
   }
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
   const data = await auth.api.getSession({
     headers: await request.headers,
-  });
+  })
   if (!data) {
-    return redirect("/");
+    return redirect("/")
   }
-  const { session, user } = data;
+  const { session, user } = data
   if (process.env.TWO_FACTOR === "enabled" && !user.twoFactorEnabled) {
-    return redirect("/2fa-setup");
+    return redirect("/2fa-setup")
   }
-  const subscription = await findSubscriptionByEmail(user?.email);
-  const aps = await findSubscribedApsList(subscription?.aps);
-  return aps;
+  const subscription = await findSubscriptionByEmail(user?.email)
+  const aps = await findSubscribedApsList(subscription?.aps)
+  return aps
 }
 
 export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
+  const navigation = useNavigation()
+
+  if (loaderData.length <= 0)
+    return (
+      <Card>
+        <CardContent>
+          <Form method="post" className="flex flex-col gap-3">
+            <p>No Aps assigned.</p>
+            {navigation.formAction === "/aps-select" ? (
+              <Button className="w-full" disabled>
+                <Loader2Icon className="animate-spin" />
+                {m.signout()}
+              </Button>
+            ) : (
+              <Button
+                className="w-full"
+                type="submit"
+                name="intent"
+                value="signout"
+              >
+                {m.signout()}
+              </Button>
+            )}
+          </Form>
+        </CardContent>
+      </Card>
+    )
+
   return (
     <Card>
       <CardContent>
@@ -87,7 +127,7 @@ export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
                         <RadioGroupItem value={ns} id={ns} />
                       </Field>
                     </FieldLabel>
-                  ),
+                  )
                 )}
               </RadioGroup>
               <Field>
@@ -98,5 +138,5 @@ export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
         </Form>
       </CardContent>
     </Card>
-  );
+  )
 }

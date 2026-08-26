@@ -1,4 +1,4 @@
-import { Checkbox } from "~/components/ui/checkbox";
+import { Checkbox } from "~/components/ui/checkbox"
 import {
   Field,
   FieldDescription,
@@ -8,9 +8,9 @@ import {
   FieldLegend,
   // FieldSeparator,
   FieldSet,
-} from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
-import { m } from "@paraglide/messages.js";
+} from "~/components/ui/field"
+import { Input } from "~/components/ui/input"
+import { m } from "@paraglide/messages.js"
 
 export function UserForm() {
   return (
@@ -31,5 +31,5 @@ export function UserForm() {
         </div>
       </FieldGroup>
     </FieldSet>
-  );
+  )
 }
