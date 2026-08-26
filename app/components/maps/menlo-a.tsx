@@ -1,9 +1,9 @@
-import { Level } from "~/components/map-level";
+import { Level } from "~/components/map-level"
 
 export default function Map({ data, view }) {
-  const levels = [...data.levels].reverse(); // Creates a copy and reverses it
+  const levels = [...data.levels].reverse() // Creates a copy and reverses it
   return (
-    <div className="overflow-auto p-0.5 space-y-3">
+    <div className="space-y-3 overflow-auto p-0.5">
       {levels.map((level) => (
         <Level
           definitions={data?.definitions}
@@ -1037,5 +1037,5 @@ export default function Map({ data, view }) {
         }
       `}</style>
     </div>
-  );
+  )
 }

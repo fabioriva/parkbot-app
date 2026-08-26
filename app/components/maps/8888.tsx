@@ -1,8 +1,8 @@
-import { Level } from "~/components/map-level";
+import { Level } from "~/components/map-level"
 
 export default function Map({ data, view }) {
   return (
-    <div className="overflow-auto p-0.5 flex flex-col gap-3">
+    <div className="flex flex-col gap-3 overflow-auto p-0.5">
       {data.levels.map((level) => (
         <Level
           definitions={data?.definitions}
@@ -892,5 +892,5 @@ export default function Map({ data, view }) {
         }
       `}</style>
     </div>
-  );
+  )
 }

@@ -125,7 +125,7 @@ export function Device({ device, advanced = false }) {
               </p>
               {view.name === "view-garage" && <Garage sensors={view.sensors} />}
               {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
-              <Accordion type="multiple" collapsible="true">
+              <Accordion multiple>
                 {view.name === "view-garage" && (
                   <AccordionItem value="garage-sensors">
                     <AccordionTrigger className="flex items-center gap-1.5 py-1.5 hover:no-underline">

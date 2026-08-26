@@ -1,10 +1,10 @@
-import { Level } from "~/components/map-level";
+import { Level } from "~/components/map-level"
 
 export default function Map({ data, view }) {
-  const levels = [...data.levels].reverse(); // Creates a copy and reverses it
+  const levels = [...data.levels].reverse() // Creates a copy and reverses it
   const jsx = () => {
-    let levels = [];
-    let offset = 0;
+    let levels = []
+    let offset = 0
     for (let i = 1; i < 14; i++) {
       const p = `
       #s-${24 + offset} {
@@ -102,15 +102,15 @@ export default function Map({ data, view }) {
       #s-${1 + offset}  {
         top: 126px;
         left: 207px;
-      }`;
-      levels.push(p);
-      offset += 24;
+      }`
+      levels.push(p)
+      offset += 24
     }
-    return levels.join(" ");
-  };
+    return levels.join(" ")
+  }
 
   return (
-    <div className="overflow-auto flex flex-wrap gap-3">
+    <div className="flex flex-wrap gap-3 overflow-auto">
       {levels.map((level) => (
         <Level
           definitions={data?.definitions}
@@ -139,5 +139,5 @@ export default function Map({ data, view }) {
         ${jsx()}
       `}</style>
     </div>
-  );
+  )
 }

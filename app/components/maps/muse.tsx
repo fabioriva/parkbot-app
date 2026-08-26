@@ -1,8 +1,8 @@
-import { Level } from "~/components/map-level";
+import { Level } from "~/components/map-level"
 
 export default function Map({ data, view }) {
   return (
-    <div className="overflow-auto flex flex-wrap gap-3">
+    <div className="flex flex-wrap gap-3 overflow-auto">
       {data.levels.map((level) => (
         <Level
           definitions={data?.definitions}
@@ -858,5 +858,5 @@ export default function Map({ data, view }) {
         }
       `}</style>
     </div>
-  );
+  )
 }
