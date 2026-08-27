@@ -4,6 +4,8 @@ import {
   ArrowRight,
   BadgeAlert,
   BadgeCheck,
+  CircleSmall,
+  Key,
   Tag,
   User,
   Wrench,
@@ -18,15 +20,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination"
-// import {
-//   Select,
-//   SelectContent,
-//   SelectGroup,
-//   SelectItem,
-//   SelectLabel,
-//   SelectTrigger,
-//   SelectValue,
-// } from "~/components/ui/select";
 import {
   Table,
   TableBody,
@@ -63,59 +56,10 @@ function getPageNumbers(
   return range
 }
 
-const Operation = ({ item }) => {
-  const { alarm, device, operation } = item
-  return (
-    <>
-      {alarm !== undefined ? (
-        <Badge
-          className={clsx({
-            "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300":
-              operation?.id === 1,
-            "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300":
-              operation?.id === 2,
-          })}
-          variant="outline"
-        >
-          {operation?.id === 1 && <BadgeAlert data-icon="inline-start" />}
-          {operation?.id === 2 && <BadgeCheck data-icon="inline-start" />}
-          <span>AL{alarm.id}</span>
-          {safeMessageT("alarm", alarm.key, alarm.query)}
-        </Badge>
-      ) : (
-        <Badge
-          className={clsx("text-muted-foreground", {
-            "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300":
-              operation?.id === 3,
-          })}
-          variant="outline"
-        >
-          {device.id === 0 ? (
-            <>
-              <User data-icon="inline-start" />
-              {safeMessageT("history_table", operation.key)}
-            </>
-          ) : (
-            <>
-              {operation?.id === 3 && <Wrench data-icon="inline-start" />}
-              {operation?.id === 4 && <Tag data-icon="inline-start" />}
-              {operation?.id === 5 && <ArrowRight data-icon="inline-start" />}
-              {operation?.id === 6 && <ArrowLeft data-icon="inline-start" />}
-              {operation?.id === 7 && <ArrowRight data-icon="inline-start" />}
-              {operation?.id === 8 && <ArrowLeft data-icon="inline-start" />}
-              {safeMessageT("history_table", operation?.key)}
-            </>
-          )}
-        </Badge>
-      )}
-    </>
-  )
-}
-
 const TablePagination = ({ currentPage, pages, paginate }) => {
   const pageNumbers = getPageNumbers(currentPage, pages)
   return (
-    <Pagination>
+    <Pagination className="flex">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
@@ -129,7 +73,7 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
             text={m.history_pagination_previous()}
           />
         </PaginationItem>
-        {pageNumbers.map((number, key) => {
+        {/* {pageNumbers.map((number, key) => {
           if (number === "...") {
             return (
               <PaginationItem key={key}>
@@ -149,7 +93,7 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
               </PaginationItem>
             )
           }
-        })}
+        })} */}
         <PaginationItem>
           <PaginationNext
             href="#"
@@ -167,7 +111,6 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
   )
 }
 
-// export function HistoryTable({ history: { count, dateFrom, dateTo }, query }) {
 export function HistoryTable({
   currentPage,
   pages,
@@ -177,7 +120,7 @@ export function HistoryTable({
 }) {
   return (
     <>
-      <div className="overflow-hidden rounded-lg border">
+      <div className="max-w-5xl overflow-hidden rounded-lg border">
         <Table className="">
           {/* <TableCaption>
             {m.history_description({
@@ -200,7 +143,6 @@ export function HistoryTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* {currentRows.map((item, key) => ( */}
             {query.map((item, key) => (
               <TableRow key={key}>
                 <TableCell>
@@ -213,15 +155,49 @@ export function HistoryTable({
                   {item.device.id !== 0 && item.device.key}
                 </TableCell>
                 <TableCell>
-                  {item.device.id !== 0 && (
-                    <>
-                      [<span className="font-mono">{item.mode.id}</span>]{" "}
-                      {safeMessageT("mode", item.mode.key)}
-                    </>
+                  {item.device.id !== 0 ? (
+                    <span>{safeMessageT("mode", item.mode.key)}</span>
+                  ) : (
+                    <span className="text-muted-foreground">No mode</span>
                   )}
                 </TableCell>
                 <TableCell>
-                  <Operation item={item} />
+                  {item.alarm !== undefined ? (
+                    <Badge variant="outline">
+                      {item.operation?.id === 1 && (
+                        <CircleSmall
+                          className="fill-red-500 stroke-red-500"
+                          data-icon="inline-start"
+                        />
+                      )}
+                      {item.operation?.id === 2 && (
+                        <CircleSmall
+                          className="fill-green-500 stroke-green-500"
+                          data-icon="inline-start"
+                        />
+                      )}
+                      <span>AL{item.alarm.id}</span>
+                      {safeMessageT("alarm", item.alarm.key, item.alarm.query)}
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline">
+                      <CircleSmall
+                        className={clsx({
+                          "fill-amber-500 stroke-amber-500": [3, 4].includes(
+                            item.operation?.id
+                          ),
+                          "fill-blue-500 stroke-blue-500": [
+                            5, 6, 7, 8,
+                          ].includes(item.operation?.id),
+                          "fill-neutral-500 stroke-neutral-500": ![
+                            3, 4, 5, 6, 7, 8,
+                          ].includes(item.operation?.id),
+                        })}
+                        data-icon="inline-start"
+                      />
+                      {safeMessageT("history_table", item.operation.key)}
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell>{item.card}</TableCell>
                 <TableCell>{item.stall}</TableCell>
@@ -232,31 +208,8 @@ export function HistoryTable({
         </Table>
       </div>
 
-      <div className="flex items-center gap-6 py-6">
-        <div className="grow text-muted-foreground" />
-        {/* <Field orientation="horizontal" className="w-fit">
-          <FieldLabel htmlFor="select-rows-per-page">
-            {m.history_pagination_rows_per_page()}
-          </FieldLabel>
-          <Select
-            defaultValue={rowsPerPage}
-            onValueChange={(rows) => setRowsPerPages(rows)}
-          >
-            <SelectTrigger className="grow-0">
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Rows per page</SelectLabel>
-                <SelectItem value={15}>15</SelectItem>
-                <SelectItem value={30}>30</SelectItem>
-                <SelectItem value={50}>50</SelectItem>
-                <SelectItem value={100}>100</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </Field> */}
-        <p className="text-sm">
+      <div className="mt-3 flex max-w-5xl items-center justify-between pl-2">
+        <p className="text-sm text-muted-foreground">
           {m.history_pagination_current_page({
             current: currentPage,
             total: pages,
