@@ -120,7 +120,7 @@ export function HistoryTable({
 }) {
   return (
     <>
-      <div className="max-w-5xl overflow-hidden rounded-lg border">
+      <div className="overflow-hidden rounded-lg border">
         <Table className="">
           {/* <TableCaption>
             {m.history_description({
@@ -208,7 +208,7 @@ export function HistoryTable({
         </Table>
       </div>
 
-      <div className="mt-3 flex max-w-5xl items-center justify-between pl-2">
+      <div className="mt-3 flex items-center justify-between pl-2">
         <p className="text-sm text-muted-foreground">
           {m.history_pagination_current_page({
             current: currentPage,

@@ -191,7 +191,7 @@
   "exit_queue_item_next": "Prossima uscita",
   "exit_queue_item_title": "{position}° chiamata",
   "history_title": "Cronologia delle operazioni",
-  "history_description": "Storico dal {from} al {to}. Totale registrazioni {count}.",
+  "history_description": "Dal {from} al {to}. Totale registrazioni {count}.",
   "history_pagination_current_page": "Pagina {current} di {total}",
   "history_pagination_next": "Successiva",
   "history_pagination_previous": "Precedente",

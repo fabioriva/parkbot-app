@@ -1,5 +1,7 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns"
-import { useState, useEffect } from "react"
+import { Search } from "lucide-react"
+import { useState } from "react"
+import { useFetcher } from "react-router"
 import { Button } from "~/components/ui/button"
 import InfiniteScroll from "react-infinite-scroll-component"
 import {
@@ -9,8 +11,9 @@ import {
   ItemDescription,
   ItemTitle,
 } from "~/components/ui/item"
-import { DateRange } from "~/components/date-range"
+// import { DateRange } from "~/components/calendar"
 import { HistoryList } from "~/components/history-list"
+import { HistoryQueryForm } from "~/components/history-query-form"
 import { HistoryTable } from "~/components/history-table"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { getToken } from "~/lib/cookie.server"
@@ -36,11 +39,13 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
 export default function History({ loaderData, params }) {
   if (!loaderData.data) return <NoDataAlert />
+  const fetcher = useFetcher()
 
-  const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
-
   const [history, setHistory] = useState(loaderData.data)
+  const [open, setOpen] = useState(false)
+  const [page, setPage] = useState(1)
+
   const { count, dateFrom, dateTo, query, total } = history
 
   const handleQuery = async ({ from, to }) => {
@@ -57,6 +62,11 @@ export default function History({ loaderData, params }) {
       const json = await res.json()
       setHistory(json)
     }
+  }
+
+  const handleSearch = async (card, dateRange, stall) => {
+    console.log(card, dateRange, stall)
+    handleQuery(dateRange)
   }
 
   const fetchPage = async (pageNumber) => {
@@ -106,11 +116,11 @@ export default function History({ loaderData, params }) {
   return (
     <>
       {/* List */}
-      <div className="mb-3 flex flex-col gap-3 xl:hidden">
+      <div className="mb-3 flex flex-col gap-3 lg:hidden">
         <Item variant="outline">
           <ItemContent>
             <ItemTitle>{m.history_title()}</ItemTitle>
-            <ItemDescription className="text-xs">
+            <ItemDescription>
               {m.history_description({
                 from: dateFrom,
                 to: dateTo,
@@ -119,7 +129,10 @@ export default function History({ loaderData, params }) {
             </ItemDescription>
           </ItemContent>
         </Item>
-        <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+        {/* <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} /> */}
+        <Button onClick={() => setOpen(true)} variant="outline">
+          <Search data-icon="inline-start" /> Search
+        </Button>
         <InfiniteScroll
           dataLength={query.length}
           next={loadMore}
@@ -131,11 +144,11 @@ export default function History({ loaderData, params }) {
         </InfiniteScroll>
       </div>
       {/* Table */}
-      <div className="hidden xl:block">
+      <div className="hidden max-w-6xl lg:block">
         <Item className="mb-3" variant="outline">
           <ItemContent>
             <ItemTitle>{m.history_title()}</ItemTitle>
-            <ItemDescription className="text-xs">
+            <ItemDescription>
               {m.history_description({
                 from: dateFrom,
                 to: dateTo,
@@ -144,12 +157,15 @@ export default function History({ loaderData, params }) {
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} />
+            {/* <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} /> */}
             {/* <SearchInput
               search={search}
               placeholder={"Fuzzy search!"}
               handleSearch={handleSearch}
             /> */}
+            <Button onClick={() => setOpen(true)} variant="outline">
+              <Search data-icon="inline-start" /> Search
+            </Button>
           </ItemActions>
         </Item>
         <HistoryTable
@@ -160,6 +176,15 @@ export default function History({ loaderData, params }) {
           rowsPerPage={LIMIT}
         />
       </div>
+      <HistoryQueryForm
+        // action="create"
+        // fetcher={fetcher}
+        dateFrom={dateFrom}
+        dateTo={dateTo}
+        handleSearch={handleSearch}
+        open={open}
+        setOpen={setOpen}
+      />
     </>
   )
 }

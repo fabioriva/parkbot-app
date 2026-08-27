@@ -191,7 +191,7 @@
   "exit_queue_item_next": "Next",
   "exit_queue_item_title": "{position}° call",
   "history_title": "Operations History",
-  "history_description": "History from {from} to {to}. Total records {count}.",
+  "history_description": "From {from} to {to}. Total records {count}.",
   "history_pagination_current_page": "Page {current} of {total}",
   "history_pagination_next": "Next",
   "history_pagination_previous": "Previous",
