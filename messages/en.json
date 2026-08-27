@@ -627,7 +627,7 @@
   "tags_edit_dialog_title": "Edit Tag {nr}",
   "tags_edit_dialog_description": "Change PIN code for Tag {nr}.",
   "tags_edit_dialog_field_label": "PIN code",
-  "tags_edit_dialog_field_description": "Enter a valid PIN code, pattern: 3 digits, [a-fA-F0-9]}",
+  "tags_edit_dialog_field_description": "Enter PIN code, pattern: 3 digits, [a-fA-F0-9]}",
   "tags_edit_dialog_field_error": "PIN code not valid",
   "tags_item_description_parked": "Parked in slot {nr}",
   "tags_item_description_valid": "Valid for entry",

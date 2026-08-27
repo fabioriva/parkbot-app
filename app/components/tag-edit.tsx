@@ -70,21 +70,25 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
           </FieldDescription>
         </Field>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setError(false)
-              }}
-            >
-              {m.cancel()}
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button onClick={handleConfirm} disabled={error}>
-              {m.confirm()}
-            </Button>
-          </DialogClose>
+          <DialogClose
+            render={
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setError(false)
+                }}
+              >
+                {m.cancel()}
+              </Button>
+            }
+          />
+          <DialogClose
+            render={
+              <Button onClick={handleConfirm} disabled={error}>
+                {m.confirm()}
+              </Button>
+            }
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>
