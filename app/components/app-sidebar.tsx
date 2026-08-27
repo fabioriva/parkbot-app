@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "~/components/ui/sidebar"
 import { UserAvatar } from "~/components/user-avatar"
 import { UserMenu } from "~/components/user-menu"
@@ -24,6 +25,7 @@ interface SidebarProps {
   // Sidebar: React.ComponentProps<typeof Sidebar>
 }
 export function AppSidebar({ aps, pathname, user }: SidebarProps) {
+  const { isMobile, setOpenMobile } = useSidebar()
   const navMain = {
     items: [
       {
@@ -67,6 +69,7 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
+              onClick={() => isMobile && setOpenMobile(false)}
               render={<Link to={`/aps/${user.aps}/dashboard`} />}
             >
               <UserAvatar user={user} />
@@ -92,6 +95,7 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   isActive={item.pathname === pathname}
+                  onClick={() => isMobile && setOpenMobile(false)}
                   render={
                     <Link
                       to={item.pathname}
