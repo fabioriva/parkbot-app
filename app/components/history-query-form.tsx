@@ -23,13 +23,22 @@ import {
   FieldSet,
 } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select"
 import { DateRange } from "~/components/calendar"
 import { m } from "@paraglide/messages.js"
 
 export function HistoryQueryForm({
   dateFrom,
   dateTo,
-  handleSearch,
+  devices,
+  handleQuery,
   open,
   setOpen,
 }) {
@@ -38,15 +47,16 @@ export function HistoryQueryForm({
     from: parse(dateFrom, "yyyy-MM-dd HH:mm", new Date()),
     to: parse(dateTo, "yyyy-MM-dd HH:mm", new Date()),
   })
+  const [device, setDevice] = useState(0)
   const [stall, setStall] = useState(0)
   const handleDateRange = (range) => {
     setRange(range)
   }
-  const handleSearch_ = () => {
-    // console.log(card, dateRange, stall)
-    handleSearch(card, dateRange, stall)
+  const handleSearch = () => {
+    handleQuery(card, dateRange, device, stall)
     setOpen(false)
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">
@@ -54,11 +64,9 @@ export function HistoryQueryForm({
           <DialogTitle>History search parameters</DialogTitle>
           <DialogDescription>Fine tune your query.</DialogDescription>
         </DialogHeader>
-        {/* <fetcher.Form method="post" onSubmit={() => setOpen(false)}> */}
-        <Form onSubmit={handleSearch_}>
+        <Form onSubmit={handleSearch}>
           <FieldSet className="mb-3">
             <FieldGroup>
-              {/* <input name="action" value={action} type="hidden" /> */}
               {/* <div className="flex items-center justify-between gap-4">
                 <Field>
                   <DateSingle id="from" />
@@ -71,12 +79,28 @@ export function HistoryQueryForm({
                 <FieldLabel htmlFor="date-range">Date range</FieldLabel>
                 <DateRange
                   id="date-range"
-                  // from={dateFrom}
-                  // to={dateTo}
-                  // handleQuery={handleDateRange}
                   dateRange={dateRange}
                   setDateRange={setDateRange}
                 />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="device">Select device or all</FieldLabel>
+                <Select id="device" value={device} onValueChange={setDevice}>
+                  <SelectTrigger className="w-45">
+                    <SelectValue>
+                      {devices.find((item) => item.id === device).name}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {devices.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </Field>
               <Field>
                 <FieldLabel htmlFor="card">Card Number</FieldLabel>
@@ -110,9 +134,7 @@ export function HistoryQueryForm({
           <DialogFooter>
             <DialogClose render={<Button variant="outline">Cancel</Button>} />
             <Button type="submit">Search history</Button>
-            {/* {fetcher.state !== "idle" && <p>Saving...</p>} */}
           </DialogFooter>
-          {/* </fetcher.Form> */}
         </Form>
       </DialogContent>
     </Dialog>

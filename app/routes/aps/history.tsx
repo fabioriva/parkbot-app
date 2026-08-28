@@ -26,7 +26,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getToken(request)
   const from = format(subDays(startOfDay(new Date()), 1), "yyyy-MM-dd HH:mm:ss")
   const to = format(endOfDay(new Date()), "yyyy-MM-dd HH:mm:ss")
-  const query = `dateFrom=${from}&dateTo=${to}&card=0&stall=0`
+  const query = `dateFrom=${from}&dateTo=${to}&card=0&device=0&stall=0`
   const url = `${process.env.BACKEND_URL}/${params?.aps}/history?${query}&page=${1}&limit=${LIMIT}`
   const data = await fetcher(url, {
     headers: {
@@ -42,14 +42,25 @@ export default function History({ loaderData, params }) {
   const [history, setHistory] = useState(loaderData.data)
   const [open, setOpen] = useState(false)
   const [page, setPage] = useState(1)
+  // console.log(history)
 
-  const { card, count, dateFrom, dateTo, query, stall, total } = history
+  const {
+    card,
+    // count,
+    dateFrom,
+    dateTo,
+    device,
+    devices,
+    query,
+    stall,
+    total,
+  } = history
 
-  const handleQuery = async (card, dateRange, stall) => {
+  const handleQuery = async (card, dateRange, device, stall) => {
     setPage(1)
     const strFrom = format(startOfDay(dateRange.from), "yyyy-MM-dd HH:mm:ss")
     const strTo = format(endOfDay(dateRange.to), "yyyy-MM-dd HH:mm:ss")
-    const query = `dateFrom=${strFrom}&dateTo=${strTo}&card=${card}&stall=${stall}&page=${1}&limit=${LIMIT}`
+    const query = `dateFrom=${strFrom}&dateTo=${strTo}&card=${card}&device=${device}&stall=${stall}&page=${1}&limit=${LIMIT}`
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}`
     const res = await fetch(url, {
       headers: {
@@ -62,12 +73,8 @@ export default function History({ loaderData, params }) {
     }
   }
 
-  // const handleSearch = async (card, dateRange, stall) => {
-  //   handleQuery(card, dateRange, stall)
-  // }
-
   const fetchPage = async (pageNumber) => {
-    const query = `dateFrom=${dateFrom}&dateTo=${dateTo}&card=${card}&stall=${stall}`
+    const query = `dateFrom=${dateFrom}&dateTo=${dateTo}&card=${card}&device=${device}&stall=${stall}`
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}&page=${pageNumber}&limit=${LIMIT}`
     const res = await fetch(url, {
       headers: {
@@ -107,9 +114,17 @@ export default function History({ loaderData, params }) {
     const json = await fetchPage(pageNumber)
     setHistory(json) // OK for Table!
   }
-  const NoData = () => <ErrorAlert description="No data available" />
+  const NoData = () => <ErrorAlert description="No record found." />
   return (
     <>
+      <HistoryQueryForm
+        dateFrom={dateFrom}
+        dateTo={dateTo}
+        devices={devices}
+        handleQuery={handleQuery}
+        open={open}
+        setOpen={setOpen}
+      />
       {/* List */}
       <div className="mb-3 flex flex-col gap-3 lg:hidden">
         <Item variant="outline">
@@ -179,13 +194,6 @@ export default function History({ loaderData, params }) {
           <NoData />
         )}
       </div>
-      <HistoryQueryForm
-        dateFrom={dateFrom}
-        dateTo={dateTo}
-        handleSearch={handleQuery}
-        open={open}
-        setOpen={setOpen}
-      />
     </>
   )
 }
