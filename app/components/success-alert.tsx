@@ -11,7 +11,7 @@ export function Success({
   return (
     <Alert className="my-3 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300">
       <CheckCircle2Icon />
-      <AlertTitle>{title}</AlertTitle>
+      {title && <AlertTitle>{title}</AlertTitle>}
       <AlertDescription>
         <div dangerouslySetInnerHTML={{ __html: description }} />
       </AlertDescription>

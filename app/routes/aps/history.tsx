@@ -11,6 +11,7 @@ import {
   ItemTitle,
 } from "~/components/ui/item"
 // import { DateRange } from "~/components/calendar"
+import { Error as ErrorAlert } from "~/components/error-alert"
 import { HistoryList } from "~/components/history-list"
 import { HistoryQueryForm } from "~/components/history-query-form"
 import { HistoryTable } from "~/components/history-table"
@@ -45,6 +46,7 @@ export default function History({ loaderData, params }) {
   const { card, count, dateFrom, dateTo, query, stall, total } = history
 
   const handleQuery = async (card, dateRange, stall) => {
+    setPage(1)
     const strFrom = format(startOfDay(dateRange.from), "yyyy-MM-dd HH:mm:ss")
     const strTo = format(endOfDay(dateRange.to), "yyyy-MM-dd HH:mm:ss")
     const query = `dateFrom=${strFrom}&dateTo=${strTo}&card=${card}&stall=${stall}&page=${1}&limit=${LIMIT}`
@@ -60,10 +62,9 @@ export default function History({ loaderData, params }) {
     }
   }
 
-  const handleSearch = async (card, dateRange, stall) => {
-    console.log(card, dateRange, stall)
-    handleQuery(card, dateRange, stall)
-  }
+  // const handleSearch = async (card, dateRange, stall) => {
+  //   handleQuery(card, dateRange, stall)
+  // }
 
   const fetchPage = async (pageNumber) => {
     const query = `dateFrom=${dateFrom}&dateTo=${dateTo}&card=${card}&stall=${stall}`
@@ -106,7 +107,7 @@ export default function History({ loaderData, params }) {
     const json = await fetchPage(pageNumber)
     setHistory(json) // OK for Table!
   }
-
+  const NoData = () => <ErrorAlert description="No data available" />
   return (
     <>
       {/* List */}
@@ -127,15 +128,19 @@ export default function History({ loaderData, params }) {
         <Button onClick={() => setOpen(true)} variant="outline">
           <Search data-icon="inline-start" /> Search
         </Button>
-        <InfiniteScroll
-          dataLength={query.length}
-          next={loadMore}
-          hasMore={hasMore}
-          loader={<p className="pt-6">Loading more records…</p>}
-          endMessage={<p className="pt-6">All records loaded.</p>}
-        >
-          <HistoryList media={true} query={query} />
-        </InfiniteScroll>
+        {query.length > 0 ? (
+          <InfiniteScroll
+            dataLength={query.length}
+            next={loadMore}
+            hasMore={hasMore}
+            loader={<p className="pt-6">Loading more records…</p>}
+            endMessage={<p className="pt-6">All records loaded.</p>}
+          >
+            <HistoryList media={true} query={query} />
+          </InfiniteScroll>
+        ) : (
+          <NoData />
+        )}
       </div>
       {/* Table */}
       <div className="hidden max-w-6xl lg:block">
@@ -162,18 +167,22 @@ export default function History({ loaderData, params }) {
             </Button>
           </ItemActions>
         </Item>
-        <HistoryTable
-          currentPage={page}
-          pages={pages}
-          paginate={paginate}
-          query={query}
-          rowsPerPage={LIMIT}
-        />
+        {query.length > 0 ? (
+          <HistoryTable
+            currentPage={page}
+            pages={pages}
+            paginate={paginate}
+            query={query}
+            rowsPerPage={LIMIT}
+          />
+        ) : (
+          <NoData />
+        )}
       </div>
       <HistoryQueryForm
         dateFrom={dateFrom}
         dateTo={dateTo}
-        handleSearch={handleSearch}
+        handleSearch={handleQuery}
         open={open}
         setOpen={setOpen}
       />

@@ -12,7 +12,7 @@ export function Error({
   return (
     <Alert variant="destructive" className="my-3">
       <AlertCircleIcon />
-      <AlertTitle>{title}</AlertTitle>
+      {title && <AlertTitle>{title}</AlertTitle>}
       <AlertDescription>
         <div dangerouslySetInnerHTML={{ __html: description }} />
       </AlertDescription>
