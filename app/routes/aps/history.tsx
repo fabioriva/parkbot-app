@@ -1,7 +1,6 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns"
 import { Search } from "lucide-react"
 import { useState } from "react"
-import { useFetcher } from "react-router"
 import { Button } from "~/components/ui/button"
 import InfiniteScroll from "react-infinite-scroll-component"
 import {
@@ -26,8 +25,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getToken(request)
   const from = format(subDays(startOfDay(new Date()), 1), "yyyy-MM-dd HH:mm:ss")
   const to = format(endOfDay(new Date()), "yyyy-MM-dd HH:mm:ss")
-  const filter = "a"
-  const query = `system=0&dateFrom=${from}&dateTo=${to}&filter=${filter}&device=0&number=0`
+  const query = `dateFrom=${from}&dateTo=${to}&card=0&stall=0`
   const url = `${process.env.BACKEND_URL}/${params?.aps}/history?${query}&page=${1}&limit=${LIMIT}`
   const data = await fetcher(url, {
     headers: {
@@ -39,19 +37,17 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
 export default function History({ loaderData, params }) {
   if (!loaderData.data) return <NoDataAlert />
-  const fetcher = useFetcher()
-
   const [hasMore, setHasMore] = useState(true)
   const [history, setHistory] = useState(loaderData.data)
   const [open, setOpen] = useState(false)
   const [page, setPage] = useState(1)
 
-  const { count, dateFrom, dateTo, query, total } = history
+  const { card, count, dateFrom, dateTo, query, stall, total } = history
 
-  const handleQuery = async ({ from, to }) => {
-    const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss")
-    const strTo = format(endOfDay(to), "yyyy-MM-dd HH:mm:ss")
-    const query = `system=0&dateFrom=${strFrom}&dateTo=${strTo}&filter=a&device=0&number=0&page=${1}&limit=${LIMIT}`
+  const handleQuery = async (card, dateRange, stall) => {
+    const strFrom = format(startOfDay(dateRange.from), "yyyy-MM-dd HH:mm:ss")
+    const strTo = format(endOfDay(dateRange.to), "yyyy-MM-dd HH:mm:ss")
+    const query = `dateFrom=${strFrom}&dateTo=${strTo}&card=${card}&stall=${stall}&page=${1}&limit=${LIMIT}`
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}`
     const res = await fetch(url, {
       headers: {
@@ -66,11 +62,11 @@ export default function History({ loaderData, params }) {
 
   const handleSearch = async (card, dateRange, stall) => {
     console.log(card, dateRange, stall)
-    handleQuery(dateRange)
+    handleQuery(card, dateRange, stall)
   }
 
   const fetchPage = async (pageNumber) => {
-    const query = `system=0&dateFrom=${dateFrom}&dateTo=${dateTo}&filter=a&device=0&number=0`
+    const query = `dateFrom=${dateFrom}&dateTo=${dateTo}&card=${card}&stall=${stall}`
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}&page=${pageNumber}&limit=${LIMIT}`
     const res = await fetch(url, {
       headers: {
@@ -79,7 +75,6 @@ export default function History({ loaderData, params }) {
     })
     if (res.ok) {
       const json = await res.json()
-      // console.log(pageNumber, "Data json:", json);
       return json
     }
   }
@@ -107,7 +102,6 @@ export default function History({ loaderData, params }) {
   const [rowsPerPage, setRowsPerPages] = useState(15)
   const pages = Math.ceil(total / rowsPerPage)
   const paginate = async (pageNumber) => {
-    // console.log(pageNumber)
     setPage(pageNumber)
     const json = await fetchPage(pageNumber)
     setHistory(json) // OK for Table!
@@ -177,8 +171,6 @@ export default function History({ loaderData, params }) {
         />
       </div>
       <HistoryQueryForm
-        // action="create"
-        // fetcher={fetcher}
         dateFrom={dateFrom}
         dateTo={dateTo}
         handleSearch={handleSearch}
