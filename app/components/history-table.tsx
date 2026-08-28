@@ -4,6 +4,8 @@ import {
   ArrowRight,
   BadgeAlert,
   BadgeCheck,
+  ChevronFirst,
+  ChevronLast,
   CircleSmall,
   Key,
   Tag,
@@ -11,6 +13,7 @@ import {
   Wrench,
 } from "lucide-react"
 import { Badge } from "~/components/ui/badge"
+import { Button } from "~/components/ui/button"
 import {
   Pagination,
   PaginationContent,
@@ -62,6 +65,19 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
     <Pagination className="flex">
       <PaginationContent>
         <PaginationItem>
+          <Button
+            variant="ghost"
+            className={
+              currentPage <= 1
+                ? "pointer-events-none cursor-not-allowed"
+                : undefined
+            }
+            onClick={() => paginate(1)}
+          >
+            <ChevronFirst />
+          </Button>
+        </PaginationItem>
+        <PaginationItem>
           <PaginationPrevious
             href="#"
             className={
@@ -105,6 +121,19 @@ const TablePagination = ({ currentPage, pages, paginate }) => {
             onClick={() => paginate(currentPage + 1)}
             text={m.history_pagination_next()}
           />
+        </PaginationItem>
+        <PaginationItem>
+          <Button
+            variant="ghost"
+            className={
+              currentPage >= pages
+                ? "pointer-events-none cursor-not-allowed"
+                : undefined
+            }
+            onClick={() => paginate(pages)}
+          >
+            <ChevronLast />
+          </Button>
         </PaginationItem>
       </PaginationContent>
     </Pagination>
