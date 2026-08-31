@@ -42,24 +42,18 @@ export default function History({ loaderData, params }) {
   const [history, setHistory] = useState(loaderData.data)
   const [open, setOpen] = useState(false)
   const [page, setPage] = useState(1)
-  // console.log(history)
+  const [parameters, setParameters] = useState({
+    card: 0,
+    dateFrom: format(subDays(startOfDay(new Date()), 1), "yyyy-MM-dd HH:mm:ss"),
+    dateTo: format(endOfDay(new Date()), "yyyy-MM-dd HH:mm:ss"),
+    device: 0,
+    stall: 0,
+  })
 
-  const {
-    card,
-    // count,
-    dateFrom,
-    dateTo,
-    device,
-    devices,
-    query,
-    stall,
-    total,
-  } = history
+  const { devices, query, total } = history
 
-  const handleQuery = async (card, dateRange, device, stall) => {
-    const strFrom = format(startOfDay(dateRange.from), "yyyy-MM-dd HH:mm:ss")
-    const strTo = format(endOfDay(dateRange.to), "yyyy-MM-dd HH:mm:ss")
-    const query = `dateFrom=${strFrom}&dateTo=${strTo}&card=${card}&device=${device}&stall=${stall}&page=${1}&limit=${LIMIT}`
+  const handleQuery = async (card, dateFrom, dateTo, device, stall) => {
+    const query = `dateFrom=${dateFrom}&dateTo=${dateTo}&card=${card}&device=${device}&stall=${stall}&page=${1}&limit=${LIMIT}`
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}`
     const res = await fetch(url, {
       headers: {
@@ -69,12 +63,13 @@ export default function History({ loaderData, params }) {
     if (res.ok) {
       const json = await res.json()
       setHistory(json)
-      setOpen(false)
       setPage(1)
+      setParameters({ card, dateFrom, dateTo, device, stall })
     }
   }
 
   const fetchPage = async (pageNumber) => {
+    const { card, dateFrom, dateTo, device, stall } = parameters
     const query = `dateFrom=${dateFrom}&dateTo=${dateTo}&card=${card}&device=${device}&stall=${stall}`
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/history?${query}&page=${pageNumber}&limit=${LIMIT}`
     const res = await fetch(url, {
@@ -98,11 +93,6 @@ export default function History({ loaderData, params }) {
     const json = await fetchPage(next)
     setHistory((prev) => ({
       ...prev,
-      // aggiorni metadati se servono
-      // count: json.count ?? prev.count,
-      dateFrom: json.dateFrom ?? prev.dateFrom,
-      dateTo: json.dateTo ?? prev.dateTo,
-      // QUI: append invece di overwrite
       query: [...prev.query, ...json.query],
     }))
     setHasMore(json.hasMore)
@@ -115,16 +105,15 @@ export default function History({ loaderData, params }) {
     const json = await fetchPage(pageNumber)
     setHistory(json) // OK for Table!
   }
+
   const NoData = () => <ErrorAlert description="No record found." />
   return (
     <>
       <HistoryQueryForm
-        dateFrom={dateFrom}
-        dateTo={dateTo}
         devices={devices}
         handleQuery={handleQuery}
         open={open}
-        // setOpen={setOpen}
+        setOpen={setOpen}
       />
       {/* List */}
       <div className="mb-3 flex flex-col gap-3 lg:hidden">
@@ -133,14 +122,13 @@ export default function History({ loaderData, params }) {
             <ItemTitle>{m.history_title()}</ItemTitle>
             <ItemDescription>
               {m.history_description({
-                from: dateFrom,
-                to: dateTo,
+                from: parameters.dateFrom,
+                to: parameters.dateTo,
                 count: total,
               })}
             </ItemDescription>
           </ItemContent>
         </Item>
-        {/* <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} /> */}
         <Button onClick={() => setOpen(true)} variant="outline">
           <Search data-icon="inline-start" /> Search
         </Button>
@@ -165,19 +153,13 @@ export default function History({ loaderData, params }) {
             <ItemTitle>{m.history_title()}</ItemTitle>
             <ItemDescription>
               {m.history_description({
-                from: dateFrom,
-                to: dateTo,
+                from: parameters.dateFrom,
+                to: parameters.dateTo,
                 count: total,
               })}
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            {/* <DateRange from={dateFrom} to={dateTo} handleQuery={handleQuery} /> */}
-            {/* <SearchInput
-              search={search}
-              placeholder={"Fuzzy search!"}
-              handleSearch={handleSearch}
-            /> */}
             <Button onClick={() => setOpen(true)} variant="outline">
               <Search data-icon="inline-start" /> Search
             </Button>

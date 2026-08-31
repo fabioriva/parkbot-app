@@ -1,6 +1,5 @@
-import { parse } from "date-fns"
+import { format, endOfDay, startOfDay, subDays } from "date-fns"
 import { useState } from "react"
-import { Form } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Calendar } from "~/components/ui/calendar"
 import {
@@ -34,37 +33,29 @@ import {
 import { DateRange } from "~/components/calendar"
 import { m } from "@paraglide/messages.js"
 
-export function HistoryQueryForm({
-  dateFrom,
-  dateTo,
-  devices,
-  handleQuery,
-  open,
-  // setOpen,
-}) {
+export function HistoryQueryForm({ devices, handleQuery, open, setOpen }) {
   const [card, setCard] = useState(0)
   const [dateRange, setDateRange] = useState({
-    from: parse(dateFrom, "yyyy-MM-dd HH:mm", new Date()),
-    to: parse(dateTo, "yyyy-MM-dd HH:mm", new Date()),
+    from: subDays(startOfDay(new Date()), 1),
+    to: endOfDay(new Date()),
   })
   const [device, setDevice] = useState(0)
   const [stall, setStall] = useState(0)
-  const handleDateRange = (range) => {
-    setRange(range)
-  }
+
   const handleSearch = () => {
-    handleQuery(card, dateRange, device, stall)
+    const dateFrom = format(startOfDay(dateRange.from), "yyyy-MM-dd HH:mm:ss")
+    const dateTo = format(endOfDay(dateRange.to), "yyyy-MM-dd HH:mm:ss")
+    handleQuery(card, dateFrom, dateTo, device, stall)
   }
 
   return (
-    // <Dialog open={open} onOpenChange={setOpen}>
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>History search parameters</DialogTitle>
           <DialogDescription>Fine tune your query.</DialogDescription>
         </DialogHeader>
-        <Form onSubmit={handleSearch}>
+        <form onSubmit={handleSearch}>
           <FieldSet className="mb-3">
             <FieldGroup>
               <Field>
@@ -125,9 +116,11 @@ export function HistoryQueryForm({
           </FieldSet>
           <DialogFooter>
             <DialogClose render={<Button variant="outline">Cancel</Button>} />
-            <Button type="submit">Search history</Button>
+            <DialogClose
+              render={<Button type="submit">Search history</Button>}
+            />
           </DialogFooter>
-        </Form>
+        </form>
       </DialogContent>
     </Dialog>
   )
