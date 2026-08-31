@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import { DateRange } from "~/components/calendar"
+import { DateRange } from "~/components/date-range"
 import { m } from "@paraglide/messages.js"
 
 export function HistoryQueryForm({ devices, handleQuery, open, setOpen }) {

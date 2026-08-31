@@ -10,7 +10,7 @@ import {
 import { Label } from "~/components/ui/label"
 import { Switch } from "~/components/ui/switch"
 import { CardWrapper } from "~/components/card-wrapper"
-import { DateRange } from "~/components/calendar"
+import { DateRange } from "~/components/date-range"
 import { Operations as OperationsChart } from "~/components/operations-chart"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { getToken } from "~/lib/cookie.server"
