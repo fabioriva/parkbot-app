@@ -40,7 +40,7 @@ export function HistoryQueryForm({
   devices,
   handleQuery,
   open,
-  setOpen,
+  // setOpen,
 }) {
   const [card, setCard] = useState(0)
   const [dateRange, setDateRange] = useState({
@@ -54,11 +54,11 @@ export function HistoryQueryForm({
   }
   const handleSearch = () => {
     handleQuery(card, dateRange, device, stall)
-    setOpen(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    // <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>History search parameters</DialogTitle>

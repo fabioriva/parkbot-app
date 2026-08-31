@@ -69,6 +69,7 @@ export default function History({ loaderData, params }) {
     if (res.ok) {
       const json = await res.json()
       setHistory(json)
+      setOpen(false)
       setPage(1)
     }
   }
@@ -123,7 +124,7 @@ export default function History({ loaderData, params }) {
         devices={devices}
         handleQuery={handleQuery}
         open={open}
-        setOpen={setOpen}
+        // setOpen={setOpen}
       />
       {/* List */}
       <div className="mb-3 flex flex-col gap-3 lg:hidden">
