@@ -67,14 +67,6 @@ export function HistoryQueryForm({
         <Form onSubmit={handleSearch}>
           <FieldSet className="mb-3">
             <FieldGroup>
-              {/* <div className="flex items-center justify-between gap-4">
-                <Field>
-                  <DateSingle id="from" />
-                </Field>
-                <Field>
-                  <DateSingle id="to" />
-                </Field>
-              </div> */}
               <Field>
                 <FieldLabel htmlFor="date-range">Date range</FieldLabel>
                 <DateRange

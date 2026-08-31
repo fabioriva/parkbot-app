@@ -57,7 +57,6 @@ export default function History({ loaderData, params }) {
   } = history
 
   const handleQuery = async (card, dateRange, device, stall) => {
-    setPage(1)
     const strFrom = format(startOfDay(dateRange.from), "yyyy-MM-dd HH:mm:ss")
     const strTo = format(endOfDay(dateRange.to), "yyyy-MM-dd HH:mm:ss")
     const query = `dateFrom=${strFrom}&dateTo=${strTo}&card=${card}&device=${device}&stall=${stall}&page=${1}&limit=${LIMIT}`
@@ -70,6 +69,7 @@ export default function History({ loaderData, params }) {
     if (res.ok) {
       const json = await res.json()
       setHistory(json)
+      setPage(1)
     }
   }
 
@@ -98,7 +98,7 @@ export default function History({ loaderData, params }) {
     setHistory((prev) => ({
       ...prev,
       // aggiorni metadati se servono
-      count: json.count ?? prev.count,
+      // count: json.count ?? prev.count,
       dateFrom: json.dateFrom ?? prev.dateFrom,
       dateTo: json.dateTo ?? prev.dateTo,
       // QUI: append invece di overwrite
