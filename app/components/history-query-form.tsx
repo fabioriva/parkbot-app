@@ -1,5 +1,6 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns"
 import { useState } from "react"
+import { Form } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Calendar } from "~/components/ui/calendar"
 import {
@@ -55,7 +56,7 @@ export function HistoryQueryForm({ devices, handleQuery, open, setOpen }) {
           <DialogTitle>History search parameters</DialogTitle>
           <DialogDescription>Fine tune your query.</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSearch}>
+        <Form onSubmit={handleSearch}>
           <FieldSet className="mb-3">
             <FieldGroup>
               <Field>
@@ -120,7 +121,7 @@ export function HistoryQueryForm({ devices, handleQuery, open, setOpen }) {
               render={<Button type="submit">Search history</Button>}
             />
           </DialogFooter>
-        </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
