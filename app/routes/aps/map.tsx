@@ -125,14 +125,14 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <TabsContent value="map">
+      <TabsContent className="mt-3" value="map">
         <Suspense fallback={<p className="py-3">Loading...</p>}>
           <EditStallDialogProvider>
             <DynamicComponent data={data} view={view} />
           </EditStallDialogProvider>
         </Suspense>
       </TabsContent>
-      <TabsContent value="occupancy" className="max-w-xl">
+      <TabsContent value="occupancy" className="mt-3 max-w-xl">
         <CardWrapper
           title={m.occupancy_title()}
           description={m.occupancy_total_count({
