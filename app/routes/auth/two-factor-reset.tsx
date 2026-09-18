@@ -58,10 +58,10 @@ export default function TwoFactorReset({
         <Form method="post">
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="totp">
+              <FieldLabel htmlFor="code">
                 {m.two_factor_reset_label()}
               </FieldLabel>
-              <Input type="text" name="code" required />
+              <Input type="text" name="code" required autoFocus />
             </Field>
             <Field>
               <Submit action="/2fa-reset" title={m.two_factor_reset_button()} />
