@@ -74,7 +74,8 @@ export function UserMenu({
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            {/* <DropdownMenuGroup>
+            {/*
+            <DropdownMenuGroup>
               <DropdownMenuItem disabled>
                 <Sparkles />
                 Upgrade to Pro
