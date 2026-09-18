@@ -1,4 +1,3 @@
-import clsx from "clsx"
 import {
   ArrowLeft,
   ArrowRight,
@@ -35,6 +34,7 @@ import {
 } from "~/components/ui/table"
 import { safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
+import { clsx } from "cn";
 
 // utils/pagination.ts
 function getPageNumbers(

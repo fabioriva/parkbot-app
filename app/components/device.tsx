@@ -1,4 +1,3 @@
-import clsx from "clsx"
 import { AlertCircleIcon, ArrowUpRightIcon } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Link, useParams } from "react-router"
@@ -21,6 +20,7 @@ import { Motion } from "~/components/motion"
 import { Silomat } from "~/components/silomat"
 import { deviceT, logT, safeMessageT } from "~/lib/trans"
 import { cn } from "~/lib/utils"
+import { clsx } from "cn";
 
 const ExternalLink = ({ link }) => (
   <Link to={link} aria-label={link}>

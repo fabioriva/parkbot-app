@@ -1,6 +1,6 @@
-import clsx from "clsx"
 import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion"
 import { m } from "@paraglide/messages.js"
+import { clsx } from "cn";
 
 const Item = ({ title, value }) => (
   <div className="flex flex-col">

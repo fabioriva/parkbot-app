@@ -1,4 +1,3 @@
-import clsx from "clsx"
 import { useLoaderData, useParams } from "react-router"
 import {
   Tooltip,
@@ -8,6 +7,7 @@ import {
 import { useEditStallDialog } from "~/components/map-edit"
 import { actionResponse } from "~/lib/action"
 import { m } from "@paraglide/messages.js"
+import { clsx } from "cn";
 
 export function Stall({ definitions, stall, view }) {
   const data = useLoaderData()

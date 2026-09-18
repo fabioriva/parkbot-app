@@ -1,4 +1,3 @@
-import clsx from "clsx"
 import {
   Links,
   Meta,
@@ -16,6 +15,7 @@ import { paraglideMiddleware } from "@paraglide/server.js"
 
 import type { Route } from "./+types/root"
 import "./app.css"
+import { clsx } from "cn";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const pathname = new URL(request.url).pathname

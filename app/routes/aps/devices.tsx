@@ -1,4 +1,3 @@
-import clsx from "clsx"
 import { Device } from "~/components/device"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { getToken } from "~/lib/cookie.server"
@@ -7,6 +6,7 @@ import fetcher from "~/lib/fetch"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/devices"
+import { clsx } from "cn";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getToken(request)

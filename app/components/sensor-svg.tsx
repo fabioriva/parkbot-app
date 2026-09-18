@@ -1,4 +1,4 @@
-import clsx from "clsx"
+import { clsx } from "cn";
 
 // export type Bit = {
 //   addr: string;
