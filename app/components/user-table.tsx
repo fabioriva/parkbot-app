@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
+import { UserAvatar } from "~/components/user-avatar"
 
 export function UserTable({ fetcher, users }) {
   const handleDelete = async (user) => {
@@ -30,6 +31,7 @@ export function UserTable({ fetcher, users }) {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
+              <TableHead>Avatar</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Email verified</TableHead>
               <TableHead>2FA enabled</TableHead>
@@ -46,6 +48,9 @@ export function UserTable({ fetcher, users }) {
               .map((user) => (
                 <TableRow key={user.email}>
                   <TableCell className="capitalize">{user.name}</TableCell>
+                  <TableCell>
+                    <UserAvatar user={user} />
+                  </TableCell>
                   <TableCell className="font-semibold">{user.email}</TableCell>
                   <TableCell className="uppercase">
                     {user.emailVerified.toString()}
