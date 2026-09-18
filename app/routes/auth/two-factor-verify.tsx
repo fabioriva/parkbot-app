@@ -62,7 +62,7 @@ export default function TwoFactorVerify({
               <FieldLabel htmlFor="totp">
                 {m.two_factor_verify_totp()}
               </FieldLabel>
-              <Input type="totp" name="totp" required />
+              <Input type="totp" name="totp" required autoFocus />
             </Field>
             <Field>
               <Submit
