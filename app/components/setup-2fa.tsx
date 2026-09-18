@@ -71,6 +71,7 @@ export function Setup2FA({ isTwoFactorEnabled, success, setSuccess }) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoFocus
             />
             <FieldDescription>
               {twoFactorEnabled

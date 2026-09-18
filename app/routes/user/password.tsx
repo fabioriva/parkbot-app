@@ -64,6 +64,7 @@ export default function Password() {
               type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
+              autoFocus
             />
             <FieldDescription>
               {m.password_change_field_description_current()}
