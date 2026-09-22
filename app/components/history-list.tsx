@@ -12,6 +12,8 @@ import { logT, safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
 
 export function HistoryList({ query, media = false }: any) {
+  console.log(query)
+
   return (
     <ItemGroup className="gap-0">
       {query.map((item, key) => (
