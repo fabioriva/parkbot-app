@@ -21,5 +21,5 @@ export const roles = {
     "racks",
     "tags",
   ],
-  valet: ["dashboard", "map", "tags"],
+  valet: ["dashboard", "history", "map", "operations", "tags"],
 }

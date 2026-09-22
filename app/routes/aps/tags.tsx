@@ -1,5 +1,6 @@
 import { Tag as TagIcon } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useOutletContext } from "react-router"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Button } from "~/components/ui/button"
 import {
@@ -105,6 +106,9 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
       setHasMore(false)
   }
 
+  const user = useOutletContext()
+  const isEditable = user?.role === "admin" || user?.role === "service"
+
   return (
     <div className="w-full space-y-3 lg:max-w-sm">
       <EditTagDialog
@@ -150,6 +154,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
                   size="sm"
                   variant="outline"
                   onClick={() => handleEdit(tag)}
+                  disabled={!isEditable}
                 >
                   Edit
                 </Button>
