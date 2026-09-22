@@ -1,5 +1,6 @@
 import { format, endOfDay, startOfDay, subDays } from "date-fns"
-import { useState } from "react"
+import { useState, type FormEvent } from "react"
+import type { DateRange as DateRangeValue } from "react-day-picker"
 import { Form } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Calendar } from "~/components/ui/calendar"
@@ -36,17 +37,21 @@ import { m } from "@paraglide/messages.js"
 
 export function HistoryQueryForm({ devices, handleQuery, open, setOpen }) {
   const [card, setCard] = useState(0)
-  const [dateRange, setDateRange] = useState({
+  const [dateRange, setDateRange] = useState<DateRangeValue | undefined>({
     from: subDays(startOfDay(new Date()), 1),
     to: endOfDay(new Date()),
   })
   const [device, setDevice] = useState(0)
   const [stall, setStall] = useState(0)
 
-  const handleSearch = () => {
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!dateRange?.from || !dateRange?.to) return
+
     const dateFrom = format(startOfDay(dateRange.from), "yyyy-MM-dd HH:mm:ss")
     const dateTo = format(endOfDay(dateRange.to), "yyyy-MM-dd HH:mm:ss")
     handleQuery(card, dateFrom, dateTo, device, stall)
+    setOpen(false)
   }
 
   return (
@@ -107,7 +112,6 @@ export function HistoryQueryForm({ devices, handleQuery, open, setOpen }) {
                   value={stall}
                   onChange={(e) => setStall(e.target.value)}
                   required
-                  required
                 />
                 <FieldDescription>
                   Enter the stall number to search or 0 = all
@@ -117,9 +121,9 @@ export function HistoryQueryForm({ devices, handleQuery, open, setOpen }) {
           </FieldSet>
           <DialogFooter>
             <DialogClose render={<Button variant="outline">Cancel</Button>} />
-            <DialogClose
-              render={<Button type="submit">Search history</Button>}
-            />
+            <Button type="submit" disabled={!dateRange?.from || !dateRange?.to}>
+              Search history
+            </Button>
           </DialogFooter>
         </Form>
       </DialogContent>

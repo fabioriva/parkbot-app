@@ -1,5 +1,6 @@
-import { format, endOfDay, startOfDay, subDays } from "date-fns"
+import { format, endOfDay, startOfDay, subDays, parseISO } from "date-fns"
 import { useState } from "react"
+import type { DateRange as DateRangeValue } from "react-day-picker"
 import {
   Item,
   ItemActions,
@@ -30,20 +31,31 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       Authorization: `Bearer ${token}`,
     },
   })
-  return { data, token }
+  return { data, token, from, to }
 }
 
 export default function Operations({
   loaderData,
   params,
 }: Route.ComponentProps) {
-  if (!loaderData.data) return <NoDataAlert />
-
   const [data, setData] = useState(loaderData.data)
   const [stacked, setStacked] = useState(true)
-  const { cards, devices, operations } = data
+  const [dateRange, setDateRange] = useState<DateRangeValue | undefined>(
+    () => ({
+      from: parseISO(loaderData.from),
+      to: parseISO(loaderData.to),
+    })
+  )
+
+  if (!data) return <NoDataAlert />
+
+  const { devices, operations } = data
   const [dateFrom, dateTo] = operations.query.date.split(" ")
-  const handleQuery = async ({ from, to }) => {
+  const handleQuery = async (range: DateRangeValue | undefined) => {
+    setDateRange(range)
+    if (!range?.from || !range?.to) return
+
+    const { from, to } = range
     const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss")
     const strTo = format(endOfDay(to), "yyyy-MM-dd HH:mm:ss")
     const query = `dateFrom=${strFrom}&dateTo=${strTo}`
@@ -73,11 +85,7 @@ export default function Operations({
             </ItemDescription>
           </ItemContent>
         </Item>
-        <DateRange
-          from={dateFrom + " 00:00"}
-          to={dateTo + " 00:00"}
-          handleQuery={handleQuery}
-        />
+        <DateRange dateRange={dateRange} setDateRange={handleQuery} />
       </div>
       <div className="hidden xl:block">
         <Item className="mb-3" variant="outline">
@@ -91,11 +99,7 @@ export default function Operations({
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <DateRange
-              from={dateFrom + " 00:00"}
-              to={dateTo + " 00:00"}
-              handleQuery={handleQuery}
-            />
+            <DateRange dateRange={dateRange} setDateRange={handleQuery} />
           </ItemActions>
         </Item>
       </div>
