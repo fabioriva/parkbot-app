@@ -17,7 +17,7 @@ export function HistoryList({ query, media = false }: any) {
   return (
     <ItemGroup className="gap-0">
       {query.map((item, key) => (
-        <Item className="gap-3 px-0 py-1.5" key={key}>
+        <Item className="px-0 py-1.5" key={key}>
           {media && (
             <ItemMedia>
               <OperationsAvatar
@@ -27,18 +27,17 @@ export function HistoryList({ query, media = false }: any) {
             </ItemMedia>
           )}
           <ItemContent className="gap-0.5">
-            <ItemTitle className="line-clamp-1">
+            <ItemTitle>
               {item.device.id === 0 && !item.user ? m.operator() : item.user}
               {item.device.id !== 0 && item.device.key}
               {item.device.id !== 0 && (
                 <span className="text-normal">
-                  {" "}
                   {safeMessageT("mode", item.mode.key)}
                 </span>
               )}
             </ItemTitle>
-            <ItemDescription className="flex items-center gap-3">
-              <span>{logT(item)}</span>
+            <ItemDescription>
+              <span className="line-clamp-1">{logT(item)}</span>
             </ItemDescription>
           </ItemContent>
           <ItemActions>
