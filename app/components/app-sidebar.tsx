@@ -49,6 +49,10 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
         title: safeMessageT("sidebar_main", "nodes"),
       },
       {
+        pathname: `/aps/${user.aps}/notifications`,
+        title: safeMessageT("sidebar_main", "notifications"),
+      },
+      {
         pathname: `/aps/${user.aps}/operations`,
         title: safeMessageT("sidebar_main", "operations"),
       },

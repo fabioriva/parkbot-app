@@ -568,6 +568,7 @@
   "sidebar_main.history": "History",
   "sidebar_main.map": "Map",
   "sidebar_main.nodes": "Profinet",
+  "sidebar_main.notifications": "Notifications",
   "sidebar_main.operations": "Operations",
   "sidebar_main.password": "Password",
   "sidebar_main.rack": "PLC I/Os",
