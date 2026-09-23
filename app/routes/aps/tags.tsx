@@ -106,7 +106,7 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
       setHasMore(false)
   }
 
-  const user = useOutletContext()
+  const { user } = useOutletContext()
   const isEditable = user?.role === "admin" || user?.role === "service"
 
   return (

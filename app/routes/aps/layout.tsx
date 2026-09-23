@@ -129,7 +129,7 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
           </header>
           <div className="p-3">
             <ConfirmDialogProvider>
-              <Outlet context={user} />
+              <Outlet context={{ aps, user }} />
             </ConfirmDialogProvider>
           </div>
         </SidebarInset>

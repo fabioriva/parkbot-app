@@ -12,7 +12,7 @@ import { clsx } from "cn"
 export function Stall({ definitions, stall, view }) {
   const data = useLoaderData()
   const params = useParams()
-  const user = useOutletContext()
+  const { user } = useOutletContext()
   const { showEditDialog } = useEditStallDialog()
   const { date, nr, size, status } = stall
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus

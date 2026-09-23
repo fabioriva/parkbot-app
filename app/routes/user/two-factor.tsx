@@ -7,7 +7,7 @@ import { m } from "@paraglide/messages.js"
 import type { Route } from "./+types/two-factor"
 
 export default function TwoFactor() {
-  const user = useOutletContext()
+  const { user } = useOutletContext()
   const [success, setSuccess] = useState(false)
   return (
     <div className="w-full max-w-md">
