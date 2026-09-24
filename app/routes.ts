@@ -41,5 +41,6 @@ export default [
   ]),
   route("action/set-theme", "./routes/action.set-theme.ts"),
   route("api/auth/*", "routes/api.auth.$.ts"),
+  route("api/notifications", "routes/api.notifications.ts"),
   route("*", "./routes/catchall.tsx"),
 ] satisfies RouteConfig

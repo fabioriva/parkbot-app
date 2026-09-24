@@ -23,7 +23,7 @@ export const Queue = ({ queue }) => {
       description: m.exit_queue_dialog_description({ card: item.card }),
       onConfirm: async () => {
         const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/queue/delete`
-        const res = await fetc(url, {
+        const res = await fetch(url, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${data.token}`,
