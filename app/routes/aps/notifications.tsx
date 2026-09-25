@@ -20,13 +20,12 @@ import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/notifications"
 
+const MAX_RECIPIENTS = 3
+
 export async function action({ params, request }: Route.ActionArgs) {
   try {
     const token = getToken(request)
-    console.log(token)
-
     const formData = await request.formData()
-    console.log(formData)
     const action = formData.get("action")
     const _id = formData.get("_id")
     const email = formData.get("email")
@@ -103,32 +102,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       Authorization: `Bearer ${token}`,
     },
   })
-  console.log(result)
   return result
-  // const data = [
-  //   {
-  //     _id: "620f1c93b24203b82edc41f4",
-  //     email: "peter.manis@parkplusinc.com",
-  //     locale: "en",
-  //     name: "Peter Manis",
-  //     phone: "7323978141",
-  //   },
-  //   {
-  //     _id: "629b8a3d1047635d4f0912dc",
-  //     email: "juancarlos.penton@parkplusinc.com",
-  //     locale: "en",
-  //     name: "Juan Carlos Penton",
-  //     phone: "",
-  //   },
-  //   {
-  //     _id: "69a9dbbe497c8edd76bbd3c5",
-  //     email: "musealerts@parkplusinc.com",
-  //     locale: "en",
-  //     name: "park plus",
-  //     phone: null,
-  //   },
-  // ]
-  // return data
 }
 
 export default function Notifications({
@@ -139,10 +113,8 @@ export default function Notifications({
 
   const { aps } = useOutletContext()
   if (!aps?.notifications) {
-    return <h1>Le notifiche per questo sistema non sono abilitate.</h1>
+    return m.notifications_disabled()
   }
-
-  // if (loaderData.recipients.length === 0) return <h1>Empty list</h1>
 
   const fetcher = useFetcher()
   const [open, setOpen] = useState(false)
@@ -156,10 +128,11 @@ export default function Notifications({
       <div className="mb-3 flex flex-col gap-3 xl:hidden">
         <Item variant="outline">
           <ItemContent>
-            <ItemTitle>{m.users_title()}</ItemTitle>
+            <ItemTitle>{m.notifications_title()}</ItemTitle>
             <ItemDescription className="text-xs">
-              {m.users_description({
+              {m.notifications_description({
                 count: recipients.length,
+                max: MAX_RECIPIENTS,
               })}
             </ItemDescription>
           </ItemContent>
@@ -168,28 +141,29 @@ export default function Notifications({
           className="w-full"
           onClick={() => setOpen(true)}
           variant="outline"
+          disabled={recipients.length >= MAX_RECIPIENTS}
         >
-          <PlusIcon /> {m.subscription_action_add()}
+          <PlusIcon /> {m.notifications_action_add()}
         </Button>
       </div>
       <div className="mb-3 hidden xl:block">
         <Item variant="outline">
           <ItemContent>
-            <ItemTitle>{m.subscriptions_title()}</ItemTitle>
+            <ItemTitle>{m.notifications_title()}</ItemTitle>
             <ItemDescription className="text-xs">
-              {m.users_description({
+              {m.notifications_description({
                 count: recipients.length,
+                max: MAX_RECIPIENTS,
               })}
             </ItemDescription>
           </ItemContent>
           <ItemActions>
             <Button onClick={() => setOpen(true)} variant="outline">
-              <PlusIcon /> {m.subscription_action_add()}
+              <PlusIcon /> {m.notifications_action_add()}
             </Button>
           </ItemActions>
         </Item>
       </div>
-
       {fetcher.data?.error && (
         <ErrorAlert description={fetcher.data.error} title="Error" />
       )}

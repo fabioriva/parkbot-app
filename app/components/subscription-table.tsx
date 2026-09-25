@@ -50,9 +50,7 @@ export function SubscriptionTable({ aps, fetcher, subscriptions }) {
               <TableHead>{m.subscription_field_role()}</TableHead>
               <TableHead>{m.subscription_field_subscribed()}</TableHead>
               <TableHead>{m.subscription_field_selected_aps()}</TableHead>
-              <TableHead className="text-right">
-                {m.subscription_field_actions()}
-              </TableHead>
+              <TableHead className="text-right">{m.actions()}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -52,7 +52,7 @@ export function ApsTable({ aps, fetcher }) {
           <TableHead>{m.aps_field_ns()}</TableHead>
           <TableHead>{m.aps_field_parking_spaces()}</TableHead>
           <TableHead>{m.aps_field_notifications()}</TableHead>
-          <TableHead className="text-right">{m.aps_field_actions()}</TableHead>
+          <TableHead className="text-right">{m.actions()}</TableHead>
           {/* <TableHead className="text-right">
             {m.aps_field_parking_spaces()}
           </TableHead> */}

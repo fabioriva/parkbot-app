@@ -46,12 +46,10 @@ export function NotificationsTable({ fetcher, recipients }) {
           <TableHeader>
             <TableRow>
               <TableHead>Email</TableHead>
-              <TableHead>Full Name</TableHead>
-              <TableHead>Locale</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead className="text-right">
-                {m.subscription_field_actions()}
-              </TableHead>
+              <TableHead>{m.notifications_field_name()}</TableHead>
+              <TableHead>{m.notifications_field_locale()}</TableHead>
+              <TableHead>{m.notifications_field_phone()}</TableHead>
+              <TableHead className="text-right">{m.actions()}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -63,10 +61,6 @@ export function NotificationsTable({ fetcher, recipients }) {
                 <TableCell>{recipient.name || "-"}</TableCell>
                 <TableCell>{recipient.locale || "en"}</TableCell>
                 <TableCell>{recipient.phone || "-"}</TableCell>
-                {/* <TableCell className="uppercase">
-                  {recipient.status === true ? "true" : "false"}
-                </TableCell>
-                <TableCell>{aps?.name || params.aps}</TableCell> */}
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger
@@ -79,14 +73,14 @@ export function NotificationsTable({ fetcher, recipients }) {
                     />
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => handleUpdate(recipient)}>
-                        {m.subscription_action_update()}
+                        {m.notifications_action_update()}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={() => handleDelete(recipient)}
                         variant="destructive"
                       >
-                        {m.subscription_action_delete()}
+                        {m.notifications_action_delete()}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -96,9 +90,7 @@ export function NotificationsTable({ fetcher, recipients }) {
           </TableBody>
         </Table>
       ) : (
-        <div className="p-4 text-center text-sm text-muted-foreground">
-          No notifications found.
-        </div>
+        <div className="p-4 text-center">{m.notifications_empty()}</div>
       )}
     </>
   )

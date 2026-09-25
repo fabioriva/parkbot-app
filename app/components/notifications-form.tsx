@@ -38,21 +38,19 @@ export function NotificationsForm({
   setOpen,
   selectedRecipient,
 }) {
-  console.log(selectedRecipient)
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>
             {action === "create"
-              ? m.subscription_action_add()
-              : m.subscription_action_update()}
+              ? m.notifications_action_add()
+              : m.notifications_action_update()}
           </DialogTitle>
           <DialogDescription>
             {action === "create"
-              ? m.subscription_action_add_description()
-              : m.subscription_action_update_description()}
+              ? m.notifications_action_add_description()
+              : m.notifications_action_update_description()}
           </DialogDescription>
         </DialogHeader>
         <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
