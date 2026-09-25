@@ -3,7 +3,7 @@ import { db } from "./db.server"
 const COLLECTION = "user"
 
 export interface User {
-  id: string // ObjectId;
+  id: string
   name: string
   email: string
   emailVerified: boolean
@@ -14,10 +14,10 @@ export interface User {
   aps: string
 }
 
-export async function findUsers(): Promise<User[]> | null {
+export async function findUsers(): Promise<User[]> {
   const result = await db
-    .collection(COLLECTION)
-    .aggregate([
+    .collection<Omit<User, "id">>(COLLECTION)
+    .aggregate<User>([
       {
         $addFields: {
           id: { $toString: "$_id" },
@@ -35,7 +35,7 @@ export async function findUsers(): Promise<User[]> | null {
 }
 
 export async function deleteUserByEmail(email: string) {
-  const collection = db.collection(COLLECTION)
+  const collection = db.collection<Omit<User, "id">>(COLLECTION)
   const result = await collection.deleteOne({ email })
   return result
 }
