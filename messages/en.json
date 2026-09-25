@@ -526,7 +526,7 @@
   "mode.mode-auto": "Automatic",
   "mode.mode-man": "Manual mode",
   "notifications_action_add": "Recipient",
-  "notifications_action_add_description": "Add a new recipient",
+  "notifications_action_add_description": "Add a new recipient to receive notifications",
   "notifications_action_create": "Create recipient",
   "notifications_action_create_success": "Recipient created successfully.",
   "notifications_action_delete": "Delete recipient",
