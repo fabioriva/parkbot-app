@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { roles } from "~/lib/roles"
+import { locales } from "@paraglide/runtime.js"
 import { m } from "@paraglide/messages.js"
 
 export function NotificationsForm({
@@ -56,7 +57,7 @@ export function NotificationsForm({
         <fetcher.Form method="post" onSubmit={() => setOpen(false)}>
           <input name="action" value={action} type="hidden" />
           <input name="id" value={selectedRecipient?._id} type="hidden" />
-          <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
+          <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4 pb-4">
             <FieldSet>
               <FieldGroup>
                 <Field>
@@ -65,42 +66,63 @@ export function NotificationsForm({
                     type="email"
                     name="email"
                     autoComplete="email"
+                    placeholder="technical@example.com"
                     defaultValue={selectedRecipient?.email}
                     required
                   />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="name">
-                    {/* {m.signup_first_name()} */}
-                    Description
+                    {m.notifications_field_name()}
                   </FieldLabel>
                   <Input
                     name="name"
-                    placeholder="Full or ompany name"
+                    placeholder={m.notifications_field_name()}
                     defaultValue={selectedRecipient?.name || ""}
                     // required
                   />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="locale">
-                    {/* {m.signup_last_name()} */}
-                    Locale
+                    {m.notifications_field_locale()}
                   </FieldLabel>
-                  <Input
+                  {/* <Input
                     name="locale"
-                    placeholder="Preferred locale"
+                    placeholder={m.notifications_field_locale()}
                     defaultValue={selectedRecipient?.locale || "en"}
                     required
-                  />
+                  /> */}
+                  <Select
+                    id="locale"
+                    name="locale"
+
+                    defaultValue={selectedRecipient?.locale || "en"}
+                  >
+                    <SelectTrigger className="uppercase">
+                      <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {locales.map((locale) => (
+                          <SelectItem
+                            className="uppercase"
+                            value={locale}
+                            key={locale}
+                          >
+                            {locale}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="phone">
-                    {/* {m.signup_last_name()} */}
-                    Phone
+                    {m.notifications_field_phone()}
                   </FieldLabel>
                   <Input
                     name="phone"
-                    placeholder="+123456"
+                    placeholder="+1234567890"
                     defaultValue={selectedRecipient?.phone || ""}
                     // required
                   />

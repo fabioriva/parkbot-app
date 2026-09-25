@@ -48,8 +48,8 @@ export async function action({ params, request }: Route.ActionArgs) {
         }),
       })
       return {
-        action: m.subscription_action_create(),
-        success: m.subscription_action_create_success(),
+        action: m.notifications_action_create(),
+        success: m.notifications_action_create_success(),
       }
     }
     if (action === "delete") {
@@ -63,8 +63,8 @@ export async function action({ params, request }: Route.ActionArgs) {
         body: JSON.stringify({ _id }),
       })
       return {
-        action: m.subscription_action_delete(),
-        success: m.subscription_action_delete_success(),
+        action: m.notifications_action_delete(),
+        success: m.notifications_action_delete_success(),
       }
     }
     if (action === "update") {
@@ -83,11 +83,11 @@ export async function action({ params, request }: Route.ActionArgs) {
         }),
       })
       return {
-        action: m.subscription_action_update(),
-        success: m.subscription_action_update_success(),
+        action: m.notifications_action_update(),
+        success: m.notifications_action_update_success(),
       }
     }
-    throw new Error(m.subscription_action_error())
+    throw new Error(m.notifications_action_error())
   } catch (error) {
     console.log(error)
     return { error: error?.message }

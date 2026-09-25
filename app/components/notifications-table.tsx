@@ -59,7 +59,9 @@ export function NotificationsTable({ fetcher, recipients }) {
                   {recipient.email}
                 </TableCell>
                 <TableCell>{recipient.name || "-"}</TableCell>
-                <TableCell>{recipient.locale || "en"}</TableCell>
+                <TableCell className="uppercase">
+                  {recipient.locale || "en"}
+                </TableCell>
                 <TableCell>{recipient.phone || "-"}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
