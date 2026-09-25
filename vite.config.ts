@@ -4,6 +4,9 @@ import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "vite"
 
 export default defineConfig({
+  build: {
+    minify: "oxc",
+  },
   plugins: [
     paraglideVitePlugin({
       project: "./project.inlang",
