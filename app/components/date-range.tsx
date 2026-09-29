@@ -12,12 +12,22 @@ import { type DateRange as DateRangeValue } from "react-day-picker"
 
 type DateRangeProps = {
   id?: string
+  timeZone?: "UTC"
+  today?: Date
   dateRange: DateRangeValue | undefined
   setDateRange: (range: DateRangeValue | undefined) => void
 }
 
-export function DateRange({ id, dateRange, setDateRange }: DateRangeProps) {
+export function DateRange({
+  id,
+  dateRange,
+  setDateRange,
+  timeZone,
+  today,
+}: DateRangeProps) {
   const [open, setOpen] = useState(false)
+  const formatDate = (date: Date) =>
+    timeZone ? date.toISOString().slice(0, 10) : date.toLocaleDateString()
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
@@ -29,7 +39,7 @@ export function DateRange({ id, dateRange, setDateRange }: DateRangeProps) {
             className="w-auto justify-between font-normal"
           >
             {dateRange?.from
-              ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to?.toLocaleDateString() ?? "…"}`
+              ? `${formatDate(dateRange.from)} - ${dateRange.to ? formatDate(dateRange.to) : "…"}`
               : "Select date"}
             <ChevronDownIcon />
           </Button>
@@ -37,6 +47,8 @@ export function DateRange({ id, dateRange, setDateRange }: DateRangeProps) {
       />
       <PopoverContent className="w-auto overflow-hidden p-0" align="start">
         <Calendar
+          timeZone={timeZone}
+          today={today}
           mode="range"
           required
           resetOnSelect

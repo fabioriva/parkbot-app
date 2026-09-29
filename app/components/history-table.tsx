@@ -32,9 +32,11 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
+import { formatPlantDateTime } from "~/lib/date-time"
+import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
 import { safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
-import { clsx } from "cn";
+import { clsx } from "cn"
 
 // utils/pagination.ts
 function getPageNumbers(
@@ -147,6 +149,7 @@ export function HistoryTable({
   query,
   rowsPerPage,
 }) {
+  const timeZone = usePlantTimeZone()
   return (
     <>
       <div className="overflow-hidden rounded-lg border">
@@ -175,7 +178,13 @@ export function HistoryTable({
             {query.map((item, key) => (
               <TableRow key={key}>
                 <TableCell>
-                  {item.date.slice(0, 10) + " " + item.date.slice(11, 19)}
+                  {timeZone
+                    ? formatPlantDateTime(
+                        item.date,
+                        timeZone,
+                        "dd/MM/yyyy HH:mm:ss xxx"
+                      )
+                    : "—"}
                 </TableCell>
                 <TableCell>
                   {item.device.id === 0 && !item.user

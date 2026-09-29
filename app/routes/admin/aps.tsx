@@ -1,6 +1,6 @@
 import { PlusIcon } from "lucide-react"
 import { useState } from "react"
-import { data, useFetcher } from "react-router"
+import { data, redirect, useFetcher } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
   Item,
@@ -22,9 +22,14 @@ import {
   updateApsByNs,
 } from "~/lib/aps.server"
 import { auth } from "~/lib/auth.server"
+import { isValidTimeZone } from "~/lib/date-time"
 import { m } from "@paraglide/messages.js"
 
 export async function action({ request }: Route.ActionArgs) {
+  const session = await auth.api.getSession({ headers: request.headers })
+  if (!session) return redirect("/signin")
+  if (!("role" in session.user) || session.user.role !== "admin")
+    throw data("Forbidden", { status: 403 })
   try {
     const formData = await request.formData()
     const action = formData.get("action")
@@ -36,6 +41,13 @@ export async function action({ request }: Route.ActionArgs) {
     const notifications = formData.get("notifications")
     const ns = formData.get("ns")
     const parkingSpaces = formData.get("parkingSpaces")
+    const timeZone = String(formData.get("timeZone") ?? "").trim()
+    if (
+      (action === "create" || action === "update") &&
+      !isValidTimeZone(timeZone)
+    ) {
+      return { error: m.aps_time_zone_invalid() }
+    }
     const aps = {
       city,
       company,
@@ -45,6 +57,7 @@ export async function action({ request }: Route.ActionArgs) {
       notifications: notifications ? true : false,
       ns,
       parkingSpaces: Number(parkingSpaces),
+      timeZone,
     }
     if (action === "create") {
       const result = await createAps(aps)

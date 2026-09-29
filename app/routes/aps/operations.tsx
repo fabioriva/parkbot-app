@@ -22,9 +22,11 @@ import type { Route } from "./+types/operations"
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getToken(request)
+  // Statistics still use the legacy backend calendar and UTC grouping.
+  // Switch to plant date ranges only when that endpoint supports the plant zone.
   const from = format(subDays(startOfDay(new Date()), 7), "yyyy-MM-dd HH:mm:ss")
   const to = format(endOfDay(new Date()), "yyyy-MM-dd HH:mm:ss")
-  const query = `dateFrom=${from}&dateTo=${to}`
+  const query = new URLSearchParams({ dateFrom: from, dateTo: to })
   const url = `${process.env.BACKEND_URL}/${params?.aps}/statistics?${query}`
   const data = await fetcher(url, {
     headers: {
@@ -55,10 +57,10 @@ export default function Operations({
     setDateRange(range)
     if (!range?.from || !range?.to) return
 
-    const { from, to } = range
-    const strFrom = format(startOfDay(from), "yyyy-MM-dd HH:mm:ss")
-    const strTo = format(endOfDay(to), "yyyy-MM-dd HH:mm:ss")
-    const query = `dateFrom=${strFrom}&dateTo=${strTo}`
+    const query = new URLSearchParams({
+      dateFrom: format(startOfDay(range.from), "yyyy-MM-dd HH:mm:ss"),
+      dateTo: format(endOfDay(range.to), "yyyy-MM-dd HH:mm:ss"),
+    })
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params?.aps}/statistics?${query}`
     const res = await fetch(url, {
       headers: {

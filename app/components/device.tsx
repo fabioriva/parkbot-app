@@ -20,7 +20,10 @@ import { Motion } from "~/components/motion"
 import { Silomat } from "~/components/silomat"
 import { deviceT, logT, safeMessageT } from "~/lib/trans"
 import { cn } from "~/lib/utils"
-import { clsx } from "cn";
+import { formatPlantDateTime } from "~/lib/date-time"
+import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
+import { m } from "@paraglide/messages.js"
+import { clsx } from "cn"
 
 const ExternalLink = ({ link }) => (
   <Link to={link} aria-label={link}>
@@ -61,6 +64,7 @@ const Step = ({ step }) => (
 )
 
 export function Device({ device, advanced = false }) {
+  const timeZone = usePlantTimeZone()
   // console.log(device);
   const params = useParams()
   const [LS, LC, LA] = device.c
@@ -176,7 +180,26 @@ export function Device({ device, advanced = false }) {
               {device.alarms.map((alarm) => (
                 <Alert variant="destructive" key={alarm.id}>
                   <AlertCircleIcon />
-                  <AlertTitle>{alarm.date}</AlertTitle>
+                  <AlertTitle>
+                    {/(?:Z|[+-]\d{2}:\d{2})$/i.test(alarm.date) ? (
+                      timeZone ? (
+                        formatPlantDateTime(
+                          alarm.date,
+                          timeZone,
+                          "dd/MM/yyyy HH:mm:ss xxx"
+                        )
+                      ) : (
+                        "—"
+                      )
+                    ) : (
+                      <>
+                        {alarm.date}{" "}
+                        <span className="font-normal">
+                          ({m.date_time_zone_unspecified()})
+                        </span>
+                      </>
+                    )}
+                  </AlertTitle>
                   <AlertDescription>
                     {`AL${alarm.id}`}{" "}
                     {safeMessageT("alarm", alarm.key, { ...alarm.query })}

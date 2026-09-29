@@ -1,5 +1,6 @@
 import type { ObjectId } from "mongodb"
 import { db } from "./db.server"
+import { isValidTimeZone } from "./date-time"
 
 const COLLECTION = "aps"
 
@@ -12,9 +13,12 @@ export interface Aps {
   name: string
   ns: string
   parkingSpaces: number
+  timeZone?: string
 }
 
 export async function createAps(aps: Omit<Aps, "_id">) {
+  if (!isValidTimeZone(aps.timeZone))
+    throw new Error("A valid IANA time zone is required")
   const collection = db.collection<Omit<Aps, "_id">>(COLLECTION)
   const result = await collection.insertOne({ ...aps })
   return result
@@ -37,9 +41,7 @@ export async function findApsByNs(
   return result
 }
 
-export async function findCompaniesFromAps(
-  aps: Aps[]
-): Promise<string[]> {
+export async function findCompaniesFromAps(aps: Aps[]): Promise<string[]> {
   const collection = db.collection<Aps>(COLLECTION)
   const fieldName = "company"
   const result = await collection.distinct(fieldName)
@@ -61,6 +63,8 @@ export async function findSubscribedApsList(
 }
 
 export async function updateApsByNs(aps: Omit<Aps, "_id">, ns: string) {
+  if (!isValidTimeZone(aps.timeZone))
+    throw new Error("A valid IANA time zone is required")
   const collection = db.collection<Aps>(COLLECTION)
   const result = await collection.updateOne({ ns }, { $set: { ...aps } })
   return result

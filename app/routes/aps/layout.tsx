@@ -30,6 +30,9 @@ import { getCookie } from "~/lib/cookie.server"
 import { roles } from "~/lib/roles"
 import { useInfo } from "~/hooks/use-ws"
 import { safeMessageT } from "~/lib/trans"
+import { isValidTimeZone } from "~/lib/date-time"
+import { Error as ErrorAlert } from "~/components/error-alert"
+import { m } from "@paraglide/messages.js"
 
 export function headers({ loaderHeaders }: Route.HeadersArgs) {
   return loaderHeaders
@@ -70,7 +73,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     },
     {
       headers: {
-        "Cache-Control": "max-age=3600", // Cache for 1 hour
+        "Cache-Control": "private, no-store",
       },
     }
   )
@@ -78,9 +81,10 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
   const { aps, pathname, route, sidebarState, user } = loaderData
+  const timeZone = isValidTimeZone(aps?.timeZone) ? aps.timeZone : null
   const {
     info: { comm, diag, map },
-  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`)
+  } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`, timeZone)
 
   return (
     <TooltipProvider>
@@ -128,6 +132,12 @@ export default function ApsLayout({ loaderData }: Route.ComponentProps) {
             </div>
           </header>
           <div className="p-3">
+            {!timeZone && route !== "history" && (
+              <ErrorAlert
+                title={m.aps_field_time_zone()}
+                description={m.aps_time_zone_missing()}
+              />
+            )}
             <ConfirmDialogProvider>
               <Outlet context={{ aps, user }} />
             </ConfirmDialogProvider>

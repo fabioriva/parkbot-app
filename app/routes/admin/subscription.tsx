@@ -76,9 +76,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (!session) {
     return redirect("/signin")
   }
-  if (session.user.role !== "admin") {
+  if (!("role" in session.user) || session.user.role !== "admin")
     throw data("Forbidden", { status: 403 })
-  }
   const aps = await findSubscribedApsList([])
   const companies = await findCompaniesFromAps(aps)
   const subscriptions = await findSubscriptions()

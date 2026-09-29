@@ -91,6 +91,19 @@ export function ApsForm({ action, fetcher, open, setOpen, selectedAps }) {
                   <FieldLabel htmlFor="ns">{m.aps_field_ns()}</FieldLabel>
                   <Input name="ns" defaultValue={selectedAps?.ns} required />
                 </Field>
+                <Field>
+                  <FieldLabel htmlFor="timeZone">
+                    {m.aps_field_time_zone()}
+                  </FieldLabel>
+                  <Input
+                    id="timeZone"
+                    name="timeZone"
+                    defaultValue={selectedAps?.timeZone ?? ""}
+                    placeholder="Asia/Dubai"
+                    required
+                  />
+                  <FieldDescription>{m.aps_time_zone_help()}</FieldDescription>
+                </Field>
                 <div className="grid grid-cols-2 items-start justify-between gap-6">
                   <Field>
                     <FieldLabel htmlFor="parkingSpaces">

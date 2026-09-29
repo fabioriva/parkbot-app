@@ -1,6 +1,7 @@
 import * as React from "react"
 import { toast } from "~/components/ui/toast"
 import { logT } from "~/lib/trans"
+import { formatPlantDateTime } from "~/lib/date-time"
 
 export function useData(url: string, options: any) {
   const { initialData } = options
@@ -30,7 +31,7 @@ export function useData(url: string, options: any) {
   return { data, loading }
 }
 
-export function useInfo(url: string) {
+export function useInfo(url: string, timeZone: string | null) {
   const [info, setInfo] = React.useState({
     comm: false,
     diag: 0,
@@ -62,7 +63,13 @@ export function useInfo(url: string) {
         if (key === "notification") {
           toast.add({
             title: logT(message[key]),
-            description: message[key].date.slice(0, -1).split("T").join(" "),
+            description: timeZone
+              ? formatPlantDateTime(
+                  message[key].date,
+                  timeZone,
+                  "dd/MM/yyyy HH:mm:ss xxx"
+                )
+              : "—",
           })
         } else {
           setInfo(message)
@@ -70,7 +77,7 @@ export function useInfo(url: string) {
       })
       setLoading(false)
     }
-  }, [])
+  }, [url, timeZone])
 
   return { info, loading }
 }

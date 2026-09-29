@@ -8,10 +8,13 @@ import {
   ItemTitle,
 } from "~/components/ui/item"
 import { OperationsAvatar } from "~/components/operation-avatar"
+import { formatPlantDateTime } from "~/lib/date-time"
+import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
 import { logT, safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
 
 export function HistoryList({ query, media = false }: any) {
+  const timeZone = usePlantTimeZone()
   return (
     <ItemGroup className="gap-0">
       {query.map((item, key) => (
@@ -40,8 +43,16 @@ export function HistoryList({ query, media = false }: any) {
           </ItemContent>
           <ItemActions>
             <div className="flex flex-col text-right">
-              <span>{item.date.slice(0, 10)}</span>
-              <span>{item.date.slice(11, 19)}</span>
+              <span>
+                {timeZone
+                  ? formatPlantDateTime(item.date, timeZone, "dd/MM/yyyy")
+                  : "—"}
+              </span>
+              <span>
+                {timeZone
+                  ? formatPlantDateTime(item.date, timeZone, "HH:mm:ss xxx")
+                  : "—"}
+              </span>
             </div>
           </ItemActions>
         </Item>

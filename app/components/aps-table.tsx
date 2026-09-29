@@ -49,6 +49,7 @@ export function ApsTable({ aps, fetcher }) {
           <TableHead>{m.aps_field_company()}</TableHead>
           <TableHead>{m.aps_field_country()}</TableHead>
           <TableHead>{m.aps_field_city()}</TableHead>
+          <TableHead>{m.aps_field_time_zone()}</TableHead>
           <TableHead>{m.aps_field_ns()}</TableHead>
           <TableHead>{m.aps_field_parking_spaces()}</TableHead>
           <TableHead>{m.aps_field_notifications()}</TableHead>
@@ -69,6 +70,7 @@ export function ApsTable({ aps, fetcher }) {
                 {aps.country}, {aps.flag}
               </TableCell>
               <TableCell>{aps.city}</TableCell>
+              <TableCell>{aps.timeZone || "—"}</TableCell>
               <TableCell>{aps.ns}</TableCell>
               <TableCell>{aps.parkingSpaces}</TableCell>
               <TableCell className="uppercase">
