@@ -6,23 +6,60 @@ email per recipient through SendGrid. No browser session is required.
 Configure these variables on the **parkbot-app server**:
 
 ```dotenv
-NOTIFICATIONS_API_TOKENS='{"daman":"replace-with-a-random-secret"}'
+NOTIFICATIONS_API_TOKENS_FILE=./.secrets/notifications-tokens.json
 SENDGRID_API_KEY=your-sendgrid-api-key
 SENDGRID_SENDER=your-verified-sender@example.com
 ```
 
-Use a distinct random token for each installation. Generate a token with
-`openssl rand -hex 32`. The JSON map can contain multiple installations.
+Create the local JSON file (one entry per installation):
+
+```json
+{
+  "daman-n": "replace-with-a-random-secret",
+  "agami": "replace-with-another-random-secret"
+}
+```
+
+Use the installation's exact `ns` from the `aps` collection as the key.
+Generate a distinct token for each installation with `openssl rand -hex 32`.
+The local `.secrets/` directory is excluded from Git. Keep the token file readable
+only by the server user (for example, `chmod 600` on Linux). Provision it separately
+on each deployed server; it is not included in the application build.
+
+Relative paths resolve from the server process's working directory. An absolute
+path such as `/etc/parkbot/notifications-tokens.json` can be used in production.
+The file is read on each authenticated request, so replacing its contents takes
+effect without restarting. Use an atomic file replacement when rotating tokens.
+Restart the server after changing the environment variable itself.
+
+For compatibility, inline `NOTIFICATIONS_API_TOKENS` JSON is still supported when
+no nonempty `NOTIFICATIONS_API_TOKENS_FILE` is configured. The file takes precedence
+if both variables are set. An unreadable or invalid file fails authentication
+processing with `500`; it never falls back to the inline map.
+
 The backend sends the matching token in `Authorization: Bearer <token>`;
 its payload's `aps` must match the installation associated with that token.
 Tokens are server configuration and must never be sent to browser clients.
+
+### Backend configuration (`parkbot-api`)
+
+The sender and receiver must use **the same token** for each installation; do not
+independently generate tokens on the backend. A backend server managing several
+installations needs the entries for those installations only.
+
+The current backend reads `NOTIFICATIONS_API_TOKENS` and selects `tokens[aps]`.
+To use a JSON file there as well, its reader must support
+`NOTIFICATIONS_API_TOKENS_FILE` with the same precedence rules. Setting the file
+variable alone does not enable it in the current backend. Until that reader is
+updated, configure the matching entries as inline JSON. `NOTIFICATIONS_URL` must
+point to this app's `/api/notifications` endpoint.
 
 Example request body, with `Content-Type: application/json`:
 
 ```json
 {
   "eventId": "log-12",
-  "aps": "daman",
+  "aps": "daman-n",
   "recipients": [{ "email": "technician@example.com", "locale": "it" }],
   "alarmLog": {
     "operation": { "id": 1 },
@@ -41,7 +78,7 @@ curl -i -X POST http://localhost:3000/api/notifications \
   -H "Authorization: Bearer replace-with-a-random-secret" \
   --data '{
     "eventId": "log-12",
-    "aps": "daman",
+    "aps": "daman-n",
     "recipients": [
       { "email": "technician@example.com", "locale": "it" }
     ],
