@@ -5,7 +5,9 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip"
 import { useEditStallDialog } from "~/components/map-edit"
+import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
 import { actionResponse } from "~/lib/action"
+import { formatPlantDateTime } from "~/lib/date-time"
 import { m } from "@paraglide/messages.js"
 import { clsx } from "cn"
 
@@ -15,6 +17,10 @@ export function Stall({ definitions, stall, view }) {
   const { user } = useOutletContext()
   const { showEditDialog } = useEditStallDialog()
   const { date, nr, size, status } = stall
+  const timeZone = usePlantTimeZone()
+  const formattedDate = timeZone
+    ? formatPlantDateTime(date, timeZone, "dd/MM/yyyy HH:mm:ss xxx")
+    : "—"
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus
   const isEditable = user?.role === "admin" || user?.role === "service"
 
@@ -90,10 +96,10 @@ export function Stall({ definitions, stall, view }) {
       />
       <TooltipContent className="text-center text-sm">
         {status === 0
-          ? m.map_stall_free({ date, nr })
+          ? m.map_stall_free({ date: formattedDate, nr })
           : status === LOCK
-            ? m.map_stall_lock({ date, nr })
-            : m.map_stall_busy({ date, nr, status })}
+            ? m.map_stall_lock({ date: formattedDate, nr })
+            : m.map_stall_busy({ date: formattedDate, nr, status })}
       </TooltipContent>
     </Tooltip>
   )

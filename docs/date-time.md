@@ -29,8 +29,11 @@ modificato automaticamente.
   mostrano i giorni inclusi, non il limite UTC finale escluso.
 - Giorni con mezzanotte inesistente o ambigua vengono rifiutati esplicitamente:
   il form chiede di scegliere un altro intervallo.
-- Storico, attività recenti e notifiche WebSocket mostrano gli
+- Storico, attività recenti, tooltip degli stalli e notifiche WebSocket mostrano gli
   istanti nel fuso dell'impianto con offset, distinguendo le ore ripetute.
+- La mappa richiede timestamp ISO con `Z` o offset sia nella risposta HTTP sia
+  negli aggiornamenti WebSocket. Finché `models/Stall.js` del backend invia
+  stringhe `yyyy-MM-dd HH:mm:ss` senza offset, i tooltip mostrano `—`.
 - Timestamp senza offset o non validi sono mostrati come `—`; non si indovina
   il fuso dei dati legacy. Le email conservano il contratto UTC documentato in
   `notifications-api.md`.
