@@ -44,10 +44,22 @@ modificato automaticamente.
 
 ## Statistiche
 
-L'endpoint `/statistics` e il riepilogo giornaliero della dashboard conservano
-le convenzioni precedenti del backend. La pagina operazioni non usa il nuovo
-helper dello storico: limiti e raggruppamenti MongoDB devono essere aggiornati
-insieme nel backend prima di supportare i giorni dell'impianto nei grafici.
+La pagina operazioni usa gli stessi helper dello storico: loader e filtri
+inviano estremi ISO UTC con `Z`, includendo il primo giorno selezionato ed
+escludendo la mezzanotte successiva all'ultimo. Il calendario rappresenta le
+date civili con `timeZone="UTC"`; il giorno corrente e l'intervallo iniziale
+(oggi e i sette giorni precedenti) sono calcolati nel fuso dell'impianto.
+
+Le descrizioni mostrano i giorni selezionati inclusi, senza usare l'estremo
+finale escluso di `operations.query`. Le etichette dei grafici sono già nel
+fuso dell'impianto e non vanno convertite nuovamente, anche nella dashboard.
+
+Il backend deve usare lo stesso fuso IANA della collection `aps`: configurare
+`def.TIME_ZONE` oppure `APS_TIME_ZONE` in parkbot-api. La pagina verifica che
+`operations.query.timeZone` coincida con `session.aps.timeZone`; un backend
+precedente o configurato con un fuso diverso viene rifiutato. In caso di fuso
+mancante o invalido la ricerca non viene eseguita. Gli errori di ricerca sono
+mostrati mantenendo l'ultimo risultato valido.
 
 ## Verifica
 
