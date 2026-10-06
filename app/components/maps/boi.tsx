@@ -1,18 +1,19 @@
 import { Level } from "~/components/map-level"
+import type { MapProps } from "./types"
 
-export default function Map({ data, view }) {
+export default function Map({ data, view }: MapProps) {
   const levels = [...data.levels].reverse() // Creates a copy and reverses it
   return (
     <div className="flex flex-wrap gap-3 overflow-auto">
       {levels.map((level) => (
         <Level
-          definitions={data?.definitions}
+          definitions={data.definitions}
           level={level}
           view={view}
           key={level.nr}
         />
       ))}
-      <style jsx="true">{`
+      <style>{`
         .level {
           height: 98px;
           width: 661px;

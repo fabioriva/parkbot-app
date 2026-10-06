@@ -1,6 +1,7 @@
 import { Level } from "~/components/map-level"
+import type { MapProps } from "./types"
 
-export default function Map({ data, view }) {
+export default function Map({ data, view }: MapProps) {
   // return (
   //   <div>
   //     <h2>Data</h2>
@@ -18,7 +19,7 @@ export default function Map({ data, view }) {
           key={level.nr}
         />
       ))}
-      <style jsx="true">{`
+      <style>{`
         .level {
           height: 160px;
           width: 1153px;
