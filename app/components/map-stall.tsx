@@ -11,10 +11,31 @@ import { formatPlantDateTime } from "~/lib/date-time"
 import { m } from "@paraglide/messages.js"
 import { clsx } from "cn"
 
-export function Stall({ definitions, stall, view }) {
-  const data = useLoaderData()
+import type { loader } from "~/routes/aps/map"
+
+interface StallProps {
+  definitions: {
+    cards: number
+    stallStatus: {
+      FREE: number
+      LOCK: number
+      PAPA: number
+      RSVD: number
+    }
+  }
+  stall: {
+    date: Date | string
+    nr: string | number
+    size: string | number
+    status: number
+  }
+  view: "view0" | "view1" | "view2" | "view3"
+}
+
+export function Stall({ definitions, stall, view }: StallProps) {
+  const data = useLoaderData<typeof loader>()
   const params = useParams()
-  const { user } = useOutletContext()
+  const { user } = useOutletContext<{ user: { role: string } }>()
   const { showEditDialog } = useEditStallDialog()
   const { date, nr, size, status } = stall
   const timeZone = usePlantTimeZone()
@@ -24,7 +45,7 @@ export function Stall({ definitions, stall, view }) {
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus
   const isEditable = user?.role === "admin" || user?.role === "service"
 
-  const handleConfirm = async (value) => {
+  const handleConfirm = async (value: number) => {
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/map/edit`
     const res = await fetch(url, {
       method: "POST",
