@@ -25,48 +25,62 @@ import {
   updateSubscriptionByEmail,
 } from "~/lib/subscription.server"
 import { m } from "@paraglide/messages.js"
+import type { Route } from "./+types/subscription"
+
+function getRequiredString(formData: FormData, name: string): string {
+  const value = formData.get(name)
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error(m.subscription_action_error())
+  }
+  return value
+}
 
 export async function action({ request }: Route.ActionArgs) {
   await requireAdmin(request)
   try {
     const formData = await request.formData()
     const action = formData.get("action")
-    const email = formData.get("email")
-    const company = formData.get("company")
-    const role = formData.get("role")
-    const aps = formData.getAll("aps")
-    const subscription = {
-      aps,
-      company,
-      email,
-      role,
-      subscribed: false,
+    if (action !== "create" && action !== "update" && action !== "delete") {
+      throw new Error(m.subscription_action_error())
     }
-    if (action === "create") {
-      const result = await createSubscription(subscription)
-      return {
-        action: m.subscription_action_create(),
-        success: m.subscription_action_create_success(),
-      }
-    }
+    const email = getRequiredString(formData, "email")
     if (action === "delete") {
-      const result = await deleteSubscriptionByEmail(email)
+      await deleteSubscriptionByEmail(email)
       return {
         action: m.subscription_action_delete(),
         success: m.subscription_action_delete_success(),
       }
     }
-    if (action === "update") {
-      const result = await updateSubscriptionByEmail(email, subscription)
+    const aps = formData.getAll("aps").map((value) => {
+      if (typeof value !== "string" || !value.trim()) {
+        throw new Error(m.subscription_action_error())
+      }
+      return value
+    })
+    const subscription = {
+      aps,
+      company: getRequiredString(formData, "company"),
+      email,
+      role: getRequiredString(formData, "role"),
+      subscribed: false,
+    }
+    if (action === "create") {
+      await createSubscription(subscription)
       return {
-        action: m.subscription_action_update(),
-        success: m.subscription_action_update_success(),
+        action: m.subscription_action_create(),
+        success: m.subscription_action_create_success(),
       }
     }
-    throw new Error(m.subscription_action_error())
+    await updateSubscriptionByEmail(email, subscription)
+    return {
+      action: m.subscription_action_update(),
+      success: m.subscription_action_update_success(),
+    }
   } catch (error) {
-    // console.log(error);
-    return { error: error?.message }
+    return {
+      error:
+        error instanceof Error ? error.message : m.subscription_action_error(),
+    }
   }
 }
 
@@ -78,8 +92,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { aps, companies, subscriptions }
 }
 
-export default function Subscription({ loaderData }: Route.LoaderArgs) {
-  const fetcher = useFetcher()
+export default function Subscription({ loaderData }: Route.ComponentProps) {
+  const fetcher = useFetcher<typeof action>()
 
   const [company, setCompany] = useState("Sotefin")
   const [open, setOpen] = useState(false)

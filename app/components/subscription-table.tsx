@@ -1,5 +1,7 @@
 import { MoreHorizontalIcon } from "lucide-react"
 import { useState } from "react"
+import type { ComponentProps } from "react"
+import type { FetcherWithComponents } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -19,15 +21,34 @@ import {
 import { SubscriptionForm } from "~/components/subscription-form"
 import { m } from "@paraglide/messages.js"
 
-export function SubscriptionTable({ aps, fetcher, subscriptions }) {
-  const [open, setOpen] = useState(false)
-  const [selectedSubscription, setSelectedSubscription] = useState()
+type TableSubscription = NonNullable<
+  ComponentProps<typeof SubscriptionForm>["selectedSubscription"]
+>
 
-  const handleDelete = async (subscription) => {
-    fetcher.submit({ action: "delete", ...subscription }, { method: "post" })
+interface SubscriptionTableProps {
+  aps: ComponentProps<typeof SubscriptionForm>["aps"]
+  fetcher: Pick<FetcherWithComponents<unknown>, "Form" | "state" | "submit">
+  subscriptions: TableSubscription[]
+}
+
+export function SubscriptionTable({
+  aps,
+  fetcher,
+  subscriptions,
+}: SubscriptionTableProps) {
+  const [open, setOpen] = useState(false)
+  const [selectedSubscription, setSelectedSubscription] =
+    useState<TableSubscription>()
+
+  const handleDelete = async (
+    subscription: Pick<TableSubscription, "email">
+  ) => {
+    fetcher.submit(
+      { action: "delete", email: subscription.email },
+      { method: "post" }
+    )
   }
-  const handleUpdate = async (subscription) => {
-    // fetcher.submit({ action: "update", ...subscription }, { method: "post" });
+  const handleUpdate = async (subscription: TableSubscription) => {
     setOpen(true)
     setSelectedSubscription(subscription)
   }

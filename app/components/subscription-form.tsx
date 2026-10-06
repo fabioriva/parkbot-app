@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import type { FetcherWithComponents } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Checkbox } from "~/components/ui/checkbox"
 import {
@@ -30,6 +31,17 @@ import {
 } from "~/components/ui/select"
 import { roles } from "~/lib/roles"
 import { m } from "@paraglide/messages.js"
+import type { Aps } from "~/lib/aps.server"
+import type { Subscription } from "~/lib/subscription.server"
+
+interface SubscriptionFormProps {
+  action: "create" | "update"
+  aps: Pick<Aps, "ns" | "name" | "company">[]
+  fetcher: Pick<FetcherWithComponents<unknown>, "Form" | "state">
+  open: boolean
+  setOpen: (open: boolean) => void
+  selectedSubscription?: Omit<Subscription, "_id">
+}
 
 export function SubscriptionForm({
   action,
@@ -38,9 +50,9 @@ export function SubscriptionForm({
   open,
   setOpen,
   selectedSubscription,
-}) {
-  const [checkedState, setCheckedState] = useState(
-    new Array(aps.length).fill(false)
+}: SubscriptionFormProps) {
+  const [checkedState, setCheckedState] = useState<boolean[]>(() =>
+    aps.map(() => false)
   )
 
   const [company, setCompany] = useState("Sotefin")
@@ -53,7 +65,7 @@ export function SubscriptionForm({
     setCheckedState(updatedCheckedState)
   }, [company])
 
-  const handleCheckboxChange = (aps, index) => {
+  const handleCheckboxChange = (index: number) => {
     const updatedCheckedState = checkedState.map((item, position) =>
       index === position ? !item : item
     )
@@ -138,7 +150,7 @@ export function SubscriptionForm({
                       name="aps"
                       value={aps.ns}
                       checked={checkedState[index]}
-                      onCheckedChange={() => handleCheckboxChange(aps, index)}
+                      onCheckedChange={() => handleCheckboxChange(index)}
                     />
                     <FieldLabel htmlFor={aps.ns} className="font-normal">
                       {aps.name}
