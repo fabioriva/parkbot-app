@@ -1,4 +1,5 @@
-import { Form, redirect } from "react-router"
+import { isAPIError } from "better-auth/api"
+import { data, Form } from "react-router"
 import {
   Card,
   CardContent,
@@ -25,18 +26,30 @@ export async function action({ request }: Route.ActionArgs) {
     const formData = await request.formData()
     const newPassword = formData.get("newPassword")
     const token = formData.get("token")
-    const data = await auth.api.resetPassword({
+    if (typeof newPassword !== "string" || !newPassword.length) {
+      return { message: "Enter a new password." }
+    }
+    if (typeof token !== "string" || !token.trim()) {
+      return { message: "Invalid password reset token." }
+    }
+    const result = await auth.api.resetPassword({
       body: {
         newPassword, // required
         token, // required
       },
     })
-    if (data) {
+    if (result.status) {
       return { success: true }
     }
-    return { message: "Password changed!!!" }
+    return { message: "Unable to reset password." }
   } catch (error) {
-    return { message: error?.body?.message }
+    return {
+      message: isAPIError(error)
+        ? (error.body?.message ?? error.message)
+        : error instanceof Error
+          ? error.message
+          : "Unable to reset password.",
+    }
   }
 }
 
@@ -44,7 +57,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url)
   const searchParams = url.searchParams
   const token = searchParams.get("token")
-  if (!token) {
+  if (!token?.trim()) {
     throw data("Forbidden", { status: 403 })
   }
   return { token }
