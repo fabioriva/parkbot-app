@@ -1,3 +1,4 @@
+import type { FetcherWithComponents } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Checkbox } from "~/components/ui/checkbox"
 import {
@@ -21,8 +22,23 @@ import {
 } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
 import { m } from "@paraglide/messages.js"
+import type { Aps } from "~/lib/aps.server"
 
-export function ApsForm({ action, fetcher, open, setOpen, selectedAps }) {
+interface ApsFormProps {
+  action: "create" | "update"
+  fetcher: Pick<FetcherWithComponents<unknown>, "Form" | "state">
+  open: boolean
+  setOpen: (open: boolean) => void
+  selectedAps?: Omit<Aps, "_id"> & { notifications?: boolean }
+}
+
+export function ApsForm({
+  action,
+  fetcher,
+  open,
+  setOpen,
+  selectedAps,
+}: ApsFormProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">
