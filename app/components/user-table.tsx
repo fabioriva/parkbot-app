@@ -1,4 +1,5 @@
 import { MoreHorizontalIcon } from "lucide-react"
+import type { FetcherSubmitFunction } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -16,13 +17,21 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { UserAvatar } from "~/components/user-avatar"
+import type { User } from "~/lib/user.server"
 
-export function UserTable({ fetcher, users }) {
-  const handleDelete = async (user) => {
-    fetcher.submit({ action: "delete", ...user }, { method: "post" })
+type TableUser = User & { twoFactorEnabled?: boolean }
+
+interface UserTableProps {
+  fetcher: { submit: FetcherSubmitFunction }
+  users: TableUser[]
+}
+
+export function UserTable({ fetcher, users }: UserTableProps) {
+  const handleDelete = async (user: Pick<User, "email">) => {
+    fetcher.submit({ action: "delete", email: user.email }, { method: "post" })
   }
-  const handleUpdate = async (user) => {
-    fetcher.submit({ action: "update", ...user }, { method: "post" })
+  const handleUpdate = async (user: Pick<User, "email">) => {
+    fetcher.submit({ action: "update", email: user.email }, { method: "post" })
   }
   return (
     <>
@@ -56,7 +65,7 @@ export function UserTable({ fetcher, users }) {
                     {user.emailVerified.toString()}
                   </TableCell>
                   <TableCell className="uppercase">
-                    {user.twoFactorEnabled.toString()}
+                    {(user.twoFactorEnabled ?? false).toString()}
                   </TableCell>
                   <TableCell>{user.role}</TableCell>
                   <TableCell>{user.aps}</TableCell>
@@ -84,7 +93,7 @@ export function UserTable({ fetcher, users }) {
                       />
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
-                          onClick={() => handleUpdate(use)}
+                          onClick={() => handleUpdate(user)}
                           disabled
                         >
                           Edit
