@@ -7,8 +7,9 @@ import { db } from "./db.server"
 import { roles } from "./roles"
 import { sendEmail } from "./email.server"
 import { m } from "@paraglide/messages.js"
+import type { BetterAuthOptions } from "better-auth"
 
-export const auth = betterAuth({
+const options = {
   appName: "Parkbot", // Used as the default issuer for TOTP
   advanced: {
     cookiePrefix: "parkbot",
@@ -50,14 +51,6 @@ export const auth = betterAuth({
     expiresIn: 3600, // 1 hour
   },
   plugins: [
-    customSession(async ({ user, session }) => {
-      const aps = await findApsByNs(user.aps)
-      return {
-        aps, // : aps.find((element) => element.ns === user.aps),
-        user,
-        session,
-      }
-    }),
     haveIBeenPwned(),
     twoFactor({
       skipVerificationOnEnable: false,
@@ -78,4 +71,15 @@ export const auth = betterAuth({
       },
     },
   },
+} satisfies BetterAuthOptions
+
+export const auth = betterAuth({
+  ...options,
+  plugins: [
+    customSession(async ({ user, session }) => {
+      const aps = user.aps ? await findApsByNs(user.aps) : null
+      return { aps, user, session }
+    }, options),
+    ...options.plugins,
+  ],
 })
