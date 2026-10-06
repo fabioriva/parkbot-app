@@ -1,5 +1,12 @@
 // import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
+interface UserAvatarProps {
+  user: {
+    name: string
+    image?: string | null
+  }
+}
+
 function getInitials(name: string) {
   return name
     .split(" ")
@@ -17,7 +24,7 @@ function stringToHslColor(str: string, s = 65, l = 55) {
   return `hsl(${h}, ${s}%, ${l}%)`
 }
 
-export function UserAvatar({ user }) {
+export function UserAvatar({ user }: UserAvatarProps) {
   const initials = getInitials(user.name)
   // const bg = stringToHslColor(initials);
   return (
