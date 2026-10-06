@@ -26,16 +26,15 @@ import {
 } from "~/components/ui/sidebar"
 import { UserAvatar } from "~/components/user-avatar"
 import { m } from "@paraglide/messages.js"
+import type { User } from "~/lib/user.server"
 
-export function UserMenu({
-  user,
-}: {
-  user: {
-    email: string
-    image: string
-    name: string
+interface UserMenuProps {
+  user: Pick<User, "email" | "name" | "role" | "aps"> & {
+    image?: string | null
   }
-}) {
+}
+
+export function UserMenu({ user }: UserMenuProps) {
   const { isMobile } = useSidebar()
   return (
     <SidebarMenu>
