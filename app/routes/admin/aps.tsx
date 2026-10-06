@@ -24,63 +24,69 @@ import {
 import { requireAdmin } from "~/lib/authorization.server"
 import { isValidTimeZone } from "~/lib/date-time"
 import { m } from "@paraglide/messages.js"
+import type { Route } from "./+types/aps"
+
+function getRequiredString(formData: FormData, name: string): string {
+  const value = formData.get(name)
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error(m.aps_action_error())
+  }
+  return value
+}
 
 export async function action({ request }: Route.ActionArgs) {
   await requireAdmin(request)
   try {
     const formData = await request.formData()
     const action = formData.get("action")
-    const city = formData.get("city")
-    const company = formData.get("company")
-    const country = formData.get("country")
-    const flag = formData.get("flag")
-    const name = formData.get("name")
-    const notifications = formData.get("notifications")
-    const ns = formData.get("ns")
-    const parkingSpaces = formData.get("parkingSpaces")
-    const timeZone = String(formData.get("timeZone") ?? "").trim()
-    if (
-      (action === "create" || action === "update") &&
-      !isValidTimeZone(timeZone)
-    ) {
-      return { error: m.aps_time_zone_invalid() }
+    if (action !== "create" && action !== "update" && action !== "delete") {
+      throw new Error(m.aps_action_error())
     }
-    const aps = {
-      city,
-      company,
-      country,
-      flag,
-      name,
-      notifications: notifications ? true : false,
-      ns,
-      parkingSpaces: Number(parkingSpaces),
-      timeZone,
-    }
-    if (action === "create") {
-      const result = await createAps(aps)
-      return {
-        action: m.aps_action_create(),
-        success: m.aps_action_create_success(),
-      }
-    }
+    const ns = getRequiredString(formData, "ns")
     if (action === "delete") {
-      const result = await deleteApsByNs(ns)
+      await deleteApsByNs(ns)
       return {
         action: m.aps_action_delete(),
         success: m.aps_action_delete_success(),
       }
     }
-    if (action === "update") {
-      const result = await updateApsByNs(aps, ns)
+    const timeZoneValue = formData.get("timeZone")
+    const timeZone =
+      typeof timeZoneValue === "string" ? timeZoneValue.trim() : ""
+    if (!isValidTimeZone(timeZone)) {
+      return { error: m.aps_time_zone_invalid() }
+    }
+    const parkingSpaces = Number(getRequiredString(formData, "parkingSpaces"))
+    if (!Number.isFinite(parkingSpaces)) {
+      throw new Error(m.aps_action_error())
+    }
+    const aps = {
+      city: getRequiredString(formData, "city"),
+      company: getRequiredString(formData, "company"),
+      country: getRequiredString(formData, "country"),
+      flag: getRequiredString(formData, "flag"),
+      name: getRequiredString(formData, "name"),
+      notifications: Boolean(formData.get("notifications")),
+      ns,
+      parkingSpaces,
+      timeZone,
+    }
+    if (action === "create") {
+      await createAps(aps)
       return {
-        action: m.aps_action_update(),
-        success: m.aps_action_update_success(),
+        action: m.aps_action_create(),
+        success: m.aps_action_create_success(),
       }
     }
-    throw new Error(m.aps_action_error())
+    await updateApsByNs(aps, ns)
+    return {
+      action: m.aps_action_update(),
+      success: m.aps_action_update_success(),
+    }
   } catch (error) {
-    // console.log(error);
-    return { error: error?.message }
+    return {
+      error: error instanceof Error ? error.message : m.aps_action_error(),
+    }
   }
 }
 
@@ -91,8 +97,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { aps, companies }
 }
 
-export default function Aps({ loaderData }: Route.LoaderArgs) {
-  const fetcher = useFetcher()
+export default function Aps({ loaderData }: Route.ComponentProps) {
+  const fetcher = useFetcher<typeof action>()
 
   const [company, setCompany] = useState("Sotefin")
   const [open, setOpen] = useState(false)
@@ -153,52 +159,6 @@ export default function Aps({ loaderData }: Route.LoaderArgs) {
           </ItemActions>
         </Item>
       </div>
-      {fetcher.data?.error && (
-        <ErrorAlert description={fetcher.data.error} title="Error" />
-      )}
-      {fetcher.data?.success && (
-        <Success
-          description={fetcher.data.success}
-          title={fetcher.data.action}
-        />
-      )}
-      <div className="overflow-hidden rounded-lg border">
-        <ApsTable aps={apsByCompany} fetcher={fetcher} />
-      </div>
-      <ApsForm
-        action="create"
-        fetcher={fetcher}
-        open={open}
-        setOpen={setOpen}
-      />
-    </>
-  )
-
-  return (
-    <>
-      <Item className="mb-3" variant="outline">
-        <ItemContent>
-          <ItemTitle>{m.aps_title()}</ItemTitle>
-          <ItemDescription className="text-xs">
-            {m.aps_description({
-              aps: apsByCompany.length,
-              spaces: apsByCompany.reduce((accumulator, currentValue) => {
-                return accumulator + Number(currentValue.parkingSpaces)
-              }, 0),
-            })}
-          </ItemDescription>
-        </ItemContent>
-        <ItemActions>
-          <CompanySelect
-            companies={loaderData.companies}
-            company={company}
-            setCompany={setCompany}
-          />
-          <Button onClick={() => setOpen(true)} variant="outline">
-            <PlusIcon /> {m.aps_action_add()}
-          </Button>
-        </ItemActions>
-      </Item>
       {fetcher.data?.error && (
         <ErrorAlert description={fetcher.data.error} title="Error" />
       )}
