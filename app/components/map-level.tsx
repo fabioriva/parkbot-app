@@ -1,6 +1,23 @@
+import type { ComponentProps } from "react"
 import { Stall } from "~/components/map-stall"
 
-export function Level({ definitions, level, view }) {
+type StallProps = ComponentProps<typeof Stall>
+
+interface LevelProps extends Pick<StallProps, "definitions" | "view"> {
+  level: {
+    nr: string | number
+    label: string
+    min: number
+    max: number
+    elevators?: {
+      id: string
+      label: string
+    }[]
+    stalls: StallProps["stall"][]
+  }
+}
+
+export function Level({ definitions, level, view }: LevelProps) {
   return (
     <div className="flex w-fit flex-col gap-1.5">
       <div className="flex flex-col gap-0 text-xs">
