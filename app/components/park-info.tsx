@@ -15,12 +15,16 @@ interface OccupancyItem {
 
 interface OccupancyInfoProps {
   occupancy: OccupancyItem[]
+  user: {
+    aps: string
+  }
 }
 
 export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
   const [busy, ,] = occupancy
   const cars = busy && busy.value > 0 ? true : false
-  const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0)
+  const total = (arr: OccupancyItem[]) =>
+    arr.reduce((acc, curr) => acc + curr.value, 0)
   return (
     <Tooltip>
       <TooltipTrigger
