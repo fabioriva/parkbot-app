@@ -1,6 +1,6 @@
 import { AlertCircleIcon, ArrowUpRightIcon } from "lucide-react"
 import { useState, useEffect } from "react"
-import { Link, useParams } from "react-router"
+import { Link, useOutletContext, useParams } from "react-router"
 import {
   Accordion,
   AccordionContent,
@@ -65,6 +65,7 @@ const Step = ({ step }) => (
 
 export function Device({ device, advanced = false }) {
   const timeZone = usePlantTimeZone()
+  const { user } = useOutletContext<{ user: { role: string } }>()
   // console.log(device);
   const params = useParams()
   const [LS, LC, LA] = device.c
@@ -75,7 +76,9 @@ export function Device({ device, advanced = false }) {
       <Lamp bit={LA} color="red" />
       <Lamp bit={LC} color="yellow" />
       <Lamp bit={LS} color="green" />
-      {!advanced && <ExternalLink link={`/aps/${params.aps}/devices`} />}
+      {!advanced && user.role !== "valet" && (
+        <ExternalLink link={`/aps/${params.aps}/devices`} />
+      )}
     </div>
   )
   const actions = (
