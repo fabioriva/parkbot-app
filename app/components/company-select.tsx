@@ -7,14 +7,26 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 
-export function CompanySelect({ companies = [], company, setCompany }) {
+interface CompanySelectProps {
+  companies?: string[]
+  company: string
+  setCompany: (company: string) => void
+}
+
+export function CompanySelect({
+  companies = [],
+  company,
+  setCompany,
+}: CompanySelectProps) {
   return (
-    <Select
+    <Select<string>
       id="company"
       name="company"
       // defaultValue="Acme" // uncontrolled
       value={company}
-      onValueChange={setCompany}
+      onValueChange={(value) => {
+        if (value !== null) setCompany(value)
+      }}
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a company" />
