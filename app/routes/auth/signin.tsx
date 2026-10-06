@@ -1,3 +1,4 @@
+import { isAPIError } from "better-auth/api"
 import { Form, redirect } from "react-router"
 import {
   Card,
@@ -22,11 +23,15 @@ import type { Route } from "./+types/signin"
 export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData()
-    const name = formData.get("name")
     const email = formData.get("email")
     const password = formData.get("password")
+    if (typeof email !== "string" || !email.trim()) {
+      return { message: m.password_forgot_email_not_valid() }
+    }
+    if (typeof password !== "string" || !password.length) {
+      return { message: "Enter your password." }
+    }
     const { headers, response } = await auth.api.signInEmail({
-      // asResponse: true, // returns a response object instead of data
       returnHeaders: true,
       body: {
         email,
@@ -34,20 +39,26 @@ export async function action({ request }: Route.ActionArgs) {
         rememberMe: false,
         callbackURL: "/aps-select",
       },
-      headers: await request.headers,
+      headers: request.headers,
     })
     if ("twoFactorRedirect" in response) {
       return redirect("/2fa-verify", { headers })
     }
     if (!response.user.emailVerified) {
-      return redirect(`/email-verification?email=${response.user.email}`, {
-        headers,
-      })
+      return redirect(
+        `/email-verification?email=${encodeURIComponent(response.user.email)}`,
+        { headers }
+      )
     }
-    return redirect(response?.url, { headers })
+    return redirect(response.url ?? "/aps-select", { headers })
   } catch (error) {
-    // console.log(error)
-    return { message: error?.body?.message }
+    return {
+      message: isAPIError(error)
+        ? (error.body?.message ?? error.message)
+        : error instanceof Error
+          ? error.message
+          : "Unable to sign in.",
+    }
   }
 }
 
