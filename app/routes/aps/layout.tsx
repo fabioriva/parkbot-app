@@ -33,6 +33,7 @@ import { safeMessageT } from "~/lib/trans"
 import { isValidTimeZone } from "~/lib/date-time"
 import { Error as ErrorAlert } from "~/components/error-alert"
 import { m } from "@paraglide/messages.js"
+import type { Route } from "./+types/layout"
 
 export function headers({ loaderHeaders }: Route.HeadersArgs) {
   return loaderHeaders
@@ -45,22 +46,28 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (!session) {
     return redirect("/signin")
   }
-  if (session.user.aps !== params.aps) {
+  const apsNs = session.user.aps
+  if (!apsNs || apsNs !== params.aps) {
     throw data(`Forbidden: route /aps/${params.aps}`, { status: 403 })
   }
   const url = new URL(request.url)
   // Normalize RR8 data request path
   const pathname = url.pathname.replace(/\.data$/, "")
-  const [, aps, route] = pathname.split("/").filter(Boolean)
+  const [, , route] = pathname.split("/").filter(Boolean)
+  const allowedRoutes =
+    Object.entries(roles).find(([role]) => role === session.user.role)?.[1] ?? []
   if (
     route !== "admin" &&
     route !== "user" &&
-    !roles[session.user.role]?.some((role) => role === route)
+    !allowedRoutes.some((role) => role === route)
   ) {
     throw data("Forbidden", { status: 403 })
   }
   if (process.env.TWO_FACTOR === "enabled" && !session.user.twoFactorEnabled) {
     return redirect("/2fa-setup")
+  }
+  if (!session.aps) {
+    throw data("Aps not found", { status: 404 })
   }
   const sidebarState = getCookie(request, "sidebar_state")
   return data(
@@ -69,7 +76,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       pathname,
       route,
       sidebarState,
-      user: session.user,
+      user: { ...session.user, aps: apsNs },
     },
     {
       headers: {
