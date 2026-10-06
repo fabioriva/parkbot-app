@@ -22,7 +22,6 @@ export function CompanySelect({
     <Select<string>
       id="company"
       name="company"
-      // defaultValue="Acme" // uncontrolled
       value={company}
       onValueChange={(value) => {
         if (value !== null) setCompany(value)
