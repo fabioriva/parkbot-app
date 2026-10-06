@@ -1,4 +1,5 @@
 import { Link } from "react-router"
+import type { ComponentProps } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -16,16 +17,15 @@ import { UserMenu } from "~/components/user-menu"
 import { roles } from "~/lib/roles"
 import { safeMessageT } from "~/lib/trans"
 
-import type { Aps } from "~/lib/aps.server"
-import type { User } from "~/lib/user.server"
-
 interface SidebarProps {
-  aps: Aps
-  user: User
-  // Sidebar: React.ComponentProps<typeof Sidebar>
+  aps: string
+  pathname: string
+  user: ComponentProps<typeof UserMenu>["user"]
 }
 export function AppSidebar({ aps, pathname, user }: SidebarProps) {
   const { isMobile, setOpenMobile } = useSidebar()
+  const allowedRoutes =
+    Object.entries(roles).find(([role]) => role === user.role)?.[1] ?? []
   const navMain = {
     items: [
       {
@@ -104,7 +104,7 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
                     <Link
                       to={item.pathname}
                       className={
-                        !roles[user.role]?.some(
+                        !allowedRoutes.some(
                           (role) => role === item.pathname.split("/").pop()
                         )
                           ? "pointer-events-none text-current! opacity-50"
