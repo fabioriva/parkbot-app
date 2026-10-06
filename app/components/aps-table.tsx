@@ -1,5 +1,7 @@
 import { MoreHorizontalIcon } from "lucide-react"
 import { useState } from "react"
+import type { ComponentProps } from "react"
+import type { FetcherWithComponents } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -21,15 +23,21 @@ import {
 import { ApsForm } from "~/components/aps-form"
 import { m } from "@paraglide/messages.js"
 
-export function ApsTable({ aps, fetcher }) {
-  const [open, setOpen] = useState(false)
-  const [selectedAps, setSelectedAps] = useState()
+type TableAps = NonNullable<ComponentProps<typeof ApsForm>["selectedAps"]>
 
-  const handleDelete = async (aps) => {
-    fetcher.submit({ action: "delete", ...aps }, { method: "post" })
+interface ApsTableProps {
+  aps: TableAps[]
+  fetcher: Pick<FetcherWithComponents<unknown>, "Form" | "state" | "submit">
+}
+
+export function ApsTable({ aps, fetcher }: ApsTableProps) {
+  const [open, setOpen] = useState(false)
+  const [selectedAps, setSelectedAps] = useState<TableAps>()
+
+  const handleDelete = async (aps: Pick<TableAps, "ns">) => {
+    fetcher.submit({ action: "delete", ns: aps.ns }, { method: "post" })
   }
-  const handleUpdate = async (aps) => {
-    // fetcher.submit({ action: "update", ...aps }, { method: "post" });
+  const handleUpdate = async (aps: TableAps) => {
     setOpen(true)
     setSelectedAps(aps)
   }
@@ -74,7 +82,7 @@ export function ApsTable({ aps, fetcher }) {
               <TableCell>{aps.ns}</TableCell>
               <TableCell>{aps.parkingSpaces}</TableCell>
               <TableCell className="uppercase">
-                {aps.notifications.toString()}
+                {(aps.notifications ?? false).toString()}
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
