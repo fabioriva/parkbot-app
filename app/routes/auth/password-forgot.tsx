@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { Form, redirect } from "react-router"
+import { isAPIError } from "better-auth/api"
+import { Form } from "react-router"
 import {
   Card,
   CardContent,
@@ -24,10 +24,10 @@ export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData()
     const email = formData.get("email")
-    if (!email) {
+    if (typeof email !== "string" || !email.trim()) {
       return { message: m.password_forgot_email_not_valid() }
     }
-    const data = await auth.api.requestPasswordReset({
+    await auth.api.requestPasswordReset({
       body: {
         email, // required
         redirectTo: "/password-reset", // required
@@ -35,13 +35,18 @@ export async function action({ request }: Route.ActionArgs) {
     })
     return { success: true }
   } catch (error) {
-    return { message: error?.body?.message }
+    return {
+      message: isAPIError(error)
+        ? (error.body?.message ?? error.message)
+        : error instanceof Error
+          ? error.message
+          : "Unable to request a password reset.",
+    }
   }
 }
 
 export default function PasswordForgot({ actionData }: Route.ComponentProps) {
-  const [emailSent, setEmailSent] = useState(false)
-  useEffect(() => setEmailSent(actionData?.success), [actionData?.success])
+  const emailSent = actionData?.success === true
 
   return (
     <Card>
