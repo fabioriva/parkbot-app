@@ -1,5 +1,5 @@
 import { Loader2Icon } from "lucide-react"
-import { Form, redirect, useNavigation } from "react-router"
+import { data, Form, redirect, useNavigation } from "react-router"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent } from "~/components/ui/card"
 import {
@@ -15,7 +15,6 @@ import {
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { Submit } from "~/components/submit-button"
 import { auth } from "~/lib/auth.server"
-// import { aps } from "~/lib/aps";
 import { findSubscribedApsList } from "~/lib/aps.server"
 import { findSubscriptionByEmail } from "~/lib/subscription.server"
 import { m } from "@paraglide/messages.js"
@@ -35,15 +34,19 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   const aps = formData.get("aps")
-  const data = await auth.api.updateUser({
+  if (typeof aps !== "string" || !aps.trim()) {
+    throw data("Invalid APS selection", { status: 400 })
+  }
+  const result = await auth.api.updateUser({
     body: {
       aps,
     },
     headers: await request.headers,
   })
-  if (data.status) {
+  if (result.status) {
     return redirect(`/aps/${aps}/dashboard`)
   }
+  return null
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -62,7 +65,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   return aps
 }
 
-export default function ApsSelect({ loaderData }: Route.LoaderArgs) {
+export default function ApsSelect({ loaderData }: Route.ComponentProps) {
   const navigation = useNavigation()
 
   if (loaderData.length <= 0)
