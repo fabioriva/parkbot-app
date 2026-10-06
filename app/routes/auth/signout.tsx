@@ -1,6 +1,6 @@
 import { Loader2Icon } from "lucide-react"
-import { Form, Link, redirect, useNavigate, useNavigation } from "react-router"
-import { Button, buttonVariants } from "~/components/ui/button"
+import { Form, redirect, useNavigate, useNavigation } from "react-router"
+import { Button } from "~/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "~/components/ui/card"
 import { auth } from "~/lib/auth.server"
-import { cn } from "~/lib/utils"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/signout"
@@ -34,15 +33,14 @@ export default function Signout() {
       </CardHeader>
       <CardContent>
         <Form method="post" className="flex gap-3">
-          <Link
-            className={cn(buttonVariants({ variant: "secondary" }), "flex-1")}
-            onClick={(e) => {
-              e.preventDefault()
-              navigate(-1)
-            }}
+          <Button
+            type="button"
+            variant="secondary"
+            className="flex-1"
+            onClick={() => navigate(-1)}
           >
             {m.cancel()}
-          </Link>
+          </Button>
           {navigation.formAction === "/signout" ? (
             <Button className="flex-1" disabled>
               <Loader2Icon className="animate-spin" />
