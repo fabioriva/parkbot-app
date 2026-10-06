@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +13,19 @@ import {
   // AlertDialogTrigger,
 } from "~/components/ui/alert-dialog"
 
-const ConfirmDialogContext = createContext()
+interface ConfirmDialogOptions {
+  title: ReactNode
+  description?: ReactNode
+  onConfirm?: () => void | Promise<void>
+}
+
+interface ConfirmDialogContextValue {
+  showConfirmDialog: (options: ConfirmDialogOptions) => void
+}
+
+const ConfirmDialogContext = createContext<ConfirmDialogContextValue | null>(
+  null
+)
 
 export const useConfirmDialog = () => {
   const context = useContext(ConfirmDialogContext)
@@ -25,10 +37,10 @@ export const useConfirmDialog = () => {
   return context
 }
 
-export function ConfirmDialogProvider({ children }) {
+export function ConfirmDialogProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState({})
-  const showConfirmDialog = (opts) => {
+  const [options, setOptions] = useState<ConfirmDialogOptions | null>(null)
+  const showConfirmDialog = (opts: ConfirmDialogOptions) => {
     setOptions(opts)
     setOpen(true)
   }
