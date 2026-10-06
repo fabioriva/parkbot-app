@@ -1,3 +1,4 @@
+import { isAPIError } from "better-auth/api"
 import { Form, redirect } from "react-router"
 import {
   Card,
@@ -24,7 +25,7 @@ import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/signup"
 
-export async function action({ context, request }: Route.ActionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData()
     const firstName = formData.get("first-name")
@@ -32,16 +33,29 @@ export async function action({ context, request }: Route.ActionArgs) {
     const email = formData.get("email")
     const password = formData.get("password")
     const confirm = formData.get("confirm")
+    if (
+      typeof firstName !== "string" ||
+      !firstName.trim() ||
+      typeof lastName !== "string" ||
+      !lastName.trim()
+    ) {
+      return { error: "Enter your first and last name." }
+    }
+    if (typeof email !== "string" || !email.trim()) {
+      return { error: m.password_forgot_email_not_valid() }
+    }
+    if (typeof password !== "string" || !password.length) {
+      return { error: "Enter your password." }
+    }
+    if (typeof confirm !== "string" || password !== confirm) {
+      return { error: m.signup_password_match() }
+    }
     const subscription = await findSubscriptionByEmail(email)
     if (subscription === null) {
       return { error: m.signup_not_subscribed() }
     }
-    if (password && password !== confirm) {
-      return { error: m.signup_password_match() }
-    }
     const name = `${firstName} ${lastName}`
-    const { headers, response } = await auth.api.signUpEmail({
-      // asResponse: true,
+    const { headers } = await auth.api.signUpEmail({
       returnHeaders: true,
       body: {
         name,
@@ -52,10 +66,18 @@ export async function action({ context, request }: Route.ActionArgs) {
         image: `https://api.dicebear.com/10.x/bottts/svg?seed=${name}`, // optional
       },
     })
-    const result = await subscribeByEmail(email)
-    return redirect(`/email-verification?email=${email}`, { headers })
+    await subscribeByEmail(email)
+    return redirect(`/email-verification?email=${encodeURIComponent(email)}`, {
+      headers,
+    })
   } catch (error) {
-    return { error: error?.body?.message }
+    return {
+      error: isAPIError(error)
+        ? (error.body?.message ?? error.message)
+        : error instanceof Error
+          ? error.message
+          : "Unable to sign up.",
+    }
   }
 }
 
