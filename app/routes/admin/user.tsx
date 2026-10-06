@@ -1,4 +1,4 @@
-import { data, useFetcher } from "react-router"
+import { useFetcher } from "react-router"
 import {
   Item,
   ItemActions,
@@ -9,17 +9,22 @@ import {
 import { Error as ErrorAlert } from "~/components/error-alert"
 import { Success } from "~/components/success-alert"
 import { UserTable } from "~/components/user-table"
-import { auth } from "~/lib/auth.server"
+import { requireAdmin } from "~/lib/authorization.server"
 import { findUsers, deleteUserByEmail } from "~/lib/user.server"
 import { m } from "@paraglide/messages.js"
+import type { Route } from "./+types/user"
 
 export async function action({ request }: Route.ActionArgs) {
+  await requireAdmin(request)
   try {
     const formData = await request.formData()
     const action = formData.get("action")
     const email = formData.get("email")
     if (action === "delete") {
-      const result = await deleteUserByEmail(email)
+      if (typeof email !== "string" || !email.trim()) {
+        throw new Error("Email is required.")
+      }
+      await deleteUserByEmail(email)
       return {
         action: "Delete user",
         success: "User successfully deleted.",
@@ -27,26 +32,20 @@ export async function action({ request }: Route.ActionArgs) {
     }
     throw new Error("Non-existent action error.")
   } catch (error) {
-    // console.log(error);
-    return { error: error?.message }
+    return {
+      error: error instanceof Error ? error.message : "Unable to delete user.",
+    }
   }
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await auth.api.getSession({
-    headers: await request.headers,
-  })
-  if (!session) {
-    return redirect("/signin")
-  }
-  if (!("role" in session.user) || session.user.role !== "admin")
-    throw data("Forbidden", { status: 403 })
+  await requireAdmin(request)
   const users = await findUsers()
   return { users }
 }
 
-export default function User({ loaderData }: Route.LoaderArgs) {
-  const fetcher = useFetcher()
+export default function User({ loaderData }: Route.ComponentProps) {
+  const fetcher = useFetcher<typeof action>()
 
   return (
     <>

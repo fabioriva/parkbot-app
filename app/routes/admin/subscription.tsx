@@ -1,6 +1,6 @@
 import { PlusIcon } from "lucide-react"
 import { useState } from "react"
-import { data, useFetcher } from "react-router"
+import { useFetcher } from "react-router"
 import { Badge } from "~/components/ui/badge"
 import { Button } from "~/components/ui/button"
 import {
@@ -17,7 +17,7 @@ import { SubscriptionTable } from "~/components/subscription-table"
 import { Success } from "~/components/success-alert"
 // import { aps } from "~/lib/aps";
 import { findCompaniesFromAps, findSubscribedApsList } from "~/lib/aps.server"
-import { auth } from "~/lib/auth.server"
+import { requireAdmin } from "~/lib/authorization.server"
 import {
   createSubscription,
   deleteSubscriptionByEmail,
@@ -27,6 +27,7 @@ import {
 import { m } from "@paraglide/messages.js"
 
 export async function action({ request }: Route.ActionArgs) {
+  await requireAdmin(request)
   try {
     const formData = await request.formData()
     const action = formData.get("action")
@@ -70,14 +71,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await auth.api.getSession({
-    headers: await request.headers,
-  })
-  if (!session) {
-    return redirect("/signin")
-  }
-  if (!("role" in session.user) || session.user.role !== "admin")
-    throw data("Forbidden", { status: 403 })
+  await requireAdmin(request)
   const aps = await findSubscribedApsList([])
   const companies = await findCompaniesFromAps(aps)
   const subscriptions = await findSubscriptions()
