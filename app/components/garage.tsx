@@ -1,8 +1,11 @@
-import { Badge } from "~/components/ui/badge"
-import { IoTooltip } from "~/components/io-tooltip"
 import { Sensor } from "~/components/sensor-svg"
+import type { DeviceData } from "~/components/device"
 
-export function Garage({ sensors }) {
+interface GarageProps {
+  sensors: Extract<DeviceData["views"][number], { sensors: unknown }>["sensors"]
+}
+
+export function Garage({ sensors }: GarageProps) {
   const [FRE, FPE, FLA, FLP, FDR, FDL] = sensors
   return (
     <div className="svg-container">
