@@ -9,7 +9,7 @@ export function meta({}: Route.MetaArgs) {
   ]
 }
 
-function generateRandomString(length) {
+function generateRandomString(length: number) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
   let result = ""
