@@ -9,7 +9,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "~/components/ui/dialog"
 import {
   Field,
@@ -20,7 +19,22 @@ import {
 import { Input } from "~/components/ui/input"
 import { m } from "@paraglide/messages.js"
 
-export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
+interface EditTagDialogProps {
+  open: boolean
+  onConfirm: (code: string) => void | Promise<void>
+  onOpenChange: (open: boolean) => void
+  tag: {
+    code: string
+    nr?: number
+  }
+}
+
+export function EditTagDialog({
+  open,
+  onConfirm,
+  onOpenChange,
+  tag,
+}: EditTagDialogProps) {
   const [error, setError] = useState(false)
   const [value, setValue] = useState("")
   useEffect(() => {
@@ -47,9 +61,11 @@ export function EditTagDialog({ open, onConfirm, onOpenChange, tag }) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{m.tags_edit_dialog_title({ nr: tag.nr })}</DialogTitle>
+          <DialogTitle>
+            {m.tags_edit_dialog_title({ nr: tag.nr ?? "" })}
+          </DialogTitle>
           <DialogDescription>
-            {m.tags_edit_dialog_description({ nr: tag.nr })}
+            {m.tags_edit_dialog_description({ nr: tag.nr ?? "" })}
           </DialogDescription>
         </DialogHeader>
         <Field>
