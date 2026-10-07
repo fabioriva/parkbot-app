@@ -4,10 +4,13 @@ import { FieldDescription, FieldLegend, FieldSet } from "~/components/ui/field"
 import { Setup2FA } from "~/components/setup-2fa"
 import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/two-factor"
+import type { Route as ApsLayoutRoute } from "../aps/+types/layout"
 
 export default function TwoFactor() {
-  const { user } = useOutletContext()
+  const { user } =
+    useOutletContext<
+      Pick<ApsLayoutRoute.ComponentProps["loaderData"], "user">
+    >()
   const [success, setSuccess] = useState(false)
   return (
     <div className="w-full max-w-md">
