@@ -1,3 +1,4 @@
+import { isAPIError } from "better-auth/api"
 import { Form, redirect } from "react-router"
 import {
   Card,
@@ -23,6 +24,9 @@ export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData()
     const code = formData.get("code")
+    if (typeof code !== "string" || !code.trim()) {
+      return { message: "Enter a recovery code." }
+    }
     const response = await auth.api.verifyBackupCode({
       asResponse: true,
       body: {
@@ -30,24 +34,28 @@ export async function action({ request }: Route.ActionArgs) {
         disableSession: false,
         // trustDevice: true,
       },
-      headers: await request.headers,
+      headers: request.headers,
     })
     if (response.ok) {
       const headers = new Headers(response.headers)
       return redirect("/2fa-setup", { headers })
     } else {
-      return { message: response.statusText }
+      return {
+        message: response.statusText || "Unable to verify recovery code.",
+      }
     }
   } catch (error) {
-    // console.log(error)
-    return { message: error?.body?.message }
+    return {
+      message: isAPIError(error)
+        ? (error.body?.message ?? error.message)
+        : error instanceof Error
+          ? error.message
+          : "Unable to verify recovery code.",
+    }
   }
 }
 
-export default function TwoFactorReset({
-  actionData,
-  loaderData,
-}: Route.ComponentProps) {
+export default function TwoFactorReset({ actionData }: Route.ComponentProps) {
   return (
     <Card>
       <CardHeader>
