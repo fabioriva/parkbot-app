@@ -89,8 +89,9 @@ export function ActionPP({ action, disabled = true }: ActionPPProps) {
     <Dialog>
       <DialogTrigger
         render={
-          // <Button disabled={disabled || !action.enable.status}>
-          <Button>{safeMessageT("action", action.key)}</Button>
+          <Button disabled={disabled || !action.enable.status}>
+            {safeMessageT("action", action.key)}
+          </Button>
         }
       />
       <DialogContent showCloseButton={false}>

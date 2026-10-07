@@ -1,5 +1,5 @@
 import { AlertCircleIcon, ArrowUpRightIcon } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, type ComponentProps } from "react"
 import { Link, useOutletContext, useParams } from "react-router"
 import {
   Accordion,
@@ -18,20 +18,92 @@ import { Garage } from "~/components/garage"
 import { IoTooltip } from "~/components/io-tooltip"
 import { Motion } from "~/components/motion"
 import { Silomat } from "~/components/silomat"
-import { deviceT, logT, safeMessageT } from "~/lib/trans"
+import { deviceT, safeMessageT } from "~/lib/trans"
 import { cn } from "~/lib/utils"
 import { formatPlantDateTime } from "~/lib/date-time"
 import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
 import { m } from "@paraglide/messages.js"
 import { clsx } from "cn"
 
-const ExternalLink = ({ link }) => (
+interface DeviceBit {
+  addr: string
+  label?: string
+  status: boolean | 0 | 1
+}
+
+interface DeviceMode {
+  id: number
+  key: string
+}
+
+interface DeviceDrive {
+  name: string
+  enable: DeviceBit
+  speed: number
+  current: number
+  load: number
+  trip: number
+}
+
+interface DevicePosition {
+  name: string
+  destination: number
+  position: number
+}
+
+interface DeviceMotor {
+  name: { key: string; query?: { id?: number } }
+  run: Pick<DeviceBit, "status">
+  message: string
+  io: DeviceBit[]
+  encoders?: DevicePosition[]
+}
+
+type DeviceView = {
+  drives: DeviceDrive[]
+  motors: DeviceMotor[]
+} & (
+  | { name: "view-main" }
+  | { name: "view-garage" | "view-sil"; sensors: DeviceBit[] }
+)
+
+export interface DeviceData {
+  name: string
+  card: number
+  stall: number
+  step: number
+  mode: DeviceMode
+  operation: number
+  motor: number
+  c: DeviceBit[]
+  d: ComponentProps<typeof ActionPP>["action"][]
+  views: DeviceView[]
+  alarms: {
+    id: number
+    key: string
+    date: string
+    query?: Record<string, unknown>
+  }[]
+}
+
+interface DeviceProps {
+  device: DeviceData
+  advanced?: boolean
+}
+
+const ExternalLink = ({ link }: { link: string }) => (
   <Link to={link} aria-label={link}>
     <ArrowUpRightIcon className="size-4 hover:text-blue-500" />
   </Link>
 )
 
-const Lamp = ({ bit, color }) => (
+const Lamp = ({
+  bit,
+  color,
+}: {
+  bit: DeviceBit
+  color: "red" | "yellow" | "green"
+}) => (
   <IoTooltip io={bit}>
     <div
       className={clsx("h-4 w-4 rounded-full", {
@@ -44,7 +116,7 @@ const Lamp = ({ bit, color }) => (
   </IoTooltip>
 )
 
-const Mode = ({ mode }) => (
+const Mode = ({ mode }: { mode: DeviceMode }) => (
   <Badge
     className={
       mode.id !== 8
@@ -56,14 +128,14 @@ const Mode = ({ mode }) => (
   </Badge>
 )
 
-const Step = ({ step }) => (
+const Step = ({ step }: { step: number }) => (
   <Badge variant="outline">
     <Spinner data-icon="inline-start" />
     {step}
   </Badge>
 )
 
-export function Device({ device, advanced = false }) {
+export function Device({ device, advanced = false }: DeviceProps) {
   const timeZone = usePlantTimeZone()
   const { user } = useOutletContext<{ user: { role: string } }>()
   // console.log(device);
