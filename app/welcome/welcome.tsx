@@ -2,11 +2,9 @@ import { Link } from "react-router"
 import { Button } from "~/components/ui/button"
 import { LocaleToggle } from "~/components/locale-toggle"
 import { ModeToggle } from "~/components/mode-toggle"
-import { cn } from "~/lib/utils"
 import { m } from "@paraglide/messages.js"
-import { getLocale, setLocale } from "@paraglide/runtime.js"
 
-export function Welcome({ seed }) {
+export function Welcome({ seed }: { seed: string }) {
   return (
     <div className="flex h-screen items-center justify-center px-3">
       <div className="flex flex-col items-center gap-3 text-center">
@@ -20,7 +18,7 @@ export function Welcome({ seed }) {
           <img
             src={`https://api.dicebear.com/10.x/bottts/svg?seed=${seed}`}
             alt="Parkbot"
-            onError={(e) => (e.target.src = "/bot.svg")}
+            onError={(e) => (e.currentTarget.src = "/bot.svg")}
           />
         </div>
         <Button
