@@ -1,3 +1,4 @@
+import { isAPIError } from "better-auth/api"
 import { Form, redirect } from "react-router"
 import {
   Card,
@@ -23,30 +24,37 @@ export async function action({ request }: Route.ActionArgs) {
   try {
     const formData = await request.formData()
     const totp = formData.get("totp")
+    if (typeof totp !== "string" || !totp.trim()) {
+      return { message: "Enter a verification code." }
+    }
     const response = await auth.api.verifyTOTP({
       asResponse: true,
       body: {
         code: totp,
         // trustDevice: true, // optional, defaults to false
       },
-      headers: await request.headers,
+      headers: request.headers,
     })
     if (response.ok) {
       const headers = new Headers(response.headers)
       return redirect("/aps-select", { headers })
     } else {
-      return { message: response.statusText }
+      return {
+        message: response.statusText || "Unable to verify code.",
+      }
     }
   } catch (error) {
-    // console.log(error);
-    return { message: error?.body?.message }
+    return {
+      message: isAPIError(error)
+        ? (error.body?.message ?? error.message)
+        : error instanceof Error
+          ? error.message
+          : "Unable to verify code.",
+    }
   }
 }
 
-export default function TwoFactorVerify({
-  actionData,
-  loaderData,
-}: Route.ComponentProps) {
+export default function TwoFactorVerify({ actionData }: Route.ComponentProps) {
   return (
     <Card>
       <CardHeader>
