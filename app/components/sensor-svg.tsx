@@ -1,20 +1,13 @@
-import { clsx } from "cn";
+import { clsx } from "cn"
+import type { DeviceData } from "~/components/device"
 
-// export type Bit = {
-//   addr: string;
-//   label: string;
-//   status: number;
-// };
+interface SensorProps {
+  x: string | number
+  y: string | number
+  sensor: DeviceData["c"][number]
+}
 
-// interface SensorProps {
-//   x: string;
-//   y: string;
-//   sensor: Bit;
-// }
-
-// export const Sensor = ({ x, y, sensor }: SensorProps) => {
-export const Sensor = ({ x, y, sensor }) => {
-  // const { t } = useTranslation();
+export const Sensor = ({ x, y, sensor }: SensorProps) => {
   return (
     <circle
       cx={x}
