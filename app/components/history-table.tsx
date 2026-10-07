@@ -37,6 +37,18 @@ import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
 import { safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
 import { clsx } from "cn"
+import type { HistoryEntry } from "~/routes/aps/history"
+
+interface TablePaginationProps {
+  currentPage: number
+  pages: number
+  paginate: (page: number) => void | Promise<void>
+}
+
+interface HistoryTableProps extends TablePaginationProps {
+  query: HistoryEntry[]
+  rowsPerPage: number
+}
 
 // utils/pagination.ts
 function getPageNumbers(
@@ -61,7 +73,11 @@ function getPageNumbers(
   return range
 }
 
-const TablePagination = ({ currentPage, pages, paginate }) => {
+const TablePagination = ({
+  currentPage,
+  pages,
+  paginate,
+}: TablePaginationProps) => {
   const pageNumbers = getPageNumbers(currentPage, pages)
   return (
     <Pagination className="flex">
@@ -147,8 +163,7 @@ export function HistoryTable({
   pages,
   paginate,
   query,
-  rowsPerPage,
-}) {
+}: HistoryTableProps) {
   const timeZone = usePlantTimeZone()
   return (
     <>

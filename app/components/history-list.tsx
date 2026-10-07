@@ -12,22 +12,7 @@ import { formatPlantDateTime } from "~/lib/date-time"
 import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
 import { logT, safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
-
-export interface HistoryEntry {
-  date: string
-  device: { id: number; key: string }
-  mode: { id: number; key: string }
-  operation: { id: number; key: string }
-  alarm?: {
-    id: number
-    key: string
-    query?: Record<string, unknown>
-  }
-  card: number
-  stall: number
-  size: number
-  user?: string | null
-}
+import type { HistoryEntry } from "~/routes/aps/history"
 
 interface HistoryListProps {
   query: HistoryEntry[]

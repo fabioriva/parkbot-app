@@ -27,6 +27,22 @@ import { auth } from "~/lib/auth.server"
 import type { Route } from "./+types/history"
 import { m } from "@paraglide/messages.js"
 
+export interface HistoryEntry {
+  date: string
+  device: { id: number; key: string }
+  mode: { id: number; key: string }
+  operation: { id: number; key: string }
+  alarm?: {
+    id: number
+    key: string
+    query?: Record<string, unknown>
+  }
+  card: number
+  stall: number
+  size: number
+  user?: string | null
+}
+
 const LIMIT = 15
 
 export async function loader({ params, request }: Route.LoaderArgs) {
