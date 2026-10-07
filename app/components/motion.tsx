@@ -4,8 +4,13 @@ import { Badge } from "~/components/ui/badge"
 import { IoTooltip } from "~/components/io-tooltip"
 import { Position } from "~/components/position"
 import { safeMessageT } from "~/lib/trans"
+import type { DeviceData } from "~/components/device"
 
-export function Motion({ motor }) {
+interface MotionProps {
+  motor: DeviceData["views"][number]["motors"][number]
+}
+
+export function Motion({ motor }: MotionProps) {
   const id = motor.name.query?.id !== 0 ? motor.name.query?.id : ""
   const isRunning = motor.run.status
   return (
