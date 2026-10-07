@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react"
+import type { FetcherWithComponents } from "react-router"
 import { Button } from "~/components/ui/button"
-import { Checkbox } from "~/components/ui/checkbox"
 import {
   Dialog,
   DialogClose,
@@ -12,11 +11,9 @@ import {
 } from "~/components/ui/dialog"
 import {
   Field,
-  FieldDescription,
   // FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
   FieldSet,
 } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
@@ -28,9 +25,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import { roles } from "~/lib/roles"
 import { locales } from "@paraglide/runtime.js"
 import { m } from "@paraglide/messages.js"
+
+interface NotificationsFormProps {
+  action: "create" | "update"
+  fetcher: Pick<FetcherWithComponents<unknown>, "Form" | "state">
+  open: boolean
+  setOpen: (open: boolean) => void
+  selectedRecipient?: {
+    _id: string
+    email: string
+    name?: string | null
+    locale?: string | null
+    phone?: string | null
+  }
+}
 
 export function NotificationsForm({
   action,
@@ -38,7 +48,7 @@ export function NotificationsForm({
   open,
   setOpen,
   selectedRecipient,
-}) {
+}: NotificationsFormProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-sm">

@@ -1,5 +1,6 @@
 import { MoreHorizontalIcon } from "lucide-react"
-import { useState } from "react"
+import { useState, type ComponentProps } from "react"
+import type { FetcherWithComponents } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -20,15 +21,29 @@ import { NotificationsForm } from "~/components/notifications-form"
 
 import { m } from "@paraglide/messages.js"
 
-export function NotificationsTable({ fetcher, recipients }) {
-  const [open, setOpen] = useState(false)
-  const [selectedRecipient, setSelectedRecipient] = useState()
+type NotificationRecipient = NonNullable<
+  ComponentProps<typeof NotificationsForm>["selectedRecipient"]
+>
 
-  const handleDelete = async (recipient) => {
-    fetcher.submit({ action: "delete", ...recipient }, { method: "post" })
+interface NotificationsTableProps {
+  fetcher: Pick<FetcherWithComponents<unknown>, "Form" | "state" | "submit">
+  recipients: NotificationRecipient[]
+}
+
+export function NotificationsTable({
+  fetcher,
+  recipients,
+}: NotificationsTableProps) {
+  const [open, setOpen] = useState(false)
+  const [selectedRecipient, setSelectedRecipient] =
+    useState<NotificationRecipient>()
+
+  const handleDelete = async (
+    recipient: Pick<NotificationRecipient, "_id">
+  ) => {
+    fetcher.submit({ action: "delete", _id: recipient._id }, { method: "post" })
   }
-  const handleUpdate = async (recipient) => {
-    // fetcher.submit({ action: "update", ...recipient }, { method: "post" });
+  const handleUpdate = async (recipient: NotificationRecipient) => {
     setOpen(true)
     setSelectedRecipient(recipient)
   }
