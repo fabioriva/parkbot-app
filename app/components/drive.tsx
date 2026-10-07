@@ -1,15 +1,25 @@
 import { AccordionContent, AccordionTrigger } from "~/components/ui/accordion"
 import { m } from "@paraglide/messages.js"
-import { clsx } from "cn";
+import { clsx } from "cn"
+import type { DeviceData } from "~/components/device"
 
-const Item = ({ title, value }) => (
+interface ItemProps {
+  title: string
+  value: string | number
+}
+
+interface DriveProps {
+  drive: DeviceData["views"][number]["drives"][number]
+}
+
+const Item = ({ title, value }: ItemProps) => (
   <div className="flex flex-col">
     <span className="text-xs text-muted-foreground">{title}</span>
     <span className="font-bold">{value}</span>
   </div>
 )
 
-export function Drive({ drive }) {
+export function Drive({ drive }: DriveProps) {
   return (
     <>
       <AccordionTrigger className="flex items-center gap-1.5 py-1.5 hover:no-underline">
