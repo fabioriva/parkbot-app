@@ -11,9 +11,7 @@ import {
 import { Setup2FA } from "~/components/setup-2fa"
 import { m } from "@paraglide/messages.js"
 
-import type { Route } from "./+types/two-factor-setup"
-
-export default function TwoFactor({ actionData }) {
+export default function TwoFactor() {
   const [success, setSuccess] = useState(false)
   return (
     <Card>
