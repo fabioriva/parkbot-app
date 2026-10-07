@@ -1,11 +1,18 @@
+import type { ReactNode } from "react"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip"
 import { safeMessageT } from "~/lib/trans"
+import type { DeviceData } from "~/components/device"
 
-function get(label) {
+interface IoTooltipProps {
+  io?: DeviceData["c"][number] | null
+  children: ReactNode
+}
+
+function get(label?: string) {
   switch (label) {
     case "AD1":
     case "AD2":
@@ -59,7 +66,7 @@ function get(label) {
   }
 }
 
-export function IoTooltip({ io, children }) {
+export function IoTooltip({ io, children }: IoTooltipProps) {
   const { key, query } = get(io?.label)
   return (
     <Tooltip>
