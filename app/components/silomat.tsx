@@ -1,12 +1,11 @@
 import { Sensor } from "~/components/sensor-svg"
-// import type { Bit } from "~/routes/aps/types";
+import type { DeviceData } from "~/components/device"
 
-// interface SilomatProps {
-//   sensors: Bit[];
-// }
+interface SilomatProps {
+  sensors: Extract<DeviceData["views"][number], { sensors: unknown }>["sensors"]
+}
 
-// export function DeviceSilomat({ sensors }: SilomatProps) {
-export function Silomat({ sensors }) {
+export function Silomat({ sensors }: SilomatProps) {
   const [RMV, RMH, RES, REH, RCV, RAV, RAH, RCH] = sensors
   return (
     <div className="svg-container border">
