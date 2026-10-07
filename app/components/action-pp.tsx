@@ -14,23 +14,36 @@ import {
 } from "~/components/ui/dialog"
 import { Field, FieldDescription, FieldLabel } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from "~/components/ui/item"
+import { Item, ItemActions, ItemContent, ItemTitle } from "~/components/ui/item"
 import { useConfirmDialog } from "~/components/confirm-dialog"
 import { actionResponse } from "~/lib/action"
+import { safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
 
-export function ActionPP({ action, disabled = true }) {
-  const data = useLoaderData()
+interface ActionPPButton {
+  key: string
+  value: string | number
+  tooltip: string
+}
+
+interface ActionPPProps {
+  action: {
+    key: string
+    enable: { status: boolean | 0 | 1 }
+    device: number
+    min: number
+    max: number
+    buttons: ActionPPButton[]
+  }
+  disabled?: boolean
+}
+
+export function ActionPP({ action, disabled = true }: ActionPPProps) {
+  const data = useLoaderData<{ token: string | null }>()
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
 
-  const [destination, setDestination] = useState(undefined)
+  const [destination, setDestination] = useState<number | undefined>(undefined)
   const [error, setError] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,9 +57,10 @@ export function ActionPP({ action, disabled = true }) {
       setDestination(result.data)
     }
   }
-  const handleConfirm = (item) => {
+  const handleConfirm = (item: ActionPPButton) => {
     const value =
       item.key === "A" || item.key === "B" ? item.value : destination
+    if (value === undefined) return
     showConfirmDialog({
       title: m.action_pp_confirm_dialog_title(),
       description: m.action_pp_confirm_dialog_description({
@@ -75,9 +89,8 @@ export function ActionPP({ action, disabled = true }) {
     <Dialog>
       <DialogTrigger
         render={
-          <Button disabled={disabled || !action.enable.status}>
-            {action.key}
-          </Button>
+          // <Button disabled={disabled || !action.enable.status}>
+          <Button>{safeMessageT("action", action.key)}</Button>
         }
       />
       <DialogContent showCloseButton={false}>
@@ -124,7 +137,7 @@ export function ActionPP({ action, disabled = true }) {
                 max={action.max}
                 // placeholder="Enter destination"
                 type="number"
-                value={destination}
+                value={destination ?? ""}
                 onChange={handleChange}
               />
               <FieldDescription>
@@ -146,8 +159,9 @@ export function ActionPP({ action, disabled = true }) {
                           // variant="primary"1
                           size="sm"
                           disabled={
+                            destination === undefined ||
                             !(destination > 0 && destination <= action.max) ||
-                            error.status
+                            error
                           }
                           onClick={() => handleConfirm(item)}
                         >

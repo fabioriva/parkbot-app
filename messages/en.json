@@ -1,5 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang_message_format",
+  "action.action-pp": "Step by step",
+  "action.action-pp-reset": "Reset step by step",
   "action_pp_dialog_title": "Step By Step operations",
   "action_pp_dialog_description": "Select a step-by-step operation to perform.",
   "action_pp_confirm_dialog_title": "Confirm operation",
