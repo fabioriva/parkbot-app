@@ -1,7 +1,19 @@
-import { useState, useEffect, useReducer } from "react"
+import { useEffect, useReducer } from "react"
+import type { DeviceData } from "~/components/device"
 import { Field, FieldLabel } from "~/components/ui/field"
 import { Progress } from "~/components/ui/progress"
 import { m } from "@paraglide/messages.js"
+
+interface PositionProps {
+  encoder: NonNullable<
+    DeviceData["views"][number]["motors"][number]["encoders"]
+  >[number]
+}
+
+interface ItemProps {
+  title: string
+  value: number
+}
 
 const initialState = {
   isRunning: false,
@@ -11,7 +23,14 @@ const initialState = {
   percent: 0,
 }
 
-function reducer(state, action) {
+type PositionState = typeof initialState
+
+type PositionAction =
+  | { type: "start"; destination: number; position: number }
+  | { type: "reset" }
+  | { type: "tick"; position: number }
+
+function reducer(state: PositionState, action: PositionAction): PositionState {
   switch (action.type) {
     case "start":
       return {
@@ -38,14 +57,14 @@ function reducer(state, action) {
   }
 }
 
-const Item = ({ title, value }) => (
+const Item = ({ title, value }: ItemProps) => (
   <div className="flex flex-col">
     <span className="text-xs text-muted-foreground">{title}</span>
     <span className="font-bold">{value}</span>
   </div>
 )
 
-export function Position({ encoder }) {
+export function Position({ encoder }: PositionProps) {
   const { destination, name, position } = encoder
   const [state, dispatch] = useReducer(reducer, initialState)
 
