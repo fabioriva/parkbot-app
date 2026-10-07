@@ -11,7 +11,14 @@ import {
 } from "~/components/ui/chart"
 import { safeMessageT } from "~/lib/trans"
 
-export function Occupancy({ occupancy }) {
+interface OccupancyProps {
+  occupancy: {
+    id: "busy" | "free" | "lock"
+    value: number
+  }[]
+}
+
+export function Occupancy({ occupancy }: OccupancyProps) {
   const chartConfig = {
     busy: {
       label: safeMessageT("occupancy", "busy"),
@@ -39,8 +46,12 @@ export function Occupancy({ occupancy }) {
         />
         <Pie data={chartData} dataKey="value" nameKey="id" />
         <ChartLegend
-          content={<ChartLegendContent nameKey="id" />}
-          className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+          content={
+            <ChartLegendContent
+              nameKey="id"
+              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+            />
+          }
         />
       </PieChart>
     </ChartContainer>
