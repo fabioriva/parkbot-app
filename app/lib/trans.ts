@@ -1,23 +1,29 @@
 import { m } from "@paraglide/messages.js"
+import type { DeviceData } from "~/components/device"
+import type { HistoryEntry } from "~/routes/aps/history"
 
-export function deviceT(device) {
+const messages: Readonly<Record<string, unknown>> = m
+
+export function deviceT(
+  device: Pick<DeviceData, "card" | "mode" | "operation" | "stall" | "c">
+): string {
   const { card, mode, operation, stall } = device
-  const ce = (card, stall) => {
+  const ce = (card: number, stall: number) => {
     if (card === 0 && stall === 0) return m.device_ce0()
     if (stall === 0) return m.device_ce1({ card })
     return m.device_ce2({ card, stall })
   }
-  const cu = (card, stall) => {
+  const cu = (card: number, stall: number) => {
     if (card === 0 && stall === 0) return m.device_cu0()
     if (stall === 0) return m.device_cu1({ card })
     return m.device_cu2({ card, stall })
   }
-  const mv = (card, stall) => {
+  const mv = (card: number, stall: number) => {
     if (card === 0 && stall === 0) return m.device_mv0()
     if (stall === 0) return m.device_mv1({ card })
     return m.device_mv2({ card, stall })
   }
-  const pp = (stall) => {
+  const pp = (stall: number) => {
     if (stall === 0) return m.device_pp0()
     return m.device_pp1({ stall })
   }
@@ -42,13 +48,18 @@ export function deviceT(device) {
   }
 }
 
-export function logT(log) {
+export function logT(
+  log: Pick<HistoryEntry, "alarm" | "card" | "operation" | "mode" | "stall">
+): string | null {
   try {
-    const { alarm, card, operation, mode, stall, uid } = log
+    const { alarm, card, operation, mode, stall } = log
     switch (operation.id) {
       case 1:
-      case 2:
-        return m["alarm." + alarm.key]({ ...alarm.query })
+      case 2: {
+        if (!alarm) return null
+        const fn = messages["alarm." + alarm.key]
+        return typeof fn === "function" ? fn({ ...alarm.query }) : null
+      }
       case 3:
         return m.log_id_3({ id: mode.id })
       case 4:
@@ -76,14 +87,17 @@ export function logT(log) {
       default:
         return `Operation ${operation.id}`
     }
-  } catch (error) {
-    // console.error(error);
+  } catch {
     return null
   }
 }
 
-export function safeMessageT(prefix, key, params = {}) {
-  const fn = m[`${prefix}.${key}`] || m[`${prefix}_${key}`]
+export function safeMessageT(
+  prefix: string,
+  key: string | null | undefined,
+  params: Record<string, unknown> = {}
+): string {
+  const fn = messages[`${prefix}.${key}`] || messages[`${prefix}_${key}`]
 
   if (typeof fn !== "function") {
     // Chiave non presente → ritorna fallback
