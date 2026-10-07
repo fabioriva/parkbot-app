@@ -1,6 +1,6 @@
 import { toast } from "~/components/ui/toast"
 
-export async function actionResponse(response) {
+export async function actionResponse(response: Response) {
   // console.log(response)
   if (response.ok) {
     const now = new Date()
