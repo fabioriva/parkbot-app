@@ -80,7 +80,7 @@ export default function Dashboard({
           }
           footer={<ActionExit exit={exitQueue.exitButton} />}
         >
-          <Queue exit={exitQueue.exitButton} queue={queue} />
+          <Queue queue={queue} />
         </CardWrapper>
         <CardWrapper
           title={m.dashboard_recent_activity_title()}

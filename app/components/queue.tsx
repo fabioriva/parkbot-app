@@ -11,13 +11,24 @@ import {
 import { useConfirmDialog } from "~/components/confirm-dialog"
 import { actionResponse } from "~/lib/action"
 import { m } from "@paraglide/messages.js"
+import type { loader } from "~/routes/aps/dashboard"
 
-export const Queue = ({ queue }) => {
-  const data = useLoaderData()
+interface QueueItem {
+  id: number
+  card: number
+  stall: number
+}
+
+interface QueueProps {
+  queue: QueueItem[]
+}
+
+export const Queue = ({ queue }: QueueProps) => {
+  const data = useLoaderData<typeof loader>()
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
 
-  const handleConfirm = async (item) => {
+  const handleConfirm = async (item: QueueItem) => {
     showConfirmDialog({
       title: m.exit_queue_dialog_title(),
       description: m.exit_queue_dialog_description({ card: item.card }),
