@@ -16,6 +16,8 @@ import type { loader } from "~/routes/aps/map"
 interface StallProps {
   definitions: {
     cards: number
+    minCard?: number
+    maxCard?: number
     stallStatus: {
       FREE: number
       LOCK: number

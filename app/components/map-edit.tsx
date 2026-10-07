@@ -24,6 +24,8 @@ import { m } from "@paraglide/messages.js"
 interface EditStallDialogOptions {
   definitions: {
     cards: number
+    minCard?: number
+    maxCard?: number
     stallStatus: {
       FREE: number
       LOCK: number
@@ -59,8 +61,8 @@ export function EditStallDialogProvider({ children }: { children: ReactNode }) {
     setOpen(true)
     setValue(opts.stall.status)
   }
-  const min = 1
-  const max = options?.definitions.cards || 1
+  const min = options?.definitions.minCard ?? 1
+  const max = options?.definitions.maxCard ?? options?.definitions.cards ?? 1
   const [error, setError] = useState(false)
   const [value, setValue] = useState(0)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
