@@ -177,10 +177,6 @@ function HistoryResults({
     throw new Error("History request failed")
   }
 
-  // useEffect(() => {
-  //   fetchPage(1);
-  // }, []);
-
   const loadMore = async () => {
     const next = page + 1
     try {
