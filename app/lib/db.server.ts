@@ -1,5 +1,10 @@
-import { MongoClient, ObjectId, type UpdateResult } from "mongodb"
+import { MongoClient } from "mongodb"
 
-const client = new MongoClient(process.env.MONGODB_URI)
+const uri = process.env.MONGODB_URI
+if (!uri?.trim()) {
+  throw new Error("MONGODB_URI is required")
+}
+
+const client = new MongoClient(uri)
 
 export const db = client.db()
