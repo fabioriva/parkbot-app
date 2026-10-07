@@ -16,23 +16,36 @@ import { Success } from "~/components/success-alert"
 import { authClient } from "~/lib/auth"
 import { m } from "@paraglide/messages.js"
 
-export function Setup2FA({ isTwoFactorEnabled, success, setSuccess }) {
-  const [backupCodes, setBackupCodes] = useState(null)
-  const [error, setError] = useState(null)
+interface Setup2FAProps {
+  isTwoFactorEnabled?: boolean | null
+  success: boolean
+  setSuccess: (success: boolean) => void
+}
+
+export function Setup2FA({
+  isTwoFactorEnabled,
+  success,
+  setSuccess,
+}: Setup2FAProps) {
+  const [backupCodes, setBackupCodes] = useState<string[]>([])
+  const [error, setError] = useState<string | null>(null)
   const [password, setPassword] = useState("")
-  const [totp, setTotp] = useState(null)
+  const [totp, setTotp] = useState("")
   const [totpURI, setTotpURI] = useState("")
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(
     isTwoFactorEnabled ?? false
   )
 
   const disable2FA = async () => {
-    const { data, error } = await authClient.twoFactor.disable({
+    const { error } = await authClient.twoFactor.disable({
       password,
     })
     if (error) {
-      return setError(error.message)
+      return setError(
+        error.message ?? "Unable to disable two-factor authentication."
+      )
     }
+    setError(null)
     setTwoFactorEnabled(false)
   }
   const enable2FA = async () => {
@@ -40,19 +53,24 @@ export function Setup2FA({ isTwoFactorEnabled, success, setSuccess }) {
       password,
     })
     if (error) {
-      return setError(error.message)
+      return setError(
+        error.message ?? "Unable to enable two-factor authentication."
+      )
     }
+    if (!data || data.method !== "totp")
+      return setError("Unable to enable two-factor authentication.")
     setError(null)
-    setBackupCodes(data?.backupCodes)
-    setTotpURI(data?.totpURI)
+    setBackupCodes(data.backupCodes)
+    setTotpURI(data.totpURI)
   }
   const verify2FA = async () => {
-    const { data, error } = await authClient.twoFactor.verifyTotp({
+    if (!totp.trim()) return
+    const { error } = await authClient.twoFactor.verifyTotp({
       code: totp, // required
       trustDevice: true,
     })
     if (error) {
-      return setError(error.message)
+      return setError(error.message ?? "Unable to verify code.")
     }
     setError(null)
     setSuccess(true)
@@ -124,7 +142,9 @@ export function Setup2FA({ isTwoFactorEnabled, success, setSuccess }) {
             </FieldDescription>
           </Field>
           <Field>
-            <Button onClick={verify2FA}>{m.two_factor_verify_submit()}</Button>
+            <Button onClick={verify2FA} disabled={!totp.trim()}>
+              {m.two_factor_verify_submit()}
+            </Button>
           </Field>
           {error && <FieldError>{error}</FieldError>}
         </FieldGroup>
