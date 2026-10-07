@@ -24,9 +24,18 @@ import { Input } from "~/components/ui/input"
 import { useConfirmDialog } from "~/components/confirm-dialog"
 import { actionResponse } from "~/lib/action"
 import { m } from "@paraglide/messages.js"
+import type { loader } from "~/routes/aps/dashboard"
 
-export function ActionExit({ exit }) {
-  const data = useLoaderData()
+interface ActionExitProps {
+  exit: {
+    enable: { status: boolean | 0 | 1 }
+    max: number
+    min: number
+  }
+}
+
+export function ActionExit({ exit }: ActionExitProps) {
+  const data = useLoaderData<typeof loader>()
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
 
