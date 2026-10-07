@@ -1,4 +1,3 @@
-import { CheckCircle2Icon } from "lucide-react"
 import { useState } from "react"
 import { Button } from "~/components/ui/button"
 import {
@@ -15,10 +14,8 @@ import { Success } from "~/components/success-alert"
 import { authClient } from "~/lib/auth"
 import { m } from "@paraglide/messages.js"
 
-// import type { Route } from "./+types/settings";
-
 export default function Password() {
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const [confirmPassword, setConfirmPassword] = useState("")
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -28,13 +25,13 @@ export default function Password() {
     if (newPassword && newPassword !== confirmPassword) {
       return setError(m.password_change_error_match())
     }
-    const { data, error } = await authClient.changePassword({
+    const { error } = await authClient.changePassword({
       newPassword, // required
       currentPassword, // required
       revokeOtherSessions: true,
     })
     if (error) {
-      return setError(error.message)
+      return setError(error.message ?? "Unable to change password.")
     }
     setError(null)
     setSuccess(true)
