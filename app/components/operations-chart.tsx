@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import {
   ChartContainer,
   ChartLegend,
@@ -12,7 +11,16 @@ import {
 } from "~/components/ui/chart"
 import { m } from "@paraglide/messages.js"
 
-export function Operations({ operations, stacked = false }) {
+interface OperationsProps {
+  operations: {
+    name: string | number
+    entries: number
+    exits: number
+  }[]
+  stacked?: boolean
+}
+
+export function Operations({ operations, stacked = false }: OperationsProps) {
   const chartConfig = {
     entries: {
       label: m.operations_entries(),

@@ -11,8 +11,11 @@ import {
 } from "lucide-react"
 import { Avatar, AvatarFallback } from "~/components/ui/avatar"
 import { cn } from "~/lib/utils"
+import type { HistoryEntry } from "~/routes/aps/history"
 
-export function OperationsAvatar({ device, operation }) {
+type OperationsAvatarProps = Pick<HistoryEntry, "device" | "operation">
+
+export function OperationsAvatar({ device, operation }: OperationsAvatarProps) {
   const error = "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
   const success =
     "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
