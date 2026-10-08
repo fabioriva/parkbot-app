@@ -15,9 +15,9 @@ import { paraglideMiddleware } from "@paraglide/server.js"
 
 import type { Route } from "./+types/root"
 import "./app.css"
-import { clsx } from "cn";
+import { clsx } from "cn"
 
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request }: Route.LoaderArgs) {
   const pathname = new URL(request.url).pathname
   const { getTheme } = await themeSessionResolver(request)
   return {
@@ -72,7 +72,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let details = "An unexpected error occurred."
   let stack: string | undefined
   if (isRouteErrorResponse(error)) {
-    message = error.status // === 404 ? "404" : "Error"
+    message = String(error.status)
     details =
       error.status === 404
         ? "The requested page could not be found."
