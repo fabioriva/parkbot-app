@@ -1,6 +1,6 @@
 import { PlusIcon } from "lucide-react"
-import { useState } from "react"
-import { /*data,*/ useFetcher, useOutletContext } from "react-router"
+import { useState, type ComponentProps } from "react"
+import { useFetcher, useOutletContext } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
   Item,
@@ -19,8 +19,17 @@ import fetcher from "~/lib/fetch"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/notifications"
+import type { Route as ApsLayoutRoute } from "./+types/layout"
 
 const MAX_RECIPIENTS = 3
+
+interface NotificationsData {
+  recipients: ComponentProps<typeof NotificationsTable>["recipients"]
+}
+
+interface NotificationMutationResponse {
+  result: { acknowledged: boolean }
+}
 
 export async function action({ params, request }: Route.ActionArgs) {
   try {
@@ -34,7 +43,7 @@ export async function action({ params, request }: Route.ActionArgs) {
     const phone = formData.get("phone")
     if (action === "create") {
       const url = `${process.env.BACKEND_URL}/${params.aps}/notifications/add`
-      const res = await fetcher(url, {
+      const res: NotificationMutationResponse | null = await fetcher(url, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -47,6 +56,8 @@ export async function action({ params, request }: Route.ActionArgs) {
           phone,
         }),
       })
+      if (!res?.result?.acknowledged)
+        throw new Error(m.notifications_action_error())
       return {
         action: m.notifications_action_create(),
         success: m.notifications_action_create_success(),
@@ -54,7 +65,7 @@ export async function action({ params, request }: Route.ActionArgs) {
     }
     if (action === "delete") {
       const url = `${process.env.BACKEND_URL}/${params.aps}/notifications/delete`
-      const res = await fetcher(url, {
+      const res: NotificationMutationResponse | null = await fetcher(url, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -62,6 +73,8 @@ export async function action({ params, request }: Route.ActionArgs) {
         },
         body: JSON.stringify({ _id }),
       })
+      if (!res?.result?.acknowledged)
+        throw new Error(m.notifications_action_error())
       return {
         action: m.notifications_action_delete(),
         success: m.notifications_action_delete_success(),
@@ -69,7 +82,7 @@ export async function action({ params, request }: Route.ActionArgs) {
     }
     if (action === "update") {
       const url = `${process.env.BACKEND_URL}/${params.aps}/notifications/update`
-      const res = await fetcher(url, {
+      const res: NotificationMutationResponse | null = await fetcher(url, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -82,6 +95,8 @@ export async function action({ params, request }: Route.ActionArgs) {
           phone,
         }),
       })
+      if (!res?.result?.acknowledged)
+        throw new Error(m.notifications_action_error())
       return {
         action: m.notifications_action_update(),
         success: m.notifications_action_update_success(),
@@ -89,15 +104,17 @@ export async function action({ params, request }: Route.ActionArgs) {
     }
     throw new Error(m.notifications_action_error())
   } catch (error) {
-    console.log(error)
-    return { error: error?.message }
+    return {
+      error:
+        error instanceof Error ? error.message : m.notifications_action_error(),
+    }
   }
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params.aps}/notifications`
-  const result = await fetcher(url, {
+  const result: NotificationsData | null = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -105,19 +122,17 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   return result
 }
 
-export default function Notifications({
-  loaderData,
-  params,
-}: Route.ComponentProps) {
+export default function Notifications({ loaderData }: Route.ComponentProps) {
+  const { aps } =
+    useOutletContext<Pick<ApsLayoutRoute.ComponentProps["loaderData"], "aps">>()
+  const fetcher = useFetcher<typeof action>()
+  const [open, setOpen] = useState(false)
+
   if (!loaderData) return <NoDataAlert />
 
-  const { aps } = useOutletContext()
   if (!aps?.notifications) {
     return m.notifications_disabled()
   }
-
-  const fetcher = useFetcher()
-  const [open, setOpen] = useState(false)
 
   const recipients = [...loaderData.recipients].sort((a, b) =>
     a.email.localeCompare(b.email)

@@ -12,6 +12,7 @@ export interface Aps {
   flag: string
   name: string
   ns: string
+  notifications?: boolean
   parkingSpaces: number
   timeZone?: string
 }
