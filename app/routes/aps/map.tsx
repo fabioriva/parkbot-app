@@ -1,5 +1,5 @@
 import { EyeIcon } from "lucide-react"
-import { lazy, Suspense, useState } from "react"
+import { lazy, Suspense, useState, type ComponentProps } from "react"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -15,12 +15,17 @@ import { CardWrapper } from "~/components/card-wrapper"
 import { EditStallDialogProvider } from "~/components/map-edit"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { Occupancy } from "~/components/occupancy-chart"
+import type { MapProps } from "~/components/maps/types"
 import { useData } from "~/hooks/use-ws"
 import { getToken } from "~/lib/cookie.server"
 import fetcher from "~/lib/fetch"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/map"
+
+type MapData = MapProps["data"] & {
+  occupancy: ComponentProps<typeof Occupancy>["occupancy"]
+}
 
 const components = {
   aa: lazy(() => import("~/components/maps/aa")),
@@ -65,10 +70,14 @@ const components = {
   wolfson: lazy(() => import("~/components/maps/wolfson")),
 }
 
+function hasMapComponent(aps: string): aps is keyof typeof components {
+  return Object.hasOwn(components, aps)
+}
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/map`
-  const data = await fetcher(url, {
+  const data: MapData | null = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -77,17 +86,39 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export default function Map({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData.data) return <NoDataAlert />
+  if (!loaderData.data || !hasMapComponent(params.aps)) return <NoDataAlert />
 
-  const DynamicComponent = components[params.aps]
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/map`
-  const { data } = useData(url, { initialData: loaderData.data })
-  const [tab, setTab] = useState("view2")
-  const onTabChange = (value) => {
-    setTab(value)
+  return (
+    <MapContent
+      key={params.aps}
+      aps={params.aps}
+      initialData={loaderData.data}
+    />
+  )
+}
+
+function MapContent({
+  aps,
+  initialData,
+}: {
+  aps: keyof typeof components
+  initialData: MapData
+}) {
+  const DynamicComponent = components[aps]
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps}/map`
+  const { data } = useData(url, { initialData })
+  const [view, setView] = useState<MapProps["view"]>("view2")
+  const onViewChange = (value: string) => {
+    switch (value) {
+      case "view0":
+      case "view1":
+      case "view2":
+      case "view3":
+        setView(value)
+    }
   }
-  const [view, setView] = useState("view2")
-  const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0)
+  const total = (arr: MapData["occupancy"]) =>
+    arr.reduce((acc, curr) => acc + curr.value, 0)
 
   return (
     <Tabs defaultValue="map">
@@ -107,7 +138,7 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
           <DropdownMenuContent className="w-32">
             <DropdownMenuGroup>
               <DropdownMenuLabel>{m.map_view_label()}</DropdownMenuLabel>
-              <DropdownMenuRadioGroup value={view} onValueChange={setView}>
+              <DropdownMenuRadioGroup value={view} onValueChange={onViewChange}>
                 <DropdownMenuRadioItem value="view0">
                   {m.map_view_icon()}
                 </DropdownMenuRadioItem>
