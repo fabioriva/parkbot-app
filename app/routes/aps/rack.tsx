@@ -1,3 +1,4 @@
+import type { ComponentProps } from "react"
 import { IoTooltip } from "~/components/io-tooltip"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { useData } from "~/hooks/use-ws"
@@ -6,7 +7,21 @@ import fetcher from "~/lib/fetch"
 
 import type { Route } from "./+types/rack"
 
-export async function loader({ params, request }: Route.LoaderArgs) {
+interface RackData {
+  cards: {
+    nr: number
+    type: string
+    bytes: {
+      label: string
+      bits: NonNullable<ComponentProps<typeof IoTooltip>["io"]>[]
+    }[]
+  }[]
+}
+
+export async function loader({
+  params,
+  request,
+}: Route.LoaderArgs): Promise<RackData | null> {
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/racks/${params?.nr}`
   return await fetcher(url, {
@@ -19,8 +34,27 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 export default function Rack({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData) return <NoDataAlert />
 
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${params.aps}/racks/${params.nr}`
-  const { data } = useData(url, { initialData: loaderData })
+  return (
+    <RackContent
+      key={`${params.aps}:${params.nr}`}
+      aps={params.aps}
+      nr={params.nr}
+      initialData={loaderData}
+    />
+  )
+}
+
+function RackContent({
+  aps,
+  nr,
+  initialData,
+}: {
+  aps: string
+  nr: string
+  initialData: RackData
+}) {
+  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps}/racks/${nr}`
+  const { data } = useData(url, { initialData })
 
   return (
     <div className="flex gap-0.5 overflow-scroll py-3">
