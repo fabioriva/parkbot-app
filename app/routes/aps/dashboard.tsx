@@ -1,10 +1,10 @@
 import { ArrowUpRightIcon } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState, type ComponentProps } from "react"
 import { Link } from "react-router"
 import { Label } from "~/components/ui/label"
 import { Switch } from "~/components/ui/switch"
 import { CardWrapper } from "~/components/card-wrapper"
-import { Device } from "~/components/device"
+import { Device, type DeviceData } from "~/components/device"
 import { ActionExit } from "~/components/action-exit"
 import { HistoryList } from "~/components/history-list"
 import { NoDataAlert } from "~/components/no-data-alert"
@@ -18,10 +18,26 @@ import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/dashboard"
 
+interface DashboardData {
+  activity: {
+    documents: ComponentProps<typeof HistoryList>["query"]
+  }
+  exitQueue: {
+    queueList: ComponentProps<typeof Queue>["queue"]
+    exitButton: ComponentProps<typeof ActionExit>["exit"]
+  }
+  occupancy: ComponentProps<typeof Occupancy>["occupancy"]
+  operations: {
+    data: ComponentProps<typeof Operations>["operations"]
+    query: { date: string }
+  }[]
+  system: Omit<DeviceData, "views">[]
+}
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/dashboard`
-  const data = await fetcher(url, {
+  const data: DashboardData | null = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -29,7 +45,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   return { data, token }
 }
 
-const ExternalLink = ({ link }) => (
+const ExternalLink = ({ link }: { link: string }) => (
   <Link to={link} aria-label={link}>
     <ArrowUpRightIcon className="size-4 hover:text-blue-500" />
   </Link>
@@ -39,35 +55,32 @@ export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
-  if (!loaderData.data) return <NoDataAlert />
-  const [dashboard, setDashboard] = useState(loaderData.data)
   const [stacked, setStacked] = useState(true)
 
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/dashboard`
-  const { data } = useSWR(
+  const { data: dashboard } = useSWR<DashboardData | null>(
     loaderData.token ? [url, loaderData.token] : null,
-    ([url, token]) =>
+    ([url, token]: [string, string]) =>
       fetcher(url, {
-        headers: { Authorization: `Bearer ${loaderData.token}` },
+        headers: { Authorization: `Bearer ${token}` },
       }),
     {
       fallbackData: loaderData.data,
       refreshInterval: 1000,
     }
   )
-  useEffect(() => setDashboard(data), [data])
-
   if (!dashboard) return <NoDataAlert />
   const { activity, exitQueue, occupancy, operations, system } = dashboard
   const [daily] = operations
-  const [busy, free, lock] = occupancy
+  if (!daily) return <NoDataAlert />
   const queue = exitQueue.queueList.filter((item) => item.card !== 0)
-  const total = (arr) => arr.reduce((acc, curr) => acc + curr.value, 0)
+  const total = (arr: DashboardData["occupancy"]) =>
+    arr.reduce((acc, curr) => acc + curr.value, 0)
   return (
     <div className="flex flex-col gap-4">
       <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {system.map((item, key) => (
-          <Device device={item} key={key} />
+          <Device device={{ views: [], ...item }} key={key} />
         ))}
       </div>
       <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
