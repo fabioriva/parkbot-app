@@ -1,5 +1,4 @@
 import { CircleCheck, CircleX } from "lucide-react"
-import { useEffect, useState } from "react"
 import { Link } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
@@ -18,10 +17,18 @@ import useSWR from "swr"
 
 import type { Route } from "./+types/racks"
 
+interface ProfinetNode {
+  deviceNr: number
+  deviceName: string
+  online: { status: boolean | 0 | 1 }
+  type: string
+  rack?: { nr: number }
+}
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/racks`
-  const data = await fetcher(url, {
+  const data: ProfinetNode[] | null = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -30,29 +37,23 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export default function Nodes({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData.data) return <NoDataAlert />
-
-  const [racks, setRacks] = useState(loaderData.data)
-
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/racks`
-  const { data } = useSWR(
+  const { data: racks } = useSWR<ProfinetNode[] | null>(
     loaderData.token ? [url, loaderData.token] : null,
-    ([url, token]) =>
+    ([url, token]: [string, string]) =>
       fetcher(url, {
-        headers: { Authorization: `Bearer ${loaderData.token}` },
+        headers: { Authorization: `Bearer ${token}` },
       }),
     {
       fallbackData: loaderData.data,
       refreshInterval: 1000,
     }
   )
-  useEffect(() => setRacks(data), [data])
-
   if (!racks) return <NoDataAlert />
 
   return (
     <ItemGroup className="w-full gap-3 lg:max-w-sm">
-      {data.map((item) => (
+      {racks.map((item) => (
         <Item variant="outline" key={item.deviceNr}>
           <ItemMedia variant="icon">
             {item.online.status ? (
@@ -71,10 +72,13 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
             <Button
               size="sm"
               variant="outline"
+              disabled={!item.rack}
               render={
-                <Link
-                  to={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
-                />
+                item.rack ? (
+                  <Link
+                    to={`/aps/${params.aps}/rack/${item.rack.nr - 1}?deviceName=${item.deviceName}&deviceNr=${item.deviceNr}`}
+                  />
+                ) : undefined
               }
             >
               View
