@@ -11,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Badge } from "~/components/ui/badge"
 import { Spinner } from "~/components/ui/spinner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { ActionEntry } from "~/components/action-entry"
 import { ActionPP } from "~/components/action-pp"
 import { CardWrapper } from "~/components/card-wrapper"
 import { Drive } from "~/components/drive"
@@ -76,7 +77,12 @@ export interface DeviceData {
   operation: number
   motor: number
   c: DeviceBit[]
-  d: ComponentProps<typeof ActionPP>["action"][]
+  d: (
+    | ComponentProps<typeof ActionEntry>["action"]
+    | (Omit<ComponentProps<typeof ActionPP>["action"], "key"> & {
+        key: "action-pp" | "action-pp-reset"
+      })
+  )[]
   views: DeviceView[]
   alarms: {
     id: number
@@ -157,6 +163,8 @@ export function Device({ device, advanced = false }: DeviceProps) {
     <div className={`grid grid-cols-${device.d.length} w-full gap-3`}>
       {device.d.map((action, key) => {
         switch (action.key) {
+          case "action-entry":
+            return <ActionEntry action={action} key={key} />
           case "action-pp":
           case "action-pp-reset":
             return <ActionPP action={action} disabled={false} key={key} />

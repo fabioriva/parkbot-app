@@ -14,31 +14,31 @@ import {
 } from "~/components/ui/dialog"
 import {
   Field,
-  FieldError,
   FieldDescription,
+  FieldError,
   FieldLabel,
 } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
 import { useConfirmDialog } from "~/components/confirm-dialog"
 import { actionResponse } from "~/lib/action"
 import { m } from "@paraglide/messages.js"
-import type { loader } from "~/routes/aps/dashboard"
 
-interface ActionExitProps {
-  exit: {
+interface ActionEntryProps {
+  action: {
+    key: "action-entry"
     enable: { status: boolean | 0 | 1 }
-    max: number
+    entry: number
     min: number
+    max: number
   }
 }
 
-export function ActionExit({ exit }: ActionExitProps) {
-  const data = useLoaderData<typeof loader>()
+export function ActionEntry({ action }: ActionEntryProps) {
+  const data = useLoaderData<{ token: string | null }>()
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
   const cardId = useId()
-
-  const { enable, max, min } = exit
+  const { enable, entry, min, max } = action
   const [card, setCard] = useState(String(min))
   const result = z.coerce.number().int().min(min).max(max).safeParse(card)
   const error = card.trim() === "" || !result.success
@@ -47,17 +47,20 @@ export function ActionExit({ exit }: ActionExitProps) {
     if (error || !result.success || !enable.status) return
     const cardNumber = result.data
     showConfirmDialog({
-      title: m.exit_call_confirm_dialog_title(),
-      description: m.exit_call_confirm_dialog_description({ card: cardNumber }),
+      title: m.entry_call_confirm_dialog_title(),
+      description: m.entry_call_confirm_dialog_description({
+        entry,
+        card: cardNumber,
+      }),
       onConfirm: async () => {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/exit`
+        const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/entry`
         const res = await fetch(url, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${data.token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ card: cardNumber }),
+          body: JSON.stringify({ entry, card: cardNumber }),
         })
         await actionResponse(res)
       },
@@ -73,20 +76,20 @@ export function ActionExit({ exit }: ActionExitProps) {
             disabled={!enable.status}
             onClick={() => setCard(String(min))}
           >
-            {m.exit_call()}
+            {m.entry_call()}
           </Button>
         }
       />
       <DialogContent showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>{m.exit_call_dialog_title()}</DialogTitle>
+          <DialogTitle>{m.entry_call_dialog_title()}</DialogTitle>
           <DialogDescription>
-            {m.exit_call_dialog_description({ card })}
+            {m.entry_call_dialog_description({ entry })}
           </DialogDescription>
         </DialogHeader>
         <Field>
           <FieldLabel htmlFor={cardId}>
-            {m.exit_call_dialog_field_label({ min, max })}
+            {m.entry_call_dialog_field_label()}
           </FieldLabel>
           <Input
             id={cardId}
@@ -100,19 +103,16 @@ export function ActionExit({ exit }: ActionExitProps) {
             onChange={(event) => setCard(event.target.value)}
           />
           <FieldDescription>
-            {m.exit_call_dialog_field_description({ min, max })}
+            {m.entry_call_dialog_field_description({ min, max })}
           </FieldDescription>
           {error && (
-            <FieldError>
-              {m.exit_call_dialog_field_error({ min, max })}
-            </FieldError>
+            <FieldError>{m.entry_call_dialog_field_error()}</FieldError>
           )}
         </Field>
         <DialogFooter>
           <DialogClose
             render={<Button variant="outline">{m.cancel()}</Button>}
           />
-
           <DialogClose
             render={
               <Button
