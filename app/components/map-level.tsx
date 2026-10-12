@@ -19,7 +19,7 @@ interface LevelProps extends Pick<StallProps, "definitions" | "view"> {
 
 export function Level({ definitions, level, view }: LevelProps) {
   return (
-    <div className="flex w-fit flex-col gap-1.5">
+    <div className="flex w-fit flex-col gap-0.5">
       <div className="flex flex-col gap-0 text-xs">
         <h1 className="grow">{level.label}</h1>
         <p className="text-muted-foreground">
