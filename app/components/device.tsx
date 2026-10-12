@@ -12,6 +12,7 @@ import { Badge } from "~/components/ui/badge"
 import { Spinner } from "~/components/ui/spinner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { ActionEntry } from "~/components/action-entry"
+import { ActionRollback } from "~/components/action-rollback"
 import { ActionPP } from "~/components/action-pp"
 import { CardWrapper } from "~/components/card-wrapper"
 import { Drive } from "~/components/drive"
@@ -79,6 +80,7 @@ export interface DeviceData {
   c: DeviceBit[]
   d: (
     | ComponentProps<typeof ActionEntry>["action"]
+    | ComponentProps<typeof ActionRollback>["action"]
     | (Omit<ComponentProps<typeof ActionPP>["action"], "key"> & {
         key: "action-pp" | "action-pp-reset"
       })
@@ -165,6 +167,10 @@ export function Device({ device, advanced = false }: DeviceProps) {
         switch (action.key) {
           case "action-entry":
             return <ActionEntry action={action} key={key} />
+          case "action-rollback":
+            return (
+              <ActionRollback action={action} card={device.card} key={key} />
+            )
           case "action-pp":
           case "action-pp-reset":
             return <ActionPP action={action} disabled={false} key={key} />
