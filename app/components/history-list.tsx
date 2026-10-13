@@ -33,8 +33,8 @@ export function HistoryList({ query, media = false }: HistoryListProps) {
               />
             </ItemMedia>
           )}
-          <ItemContent className="gap-0.5">
-            <ItemTitle>
+          <ItemContent className="min-w-0 gap-0.5">
+            <ItemTitle className="w-full truncate">
               {item.device?.id === 0 && !item.user ? m.operator() : item.user}
               {item.device?.id !== 0 && item.device?.key}
               {item.device?.id !== 0 && (
