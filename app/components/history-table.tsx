@@ -246,7 +246,7 @@ export function HistoryTable({
                         })}
                         data-icon="inline-start"
                       />
-                      {safeMessageT("history_table", item.operation.key)}
+                      {safeMessageT("history_table", item.operation?.key)}
                     </Badge>
                   )}
                 </TableCell>

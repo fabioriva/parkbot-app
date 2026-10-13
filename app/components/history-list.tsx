@@ -35,11 +35,11 @@ export function HistoryList({ query, media = false }: HistoryListProps) {
           )}
           <ItemContent className="gap-0.5">
             <ItemTitle>
-              {item.device.id === 0 && !item.user ? m.operator() : item.user}
-              {item.device.id !== 0 && item.device.key}
-              {item.device.id !== 0 && (
+              {item.device?.id === 0 && !item.user ? m.operator() : item.user}
+              {item.device?.id !== 0 && item.device?.key}
+              {item.device?.id !== 0 && (
                 <span className="text-normal">
-                  {safeMessageT("mode", item.mode.key)}
+                  {safeMessageT("mode", item.mode?.key)}
                 </span>
               )}
             </ItemTitle>
