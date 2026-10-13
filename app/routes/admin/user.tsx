@@ -14,8 +14,8 @@ import { findUsers, deleteUserByEmail } from "~/lib/user.server"
 import { m } from "@paraglide/messages.js"
 import type { Route } from "./+types/user"
 
-export async function action({ request }: Route.ActionArgs) {
-  await requireAdmin(request)
+export async function action({ request, params }: Route.ActionArgs) {
+  await requireAdmin(request, params.aps)
   try {
     const formData = await request.formData()
     const action = formData.get("action")
@@ -38,8 +38,8 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  await requireAdmin(request)
+export async function loader({ request, params }: Route.LoaderArgs) {
+  await requireAdmin(request, params.aps)
   const users = await findUsers()
   return { users }
 }

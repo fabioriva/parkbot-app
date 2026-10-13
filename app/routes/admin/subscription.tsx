@@ -16,7 +16,7 @@ import { SubscriptionForm } from "~/components/subscription-form"
 import { SubscriptionTable } from "~/components/subscription-table"
 import { Success } from "~/components/success-alert"
 // import { aps } from "~/lib/aps";
-import { findCompaniesFromAps, findSubscribedApsList } from "~/lib/aps.server"
+import { findCompaniesFromAps, findAllAps } from "~/lib/aps.server"
 import { requireAdmin } from "~/lib/authorization.server"
 import {
   createSubscription,
@@ -35,8 +35,8 @@ function getRequiredString(formData: FormData, name: string): string {
   return value
 }
 
-export async function action({ request }: Route.ActionArgs) {
-  await requireAdmin(request)
+export async function action({ request, params }: Route.ActionArgs) {
+  await requireAdmin(request, params.aps)
   try {
     const formData = await request.formData()
     const action = formData.get("action")
@@ -84,9 +84,9 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  await requireAdmin(request)
-  const aps = await findSubscribedApsList([])
+export async function loader({ request, params }: Route.LoaderArgs) {
+  await requireAdmin(request, params.aps)
+  const aps = await findAllAps()
   const companies = await findCompaniesFromAps(aps)
   const subscriptions = await findSubscriptions()
   return { aps, companies, subscriptions }

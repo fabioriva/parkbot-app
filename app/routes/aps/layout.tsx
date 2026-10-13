@@ -1,5 +1,5 @@
 import * as React from "react"
-import { data, Outlet, redirect } from "react-router"
+import { data, Outlet } from "react-router"
 import { Badge } from "~/components/ui/badge"
 import {
   Breadcrumb,
@@ -25,7 +25,7 @@ import { ConfirmDialogProvider } from "~/components/confirm-dialog"
 import { LocaleToggle } from "~/components/locale-toggle"
 import { ParkInfo } from "~/components/park-info"
 import { ModeToggle } from "~/components/mode-toggle"
-import { auth } from "~/lib/auth.server"
+import { requireAps } from "~/lib/authorization.server"
 import { getCookie } from "~/lib/cookie.server"
 import { roles } from "~/lib/roles"
 import { useInfo } from "~/hooks/use-ws"
@@ -40,31 +40,21 @@ export function headers({ loaderHeaders }: Route.HeadersArgs) {
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const session = await auth.api.getSession({
-    headers: await request.headers,
-  })
-  if (!session) {
-    return redirect("/signin")
-  }
-  const apsNs = session.user.aps
-  if (!apsNs || apsNs !== params.aps) {
-    throw data(`Forbidden: route /aps/${params.aps}`, { status: 403 })
-  }
+  const session = await requireAps(request, params.aps)
+  const apsNs = params.aps
   const url = new URL(request.url)
   // Normalize RR8 data request path
   const pathname = url.pathname.replace(/\.data$/, "")
   const [, , route] = pathname.split("/").filter(Boolean)
   const allowedRoutes =
-    Object.entries(roles).find(([role]) => role === session.user.role)?.[1] ?? []
+    Object.entries(roles).find(([role]) => role === session.user.role)?.[1] ??
+    []
   if (
     route !== "admin" &&
     route !== "user" &&
     !allowedRoutes.some((role) => role === route)
   ) {
     throw data("Forbidden", { status: 403 })
-  }
-  if (process.env.TWO_FACTOR === "enabled" && !session.user.twoFactorEnabled) {
-    return redirect("/2fa-setup")
   }
   if (!session.aps) {
     throw data("Aps not found", { status: 404 })

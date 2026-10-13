@@ -7,4 +7,4 @@ if (!uri?.trim()) {
 
 const client = new MongoClient(uri)
 
-export const db = client.db()
+export const db = client.db("parkbot-auth")

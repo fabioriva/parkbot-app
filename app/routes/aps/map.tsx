@@ -1,3 +1,4 @@
+import { requireAps } from "~/lib/authorization.server"
 import { EyeIcon } from "lucide-react"
 import { lazy, Suspense, useState, type ComponentProps } from "react"
 import { Button } from "~/components/ui/button"
@@ -75,6 +76,7 @@ function hasMapComponent(aps: string): aps is keyof typeof components {
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
+  await requireAps(request, params.aps, "read")
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/map`
   const data: MapData | null = await fetcher(url, {

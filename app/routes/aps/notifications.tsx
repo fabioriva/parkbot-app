@@ -1,3 +1,4 @@
+import { requireAps } from "~/lib/authorization.server"
 import { PlusIcon } from "lucide-react"
 import { useState, type ComponentProps } from "react"
 import { useFetcher, useOutletContext } from "react-router"
@@ -32,6 +33,7 @@ interface NotificationMutationResponse {
 }
 
 export async function action({ params, request }: Route.ActionArgs) {
+  await requireAps(request, params.aps, "notifications")
   try {
     const token = getToken(request)
     const formData = await request.formData()
@@ -104,6 +106,7 @@ export async function action({ params, request }: Route.ActionArgs) {
     }
     throw new Error(m.notifications_action_error())
   } catch (error) {
+    if (error instanceof Response) throw error
     return {
       error:
         error instanceof Error ? error.message : m.notifications_action_error(),
@@ -112,6 +115,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
+  await requireAps(request, params.aps, "notifications")
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params.aps}/notifications`
   const result: NotificationsData | null = await fetcher(url, {

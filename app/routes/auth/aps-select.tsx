@@ -16,7 +16,7 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { Submit } from "~/components/submit-button"
 import { auth } from "~/lib/auth.server"
 import { findSubscribedApsList } from "~/lib/aps.server"
-import { findSubscriptionByEmail } from "~/lib/subscription.server"
+import { requireSession } from "~/lib/authorization.server"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/aps-select"
@@ -37,6 +37,9 @@ export async function action({ request }: Route.ActionArgs) {
   if (typeof aps !== "string" || !aps.trim()) {
     throw data("Invalid APS selection", { status: 400 })
   }
+  const session = await requireSession(request)
+  if (!session.assignedAps.includes(aps))
+    throw data("APS not assigned", { status: 403 })
   const result = await auth.api.updateUser({
     body: {
       aps,
@@ -60,8 +63,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (process.env.TWO_FACTOR === "enabled" && !user.twoFactorEnabled) {
     return redirect("/2fa-setup")
   }
-  const subscription = await findSubscriptionByEmail(user?.email)
-  const aps = await findSubscribedApsList(subscription?.aps)
+  const aps = await findSubscribedApsList(data.assignedAps)
   return aps
 }
 

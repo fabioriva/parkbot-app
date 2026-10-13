@@ -11,7 +11,8 @@
     "test:date-time": "node --test test/date-time.test.mjs",
     "test:websocket": "node --test test/reconnecting-websocket.test.mjs",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "machine-translate": "inlang machine translate --project project.inlang"
+    "machine-translate": "inlang machine translate --project project.inlang",
+    "test:auth": "node --test --test-isolation=none test/auth-permissions.test.mjs test/aps-access.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

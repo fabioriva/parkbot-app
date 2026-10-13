@@ -1,3 +1,4 @@
+import { can } from "~/lib/permissions"
 import { AlertCircleIcon, ArrowUpRightIcon } from "lucide-react"
 import { useState, useEffect, type ComponentProps } from "react"
 import { Link, useOutletContext, useParams } from "react-router"
@@ -166,6 +167,7 @@ export function Device({ device, advanced = false }: DeviceProps) {
       {device.d.map((action, key) => {
         switch (action.key) {
           case "action-entry":
+            if (!can(user.role, "entry")) return null
             return <ActionEntry action={action} key={key} />
           case "action-rollback":
             return (
@@ -173,6 +175,7 @@ export function Device({ device, advanced = false }: DeviceProps) {
             )
           case "action-pp":
           case "action-pp-reset":
+            if (!can(user.role, "pp")) return null
             return <ActionPP action={action} disabled={false} key={key} />
         }
       })}

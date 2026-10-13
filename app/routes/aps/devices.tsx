@@ -1,3 +1,4 @@
+import { requireAps } from "~/lib/authorization.server"
 import { Device, type DeviceData } from "~/components/device"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { getToken } from "~/lib/cookie.server"
@@ -12,6 +13,7 @@ interface OverviewData {
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
+  await requireAps(request, params.aps, "technical.read")
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/overview`
   const data: OverviewData | null = await fetcher(url, {
