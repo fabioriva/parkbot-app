@@ -52,15 +52,17 @@ export async function findCompaniesFromAps(aps: Aps[]): Promise<string[]> {
 export async function findSubscribedApsList(
   nsList: string[] | undefined
 ): Promise<Aps[]> {
-  if (nsList === undefined) {
+  if (!nsList?.length) {
     return []
   }
 
   const aps = db.collection<Aps>(COLLECTION)
-  const result = await aps
-    .find(nsList.length > 0 ? { ns: { $in: nsList } } : {})
-    .toArray()
+  const result = await aps.find({ ns: { $in: nsList } }).toArray()
   return result
+}
+
+export async function findAllAps(): Promise<Aps[]> {
+  return db.collection<Aps>(COLLECTION).find({}).toArray()
 }
 
 export async function updateApsByNs(aps: Omit<Aps, "_id">, ns: string) {

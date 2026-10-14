@@ -1,4 +1,5 @@
-import { data as routeData, redirect } from "react-router"
+import { requireAps } from "~/lib/authorization.server"
+import { data as routeData } from "react-router"
 import { useState } from "react"
 import type { DateRange as DateRangeValue } from "react-day-picker"
 import {
@@ -17,7 +18,6 @@ import { Error as ErrorAlert } from "~/components/error-alert"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { getToken } from "~/lib/cookie.server"
 import fetcher from "~/lib/fetch"
-import { auth } from "~/lib/auth.server"
 import {
   buildPlantDateRangeQuery,
   calendarDate,
@@ -30,10 +30,7 @@ import { m } from "@paraglide/messages.js"
 import type { Route } from "./+types/operations"
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const session = await auth.api.getSession({ headers: request.headers })
-  if (!session) return redirect("/signin")
-  if (!("aps" in session.user) || session.user.aps !== params.aps)
-    throw routeData("Forbidden", { status: 403 })
+  const session = await requireAps(request, params.aps, "read")
   const token = getToken(request)
   const timeZone = session.aps?.timeZone
   if (!isValidTimeZone(timeZone))

@@ -1,3 +1,4 @@
+import { requireAps } from "~/lib/authorization.server"
 import { ArrowUpRightIcon } from "lucide-react"
 import { useState, type ComponentProps } from "react"
 import { Link } from "react-router"
@@ -35,6 +36,7 @@ interface DashboardData {
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
+  await requireAps(request, params.aps, "read")
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/dashboard`
   const data: DashboardData | null = await fetcher(url, {

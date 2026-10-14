@@ -1,3 +1,4 @@
+import { requireAps } from "~/lib/authorization.server"
 import type { ComponentProps } from "react"
 import { IoTooltip } from "~/components/io-tooltip"
 import { NoDataAlert } from "~/components/no-data-alert"
@@ -22,6 +23,7 @@ export async function loader({
   params,
   request,
 }: Route.LoaderArgs): Promise<RackData | null> {
+  await requireAps(request, params.aps, "technical.read")
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/racks/${params?.nr}`
   return await fetcher(url, {

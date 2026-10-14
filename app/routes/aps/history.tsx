@@ -1,4 +1,4 @@
-import { data as routeData, redirect } from "react-router"
+import { requireAps } from "~/lib/authorization.server"
 import { Search } from "lucide-react"
 import { useState } from "react"
 import { Button } from "~/components/ui/button"
@@ -23,7 +23,6 @@ import {
   isValidTimeZone,
   type PlantDateRange,
 } from "~/lib/date-time"
-import { auth } from "~/lib/auth.server"
 import type { Route } from "./+types/history"
 import { m } from "@paraglide/messages.js"
 
@@ -46,10 +45,7 @@ export interface HistoryEntry {
 const LIMIT = 15
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  const session = await auth.api.getSession({ headers: request.headers })
-  if (!session) return redirect("/signin")
-  if (!("aps" in session.user) || session.user.aps !== params.aps)
-    throw routeData("Forbidden", { status: 403 })
+  const session = await requireAps(request, params.aps, "read")
   const token = getToken(request)
   const timeZone = session.aps?.timeZone
   if (!isValidTimeZone(timeZone)) {

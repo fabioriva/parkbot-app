@@ -1,3 +1,4 @@
+import { requireAps } from "~/lib/authorization.server"
 import { Tag as TagIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useOutletContext } from "react-router"
@@ -34,6 +35,7 @@ interface TagData {
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
+  await requireAps(request, params.aps, "read")
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/cards`
   const data: TagData[] | null = await fetcher(url, {

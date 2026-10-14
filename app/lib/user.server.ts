@@ -1,4 +1,6 @@
 import { db } from "./db.server"
+import { findSubscriptionByEmail } from "./subscription.server"
+import { isRole } from "./permissions"
 
 const COLLECTION = "user"
 
@@ -31,7 +33,15 @@ export async function findUsers(): Promise<User[]> {
       { $sort: { email: 1 } },
     ])
     .toArray()
-  return result
+  return Promise.all(
+    result.map(async (user) => {
+      const subscription = await findSubscriptionByEmail(user.email)
+      return {
+        ...user,
+        role: isRole(subscription?.role) ? subscription.role : "—",
+      }
+    })
+  )
 }
 
 export async function deleteUserByEmail(email: string) {

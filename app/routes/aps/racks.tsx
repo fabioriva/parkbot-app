@@ -1,3 +1,4 @@
+import { requireAps } from "~/lib/authorization.server"
 import { CircleCheck, CircleX } from "lucide-react"
 import { Link } from "react-router"
 import { Button } from "~/components/ui/button"
@@ -26,6 +27,7 @@ interface ProfinetNode {
 }
 
 export async function loader({ params, request }: Route.LoaderArgs) {
+  await requireAps(request, params.aps, "technical.read")
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/racks`
   const data: ProfinetNode[] | null = await fetcher(url, {

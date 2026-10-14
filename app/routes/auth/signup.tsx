@@ -61,7 +61,6 @@ export async function action({ request }: Route.ActionArgs) {
         name,
         email,
         password,
-        role: subscription.role,
         // callbackURL: "/aps-select", // optional
         image: `https://api.dicebear.com/10.x/bottts/svg?seed=${name}`, // optional
       },

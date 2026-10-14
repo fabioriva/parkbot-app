@@ -30,5 +30,8 @@ export async function actionResponse(response: Response) {
         return toast.add({ title: message, description: formatted })
     }
   }
-  return toast.add({ type: "error", description: "401 Unauthorized" })
+  return toast.add({
+    type: "error",
+    description: `${response.status} ${response.statusText}`,
+  })
 }

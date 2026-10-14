@@ -18,7 +18,7 @@ import {
   createAps,
   deleteApsByNs,
   findCompaniesFromAps,
-  findSubscribedApsList,
+  findAllAps,
   updateApsByNs,
 } from "~/lib/aps.server"
 import { requireAdmin } from "~/lib/authorization.server"
@@ -34,8 +34,8 @@ function getRequiredString(formData: FormData, name: string): string {
   return value
 }
 
-export async function action({ request }: Route.ActionArgs) {
-  await requireAdmin(request)
+export async function action({ request, params }: Route.ActionArgs) {
+  await requireAdmin(request, params.aps)
   try {
     const formData = await request.formData()
     const action = formData.get("action")
@@ -90,9 +90,9 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  await requireAdmin(request)
-  const aps = await findSubscribedApsList([])
+export async function loader({ request, params }: Route.LoaderArgs) {
+  await requireAdmin(request, params.aps)
+  const aps = await findAllAps()
   const companies = await findCompaniesFromAps(aps)
   return { aps, companies }
 }
