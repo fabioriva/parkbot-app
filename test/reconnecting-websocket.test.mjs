@@ -29,7 +29,8 @@ function setup(t) {
   const originalWebSocket = globalThis.WebSocket
 
   class FakeWebSocket {
-    constructor(url) {
+    constructor(url, protocols) {
+      this.protocols = protocols
       this.url = url
       this.closeCalls = 0
       sockets.push(this)
@@ -181,4 +182,26 @@ test("policy violations stop retries while normal server closes reconnect", (t) 
   t.mock.timers.tick(900)
   assert.equal(sockets.length, 3)
   stopNormal()
+})
+
+test("sends session credentials as protocols on the first connection and reconnect", (t) => {
+  const sockets = setup(t)
+  const url = "wss://example.test/info"
+  const stop = connectReconnectingWebSocket(
+    url,
+    { onMessage() {} },
+    "session-token"
+  )
+  assert.equal(sockets[0].url, url)
+  assert.deepEqual(sockets[0].protocols, [
+    "parkbot",
+    "parkbot-session.session-token",
+  ])
+  sockets[0].end()
+  t.mock.timers.tick(1000)
+  assert.deepEqual(sockets[1].protocols, [
+    "parkbot",
+    "parkbot-session.session-token",
+  ])
+  stop()
 })

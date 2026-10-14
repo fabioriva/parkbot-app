@@ -3,6 +3,10 @@ import { toast } from "~/components/ui/toast"
 import { logT } from "~/lib/trans"
 import { formatPlantDateTime } from "~/lib/date-time"
 
+export const WebSocketAuthContext = React.createContext<string | undefined>(
+  undefined
+)
+
 interface WebSocketHandlers {
   onMessage: (event: MessageEvent<string>) => void
   onOpen?: () => void
@@ -11,7 +15,8 @@ interface WebSocketHandlers {
 
 export function connectReconnectingWebSocket(
   url: string,
-  handlers: WebSocketHandlers
+  handlers: WebSocketHandlers,
+  token?: string
 ): () => void {
   let disposed = false
   let socket: WebSocket | undefined
@@ -21,7 +26,9 @@ export function connectReconnectingWebSocket(
   const connect = () => {
     if (disposed) return
 
-    const current = new WebSocket(url)
+    const current = token
+      ? new WebSocket(url, ["parkbot", `parkbot-session.${token}`])
+      : new WebSocket(url)
     socket = current
     const isActive = () => !disposed && socket === current
 
@@ -75,6 +82,7 @@ function useReconnectingWebSocket(
   url: string,
   onMessage: (event: MessageEvent<string>) => void
 ) {
+  const token = React.useContext(WebSocketAuthContext)
   const handler = React.useRef(onMessage)
   const [connected, setConnected] = React.useState(false)
 
@@ -84,12 +92,16 @@ function useReconnectingWebSocket(
 
   React.useEffect(() => {
     setConnected(false)
-    return connectReconnectingWebSocket(url, {
-      onMessage: (event) => handler.current(event),
-      onOpen: () => setConnected(true),
-      onClose: () => setConnected(false),
-    })
-  }, [url])
+    return connectReconnectingWebSocket(
+      url,
+      {
+        onMessage: (event) => handler.current(event),
+        onOpen: () => setConnected(true),
+        onClose: () => setConnected(false),
+      },
+      token
+    )
+  }, [url, token])
 
   return connected
 }

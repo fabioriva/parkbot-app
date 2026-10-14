@@ -28,7 +28,7 @@ import { ModeToggle } from "~/components/mode-toggle"
 import { requireAps } from "~/lib/authorization.server"
 import { getCookie } from "~/lib/cookie.server"
 import { roles } from "~/lib/roles"
-import { useInfo } from "~/hooks/use-ws"
+import { useInfo, WebSocketAuthContext } from "~/hooks/use-ws"
 import { safeMessageT } from "~/lib/trans"
 import { isValidTimeZone } from "~/lib/date-time"
 import { Error as ErrorAlert } from "~/components/error-alert"
@@ -66,6 +66,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       pathname,
       route,
       sidebarState,
+      token: session.session.token,
       user: { ...session.user, aps: apsNs },
     },
     {
@@ -77,6 +78,14 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export default function ApsLayout({ loaderData }: Route.ComponentProps) {
+  return (
+    <WebSocketAuthContext value={loaderData.token}>
+      <ApsContent loaderData={loaderData} />
+    </WebSocketAuthContext>
+  )
+}
+
+function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
   const { aps, pathname, route, sidebarState, user } = loaderData
   const timeZone = isValidTimeZone(aps?.timeZone) ? aps.timeZone : null
   const {
