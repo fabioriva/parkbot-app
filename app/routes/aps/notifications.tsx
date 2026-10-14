@@ -173,7 +173,11 @@ export default function Notifications({ loaderData }: Route.ComponentProps) {
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button onClick={() => setOpen(true)} variant="outline">
+            <Button
+              onClick={() => setOpen(true)}
+              disabled={recipients.length >= MAX_RECIPIENTS}
+              variant="outline"
+            >
               <PlusIcon /> {m.notifications_action_add()}
             </Button>
           </ItemActions>
