@@ -3,6 +3,7 @@ import { registerHooks } from "node:module"
 import { test } from "node:test"
 import { memoryAdapter } from "better-auth/adapters/memory"
 import { customSession, twoFactor } from "better-auth/plugins"
+import { base32 } from "@better-auth/utils/base32"
 
 const database = {
   user: [],
@@ -12,6 +13,7 @@ const database = {
   twoFactor: [],
 }
 const state = {
+  emails: [],
   subscription: {
     email: "assigned@example.test",
     aps: ["avigail"],
@@ -35,7 +37,10 @@ const dependencies = new Map([
     'export const { customSession, twoFactor } = globalThis.authTest; export const haveIBeenPwned = () => ({ id: "pwned-test" })',
   ],
   ["./db.server", "export const db = {}"],
-  ["./email.server", "export async function sendEmail() {}"],
+  [
+    "./email.server",
+    "export async function sendEmail(email) { globalThis.authTest.state.emails.push(email) }",
+  ],
   [
     "./aps.server",
     'export async function findApsByNs(ns) { return ns === "avigail" ? { name: "Avigail" } : null }',
@@ -46,7 +51,7 @@ const dependencies = new Map([
   ],
   [
     "@paraglide/messages.js",
-    'export const m = new Proxy({}, { get: () => () => "test" })',
+    'export const m = new Proxy({}, { get: () => (params) => params?.url ?? "test" })',
   ],
 ])
 const hooks = registerHooks({
@@ -141,4 +146,158 @@ test("Better Auth endpoints enforce subscription and server-assigned roles", asy
   state.subscription = null
   session = await auth.api.getSession({ headers })
   assert.equal(session.user.role, null)
+})
+
+const password = "Test-password-8234!"
+
+function mergeCookies(headers, responseHeaders) {
+  const jar = new Map(
+    (headers.get("cookie") ?? "")
+      .split("; ")
+      .filter(Boolean)
+      .map((pair) => {
+        const separator = pair.indexOf("=")
+        return [pair.slice(0, separator), pair.slice(separator + 1)]
+      })
+  )
+  for (const cookie of responseHeaders.getSetCookie()) {
+    const pair = cookie.split(";")[0]
+    const separator = pair.indexOf("=")
+    const name = pair.slice(0, separator)
+    const value = pair.slice(separator + 1)
+    if (!value) jar.delete(name)
+    else jar.set(name, value)
+  }
+  return new Headers({
+    cookie: [...jar].map(([name, value]) => `${name}=${value}`).join("; "),
+  })
+}
+
+async function verifiedAccount(email) {
+  state.subscription = { email, aps: ["avigail"], role: "service" }
+  await signup(email)
+  database.user.find((user) => user.email === email).emailVerified = true
+  const signedIn = await auth.api.signInEmail({
+    body: { email, password },
+    returnHeaders: true,
+  })
+  return mergeCookies(new Headers(), signedIn.headers)
+}
+
+test("logout and expired sessions are rejected and stale cookies are cleared", async () => {
+  const headers = await verifiedAccount("logout@example.test")
+  assert.ok(await auth.api.getSession({ headers }))
+  await auth.api.signOut({ headers })
+  assert.equal(await auth.api.getSession({ headers }), null)
+
+  const expiredHeaders = await verifiedAccount("expired@example.test")
+  const user = database.user.find(
+    (user) => user.email === "expired@example.test"
+  )
+  database.session.find((session) => session.userId === user.id).expiresAt =
+    new Date(Date.now() - 1000)
+  const expired = await auth.api.getSession({
+    headers: expiredHeaders,
+    returnHeaders: true,
+  })
+  assert.equal(expired.response, null)
+  assert.ok(
+    expired.headers
+      .getSetCookie()
+      .some(
+        (cookie) =>
+          cookie.includes("parkbot.session_token=") && /max-age=0/i.test(cookie)
+      )
+  )
+})
+
+test("password reset changes the credential, revokes sessions and consumes the token", async () => {
+  const email = "reset@example.test"
+  const headers = await verifiedAccount(email)
+  await auth.api.requestPasswordReset({ body: { email } })
+  const message = state.emails.filter((message) => message.to === email).at(-1)
+  const token = new URL(message.text).pathname.split("/").at(-1)
+  assert.ok(token)
+  const newPassword = "Replacement-password-9345!"
+  await auth.api.resetPassword({ body: { token, newPassword } })
+  assert.equal(await auth.api.getSession({ headers }), null)
+  await assert.rejects(
+    auth.api.signInEmail({ body: { email, password } }),
+    status(401)
+  )
+  const signedIn = await auth.api.signInEmail({
+    body: { email, password: newPassword },
+  })
+  assert.ok(signedIn.token)
+  await assert.rejects(auth.api.resetPassword({ body: { token, newPassword } }))
+})
+
+test("TOTP enrollment and sign-in require the second factor", async () => {
+  const email = "totp@example.test"
+  let headers = await verifiedAccount(email)
+  const enabled = await auth.api.enableTwoFactor({
+    headers,
+    body: { password },
+    returnHeaders: true,
+  })
+  headers = mergeCookies(headers, enabled.headers)
+  const encodedSecret = new URL(enabled.response.totpURI).searchParams.get(
+    "secret"
+  )
+  assert.ok(encodedSecret)
+  const secret = new TextDecoder().decode(base32.decode(encodedSecret))
+  const { code } = await auth.api.generateTOTP({ body: { secret } })
+  const enrolled = await auth.api.verifyTOTP({
+    headers,
+    body: { code },
+    returnHeaders: true,
+  })
+  headers = mergeCookies(headers, enrolled.headers)
+  assert.equal(
+    (await auth.api.getSession({ headers })).user.twoFactorEnabled,
+    true
+  )
+  await auth.api.signOut({ headers })
+
+  const challenge = await auth.api.signInEmail({
+    body: { email, password },
+    returnHeaders: true,
+  })
+  assert.equal(challenge.response.twoFactorRedirect, true)
+  headers = mergeCookies(new Headers(), challenge.headers)
+  assert.equal(await auth.api.getSession({ headers }), null)
+  await assert.rejects(
+    auth.api.verifyTOTP({ headers, body: { code: "invalid" } })
+  )
+  const current = await auth.api.generateTOTP({ body: { secret } })
+  const verified = await auth.api.verifyTOTP({
+    headers,
+    body: { code: current.code },
+    returnHeaders: true,
+  })
+  headers = mergeCookies(headers, verified.headers)
+  const session = await auth.api.getSession({ headers })
+  assert.equal(session.user.email, email)
+  assert.equal(session.user.twoFactorEnabled, true)
+})
+
+test("customSession propagates storage failures instead of returning a signed-out session", async () => {
+  const headers = await verifiedAccount("lookup-error@example.test")
+  const sessions = database.session
+  Object.defineProperty(database, "session", {
+    configurable: true,
+    get() {
+      throw new Error("Simulated session storage failure")
+    },
+  })
+  try {
+    await assert.rejects(auth.api.getSession({ headers }), status(500))
+  } finally {
+    Object.defineProperty(database, "session", {
+      configurable: true,
+      writable: true,
+      value: sessions,
+    })
+  }
+  assert.ok(await auth.api.getSession({ headers }))
 })
