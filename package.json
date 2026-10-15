@@ -12,7 +12,7 @@
     "test:websocket": "node --test test/reconnecting-websocket.test.mjs",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "machine-translate": "inlang machine translate --project project.inlang",
-    "test:auth": "node --test --test-isolation=none test/auth-permissions.test.mjs test/aps-access.test.mjs",
+    "test:auth": "node --test --experimental-test-isolation=none test/auth-permissions.test.mjs test/aps-access.test.mjs",
     "test:auth:mongodb": "node test/run-auth-mongodb.mjs"
   },
   "dependencies": {
