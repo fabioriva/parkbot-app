@@ -12,7 +12,8 @@
     "test:websocket": "node --test test/reconnecting-websocket.test.mjs",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "machine-translate": "inlang machine translate --project project.inlang",
-    "test:auth": "node --test --test-isolation=none test/auth-permissions.test.mjs test/aps-access.test.mjs"
+    "test:auth": "node --test --test-isolation=none test/auth-permissions.test.mjs test/aps-access.test.mjs",
+    "test:auth:mongodb": "node test/run-auth-mongodb.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -20,7 +21,7 @@
     "@react-router/node": "8.4.0",
     "@react-router/serve": "8.4.0",
     "@sendgrid/mail": "^8.1.6",
-    "better-auth": "1.7.5",
+    "better-auth": "1.7.9",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.3.0",
     "date-fns": "^4.4.0",
