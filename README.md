@@ -1,87 +1,52 @@
-# Welcome to React Router!
+# 🤖 Parkbot App
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Interfaccia web per il monitoraggio e la gestione degli impianti di parcheggio
+automatico (APS), integrata con il backend Parkbot.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## ⚙️ Funzionalità
 
-## Features
+- Dashboard con occupazione, attività recenti e stato dell’impianto.
+- Mappe degli stalli e monitoraggio dei dispositivi.
+- Gestione delle operazioni di ingresso e uscita.
+- Consultazione dello storico e delle statistiche.
+- Gestione di tessere, notifiche e utenti.
+- Accesso a più impianti con autorizzazioni basate sul ruolo.
+- Autenticazione con verifica email e secondo fattore.
+- Interfaccia in italiano e inglese, con tema chiaro e scuro.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+Le funzionalità disponibili dipendono dal ruolo e dagli impianti assegnati.
 
-## Getting Started
+## 🔑 Accesso al servizio
 
-### Installation
+Parkbot è un servizio offerto dalla nostra società e ospitato su server
+di proprietà. L’utilizzo richiede una sottoscrizione da parte del cliente
+e l’abilitazione degli utenti agli impianti previsti.
 
-Install the dependencies:
+La disponibilità pubblica di questo repository non include l’accesso
+al servizio, ai dati o agli impianti dei clienti.
 
-```bash
-npm install
-```
+Per informazioni commerciali e attivazione, contattare la società fornitrice.
 
-### Development
+## 🛠️ Stack tecnologico
 
-Start the development server with HMR:
+| Ambito | Tecnologie |
+| --- | --- |
+| Interfaccia | React 19 e TypeScript |
+| Routing e rendering lato server | React Router 8 |
+| Build e sviluppo | Vite |
+| Stile e componenti | Tailwind CSS 4 e Base UI |
+| Autenticazione | Better Auth, con supporto TOTP |
+| Database | MongoDB |
+| Dati e aggiornamenti in tempo reale | API HTTP, SWR e WebSocket |
+| Localizzazione | Paraglide JS e Inlang |
+| Invio email | SendGrid |
 
-```bash
-npm run dev
-```
+L’applicazione combina rendering lato server e aggiornamenti nel browser
+per offrire un’interfaccia reattiva. Le connessioni WebSocket aggiornano
+i dati dell’impianto in tempo reale, mentre le API HTTP gestiscono
+consultazioni e comandi.
 
-Your application will be available at `http://localhost:5173`.
+## 📚 Documentazione tecnica
 
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+- [Date, fusi orari e statistiche](docs/date-time.md)
+- [API per le notifiche email](docs/notifications-api.md)
