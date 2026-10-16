@@ -18,14 +18,14 @@ Le funzionalità disponibili dipendono dal ruolo e dagli impianti assegnati.
 
 ## 🔑 Accesso al servizio
 
-Parkbot è un servizio offerto dalla nostra società e ospitato su server
-di proprietà. L’utilizzo richiede una sottoscrizione da parte del cliente
-e l’abilitazione degli utenti agli impianti previsti.
+I servizi Parkbot sono offerti da [Sotefin SA](https://www.sotefin.com)
+e ospitati su server di proprietà della società. L’utilizzo richiede una
+sottoscrizione da parte del cliente e l’abilitazione degli utenti agli impianti previsti.
 
 La disponibilità pubblica di questo repository non include l’accesso
 al servizio, ai dati o agli impianti dei clienti.
 
-Per informazioni commerciali e attivazione, contattare la società fornitrice.
+Per informazioni commerciali e attivazione, contattare [Sotefin SA](https://www.sotefin.com).
 
 ## 🛠️ Stack tecnologico
 
