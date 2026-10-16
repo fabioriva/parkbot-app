@@ -43,6 +43,7 @@ export function ActionPP({ action, disabled = true }: ActionPPProps) {
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
 
+  const [open, setOpen] = useState(false)
   const [destination, setDestination] = useState<number | undefined>(undefined)
   const [error, setError] = useState(false)
 
@@ -68,6 +69,7 @@ export function ActionPP({ action, disabled = true }: ActionPPProps) {
         value,
       }),
       onConfirm: async () => {
+        setOpen(false)
         const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/operation/pp`
         const res = await fetch(url, {
           method: "POST",
@@ -81,12 +83,12 @@ export function ActionPP({ action, disabled = true }: ActionPPProps) {
             value,
           }),
         })
-        actionResponse(res)
+        await actionResponse(res)
       },
     })
   }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
           <Button disabled={disabled || !action.enable.status}>
