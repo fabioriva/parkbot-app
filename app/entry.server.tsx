@@ -1,8 +1,12 @@
 import dotenv from "dotenv"
 import { PassThrough } from "node:stream"
-import type { EntryContext, RouterContextProvider } from "react-router"
+import type {
+  EntryContext,
+  HandleErrorFunction,
+  RouterContextProvider,
+} from "react-router"
 import { createReadableStreamFromReadable } from "@react-router/node"
-import { ServerRouter } from "react-router"
+import { isRouteErrorResponse, ServerRouter } from "react-router"
 import { isbot } from "isbot"
 import type { RenderToPipeableStreamOptions } from "react-dom/server"
 import { renderToPipeableStream } from "react-dom/server"
@@ -10,6 +14,27 @@ import { renderToPipeableStream } from "react-dom/server"
 dotenv.config()
 
 export const streamTimeout = 5_000
+
+export const handleError: HandleErrorFunction = (error, { request }) => {
+  if (request.signal.aborted) return
+
+  if (
+    isRouteErrorResponse(error) &&
+    error.status === 405 &&
+    request.method === "POST" &&
+    new URL(request.url).pathname === "/"
+  ) {
+    console.warn("POST / -> 405 Method Not Allowed")
+    return
+  }
+
+  // Preserve React Router's default logging, including the original stack.
+  console.error(
+    isRouteErrorResponse(error) && "error" in error && error.error
+      ? error.error
+      : error
+  )
+}
 
 export default function handleRequest(
   request: Request,
