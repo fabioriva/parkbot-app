@@ -148,7 +148,7 @@ export function composeNotificationEmail(
       // Keep the alarm identifier if the message function cannot render.
     }
   }
-  const title = m.log_id_1({ id: alarm.id }, options)
+  const title = m["log.op-alarm-on"]({ id: alarm.id }, options)
   const timestamp = new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
     timeStyle: "long",
