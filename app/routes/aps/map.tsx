@@ -61,6 +61,7 @@ const components = {
   parshvnath: lazy(() => import("~/components/maps/parshvnath")),
   ruth: lazy(() => import("~/components/maps/ruth")),
   sdmc: lazy(() => import("~/components/maps/sdmc")),
+  slorenzo: lazy(() => import("~/components/maps/slorenzo")),
   smoritz: lazy(() => import("~/components/maps/smoritz")),
   sotefin: lazy(() => import("~/components/maps/bugrashov")), // Sotefin Lab
   teenmurty: lazy(() => import("~/components/maps/teenmurty")),
