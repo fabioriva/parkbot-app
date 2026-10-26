@@ -74,10 +74,10 @@ function RackContent({
               {byte.bits.map((bit) => (
                 <IoTooltip io={bit} key={bit.addr}>
                   <div className="flex border bg-white dark:bg-neutral-950">
-                    <span className="w-12">{bit.addr}</span>
+                    <span className="w-12 tabular-nums">{bit.addr}</span>
                     <span className="w-16">{bit.label}</span>
                     <span
-                      className={`w-3 text-center ${bit.status ? "bg-green-300 text-green-950 dark:bg-green-950 dark:text-green-300" : "bg-neutral-300 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-300"}`}
+                      className={`w-3 tabular-nums ${bit.status ? "bg-green-300 text-green-950 dark:bg-green-950 dark:text-green-300" : "bg-neutral-300 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-300"}`}
                     >
                       {bit.addr.slice(-1)}
                     </span>
