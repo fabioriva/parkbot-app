@@ -78,7 +78,7 @@ export async function subscribeByEmail(
 
 export async function updateSubscriptionByEmail(
   email: string,
-  subscription: Omit<Subscription, "_id">
+  subscription: Omit<Subscription, "_id" | "subscribed">
 ) {
   if (!isRole(subscription.role)) throw new Error("Invalid role")
   subscription = {
@@ -89,7 +89,14 @@ export async function updateSubscriptionByEmail(
   const existing = await findSubscriptionByEmail(email)
   const result = await collection.updateOne(
     { _id: existing?._id ?? new ObjectId() },
-    { $set: { ...subscription } }
+    {
+      $set: {
+        aps: subscription.aps,
+        company: subscription.company,
+        email: subscription.email,
+        role: subscription.role,
+      },
+    }
   )
   return result
 }

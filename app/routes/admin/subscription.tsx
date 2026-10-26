@@ -62,10 +62,9 @@ export async function action({ request, params }: Route.ActionArgs) {
       company: getRequiredString(formData, "company"),
       email,
       role: getRequiredString(formData, "role"),
-      subscribed: false,
     }
     if (action === "create") {
-      await createSubscription(subscription)
+      await createSubscription({ ...subscription, subscribed: false })
       return {
         action: m.subscription_action_create(),
         success: m.subscription_action_create_success(),
