@@ -332,22 +332,6 @@ export default function Map({ data, view }: MapProps) {
           top: 126px;
           left: 945px;
         }
-        #s-69 {
-          top: 2px;
-          left: 945px;
-        }
-        #s-70 {
-          top: 33px;
-          left: 945px;
-        }
-        #s-71 {
-          top: 95px;
-          left: 945px;
-        }
-        #s-72 {
-          top: 126px;
-          left: 945px;
-        }
         #s-73 {
           top: 2px;
           left: 986px;

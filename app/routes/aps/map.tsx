@@ -41,6 +41,7 @@ const components = {
   chandan: lazy(() => import("~/components/maps/chandan")),
   chiattone: lazy(() => import("~/components/maps/chiattone")),
   "daman-n": lazy(() => import("~/components/maps/daman-n")),
+  "daman-s": lazy(() => import("~/components/maps/daman-s")),
   donini: lazy(() => import("~/components/maps/donini")),
   ehad: lazy(() => import("~/components/maps/ehad")),
   gazit: lazy(() => import("~/components/maps/gazit")),
