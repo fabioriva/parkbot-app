@@ -707,5 +707,8 @@
   "log.op-req-rollback": "Rollback requested for card {card}",
   "log.op-req-pp": "Step-by-step operation requested",
   "log.op-no": "---",
-  "log.op-stall-lck": "Locked stall {stall}"
+  "log.op-stall-lck": "Locked stall {stall}",
+  "plant_api_disconnected": "API connection interrupted",
+  "plant_waiting_for_data": "Waiting for updated data",
+  "plant_plc_offline": "Plant offline"
 }

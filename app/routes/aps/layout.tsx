@@ -90,7 +90,17 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
   const timeZone = isValidTimeZone(aps?.timeZone) ? aps.timeZone : null
   const {
     info: { comm, diag, map },
+    loading,
+    connectionState,
   } = useInfo(`${import.meta.env.VITE_WEBSOCK_URL}/${user.aps}/info`, timeZone)
+  const connectionMessage =
+    connectionState === "closed"
+      ? m.plant_api_disconnected()
+      : connectionState === "connecting" || loading
+        ? m.plant_waiting_for_data()
+        : !comm
+          ? m.plant_plc_offline()
+          : null
 
   return (
     <TooltipProvider>
@@ -123,8 +133,8 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              {!comm ? (
-                <Badge variant="destructive">Data not available!</Badge>
+              {connectionMessage ? (
+                <Badge variant="destructive">{connectionMessage}</Badge>
               ) : (
                 <React.Fragment>
                   <AlarmInfo active={diag || 0} />

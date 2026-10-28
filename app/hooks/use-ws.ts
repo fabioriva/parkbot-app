@@ -84,39 +84,41 @@ function useReconnectingWebSocket(
 ) {
   const token = React.useContext(WebSocketAuthContext)
   const handler = React.useRef(onMessage)
-  const [connected, setConnected] = React.useState(false)
+  const [connectionState, setConnectionState] = React.useState<
+    "connecting" | "open" | "closed"
+  >("connecting")
 
   React.useEffect(() => {
     handler.current = onMessage
   }, [onMessage])
 
   React.useEffect(() => {
-    setConnected(false)
+    setConnectionState("connecting")
     return connectReconnectingWebSocket(
       url,
       {
         onMessage: (event) => handler.current(event),
-        onOpen: () => setConnected(true),
-        onClose: () => setConnected(false),
+        onOpen: () => setConnectionState("open"),
+        onClose: () => setConnectionState("closed"),
       },
       token
     )
   }, [url, token])
 
-  return connected
+  return connectionState
 }
 
 export function useData<T>(url: string, options: { initialData: T }) {
   const { initialData } = options
   const [data, setData] = React.useState(initialData)
   const [loading, setLoading] = React.useState(true)
-  const connected = useReconnectingWebSocket(url, (event) => {
+  const connectionState = useReconnectingWebSocket(url, (event) => {
     const message: T = JSON.parse(event.data)
     setData(message)
     setLoading(false)
   })
 
-  return { data, loading, connected }
+  return { data, loading, connected: connectionState === "open" }
 }
 
 export function useInfo(url: string, timeZone: string | null) {
@@ -132,26 +134,35 @@ export function useInfo(url: string, timeZone: string | null) {
   })
   const [loading, setLoading] = React.useState(true)
 
-  const connected = useReconnectingWebSocket(url, (event) => {
+  const connectionState = useReconnectingWebSocket(url, (event) => {
     const message = JSON.parse(event.data)
-    Object.keys(message).forEach((key) => {
-      if (key === "notification") {
-        toast.add({
-          title: logT(message[key]),
-          description: timeZone
-            ? formatPlantDateTime(
-                message[key].date,
-                timeZone,
-                "dd/MM/yyyy HH:mm:ss xxx"
-              )
-            : "—",
-        })
-      } else {
-        setInfo(message)
-      }
-    })
-    setLoading(false)
+    if (message.notification) {
+      toast.add({
+        title: logT(message.notification),
+        description: timeZone
+          ? formatPlantDateTime(
+              message.notification.date,
+              timeZone,
+              "dd/MM/yyyy HH:mm:ss xxx"
+            )
+          : "—",
+      })
+    }
+    // A notification alone does not confirm the current PLC state.
+    if (typeof message.comm === "boolean") {
+      setInfo(message)
+      setLoading(false)
+    }
   })
 
-  return { info, loading, connected }
+  React.useEffect(() => {
+    if (connectionState !== "open") setLoading(true)
+  }, [connectionState, url])
+
+  return {
+    info,
+    loading,
+    connected: connectionState === "open",
+    connectionState,
+  }
 }

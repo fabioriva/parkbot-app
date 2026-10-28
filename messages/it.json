@@ -707,5 +707,8 @@
   "history_table.op-alarm-on": "Allarme attivo",
   "history_table.op-alarm-off": "Allarme annullato",
   "history_table.op-switch-mode": "Cambio modalità",
-  "history_table.op-change-pin": "PIN modificato"
+  "history_table.op-change-pin": "PIN modificato",
+  "plant_api_disconnected": "Collegamento alle API interrotto",
+  "plant_waiting_for_data": "In attesa di dati aggiornati",
+  "plant_plc_offline": "Impianto offline"
 }
