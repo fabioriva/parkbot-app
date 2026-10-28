@@ -13,14 +13,18 @@ import {
   ItemMedia,
   ItemTitle,
 } from "~/components/ui/item"
-import { useConfirmDialog } from "~/components/confirm-dialog"
+import {
+  ConfirmDialogProvider,
+  useConfirmDialog,
+} from "~/components/confirm-dialog"
 import { SearchInput } from "~/components/search-input"
 import { EditTagDialog } from "~/components/tag-edit"
 import { NoDataAlert } from "~/components/no-data-alert"
-import { useData } from "~/hooks/use-ws"
+import { connectReconnectingWebSocket } from "~/hooks/use-ws"
 import { getToken } from "~/lib/cookie.server"
 import { actionResponse } from "~/lib/action"
 import fetcher from "~/lib/fetch"
+import useSWR from "swr"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/tags"
@@ -66,20 +70,87 @@ function TagsContent({
 }: {
   aps: string
   initialData: TagData[]
-  token: Route.ComponentProps["loaderData"]["token"]
+  token: string | null
 }) {
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps}/cards`
-  const { data } = useData(url, { initialData })
+  const { plantReady } = useOutletContext<{ plantReady: boolean | null }>()
+  const [cardsConnected, setCardsConnected] = useState<boolean | null>(null)
+  const [reconnections, setReconnections] = useState(0)
+  const ready = plantReady === true && cardsConnected === true
+  const url = `${import.meta.env.VITE_BACKEND_URL}/${aps}/cards`
+  const {
+    data: tags,
+    error,
+    mutate,
+  } = useSWR<TagData[]>(
+    ready && token ? [url, token, reconnections] : null,
+    ([url, token]: [string, string, number]) =>
+      fetcher(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    {
+      fallbackData: reconnections === 0 ? initialData : undefined,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  useEffect(() => {
+    if (plantReady === false) setReconnections((value) => value + 1)
+  }, [plantReady])
+
+  useEffect(() => {
+    setCardsConnected(null)
+    return connectReconnectingWebSocket(
+      `${import.meta.env.VITE_WEBSOCK_URL}/${aps}/cards`,
+      {
+        onOpen: () => setCardsConnected(true),
+        onClose: () => {
+          setCardsConnected(false)
+          setReconnections((value) => value + 1)
+        },
+        onMessage: (event) => {
+          // Live updates replace the snapshot without starting another HTTP read.
+          void mutate(JSON.parse(event.data), { revalidate: false })
+        },
+      },
+      token ?? undefined
+    )
+  }, [aps, token, mutate])
+
+  if (plantReady === false || cardsConnected === false) {
+    return <NoDataAlert description={m.tags_connection_unavailable()} />
+  }
+  if (error || !tags) return <NoDataAlert />
+
+  return (
+    <ConfirmDialogProvider>
+      <TagsList aps={aps} tags={tags} token={token} disabled={!ready} />
+    </ConfirmDialogProvider>
+  )
+}
+
+function TagsList({
+  aps,
+  tags,
+  token,
+  disabled,
+}: {
+  aps: string
+  tags: TagData[]
+  token: string | null
+  disabled: boolean
+}) {
   const [open, setOpen] = useState(false)
   const [tag, setTag] = useState<TagData | null>(null)
 
   const { showConfirmDialog } = useConfirmDialog()
   const handleConfirm = (pin: string) => {
-    if (!tag) return
+    if (disabled || !tag) return
     showConfirmDialog({
       title: m.tags_confirm_dialog_title(),
       description: m.tags_edit_dialog_description({ nr: tag.nr }),
       onConfirm: async () => {
+        setOpen(false)
         const url = `${import.meta.env.VITE_BACKEND_URL}/${aps}/card/edit`
         const res = await fetch(url, {
           method: "POST",
@@ -89,7 +160,7 @@ function TagsContent({
           },
           body: JSON.stringify({ card: tag.nr, code: pin }),
         })
-        actionResponse(res)
+        await actionResponse(res)
       },
     })
   }
@@ -109,7 +180,7 @@ function TagsContent({
     }
     const Fuse = (await import("fuse.js")).default
     if (request !== searchRequest.current) return
-    const fuse = new Fuse(data, {
+    const fuse = new Fuse(tags, {
       keys: ["code", "nr", "type", "uid"],
     })
     const result = fuse.search(query)
@@ -117,26 +188,23 @@ function TagsContent({
   }
   // Infinite scroll
   const chunkSize = 20
-  const [tags, setTags] = useState<TagData[]>(() => data.slice(0, chunkSize))
-  const [hasMore, setHasMore] = useState(data.length > chunkSize)
+  const [visibleCount, setVisibleCount] = useState(chunkSize)
+  const filteredTags = search ?? tags
+  const visibleTags = filteredTags.slice(0, visibleCount)
+  const hasMore = visibleCount < filteredTags.length
+
   useEffect(() => {
-    const items = search ?? data
-    setTags(items.slice(0, chunkSize))
-    setHasMore(items.length > chunkSize)
-  }, [data, search])
-  const loadMore = () => {
-    const nextLength = tags.length + chunkSize
-    const items = search ?? data
-    const nextSlice = items.slice(0, nextLength)
-    setTags(nextSlice)
-    setHasMore(nextSlice.length < items.length)
-  }
+    setVisibleCount(chunkSize)
+  }, [tags, search])
+
+  const loadMore = () => setVisibleCount((count) => count + chunkSize)
 
   const { user } =
     useOutletContext<
       Pick<ApsLayoutRoute.ComponentProps["loaderData"], "user">
     >()
-  const isEditable = user?.role === "admin" || user?.role === "service"
+  const isEditable =
+    !disabled && (user?.role === "admin" || user?.role === "service")
 
   return (
     <div className="w-full space-y-3 lg:max-w-sm">
@@ -154,14 +222,14 @@ function TagsContent({
         handleSearch={handleSearch}
       />
       <InfiniteScroll
-        dataLength={tags.length}
+        dataLength={visibleTags.length}
         next={loadMore}
         hasMore={hasMore}
         loader={null}
         endMessage={<p className="pt-6">All tags loaded.</p>}
       >
         <ItemGroup>
-          {tags.map((tag) => (
+          {visibleTags.map((tag) => (
             <Item variant="outline" key={tag.nr}>
               <ItemMedia variant="icon">
                 <TagIcon

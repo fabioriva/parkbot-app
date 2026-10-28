@@ -713,5 +713,6 @@
   "plant_plc_offline": "Plant offline",
   "no_data_alert_title": "Data unavailable",
   "no_data_alert_description": "There is currently no data to display on this page.",
-  "dashboard_connection_unavailable": "Live data and commands are temporarily unavailable. The dashboard will resume automatically when the connection is restored and updated data is received."
+  "dashboard_connection_unavailable": "Live data and commands are temporarily unavailable. The dashboard will resume automatically when the connection is restored and updated data is received.",
+  "tags_connection_unavailable": "Live card data and editing are temporarily unavailable. The list will resume automatically after the connection is restored and updated data is received."
 }

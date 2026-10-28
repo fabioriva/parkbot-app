@@ -713,5 +713,6 @@
   "plant_plc_offline": "Impianto offline",
   "no_data_alert_title": "Dati non disponibili",
   "no_data_alert_description": "Al momento non ci sono dati da visualizzare in questa pagina.",
-  "dashboard_connection_unavailable": "I dati in tempo reale e i comandi sono temporaneamente non disponibili. La dashboard sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati."
+  "dashboard_connection_unavailable": "I dati in tempo reale e i comandi sono temporaneamente non disponibili. La dashboard sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati.",
+  "tags_connection_unavailable": "I dati delle tessere e le modifiche sono temporaneamente non disponibili. La lista sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati."
 }
