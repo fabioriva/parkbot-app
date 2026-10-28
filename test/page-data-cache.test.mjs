@@ -11,19 +11,29 @@ const componentUrl = new URL(
   "../app/components/page-data-cache.tsx",
   import.meta.url
 )
+const fetchUrl = new URL("../app/lib/fetch.ts", import.meta.url)
 const hooks = registerHooks({
+  resolve(specifier, context, nextResolve) {
+    if (specifier === "~/lib/fetch") {
+      return { url: fetchUrl.href, shortCircuit: true }
+    }
+    return nextResolve(specifier, context)
+  },
   load(url, context, nextLoad) {
-    if (url !== componentUrl.href) return nextLoad(url, context)
+    if (url !== componentUrl.href && url !== fetchUrl.href) {
+      return nextLoad(url, context)
+    }
     return {
       format: "module",
       shortCircuit: true,
-      source: transpileModule(readFileSync(componentUrl, "utf8"), {
+      source: transpileModule(readFileSync(new URL(url), "utf8"), {
         compilerOptions: { module: ModuleKind.ESNext, jsx: JsxEmit.ReactJSX },
       }).outputText,
     }
   },
 })
 const { PageDataCache } = await import(componentUrl.href)
+const { HttpError } = await import(fetchUrl.href)
 hooks.deregister()
 
 const key = ["https://example.test/api/aps/sotefin/map", "test-token"]
@@ -91,4 +101,50 @@ test("a response started before an outage cannot replace recovered data", async 
     "recovered"
   )
   assert.equal([...page.cache.keys()].length, 1)
+})
+
+for (const status of [401, 403, 404]) {
+  test(`page configuration disables error retries for HTTP ${status}`, () => {
+    const page = openPage(null)
+    assert.equal(
+      page.shouldRetryOnError(new HttpError(status, "Test error")),
+      false
+    )
+  })
+}
+
+for (const status of [500, 502, 503, 504]) {
+  test(`page configuration allows recovery from HTTP ${status}`, () => {
+    const page = openPage(null)
+    assert.equal(
+      page.shouldRetryOnError(new HttpError(status, "Test error")),
+      true
+    )
+  })
+}
+
+test("other errors retain SWR's existing retry behavior", () => {
+  const page = openPage(null)
+  assert.equal(page.shouldRetryOnError(new Error("Test error")), true)
+})
+
+test("temporary error retries retain SWR's progressive delays", (t) => {
+  t.mock.timers.enable({ apis: ["setTimeout"] })
+  t.mock.method(Math, "random", () => 0.5)
+  const page = openPage(null)
+  const retries = []
+  const retry = () => retries.push("retry")
+  const error = new HttpError(503, "503 API connection unavailable")
+
+  page.onErrorRetry(error, "test-resource", page, retry, { retryCount: 1 })
+  t.mock.timers.tick(page.errorRetryInterval * 2 - 1)
+  assert.equal(retries.length, 0)
+  t.mock.timers.tick(1)
+  assert.equal(retries.length, 1)
+
+  page.onErrorRetry(error, "test-resource", page, retry, { retryCount: 2 })
+  t.mock.timers.tick(page.errorRetryInterval * 4 - 1)
+  assert.equal(retries.length, 1)
+  t.mock.timers.tick(1)
+  assert.equal(retries.length, 2)
 })
