@@ -1,6 +1,8 @@
 import { requireAps } from "~/lib/authorization.server"
 import { EyeIcon } from "lucide-react"
-import { lazy, Suspense, useState, type ComponentProps } from "react"
+import { lazy, Suspense, useEffect, useState, type ComponentProps } from "react"
+import { useOutletContext } from "react-router"
+import useSWR from "swr"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -17,7 +19,7 @@ import { EditStallDialogProvider } from "~/components/map-edit"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { Occupancy } from "~/components/occupancy-chart"
 import type { MapProps } from "~/components/maps/types"
-import { useData } from "~/hooks/use-ws"
+import { connectReconnectingWebSocket } from "~/hooks/use-ws"
 import { getToken } from "~/lib/cookie.server"
 import fetcher from "~/lib/fetch"
 import { m } from "@paraglide/messages.js"
@@ -98,6 +100,7 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
       key={params.aps}
       aps={params.aps}
       initialData={loaderData.data}
+      token={loaderData.token}
     />
   )
 }
@@ -105,13 +108,71 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
 function MapContent({
   aps,
   initialData,
+  token,
 }: {
   aps: keyof typeof components
   initialData: MapData
+  token: string | null
+}) {
+  const { plantReady } = useOutletContext<{ plantReady: boolean | null }>()
+  const [mapConnected, setMapConnected] = useState<boolean | null>(null)
+  const [reconnections, setReconnections] = useState(0)
+  const ready = plantReady === true && mapConnected === true
+  const url = `${import.meta.env.VITE_BACKEND_URL}/${aps}/map`
+  const { data, error, mutate } = useSWR<MapData>(
+    ready && token ? [url, token, reconnections] : null,
+    ([url, token]: [string, string, number]) =>
+      fetcher(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    {
+      fallbackData: reconnections === 0 ? initialData : undefined,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  useEffect(() => {
+    if (plantReady === false) setReconnections((value) => value + 1)
+  }, [plantReady])
+
+  useEffect(() => {
+    setMapConnected(null)
+    return connectReconnectingWebSocket(
+      `${import.meta.env.VITE_WEBSOCK_URL}/${aps}/map`,
+      {
+        onOpen: () => setMapConnected(true),
+        onClose: () => {
+          setMapConnected(false)
+          setReconnections((value) => value + 1)
+        },
+        onMessage: (event) => {
+          // Live updates replace the snapshot without starting another HTTP read.
+          void mutate(JSON.parse(event.data), { revalidate: false })
+        },
+      },
+      token ?? undefined
+    )
+  }, [aps, token, mutate])
+
+  if (plantReady === false || mapConnected === false) {
+    return <NoDataAlert description={m.map_connection_unavailable()} />
+  }
+  if (error || !data) return <NoDataAlert />
+
+  return <MapView aps={aps} data={data} disabled={!ready} />
+}
+
+function MapView({
+  aps,
+  data,
+  disabled,
+}: {
+  aps: keyof typeof components
+  data: MapData
+  disabled: boolean
 }) {
   const DynamicComponent = components[aps]
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps}/map`
-  const { data } = useData(url, { initialData })
   const [view, setView] = useState<MapProps["view"]>("view2")
   const onViewChange = (value: string) => {
     switch (value) {
@@ -163,7 +224,7 @@ function MapContent({
       </div>
       <TabsContent className="mt-3" value="map">
         <Suspense fallback={<p className="py-3">Loading...</p>}>
-          <EditStallDialogProvider>
+          <EditStallDialogProvider disabled={disabled}>
             <DynamicComponent data={data} view={view} />
           </EditStallDialogProvider>
         </Suspense>

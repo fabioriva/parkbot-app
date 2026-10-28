@@ -40,6 +40,7 @@ interface EditStallDialogOptions {
 
 interface EditStallDialogContextValue {
   showEditDialog: (options: EditStallDialogOptions) => void
+  disabled: boolean
 }
 
 const EditStallDialogContext =
@@ -53,10 +54,17 @@ export const useEditStallDialog = () => {
   return context
 }
 
-export function EditStallDialogProvider({ children }: { children: ReactNode }) {
+export function EditStallDialogProvider({
+  children,
+  disabled = false,
+}: {
+  children: ReactNode
+  disabled?: boolean
+}) {
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<EditStallDialogOptions | null>(null)
   const showEditDialog = (opts: EditStallDialogOptions) => {
+    if (disabled) return
     setOptions(opts)
     setOpen(true)
     setValue(opts.stall.status)
@@ -77,12 +85,13 @@ export function EditStallDialogProvider({ children }: { children: ReactNode }) {
     }
   }
   const handleConfirm = (status: number) => {
+    if (disabled) return
     setOpen(false)
     options?.onConfirm?.(status)
   }
 
   return (
-    <EditStallDialogContext.Provider value={{ showEditDialog }}>
+    <EditStallDialogContext.Provider value={{ showEditDialog, disabled }}>
       {children}
       <Dialog open={open} onOpenChange={setOpen}>
         {options && (

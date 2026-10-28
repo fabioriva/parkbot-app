@@ -38,14 +38,15 @@ export function Stall({ definitions, stall, view }: StallProps) {
   const data = useLoaderData<typeof loader>()
   const params = useParams()
   const { user } = useOutletContext<{ user: { role: string } }>()
-  const { showEditDialog } = useEditStallDialog()
+  const { showEditDialog, disabled } = useEditStallDialog()
   const { date, nr, size, status } = stall
   const timeZone = usePlantTimeZone()
   const formattedDate = timeZone
     ? formatPlantDateTime(date, timeZone, "dd/MM/yyyy HH:mm:ss xxx")
     : "—"
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus
-  const isEditable = user?.role === "admin" || user?.role === "service"
+  const isEditable =
+    !disabled && (user?.role === "admin" || user?.role === "service")
 
   const handleConfirm = async (value: number) => {
     const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/map/edit`
