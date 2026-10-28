@@ -710,5 +710,8 @@
   "history_table.op-change-pin": "PIN modificato",
   "plant_api_disconnected": "Collegamento alle API interrotto",
   "plant_waiting_for_data": "In attesa di dati aggiornati",
-  "plant_plc_offline": "Impianto offline"
+  "plant_plc_offline": "Impianto offline",
+  "no_data_alert_title": "Dati non disponibili",
+  "no_data_alert_description": "Al momento non ci sono dati da visualizzare in questa pagina.",
+  "dashboard_connection_unavailable": "I dati in tempo reale e i comandi sono temporaneamente non disponibili. La dashboard sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati."
 }

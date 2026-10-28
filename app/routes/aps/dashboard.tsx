@@ -83,7 +83,10 @@ export default function Dashboard({
     }
   )
 
-  if (plantReady === false || error || !dashboard) return <NoDataAlert />
+  if (plantReady === false) {
+    return <NoDataAlert description={m.dashboard_connection_unavailable()} />
+  }
+  if (error || !dashboard) return <NoDataAlert />
   const { activity, exitQueue, occupancy, operations, system } = dashboard
   const [daily] = operations
   if (!daily) return <NoDataAlert />
