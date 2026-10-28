@@ -108,19 +108,6 @@ function useReconnectingWebSocket(
   return connectionState
 }
 
-export function useData<T>(url: string, options: { initialData: T }) {
-  const { initialData } = options
-  const [data, setData] = React.useState(initialData)
-  const [loading, setLoading] = React.useState(true)
-  const connectionState = useReconnectingWebSocket(url, (event) => {
-    const message: T = JSON.parse(event.data)
-    setData(message)
-    setLoading(false)
-  })
-
-  return { data, loading, connected: connectionState === "open" }
-}
-
 export function useInfo(url: string, timeZone: string | null) {
   const [info, setInfo] = React.useState({
     comm: false,

@@ -1,10 +1,14 @@
 import { requireAps } from "~/lib/authorization.server"
-import type { ComponentProps } from "react"
+import { useEffect, useRef, useState, type ComponentProps } from "react"
+import { useOutletContext } from "react-router"
+import useSWR, { useSWRConfig } from "swr"
 import { IoTooltip } from "~/components/io-tooltip"
 import { NoDataAlert } from "~/components/no-data-alert"
-import { useData } from "~/hooks/use-ws"
+import { PageDataCache } from "~/components/page-data-cache"
+import { connectReconnectingWebSocket } from "~/hooks/use-ws"
 import { getToken } from "~/lib/cookie.server"
 import fetcher from "~/lib/fetch"
+import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/rack"
 
@@ -19,30 +23,30 @@ interface RackData {
   }[]
 }
 
-export async function loader({
-  params,
-  request,
-}: Route.LoaderArgs): Promise<RackData | null> {
+export async function loader({ params, request }: Route.LoaderArgs) {
   await requireAps(request, params.aps, "technical.read")
   const token = getToken(request)
   const url = `${process.env.BACKEND_URL}/${params?.aps}/racks/${params?.nr}`
-  return await fetcher(url, {
+  const data: RackData | null = await fetcher(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
+  return { data, token }
 }
 
 export default function Rack({ loaderData, params }: Route.ComponentProps) {
-  if (!loaderData) return <NoDataAlert />
+  if (!loaderData.data) return <NoDataAlert />
 
   return (
-    <RackContent
-      key={`${params.aps}:${params.nr}`}
-      aps={params.aps}
-      nr={params.nr}
-      initialData={loaderData}
-    />
+    <PageDataCache key={`${params.aps}:${params.nr}:${loaderData.token}`}>
+      <RackContent
+        aps={params.aps}
+        nr={params.nr}
+        initialData={loaderData.data}
+        token={loaderData.token}
+      />
+    </PageDataCache>
   )
 }
 
@@ -50,13 +54,65 @@ function RackContent({
   aps,
   nr,
   initialData,
+  token,
 }: {
   aps: string
   nr: string
   initialData: RackData
+  token: string | null
 }) {
-  const url = `${import.meta.env.VITE_WEBSOCK_URL}/${aps}/racks/${nr}`
-  const { data } = useData(url, { initialData })
+  const { plantReady } = useOutletContext<{ plantReady: boolean | null }>()
+  const [rackConnected, setRackConnected] = useState<boolean | null>(null)
+  const [initialDataValid, setInitialDataValid] = useState(true)
+  const { unload } = useSWRConfig()
+  const ready = plantReady === true && rackConnected === true
+  const readyRef = useRef(ready)
+  const url = `${import.meta.env.VITE_BACKEND_URL}/${aps}/racks/${nr}`
+  const { data, error, mutate } = useSWR<RackData>(
+    ready && token ? [url, token] : null,
+    ([url, token]: [string, string]) =>
+      fetcher(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    {
+      fallbackData: initialDataValid ? initialData : undefined,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  )
+
+  useEffect(() => {
+    readyRef.current = ready
+    if (plantReady === false || rackConnected === false) {
+      setInitialDataValid(false)
+      unload({ revalidate: false })
+    }
+  }, [plantReady, rackConnected, ready, unload])
+
+  useEffect(() => {
+    setRackConnected(null)
+    return connectReconnectingWebSocket(
+      `${import.meta.env.VITE_WEBSOCK_URL}/${aps}/racks/${nr}`,
+      {
+        onOpen: () => setRackConnected(true),
+        onClose: () => {
+          readyRef.current = false
+          setRackConnected(false)
+        },
+        onMessage: (event) => {
+          if (!readyRef.current) return
+          // Live updates replace the snapshot without starting another HTTP read.
+          void mutate(JSON.parse(event.data), { revalidate: false })
+        },
+      },
+      token ?? undefined
+    )
+  }, [aps, nr, token, mutate])
+
+  if (plantReady === false || rackConnected === false) {
+    return <NoDataAlert description={m.rack_connection_unavailable()} />
+  }
+  if (error || !data) return <NoDataAlert />
 
   return (
     <div className="flex gap-0.5 overflow-scroll py-3">

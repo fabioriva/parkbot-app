@@ -716,5 +716,6 @@
   "dashboard_connection_unavailable": "I dati in tempo reale e i comandi sono temporaneamente non disponibili. La dashboard sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati.",
   "tags_connection_unavailable": "I dati delle tessere e le modifiche sono temporaneamente non disponibili. La lista sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati.",
   "map_connection_unavailable": "I dati della mappa e le modifiche agli stalli sono temporaneamente non disponibili. La mappa sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati.",
-  "devices_connection_unavailable": "I dati dei dispositivi e i comandi sono temporaneamente non disponibili. La pagina sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati."
+  "devices_connection_unavailable": "I dati dei dispositivi e i comandi sono temporaneamente non disponibili. La pagina sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati.",
+  "rack_connection_unavailable": "I dati degli ingressi e delle uscite sono temporaneamente non disponibili. La pagina sarà ripristinata automaticamente al recupero del collegamento e alla ricezione di dati aggiornati."
 }
