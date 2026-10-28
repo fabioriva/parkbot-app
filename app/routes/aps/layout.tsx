@@ -101,6 +101,16 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
         : !comm
           ? m.plant_plc_offline()
           : null
+  const plantReady =
+    connectionState === "closed"
+      ? false
+      : connectionState !== "open" || loading
+        ? null
+        : comm
+  const outletContext = React.useMemo(
+    () => ({ aps, user, plantReady }),
+    [aps, user, plantReady]
+  )
 
   return (
     <TooltipProvider>
@@ -155,7 +165,7 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
               />
             )}
             <ConfirmDialogProvider>
-              <Outlet context={{ aps, user }} />
+              <Outlet context={outletContext} />
             </ConfirmDialogProvider>
           </div>
         </SidebarInset>

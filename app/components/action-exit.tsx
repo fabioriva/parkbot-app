@@ -25,6 +25,7 @@ import { m } from "@paraglide/messages.js"
 import type { loader } from "~/routes/aps/dashboard"
 
 interface ActionExitProps {
+  disabled?: boolean
   exit: {
     enable: { status: boolean | 0 | 1 }
     max: number
@@ -32,7 +33,7 @@ interface ActionExitProps {
   }
 }
 
-export function ActionExit({ exit }: ActionExitProps) {
+export function ActionExit({ exit, disabled = false }: ActionExitProps) {
   const data = useLoaderData<typeof loader>()
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
@@ -44,7 +45,7 @@ export function ActionExit({ exit }: ActionExitProps) {
   const error = card.trim() === "" || !result.success
 
   const handleConfirm = () => {
-    if (error || !result.success || !enable.status) return
+    if (disabled || error || !result.success || !enable.status) return
     const cardNumber = result.data
     showConfirmDialog({
       title: m.exit_call_confirm_dialog_title(),
@@ -70,7 +71,7 @@ export function ActionExit({ exit }: ActionExitProps) {
         render={
           <Button
             className="w-full"
-            disabled={!enable.status}
+            disabled={disabled || !enable.status}
             onClick={() => setCard(String(min))}
           >
             {m.exit_call()}
@@ -117,7 +118,7 @@ export function ActionExit({ exit }: ActionExitProps) {
             render={
               <Button
                 onClick={handleConfirm}
-                disabled={error || !enable.status}
+                disabled={disabled || error || !enable.status}
               >
                 {m.confirm()}
               </Button>

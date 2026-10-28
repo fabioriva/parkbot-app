@@ -21,14 +21,16 @@ interface QueueItem {
 
 interface QueueProps {
   queue: QueueItem[]
+  disabled?: boolean
 }
 
-export const Queue = ({ queue }: QueueProps) => {
+export const Queue = ({ queue, disabled = false }: QueueProps) => {
   const data = useLoaderData<typeof loader>()
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
 
   const handleConfirm = async (item: QueueItem) => {
+    if (disabled) return
     showConfirmDialog({
       title: m.exit_queue_dialog_title(),
       description: m.exit_queue_dialog_description({ card: item.card }),
@@ -70,6 +72,7 @@ export const Queue = ({ queue }: QueueProps) => {
               variant="outline"
               className="rounded-full"
               aria-label="Delete"
+              disabled={disabled}
               // onClick={() => setQueueItem({ card: item.card, index: key + 1 })}
               onClick={() => handleConfirm(item)}
             >
