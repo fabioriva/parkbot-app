@@ -11,6 +11,7 @@
     "test:date-time": "node --test test/date-time.test.mjs",
     "test:websocket": "node --test test/reconnecting-websocket.test.mjs",
     "test:data-cache": "node --test --experimental-test-isolation=none test/page-data-cache.test.mjs",
+    "test:fetch": "node --test --experimental-test-isolation=none test/fetch.test.mjs",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "machine-translate": "inlang machine translate --project project.inlang",
     "test:auth": "node --test --experimental-test-isolation=none test/auth-permissions.test.mjs test/aps-access.test.mjs",
