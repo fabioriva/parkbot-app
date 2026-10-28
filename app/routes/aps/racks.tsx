@@ -1,6 +1,7 @@
 import { requireAps } from "~/lib/authorization.server"
 import { CircleCheck, CircleX } from "lucide-react"
-import { Link } from "react-router"
+import { useEffect, useState } from "react"
+import { Link, useOutletContext } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
   Item,
@@ -12,9 +13,11 @@ import {
   ItemTitle,
 } from "~/components/ui/item"
 import { NoDataAlert } from "~/components/no-data-alert"
+import { PageDataCache } from "~/components/page-data-cache"
 import { getToken } from "~/lib/cookie.server"
 import fetcher from "~/lib/fetch"
-import useSWR from "swr"
+import useSWR, { useSWRConfig } from "swr"
+import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/racks"
 
@@ -39,19 +42,45 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export default function Nodes({ loaderData, params }: Route.ComponentProps) {
+  return (
+    <PageDataCache key={`${params.aps}:${loaderData.token}`}>
+      <NodesContent loaderData={loaderData} params={params} />
+    </PageDataCache>
+  )
+}
+
+function NodesContent({
+  loaderData,
+  params,
+}: Pick<Route.ComponentProps, "loaderData" | "params">) {
+  const { plantReady } = useOutletContext<{ plantReady: boolean | null }>()
+  const [initialDataValid, setInitialDataValid] = useState(true)
+  const { unload } = useSWRConfig()
+
+  useEffect(() => {
+    if (plantReady === false) {
+      setInitialDataValid(false)
+      // Also discard requests still in flight before the interruption.
+      unload({ revalidate: false })
+    }
+  }, [plantReady, unload])
+
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/racks`
-  const { data: racks } = useSWR<ProfinetNode[] | null>(
-    loaderData.token ? [url, loaderData.token] : null,
+  const { data: racks, error } = useSWR<ProfinetNode[] | null>(
+    plantReady === true && loaderData.token ? [url, loaderData.token] : null,
     ([url, token]: [string, string]) =>
       fetcher(url, {
         headers: { Authorization: `Bearer ${token}` },
       }),
     {
-      fallbackData: loaderData.data,
+      fallbackData: initialDataValid ? loaderData.data : undefined,
       refreshInterval: 1000,
     }
   )
-  if (!racks) return <NoDataAlert />
+  if (plantReady === false) {
+    return <NoDataAlert description={m.racks_connection_unavailable()} />
+  }
+  if (error || !racks) return <NoDataAlert />
 
   return (
     <ItemGroup className="w-full gap-3 lg:max-w-sm">
@@ -74,7 +103,7 @@ export default function Nodes({ loaderData, params }: Route.ComponentProps) {
             <Button
               size="sm"
               variant="outline"
-              disabled={!item.rack}
+              disabled={plantReady !== true || !item.rack}
               render={
                 item.rack ? (
                   <Link
