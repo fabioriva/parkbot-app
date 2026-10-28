@@ -38,7 +38,7 @@ interface ActionPPProps {
   disabled?: boolean
 }
 
-export function ActionPP({ action, disabled = true }: ActionPPProps) {
+export function ActionPP({ action, disabled = false }: ActionPPProps) {
   const data = useLoaderData<{ token: string | null }>()
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
@@ -59,6 +59,7 @@ export function ActionPP({ action, disabled = true }: ActionPPProps) {
     }
   }
   const handleConfirm = (item: ActionPPButton) => {
+    if (disabled || !action.enable.status) return
     const value =
       item.key === "A" || item.key === "B" ? item.value : destination
     if (value === undefined) return

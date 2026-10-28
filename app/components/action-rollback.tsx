@@ -24,6 +24,7 @@ import { actionResponse } from "~/lib/action"
 import { m } from "@paraglide/messages.js"
 
 interface ActionRollbackProps {
+  disabled?: boolean
   card: number
   action: {
     key: "action-rollback"
@@ -37,6 +38,7 @@ interface ActionRollbackProps {
 export function ActionRollback({
   action,
   card: deviceCard,
+  disabled = false,
 }: ActionRollbackProps) {
   const data = useLoaderData<{ token: string | null }>()
   const params = useParams()
@@ -48,7 +50,7 @@ export function ActionRollback({
   const error = card.trim() === "" || !result.success
 
   const handleConfirm = () => {
-    if (error || !result.success || !enable.status) return
+    if (disabled || error || !result.success || !enable.status) return
     const cardNumber = result.data
     showConfirmDialog({
       title: m.rollback_call_confirm_dialog_title(),
@@ -79,7 +81,7 @@ export function ActionRollback({
     >
       <DialogTrigger
         render={
-          <Button className="w-full" disabled={!enable.status}>
+          <Button className="w-full" disabled={disabled || !enable.status}>
             {m.rollback_call()}
           </Button>
         }
@@ -121,7 +123,7 @@ export function ActionRollback({
             render={
               <Button
                 onClick={handleConfirm}
-                disabled={error || !enable.status}
+                disabled={disabled || error || !enable.status}
               >
                 {m.confirm()}
               </Button>

@@ -98,6 +98,7 @@ export interface DeviceData {
 interface DeviceProps {
   device: DeviceData
   advanced?: boolean
+  disabled?: boolean
 }
 
 const ExternalLink = ({ link }: { link: string }) => (
@@ -144,7 +145,11 @@ const Step = ({ step }: { step: number }) => (
   </Badge>
 )
 
-export function Device({ device, advanced = false }: DeviceProps) {
+export function Device({
+  device,
+  advanced = false,
+  disabled = false,
+}: DeviceProps) {
   const timeZone = usePlantTimeZone()
   const { user } = useOutletContext<{ user: { role: string } }>()
   // console.log(device);
@@ -168,15 +173,20 @@ export function Device({ device, advanced = false }: DeviceProps) {
         switch (action.key) {
           case "action-entry":
             if (!can(user.role, "entry")) return null
-            return <ActionEntry action={action} key={key} />
+            return <ActionEntry action={action} disabled={disabled} key={key} />
           case "action-rollback":
             return (
-              <ActionRollback action={action} card={device.card} key={key} />
+              <ActionRollback
+                action={action}
+                card={device.card}
+                disabled={disabled}
+                key={key}
+              />
             )
           case "action-pp":
           case "action-pp-reset":
             if (!can(user.role, "pp")) return null
-            return <ActionPP action={action} disabled={false} key={key} />
+            return <ActionPP action={action} disabled={disabled} key={key} />
         }
       })}
     </div>

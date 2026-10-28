@@ -24,6 +24,7 @@ import { actionResponse } from "~/lib/action"
 import { m } from "@paraglide/messages.js"
 
 interface ActionEntryProps {
+  disabled?: boolean
   action: {
     key: "action-entry"
     enable: { status: boolean | 0 | 1 }
@@ -33,7 +34,7 @@ interface ActionEntryProps {
   }
 }
 
-export function ActionEntry({ action }: ActionEntryProps) {
+export function ActionEntry({ action, disabled = false }: ActionEntryProps) {
   const data = useLoaderData<{ token: string | null }>()
   const params = useParams()
   const { showConfirmDialog } = useConfirmDialog()
@@ -44,7 +45,7 @@ export function ActionEntry({ action }: ActionEntryProps) {
   const error = card.trim() === "" || !result.success
 
   const handleConfirm = () => {
-    if (error || !result.success || !enable.status) return
+    if (disabled || error || !result.success || !enable.status) return
     const cardNumber = result.data
     showConfirmDialog({
       title: m.entry_call_confirm_dialog_title(),
@@ -73,7 +74,7 @@ export function ActionEntry({ action }: ActionEntryProps) {
         render={
           <Button
             className="w-full"
-            disabled={!enable.status}
+            disabled={disabled || !enable.status}
             onClick={() => setCard(String(min))}
           >
             {m.entry_call()}
@@ -117,7 +118,7 @@ export function ActionEntry({ action }: ActionEntryProps) {
             render={
               <Button
                 onClick={handleConfirm}
-                disabled={error || !enable.status}
+                disabled={disabled || error || !enable.status}
               >
                 {m.confirm()}
               </Button>

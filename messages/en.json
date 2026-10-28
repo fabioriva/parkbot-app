@@ -715,5 +715,6 @@
   "no_data_alert_description": "There is currently no data to display on this page.",
   "dashboard_connection_unavailable": "Live data and commands are temporarily unavailable. The dashboard will resume automatically when the connection is restored and updated data is received.",
   "tags_connection_unavailable": "Live card data and editing are temporarily unavailable. The list will resume automatically after the connection is restored and updated data is received.",
-  "map_connection_unavailable": "Live map data and stall editing are temporarily unavailable. The map will resume automatically after the connection is restored and updated data is received."
+  "map_connection_unavailable": "Live map data and stall editing are temporarily unavailable. The map will resume automatically after the connection is restored and updated data is received.",
+  "devices_connection_unavailable": "Live device data and commands are temporarily unavailable. The page will resume automatically after the connection is restored and updated data is received."
 }
