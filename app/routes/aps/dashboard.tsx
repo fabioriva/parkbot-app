@@ -10,12 +10,13 @@ import { ActionExit } from "~/components/action-exit"
 import { ConfirmDialogProvider } from "~/components/confirm-dialog"
 import { HistoryList } from "~/components/history-list"
 import { NoDataAlert } from "~/components/no-data-alert"
+import { PageDataCache } from "~/components/page-data-cache"
 import { Occupancy } from "~/components/occupancy-chart"
 import { Operations } from "~/components/operations-chart"
 import { Queue } from "~/components/queue"
 import { getToken } from "~/lib/cookie.server"
 import fetcher from "~/lib/fetch"
-import useSWR from "swr"
+import useSWR, { useSWRConfig } from "swr"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/dashboard"
@@ -58,27 +59,41 @@ export default function Dashboard({
   loaderData,
   params,
 }: Route.ComponentProps) {
+  return (
+    <PageDataCache key={`${params.aps}:${loaderData.token}`}>
+      <DashboardContent loaderData={loaderData} params={params} />
+    </PageDataCache>
+  )
+}
+
+function DashboardContent({
+  loaderData,
+  params,
+}: Pick<Route.ComponentProps, "loaderData" | "params">) {
   const [stacked, setStacked] = useState(true)
   // null: waiting for the first PLC status; false: confirmed unavailable.
   const { plantReady } = useOutletContext<{ plantReady: boolean | null }>()
-  const [reconnections, setReconnections] = useState(0)
+  const [initialDataValid, setInitialDataValid] = useState(true)
+  const { unload } = useSWRConfig()
 
   useEffect(() => {
-    if (plantReady === false) setReconnections((value) => value + 1)
-  }, [plantReady])
+    if (plantReady === false) {
+      setInitialDataValid(false)
+      // Also discard requests still in flight before the interruption.
+      unload({ revalidate: false })
+    }
+  }, [plantReady, unload])
 
   const url = `${import.meta.env.VITE_BACKEND_URL}/${params.aps}/dashboard`
   const { data: dashboard, error } = useSWR<DashboardData | null>(
-    plantReady === true && loaderData.token
-      ? [url, loaderData.token, reconnections]
-      : null,
-    ([url, token]: [string, string, number]) =>
+    plantReady === true && loaderData.token ? [url, loaderData.token] : null,
+    ([url, token]: [string, string]) =>
       fetcher(url, {
         headers: { Authorization: `Bearer ${token}` },
       }),
     {
       // The server snapshot is valid only before the first interruption.
-      fallbackData: reconnections === 0 ? loaderData.data : undefined,
+      fallbackData: initialDataValid ? loaderData.data : undefined,
       refreshInterval: 1000,
     }
   )

@@ -20,11 +20,12 @@ import {
 import { SearchInput } from "~/components/search-input"
 import { EditTagDialog } from "~/components/tag-edit"
 import { NoDataAlert } from "~/components/no-data-alert"
+import { PageDataCache } from "~/components/page-data-cache"
 import { connectReconnectingWebSocket } from "~/hooks/use-ws"
 import { getToken } from "~/lib/cookie.server"
 import { actionResponse } from "~/lib/action"
 import fetcher from "~/lib/fetch"
-import useSWR from "swr"
+import useSWR, { useSWRConfig } from "swr"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/tags"
@@ -54,12 +55,13 @@ export default function Tags({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData.data) return <NoDataAlert />
 
   return (
-    <TagsContent
-      key={params.aps}
-      aps={params.aps}
-      initialData={loaderData.data}
-      token={loaderData.token}
-    />
+    <PageDataCache key={`${params.aps}:${loaderData.token}`}>
+      <TagsContent
+        aps={params.aps}
+        initialData={loaderData.data}
+        token={loaderData.token}
+      />
+    </PageDataCache>
   )
 }
 
@@ -74,29 +76,35 @@ function TagsContent({
 }) {
   const { plantReady } = useOutletContext<{ plantReady: boolean | null }>()
   const [cardsConnected, setCardsConnected] = useState<boolean | null>(null)
-  const [reconnections, setReconnections] = useState(0)
+  const [initialDataValid, setInitialDataValid] = useState(true)
+  const { unload } = useSWRConfig()
   const ready = plantReady === true && cardsConnected === true
+  const readyRef = useRef(ready)
   const url = `${import.meta.env.VITE_BACKEND_URL}/${aps}/cards`
   const {
     data: tags,
     error,
     mutate,
   } = useSWR<TagData[]>(
-    ready && token ? [url, token, reconnections] : null,
-    ([url, token]: [string, string, number]) =>
+    ready && token ? [url, token] : null,
+    ([url, token]: [string, string]) =>
       fetcher(url, {
         headers: { Authorization: `Bearer ${token}` },
       }),
     {
-      fallbackData: reconnections === 0 ? initialData : undefined,
+      fallbackData: initialDataValid ? initialData : undefined,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }
   )
 
   useEffect(() => {
-    if (plantReady === false) setReconnections((value) => value + 1)
-  }, [plantReady])
+    readyRef.current = ready
+    if (plantReady === false || cardsConnected === false) {
+      setInitialDataValid(false)
+      unload({ revalidate: false })
+    }
+  }, [plantReady, cardsConnected, ready, unload])
 
   useEffect(() => {
     setCardsConnected(null)
@@ -105,10 +113,11 @@ function TagsContent({
       {
         onOpen: () => setCardsConnected(true),
         onClose: () => {
+          readyRef.current = false
           setCardsConnected(false)
-          setReconnections((value) => value + 1)
         },
         onMessage: (event) => {
+          if (!readyRef.current) return
           // Live updates replace the snapshot without starting another HTTP read.
           void mutate(JSON.parse(event.data), { revalidate: false })
         },

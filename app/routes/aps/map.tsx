@@ -1,8 +1,15 @@
 import { requireAps } from "~/lib/authorization.server"
 import { EyeIcon } from "lucide-react"
-import { lazy, Suspense, useEffect, useState, type ComponentProps } from "react"
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentProps,
+} from "react"
 import { useOutletContext } from "react-router"
-import useSWR from "swr"
+import useSWR, { useSWRConfig } from "swr"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -17,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { CardWrapper } from "~/components/card-wrapper"
 import { EditStallDialogProvider } from "~/components/map-edit"
 import { NoDataAlert } from "~/components/no-data-alert"
+import { PageDataCache } from "~/components/page-data-cache"
 import { Occupancy } from "~/components/occupancy-chart"
 import type { MapProps } from "~/components/maps/types"
 import { connectReconnectingWebSocket } from "~/hooks/use-ws"
@@ -96,12 +104,13 @@ export default function Map({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData.data || !hasMapComponent(params.aps)) return <NoDataAlert />
 
   return (
-    <MapContent
-      key={params.aps}
-      aps={params.aps}
-      initialData={loaderData.data}
-      token={loaderData.token}
-    />
+    <PageDataCache key={`${params.aps}:${loaderData.token}`}>
+      <MapContent
+        aps={params.aps}
+        initialData={loaderData.data}
+        token={loaderData.token}
+      />
+    </PageDataCache>
   )
 }
 
@@ -116,25 +125,31 @@ function MapContent({
 }) {
   const { plantReady } = useOutletContext<{ plantReady: boolean | null }>()
   const [mapConnected, setMapConnected] = useState<boolean | null>(null)
-  const [reconnections, setReconnections] = useState(0)
+  const [initialDataValid, setInitialDataValid] = useState(true)
+  const { unload } = useSWRConfig()
   const ready = plantReady === true && mapConnected === true
+  const readyRef = useRef(ready)
   const url = `${import.meta.env.VITE_BACKEND_URL}/${aps}/map`
   const { data, error, mutate } = useSWR<MapData>(
-    ready && token ? [url, token, reconnections] : null,
-    ([url, token]: [string, string, number]) =>
+    ready && token ? [url, token] : null,
+    ([url, token]: [string, string]) =>
       fetcher(url, {
         headers: { Authorization: `Bearer ${token}` },
       }),
     {
-      fallbackData: reconnections === 0 ? initialData : undefined,
+      fallbackData: initialDataValid ? initialData : undefined,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }
   )
 
   useEffect(() => {
-    if (plantReady === false) setReconnections((value) => value + 1)
-  }, [plantReady])
+    readyRef.current = ready
+    if (plantReady === false || mapConnected === false) {
+      setInitialDataValid(false)
+      unload({ revalidate: false })
+    }
+  }, [plantReady, mapConnected, ready, unload])
 
   useEffect(() => {
     setMapConnected(null)
@@ -143,10 +158,11 @@ function MapContent({
       {
         onOpen: () => setMapConnected(true),
         onClose: () => {
+          readyRef.current = false
           setMapConnected(false)
-          setReconnections((value) => value + 1)
         },
         onMessage: (event) => {
+          if (!readyRef.current) return
           // Live updates replace the snapshot without starting another HTTP read.
           void mutate(JSON.parse(event.data), { revalidate: false })
         },
