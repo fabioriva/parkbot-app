@@ -12,13 +12,13 @@ import {
 } from "~/components/ui/dropdown-menu"
 import { locales, getLocale, setLocale } from "@paraglide/runtime.js"
 
-export function LocaleToggle() {
+export function LocaleToggle({ label = "Language" }: { label?: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant="ghost" size="icon">
-            <Languages />
+          <Button variant="ghost" size="icon" aria-label={label}>
+            <Languages aria-hidden="true" />
           </Button>
         }
       />

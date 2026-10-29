@@ -41,7 +41,7 @@ export default function EmailVerification({
         <CardTitle>{m.email_verification_card_title()}</CardTitle>
         <CardDescription>
           {m.email_verification_card_description()}{" "}
-          <span className="text-blue-500">{loaderData?.email}</span>
+          <span className="text-primary">{loaderData?.email}</span>
         </CardDescription>
       </CardHeader>
       <CardContent>

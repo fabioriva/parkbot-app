@@ -1,0 +1,418 @@
+.welcome-page {
+  min-height: 100svh;
+  color: var(--parkbot-ink);
+  background: var(--parkbot-bg);
+}
+.welcome-container {
+  width: min(1200px, calc(100% - 96px));
+  margin-inline: auto;
+}
+.welcome-page a:focus-visible {
+  outline: 2px solid var(--parkbot-accent);
+  outline-offset: 6px;
+}
+.welcome-skip {
+  position: absolute;
+  top: -100px;
+  left: 24px;
+  z-index: 10;
+  padding: 12px;
+  background: var(--parkbot-bg);
+}
+.welcome-skip:focus {
+  top: 12px;
+}
+.welcome-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 108px;
+  border-bottom: 1px solid var(--parkbot-line);
+}
+.welcome-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -1.5px;
+}
+.welcome-brand-icon {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  border: 1px solid var(--parkbot-line);
+  border-radius: 12px;
+}
+.welcome-brand-dot {
+  color: var(--parkbot-accent);
+}
+.welcome-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.welcome-controls button:hover {
+  background: var(--parkbot-panel);
+  color: var(--parkbot-ink);
+}
+.welcome-control-divider {
+  height: 20px;
+  width: 1px;
+  background: var(--parkbot-line);
+  margin-inline: 12px;
+}
+.welcome-header-login {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.welcome-header-login:hover,
+.welcome-explore:hover {
+  color: var(--parkbot-accent);
+}
+.welcome-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  padding-block: 86px 80px;
+}
+.welcome-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1.7px;
+  line-height: 1.8;
+  margin-bottom: 26px;
+}
+.welcome-eyebrow > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--parkbot-accent);
+  flex-shrink: 0;
+}
+.welcome-copy h1 {
+  font-size: clamp(38px, 4.4vw, 61px);
+  font-weight: 550;
+  line-height: 1.1;
+  letter-spacing: -3px;
+}
+.welcome-copy h1 > span {
+  color: var(--parkbot-accent);
+}
+.welcome-description {
+  max-width: 410px;
+  color: var(--parkbot-muted);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-top: 25px;
+}
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  margin-top: 32px;
+}
+.welcome-page .welcome-primary {
+  height: 50px;
+  padding-inline: 22px;
+  gap: 20px;
+  border-radius: 7px;
+  background: var(--parkbot-ink);
+  color: var(--parkbot-bg);
+  font-size: 13px;
+  box-shadow: 0 4px 12px #00000010;
+}
+.welcome-page .welcome-primary:hover {
+  background: var(--parkbot-accent);
+  color: var(--parkbot-bg);
+}
+.welcome-primary svg {
+  transition: transform 0.2s;
+}
+.welcome-primary:hover svg {
+  transform: translateX(3px);
+}
+.welcome-explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 550;
+}
+.welcome-byline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 400px;
+  font-size: 11px;
+  color: var(--parkbot-muted);
+  line-height: 1.7;
+  margin-top: 35px;
+}
+.welcome-byline > span {
+  width: 20px;
+  height: 1px;
+  background: var(--parkbot-accent);
+  flex-shrink: 0;
+}
+.welcome-visual {
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--parkbot-line);
+  border-radius: 12px;
+  background: var(--parkbot-panel);
+  color: var(--parkbot-accent);
+}
+.welcome-visual-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 23px 25px 0;
+  font: 9px/1.5 monospace;
+  letter-spacing: 1.5px;
+}
+.welcome-visual-heading > span:last-child {
+  font: 22px/1 sans-serif;
+}
+.parking-illustration {
+  width: 100%;
+  height: auto;
+}
+.parking-slab {
+  fill: var(--parkbot-panel);
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.parking-platform {
+  fill: var(--parkbot-bg);
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.parking-shuttle {
+  animation: parking-transfer 9s ease-in-out infinite;
+}
+.welcome-visual figcaption {
+  position: relative;
+  margin: -14px 25px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.welcome-visual figcaption strong {
+  font-size: 17px;
+  font-weight: 550;
+  color: var(--parkbot-ink);
+  letter-spacing: -0.4px;
+}
+.welcome-visual figcaption span {
+  font-size: 11px;
+  color: var(--parkbot-muted);
+}
+.welcome-features {
+  border-top: 1px solid var(--parkbot-line);
+  padding-block: 30px 54px;
+  scroll-margin-top: 30px;
+}
+.welcome-section-heading {
+  display: flex;
+  gap: 26px;
+  align-items: baseline;
+  margin-bottom: 28px;
+}
+.welcome-section-number {
+  font: 10px monospace;
+  color: var(--parkbot-accent);
+  white-space: nowrap;
+}
+.welcome-section-heading h2 {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+}
+.welcome-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.welcome-feature {
+  padding-inline: 30px;
+  border-left: 1px solid var(--parkbot-line);
+}
+.welcome-feature:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.welcome-feature:last-child {
+  padding-right: 0;
+}
+.welcome-feature-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--parkbot-accent);
+  margin-bottom: 21px;
+}
+.welcome-feature-top span {
+  font: 10px monospace;
+  color: var(--parkbot-muted);
+}
+.welcome-feature h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 9px;
+  letter-spacing: -0.3px;
+}
+.welcome-feature p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--parkbot-muted);
+  max-width: 310px;
+}
+.welcome-footer {
+  border-top: 1px solid var(--parkbot-line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-block: 23px;
+  font-size: 11px;
+  color: var(--parkbot-muted);
+}
+.welcome-footer p,
+.welcome-footer a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.welcome-footer a {
+  color: var(--parkbot-ink);
+}
+.welcome-footer a:hover {
+  text-decoration: underline;
+}
+@keyframes parking-transfer {
+  0%,
+  20%,
+  100% {
+    transform: translateX(0);
+  }
+  45%,
+  65% {
+    transform: translateX(72px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .parking-shuttle {
+    animation: none;
+  }
+  .welcome-primary svg {
+    transition: none;
+  }
+}
+@media (min-width: 1500px) {
+  .welcome-hero {
+    padding-block: 110px;
+  }
+}
+@media (max-width: 1050px) {
+  .welcome-container {
+    width: calc(100% - 64px);
+  }
+  .welcome-hero {
+    gap: 28px;
+    padding-block: 60px;
+  }
+  .welcome-copy h1 {
+    letter-spacing: -2px;
+  }
+  .welcome-actions {
+    gap: 18px;
+  }
+}
+@media (max-width: 760px) {
+  .welcome-container {
+    width: calc(100% - 40px);
+  }
+  .welcome-header {
+    min-height: 82px;
+  }
+  .welcome-brand {
+    font-size: 25px;
+  }
+  .welcome-control-divider {
+    margin-inline: 4px;
+  }
+  .welcome-header-login {
+    gap: 5px;
+  }
+  .welcome-hero {
+    grid-template-columns: 1fr;
+    padding-block: 48px 40px;
+    gap: 36px;
+  }
+  .welcome-copy h1 {
+    font-size: clamp(38px, 8vw, 58px);
+  }
+  .welcome-description {
+    max-width: 460px;
+  }
+  .welcome-eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.1px;
+    margin-bottom: 22px;
+  }
+  .welcome-visual {
+    width: 100%;
+    max-width: 520px;
+    justify-self: center;
+  }
+  .welcome-byline {
+    margin-top: 26px;
+  }
+  .welcome-feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .welcome-feature,
+  .welcome-feature:first-child,
+  .welcome-feature:last-child {
+    padding: 24px 0;
+    border-left: 0;
+    border-top: 1px solid var(--parkbot-line);
+  }
+  .welcome-feature-top {
+    margin-bottom: 14px;
+  }
+  .welcome-feature p {
+    max-width: 100%;
+  }
+  .welcome-section-heading {
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 6px;
+  }
+  .welcome-section-number {
+    padding-top: 6px;
+  }
+  .welcome-features {
+    padding-bottom: 16px;
+  }
+  .welcome-footer {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .welcome-header-login,
+  .welcome-control-divider {
+    display: none;
+  }
+}

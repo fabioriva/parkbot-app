@@ -1,0 +1,9 @@
+.welcome-page,
+.auth-page {
+  --parkbot-bg: var(--background);
+  --parkbot-ink: var(--foreground);
+  --parkbot-muted: var(--muted-foreground);
+  --parkbot-accent: var(--primary);
+  --parkbot-line: var(--border);
+  --parkbot-panel: var(--muted);
+}

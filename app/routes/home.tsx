@@ -1,25 +1,15 @@
 import { Welcome } from "../welcome/welcome"
+import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/home"
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Parkbot App" },
-    { name: "Parkbot", content: "Parkbot Web Service" },
+    { title: "Parkbot · Sotefin" },
+    { name: "description", content: m.welcome_text() },
   ]
 }
 
-function generateRandomString(length: number) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-  let result = ""
-  const charactersLength = characters.length
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  return result
-}
-
 export default function Home({}: Route.ComponentProps) {
-  return <Welcome seed={generateRandomString(8)} />
+  return <Welcome />
 }
