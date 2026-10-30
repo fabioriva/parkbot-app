@@ -3,7 +3,6 @@ import { data, Outlet } from "react-router"
 import { Badge } from "~/components/ui/badge"
 import {
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -34,6 +33,7 @@ import { isValidTimeZone } from "~/lib/date-time"
 import { Error as ErrorAlert } from "~/components/error-alert"
 import { m } from "@paraglide/messages.js"
 import type { Route } from "./+types/layout"
+import "./aps.css"
 
 export function headers({ loaderHeaders }: Route.HeadersArgs) {
   return loaderHeaders
@@ -123,37 +123,47 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
         }
       >
         <AppSidebar aps={aps.name} pathname={pathname} user={user} />
-        <SidebarInset>
-          <header className="flex h-16 items-center px-4">
-            <div className="flex h-6 grow items-center gap-1.5">
-              <SidebarTrigger className="-ml-1.5" />
-              <Separator className="mr-2.5" orientation="vertical" />
-              <Breadcrumb className="grow">
-                <BreadcrumbList>
+        <SidebarInset className="aps-inset">
+          <header className="aps-header">
+            <div className="aps-header-location">
+              <SidebarTrigger className="shrink-0" />
+              <Separator className="h-5!" orientation="vertical" />
+              <Breadcrumb className="min-w-0">
+                <BreadcrumbList className="flex-nowrap">
                   <BreadcrumbItem className="hidden lg:block">
-                    <BreadcrumbLink href="/aps-select">
+                    <BreadcrumbLink
+                      className="aps-plant-link"
+                      href="/aps-select"
+                      title={aps.name}
+                    >
                       {aps.name}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden lg:block" />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage className="w-16 truncate capitalize lg:w-full">
+                  <BreadcrumbItem className="min-w-0">
+                    <BreadcrumbPage className="truncate font-medium capitalize">
                       {safeMessageT("sidebar_main", route)}
                     </BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              {connectionMessage ? (
-                <Badge variant="destructive">{connectionMessage}</Badge>
-              ) : (
-                <React.Fragment>
-                  <AlarmInfo active={diag || 0} />
-                  <ParkInfo occupancy={map} user={user} />
-                  <CommInfo status={comm} user={user} />
-                </React.Fragment>
-              )}
-              <Separator orientation="vertical" />
-              <LocaleToggle />
+            </div>
+            <div className="aps-header-tools">
+              <div className="aps-header-status">
+                {connectionMessage ? (
+                  <Badge className="aps-connection-badge" variant="destructive">
+                    {connectionMessage}
+                  </Badge>
+                ) : (
+                  <React.Fragment>
+                    <AlarmInfo active={diag || 0} />
+                    <ParkInfo occupancy={map} user={user} />
+                    <CommInfo status={comm} user={user} />
+                  </React.Fragment>
+                )}
+              </div>
+              <Separator className="h-5!" orientation="vertical" />
+              <LocaleToggle label={m.auth_language()} />
               <ModeToggle />
             </div>
           </header>
