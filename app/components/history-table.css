@@ -1,0 +1,102 @@
+.history-table th,
+.history-table td {
+  padding-inline: 12px;
+}
+
+.history-table td {
+  padding-block: 6px;
+}
+
+.history-table th {
+  background: color-mix(in oklch, var(--muted) 50%, var(--card));
+  color: var(--muted-foreground);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.history-table-date-cell {
+  width: 1%;
+}
+
+.history-table-timestamp {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.history-table-time {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.history-table-offset,
+.history-table-date {
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.history-table-device {
+  min-width: 8rem;
+  max-width: 16rem;
+  font-weight: 600;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.history-table-mode {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  white-space: normal;
+}
+
+.history-table-operation {
+  min-width: 14rem;
+  white-space: normal;
+}
+
+.history-table-event {
+  height: auto;
+  min-height: 24px;
+  max-width: 100%;
+  border-radius: 6px;
+  padding-block: 3px;
+  text-align: left;
+  white-space: normal;
+}
+
+.history-table-event > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.history-table-number {
+  width: 1%;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.history-table td.history-table-number {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.history-table-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+}
+
+.history-table-pagination {
+  width: auto;
+  margin: 0;
+  justify-content: flex-end;
+}
