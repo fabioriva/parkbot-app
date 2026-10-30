@@ -276,28 +276,6 @@
   color: var(--parkbot-muted);
   max-width: 310px;
 }
-.welcome-footer {
-  border-top: 1px solid var(--parkbot-line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  padding-block: 23px;
-  font-size: 11px;
-  color: var(--parkbot-muted);
-}
-.welcome-footer p,
-.welcome-footer a {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.welcome-footer a {
-  color: var(--parkbot-ink);
-}
-.welcome-footer a:hover {
-  text-decoration: underline;
-}
 @keyframes parking-transfer {
   0%,
   20%,
@@ -403,10 +381,6 @@
   }
   .welcome-features {
     padding-bottom: 16px;
-  }
-  .welcome-footer {
-    flex-wrap: wrap;
-    gap: 12px;
   }
 }
 

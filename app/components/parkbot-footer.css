@@ -1,0 +1,41 @@
+.parkbot-footer {
+  width: min(1200px, calc(100% - 96px));
+  margin-inline: auto;
+  border-top: 1px solid var(--parkbot-line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-block: 23px;
+  font-size: 11px;
+  color: var(--parkbot-muted);
+}
+
+.parkbot-footer p,
+.parkbot-footer a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.parkbot-footer a {
+  color: var(--parkbot-ink);
+}
+
+.parkbot-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1050px) {
+  .parkbot-footer {
+    width: calc(100% - 64px);
+  }
+}
+
+@media (max-width: 760px) {
+  .parkbot-footer {
+    width: calc(100% - 40px);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}

@@ -10,6 +10,7 @@ import { Link } from "react-router"
 import { Button } from "~/components/ui/button"
 import { LocaleToggle } from "~/components/locale-toggle"
 import { ModeToggle } from "~/components/mode-toggle"
+import { ParkbotFooter } from "~/components/parkbot-footer"
 import { m } from "@paraglide/messages.js"
 import "./welcome.css"
 
@@ -267,15 +268,7 @@ export function Welcome() {
           </div>
         </section>
       </main>
-      <footer className="welcome-footer welcome-container">
-        <p>
-          Parkbot © {new Date().getFullYear()}{" "}
-          <a href="https://www.sotefin.com/">
-            Sotefin SA <ArrowRight size={13} aria-hidden="true" />
-          </a>
-        </p>
-        <span>{m.welcome_service()}</span>
-      </footer>
+      <ParkbotFooter />
     </div>
   )
 }

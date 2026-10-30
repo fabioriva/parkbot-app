@@ -2,6 +2,7 @@ import { Bot } from "lucide-react"
 import { Link, Outlet } from "react-router"
 import { LocaleToggle } from "~/components/locale-toggle"
 import { ModeToggle } from "~/components/mode-toggle"
+import { ParkbotFooter } from "~/components/parkbot-footer"
 import { m } from "@paraglide/messages.js"
 import "./auth.css"
 
@@ -33,11 +34,7 @@ export default function Auth() {
           </p>
         </div>
       </main>
-      <footer className="auth-footer">
-        <span>Parkbot © {new Date().getFullYear()}</span>
-        <span aria-hidden="true">·</span>
-        <a href="https://www.sotefin.com/">Sotefin SA</a>
-      </footer>
+      <ParkbotFooter />
     </div>
   )
 }

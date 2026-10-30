@@ -123,21 +123,6 @@
   min-height: 44px;
 }
 
-.auth-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 0 20px 24px;
-  color: var(--muted-foreground);
-  font-size: 11px;
-}
-
-.auth-footer a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 @media (max-width: 480px) {
   .auth-header {
     width: calc(100% - 40px);
