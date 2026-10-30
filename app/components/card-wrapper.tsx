@@ -1,4 +1,5 @@
 import * as React from "react"
+import { cn } from "~/lib/utils"
 import {
   Card,
   CardAction,
@@ -8,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card"
+import "./card-wrapper.css"
 
 interface CardWrapperProps {
   action?: React.ReactNode
@@ -27,16 +29,30 @@ export const CardWrapper: React.FC<CardWrapperProps> = ({
   title,
 }) => {
   return (
-    <Card className={className} size="sm">
-      {(title || description) && (
-        <CardHeader>
-          {title && <CardTitle>{title}</CardTitle>}
-          {description && <CardDescription>{description}</CardDescription>}
-          {action && <CardAction>{action}</CardAction>}
+    <Card className={cn("card-wrapper", className)} size="sm">
+      {(title || description || action) && (
+        <CardHeader className="card-wrapper-header">
+          {(title || description) && (
+            <div className="card-wrapper-heading">
+              {title && (
+                <CardTitle className="card-wrapper-title">{title}</CardTitle>
+              )}
+              {description && (
+                <CardDescription className="card-wrapper-description">
+                  {description}
+                </CardDescription>
+              )}
+            </div>
+          )}
+          {action && (
+            <CardAction className="card-wrapper-action">{action}</CardAction>
+          )}
         </CardHeader>
       )}
-      <CardContent>{children}</CardContent>
-      {footer && <CardFooter>{footer}</CardFooter>}
+      <CardContent className="card-wrapper-content">{children}</CardContent>
+      {footer && (
+        <CardFooter className="card-wrapper-footer">{footer}</CardFooter>
+      )}
     </Card>
   )
 }
