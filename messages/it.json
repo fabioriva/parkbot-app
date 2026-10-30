@@ -757,5 +757,7 @@
   "io_tooltip_status": "Stato",
   "io_tooltip_unavailable": "Dato non disponibile",
   "io_tooltip_no_description": "Descrizione non disponibile",
-  "io_tooltip_trigger": "{label}, stato: {status}"
+  "io_tooltip_trigger": "{label}, stato: {status}",
+  "park_info_map_label": "Vetture parcheggiate: {count}. Apri la mappa",
+  "park_info_unavailable": "Occupazione non disponibile. Apri la mappa"
 }

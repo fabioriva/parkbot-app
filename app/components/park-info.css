@@ -1,0 +1,68 @@
+.park-info-tooltip {
+  width: 240px;
+  max-width: calc(100vw - 24px);
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.park-info-body {
+  min-width: 0;
+  width: 100%;
+}
+
+.park-info-title {
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.park-info-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 3px;
+}
+
+.park-info-row dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.park-info-row dd {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.park-info-dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.park-info-row[data-occupancy="busy"] .park-info-dot {
+  background: var(--chart-5);
+}
+
+.park-info-row[data-occupancy="free"] .park-info-dot {
+  background: var(--chart-2);
+}
+
+.park-info-row[data-occupancy="lock"] .park-info-dot {
+  background: var(--chart-4);
+}
+
+.park-info-total {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid currentColor;
+  border-top-color: color-mix(in oklch, currentColor 20%, transparent);
+  font-weight: 600;
+}

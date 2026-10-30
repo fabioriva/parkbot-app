@@ -1,4 +1,4 @@
-import { User as Car } from "lucide-react"
+import { CarFront } from "lucide-react"
 import { Badge } from "~/components/ui/badge"
 import {
   Tooltip,
@@ -7,6 +7,7 @@ import {
 } from "~/components/ui/tooltip"
 import { safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
+import "./park-info.css"
 
 interface OccupancyItem {
   id: string
@@ -14,17 +15,28 @@ interface OccupancyItem {
 }
 
 interface OccupancyInfoProps {
-  occupancy: OccupancyItem[]
+  occupancy?: OccupancyItem[] | null
   user: {
     aps: string
   }
 }
 
 export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
-  const [busy, ,] = occupancy
-  const cars = busy && busy.value > 0 ? true : false
-  const total = (arr: OccupancyItem[]) =>
-    arr.reduce((acc, curr) => acc + curr.value, 0)
+  const rows = ["busy", "free", "lock"].map((id) => {
+    const value = occupancy?.find((item) => item.id === id)?.value
+    return {
+      id,
+      value:
+        typeof value === "number" && Number.isSafeInteger(value) && value >= 0
+          ? value
+          : null,
+    }
+  })
+  const busy = rows[0].value
+  const total = rows.every((item) => item.value !== null)
+    ? rows.reduce((sum, item) => sum + item.value!, 0)
+    : null
+
   return (
     <Tooltip>
       <TooltipTrigger
@@ -32,41 +44,51 @@ export function ParkInfo({ occupancy, user }: OccupancyInfoProps) {
           <Badge
             variant="outline"
             render={
-              <a href={`/aps/${user.aps}/map`}>
+              <a
+                href={`/aps/${user.aps}/map`}
+                aria-label={
+                  busy === null
+                    ? m.park_info_unavailable()
+                    : m.park_info_map_label({ count: busy })
+                }
+              >
                 <span className="hidden sm:block">{m.occupancy_parked()}</span>
-                <Car
+                <CarFront
                   className="block sm:hidden"
                   data-icon="inline-start"
-                />{" "}
-                {busy.value}
+                  aria-hidden="true"
+                />
+                <span className="font-mono font-semibold tabular-nums">
+                  {busy ?? "—"}
+                </span>
               </a>
             }
           />
         }
       />
-
-      <TooltipContent className="flex flex-col">
-        <table className="m-0 p-0">
-          <thead>
-            <tr>
-              <th>{m.occupancy_title()}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {occupancy.map((item, key) => (
-              <tr className="capitalize" key={key}>
-                <td>{safeMessageT("occupancy", item.id)}</td>
-                <td className="w-16 text-right">{item.value}</td>
-              </tr>
+      <TooltipContent className="park-info-tooltip">
+        <div className="park-info-body">
+          <p className="park-info-title">{m.occupancy_title()}</p>
+          <dl>
+            {rows.map((item) => (
+              <div
+                className="park-info-row"
+                data-occupancy={item.id}
+                key={item.id}
+              >
+                <dt>
+                  <span className="park-info-dot" aria-hidden="true" />
+                  {safeMessageT("occupancy", item.id)}
+                </dt>
+                <dd>{item.value ?? "—"}</dd>
+              </div>
             ))}
-          </tbody>
-          <tfoot>
-            <tr className="capitalize">
-              <td>{m.occupancy_total()}</td>
-              <td className="w-16 text-right">{total(occupancy)}</td>
-            </tr>
-          </tfoot>
-        </table>
+            <div className="park-info-row park-info-total">
+              <dt>{m.occupancy_total()}</dt>
+              <dd>{total ?? "—"}</dd>
+            </div>
+          </dl>
+        </div>
       </TooltipContent>
     </Tooltip>
   )

@@ -757,5 +757,7 @@
   "io_tooltip_status": "Status",
   "io_tooltip_unavailable": "Data unavailable",
   "io_tooltip_no_description": "Description unavailable",
-  "io_tooltip_trigger": "{label}, status: {status}"
+  "io_tooltip_trigger": "{label}, status: {status}",
+  "park_info_map_label": "Parked cars: {count}. Open the map",
+  "park_info_unavailable": "Occupancy unavailable. Open the map"
 }
