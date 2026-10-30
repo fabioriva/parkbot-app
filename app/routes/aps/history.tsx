@@ -253,7 +253,7 @@ function HistoryResults({
         )}
       </div>
       {/* Table */}
-      <div className="hidden max-w-6xl lg:block">
+      <div className="hidden w-full lg:block">
         <Item className="mb-3" variant="outline">
           <ItemContent>
             <ItemTitle>{m.history_title()}</ItemTitle>
