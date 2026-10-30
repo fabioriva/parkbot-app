@@ -4,6 +4,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip"
+import { m } from "@paraglide/messages.js"
+import "./comm-info.css"
 
 interface CommInfoProps {
   status: boolean
@@ -13,22 +15,38 @@ interface CommInfoProps {
 }
 
 export function CommInfo({ status, user }: CommInfoProps) {
+  const statusText = status ? m.comm_info_online() : m.comm_info_offline()
   return (
-    <Badge
-      className={
-        status
-          ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
-          : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
-      }
-    >
-      <Tooltip>
-        <TooltipTrigger render={<a href={`/aps/${user.aps}/racks`}>PLC </a>} />
-        {/* <a href={`/aps/${user.aps}/racks`}>PLC </a>
-        </TooltipTrigger> */}
-        <TooltipContent>
-          <p>{status ? "PLC is online" : "PLC is offline"}</p>
-        </TooltipContent>
-      </Tooltip>
-    </Badge>
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Badge
+            variant="outline"
+            className="comm-info-badge"
+            data-online={status}
+            render={
+              <a
+                href={`/aps/${user.aps}/racks`}
+                aria-label={m.comm_info_link_label({ status: statusText })}
+              >
+                <span className="comm-info-dot" aria-hidden="true" />
+                PLC
+              </a>
+            }
+          />
+        }
+      />
+      <TooltipContent className="comm-info-tooltip">
+        <div className="comm-info-body">
+          <div className="comm-info-heading">
+            <span className="comm-info-title">{m.comm_info_title()}</span>
+            <span className="comm-info-status" data-online={status}>
+              {statusText}
+            </span>
+          </div>
+          <p className="comm-info-hint">{m.comm_info_hint()}</p>
+        </div>
+      </TooltipContent>
+    </Tooltip>
   )
 }

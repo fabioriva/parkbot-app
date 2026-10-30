@@ -759,5 +759,10 @@
   "io_tooltip_no_description": "Descrizione non disponibile",
   "io_tooltip_trigger": "{label}, stato: {status}",
   "park_info_map_label": "Vetture parcheggiate: {count}. Apri la mappa",
-  "park_info_unavailable": "Occupazione non disponibile. Apri la mappa"
+  "park_info_unavailable": "Occupazione non disponibile. Apri la mappa",
+  "comm_info_title": "Connessione PLC",
+  "comm_info_online": "Online",
+  "comm_info_offline": "Offline",
+  "comm_info_hint": "Apri la diagnostica I/O dell’impianto",
+  "comm_info_link_label": "PLC {status}. Apri la diagnostica I/O"
 }

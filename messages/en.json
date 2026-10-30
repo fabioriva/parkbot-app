@@ -759,5 +759,10 @@
   "io_tooltip_no_description": "Description unavailable",
   "io_tooltip_trigger": "{label}, status: {status}",
   "park_info_map_label": "Parked cars: {count}. Open the map",
-  "park_info_unavailable": "Occupancy unavailable. Open the map"
+  "park_info_unavailable": "Occupancy unavailable. Open the map",
+  "comm_info_title": "PLC connection",
+  "comm_info_online": "Online",
+  "comm_info_offline": "Offline",
+  "comm_info_hint": "Open the system I/O diagnostics",
+  "comm_info_link_label": "PLC {status}. Open I/O diagnostics"
 }
