@@ -12,14 +12,15 @@ interface MotionProps {
 
 export function Motion({ motor }: MotionProps) {
   const id = motor.name.query?.id !== 0 ? motor.name.query?.id : ""
-  const isRunning = motor.run.status
+  const isRunning = Boolean(motor.run.status)
   return (
     <>
       <AccordionTrigger className="flex items-center gap-1.5 py-1.5 hover:no-underline">
-        <div className="grow">
+        <div className="device-detail-name grow">
           {safeMessageT("device", motor.name.key, { id })}
         </div>
         <Badge
+          data-device-motor-state=""
           className={
             isRunning
               ? "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
@@ -27,7 +28,7 @@ export function Motion({ motor }: MotionProps) {
           }
           variant="ghost"
         >
-          {isRunning !== 0 && <Loader className="animate-spin" />}
+          {isRunning && <Loader className="animate-spin" aria-hidden="true" />}
           {safeMessageT("device", motor.message)}
         </Badge>
       </AccordionTrigger>
@@ -39,7 +40,7 @@ export function Motion({ motor }: MotionProps) {
             ))}
         </div>
 
-        <div className="flex max-w-xs gap-1 overflow-auto sm:max-w-none">
+        <div className="device-io-list">
           {motor.io.map((item, key) => (
             <IoTooltip io={item} key={key}>
               <Badge

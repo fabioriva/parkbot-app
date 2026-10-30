@@ -27,6 +27,7 @@ import { formatPlantDateTime } from "~/lib/date-time"
 import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
 import { m } from "@paraglide/messages.js"
 import { clsx } from "cn"
+import "./device-advanced.css"
 
 interface DeviceBit {
   addr: string
@@ -152,7 +153,6 @@ export function Device({
 }: DeviceProps) {
   const timeZone = usePlantTimeZone()
   const { user } = useOutletContext<{ user: { role: string } }>()
-  // console.log(device);
   const params = useParams()
   const [LS, LC, LA] = device.c
   const action = (
@@ -167,61 +167,68 @@ export function Device({
       )}
     </div>
   )
-  const actions = (
-    <div className={`grid grid-cols-${device.d.length} w-full gap-3`}>
-      {device.d.map((action, key) => {
-        switch (action.key) {
-          case "action-entry":
-            if (!can(user.role, "entry")) return null
-            return <ActionEntry action={action} disabled={disabled} key={key} />
-          case "action-rollback":
-            return (
-              <ActionRollback
-                action={action}
-                card={device.card}
-                disabled={disabled}
-                key={key}
-              />
-            )
-          case "action-pp":
-          case "action-pp-reset":
-            if (!can(user.role, "pp")) return null
-            return <ActionPP action={action} disabled={disabled} key={key} />
-        }
-      })}
-    </div>
-  )
+  const commandButtons = device.d
+    .map((action, key) => {
+      switch (action.key) {
+        case "action-entry":
+          if (!can(user.role, "entry")) return null
+          return <ActionEntry action={action} disabled={disabled} key={key} />
+        case "action-rollback":
+          return (
+            <ActionRollback
+              action={action}
+              card={device.card}
+              disabled={disabled}
+              key={key}
+            />
+          )
+        case "action-pp":
+        case "action-pp-reset":
+          if (!can(user.role, "pp")) return null
+          return <ActionPP action={action} disabled={disabled} key={key} />
+      }
+    })
+    .filter(Boolean)
+  const actions =
+    commandButtons.length > 0 ? (
+      <div className="device-commands">{commandButtons}</div>
+    ) : undefined
   const bg = device.operation !== 0 ? "bg-blue-50 dark:bg-blue-950" : undefined
   const [tab, setTab] = useState("tab-0")
   useEffect(() => setTab(`tab-${device.motor}`), [device.motor])
 
   if (advanced) {
     return (
-      <Tabs value={tab} onValueChange={setTab}>
-        <TabsList>
-          {device?.views.map((item, key) => (
-            <TabsTrigger value={`tab-${key}`} key={key}>
-              {safeMessageT("device", item.name)}
+      <Tabs className="device-advanced" value={tab} onValueChange={setTab}>
+        <div className="device-tabs-scroll">
+          <TabsList className="device-tabs-list" aria-label={device.name}>
+            {device?.views.map((item, key) => (
+              <TabsTrigger value={`tab-${key}`} key={key}>
+                {safeMessageT("device", item.name)}
+              </TabsTrigger>
+            ))}
+            <TabsTrigger
+              value="diagnostic"
+              disabled={device.alarms.length === 0}
+            >
+              {safeMessageT("device", "view-diag")}{" "}
+              {device.alarms.length > 0 && (
+                <Badge variant="destructive">{device.alarms.length}</Badge>
+              )}
             </TabsTrigger>
-          ))}
-          <TabsTrigger value="diagnostic" disabled={device.alarms.length === 0}>
-            {safeMessageT("device", "view-diag")}{" "}
-            {device.alarms.length > 0 && (
-              <Badge variant="destructive">{device.alarms.length}</Badge>
-            )}
-          </TabsTrigger>
-        </TabsList>
+          </TabsList>
+        </div>
         {device.views.map((view, key) => (
           <TabsContent key={key} value={`tab-${key}`}>
             <CardWrapper
-              className={cn("", bg)}
+              className={cn("device-advanced-card", bg)}
               title={device.name}
               action={action}
               footer={actions}
             >
               <p
                 className={cn(
-                  "mb-1.5 font-bold",
+                  "device-summary",
                   device.operation !== 0
                     ? "text-normal"
                     : "text-muted-foreground"
@@ -231,14 +238,14 @@ export function Device({
               </p>
               {view.name === "view-garage" && <Garage sensors={view.sensors} />}
               {view.name === "view-sil" && <Silomat sensors={view.sensors} />}
-              <Accordion multiple>
+              <Accordion className="device-details" multiple>
                 {view.name === "view-garage" && (
                   <AccordionItem value="garage-sensors">
                     <AccordionTrigger className="flex items-center gap-1.5 py-1.5 hover:no-underline">
-                      Garage sensors
+                      {m.device_garage_sensors()}
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div className="flex max-w-xs gap-1 overflow-auto sm:max-w-none">
+                      <div className="device-io-list">
                         {view.sensors.slice(6).map((item, key) => (
                           <IoTooltip io={item} key={key}>
                             <Badge
@@ -273,16 +280,26 @@ export function Device({
         ))}
         <TabsContent value="diagnostic">
           <CardWrapper
-            className={bg}
+            className={cn("device-advanced-card", bg)}
             title={device.name}
             action={action}
             footer={actions}
           >
-            <div className="flex flex-col gap-1">
+            <div className="device-alarms">
               {device.alarms.map((alarm) => (
-                <Alert variant="destructive" key={alarm.id}>
-                  <AlertCircleIcon />
-                  <AlertTitle>
+                <Alert
+                  className="device-alarm"
+                  variant="destructive"
+                  key={alarm.id}
+                >
+                  <AlertCircleIcon aria-hidden="true" />
+                  <AlertTitle className="device-alarm-title">
+                    <span className="device-alarm-code">{`AL${alarm.id}`}</span>
+                    <span>
+                      {safeMessageT("alarm", alarm.key, { ...alarm.query })}
+                    </span>
+                  </AlertTitle>
+                  <AlertDescription className="device-alarm-date">
                     {/(?:Z|[+-]\d{2}:\d{2})$/i.test(alarm.date) ? (
                       timeZone ? (
                         formatPlantDateTime(
@@ -301,10 +318,6 @@ export function Device({
                         </span>
                       </>
                     )}
-                  </AlertTitle>
-                  <AlertDescription>
-                    {`AL${alarm.id}`}{" "}
-                    {safeMessageT("alarm", alarm.key, { ...alarm.query })}
                   </AlertDescription>
                 </Alert>
               ))}

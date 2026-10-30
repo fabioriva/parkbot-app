@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react"
+import { useEffect, useId, useReducer } from "react"
 import type { DeviceData } from "~/components/device"
 import { Field, FieldLabel } from "~/components/ui/field"
 import { Progress } from "~/components/ui/progress"
@@ -58,15 +58,16 @@ function reducer(state: PositionState, action: PositionAction): PositionState {
 }
 
 const Item = ({ title, value }: ItemProps) => (
-  <div className="flex flex-col">
+  <div className="device-metric flex flex-col">
     <span className="text-xs text-muted-foreground">{title}</span>
-    <span className="font-bold">{value}</span>
+    <span className="device-metric-value font-bold">{value}</span>
   </div>
 )
 
 export function Position({ encoder }: PositionProps) {
   const { destination, name, position } = encoder
   const [state, dispatch] = useReducer(reducer, initialState)
+  const progressLabelId = useId()
 
   useEffect(
     () => dispatch({ type: "start", destination, position }),
@@ -80,18 +81,19 @@ export function Position({ encoder }: PositionProps) {
   }, [position])
 
   return (
-    <div className="grid grid-cols-3 items-start">
+    <div className="device-position grid grid-cols-3 items-start">
       <Item title={name} value={position} />
       <Item title={m.device_pos_destination()} value={destination} />
       {/* <Item title={m.device_pos_progress()} value={`${Math.round(percent)} %`} /> */}
       <Field className="gap-1">
-        <FieldLabel htmlFor="progress">
+        <FieldLabel id={progressLabelId}>
           <span className="text-xs text-muted-foreground">
             {m.device_pos_progress()}
           </span>
           <span className="ml-auto font-bold">{state?.percent}%</span>
         </FieldLabel>
         <Progress
+          aria-labelledby={progressLabelId}
           className="*:data-[slot=progress-indicator]:bg-green-700"
           value={Math.round(state?.percent)}
           max={100}

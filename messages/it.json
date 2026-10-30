@@ -160,6 +160,7 @@
   "device.sil-pos-closed": "chiuso",
   "device.sil-pos-opened": "aperto",
   "device.view-diag": "Diagnostica",
+  "device_garage_sensors": "Sensori garage",
   "device.view-garage": "Garage",
   "device.view-main": "Principale",
   "device.view-sil": "Silomat",
