@@ -23,6 +23,7 @@ import { CommInfo } from "~/components/comm-info"
 import { ConfirmDialogProvider } from "~/components/confirm-dialog"
 import { LocaleToggle } from "~/components/locale-toggle"
 import { ParkInfo } from "~/components/park-info"
+import { ParkbotFooter } from "~/components/parkbot-footer"
 import { ModeToggle } from "~/components/mode-toggle"
 import { requireAps } from "~/lib/authorization.server"
 import { getCookie } from "~/lib/cookie.server"
@@ -167,7 +168,7 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
               <ModeToggle />
             </div>
           </header>
-          <div className="p-3">
+          <div className="flex-1 p-3">
             {!timeZone && route !== "history" && (
               <ErrorAlert
                 title={m.aps_field_time_zone()}
@@ -178,6 +179,7 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
               <Outlet context={outletContext} />
             </ConfirmDialogProvider>
           </div>
+          <ParkbotFooter />
         </SidebarInset>
       </SidebarProvider>
       <Toaster />

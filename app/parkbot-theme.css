@@ -1,5 +1,6 @@
 .welcome-page,
-.auth-page {
+.auth-page,
+.aps-inset {
   --parkbot-bg: var(--background);
   --parkbot-ink: var(--foreground);
   --parkbot-muted: var(--muted-foreground);
