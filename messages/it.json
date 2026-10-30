@@ -736,5 +736,10 @@
   "welcome_diagram_caption": "Precisione in movimento.",
   "welcome_diagram_note": "Dall’impianto alla tua interfaccia.",
   "welcome_service": "La tecnologia Sotefin, connessa.",
-  "auth_language": "Scegli la lingua"
+  "auth_language": "Scegli la lingua",
+  "racks_online": "Online",
+  "racks_offline": "Offline",
+  "racks_node_details": "PROFINET · Nodo {nr} · Tipo {type}",
+  "racks_view_io": "Visualizza I/O",
+  "racks_view_node": "Visualizza I/O di {name}"
 }

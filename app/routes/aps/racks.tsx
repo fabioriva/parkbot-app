@@ -1,8 +1,9 @@
 import { requireAps } from "~/lib/authorization.server"
-import { CircleCheck, CircleX } from "lucide-react"
+import { ArrowRight, CircleCheck, CircleX, Network } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, useOutletContext } from "react-router"
 import { Button } from "~/components/ui/button"
+import { Badge } from "~/components/ui/badge"
 import {
   Item,
   ItemActions,
@@ -83,26 +84,49 @@ function NodesContent({
   if (error || !racks) return <NoDataAlert />
 
   return (
-    <ItemGroup className="w-full gap-3 lg:max-w-sm">
+    <ItemGroup className="w-full gap-3 lg:max-w-xl">
       {racks.map((item) => (
-        <Item variant="outline" key={item.deviceNr}>
-          <ItemMedia variant="icon">
-            {item.online.status ? (
-              <CircleCheck className="stroke-green-500" />
-            ) : (
-              <CircleX className="stroke-red-500" />
-            )}
+        <Item
+          variant="outline"
+          className="gap-3 rounded-xl bg-card p-4 sm:flex-nowrap"
+          key={item.deviceNr}
+          role="listitem"
+        >
+          <ItemMedia
+            variant="icon"
+            className="size-9 rounded-lg border bg-muted/40 text-muted-foreground"
+          >
+            <Network aria-hidden="true" />
           </ItemMedia>
-          <ItemContent>
-            <ItemTitle>Profinet node {item.deviceName}</ItemTitle>
-            <ItemDescription>
-              Node {item.deviceNr} Type {item.type}
+          <ItemContent className="min-w-0 gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <ItemTitle className="line-clamp-none max-w-full font-semibold [overflow-wrap:anywhere]">
+                {item.deviceName}
+              </ItemTitle>
+              <Badge
+                className={
+                  item.online.status
+                    ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                    : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+                }
+              >
+                {item.online.status ? (
+                  <CircleCheck aria-hidden="true" />
+                ) : (
+                  <CircleX aria-hidden="true" />
+                )}
+                {item.online.status ? m.racks_online() : m.racks_offline()}
+              </Badge>
+            </div>
+            <ItemDescription className="line-clamp-none text-xs [overflow-wrap:anywhere]">
+              {m.racks_node_details({ nr: item.deviceNr, type: item.type })}
             </ItemDescription>
           </ItemContent>
-          <ItemActions>
+          <ItemActions className="w-full sm:w-auto">
             <Button
-              size="sm"
+              className="h-9 w-full gap-2 sm:w-auto"
               variant="outline"
+              aria-label={m.racks_view_node({ name: item.deviceName })}
               disabled={plantReady !== true || !item.rack}
               render={
                 item.rack ? (
@@ -112,7 +136,8 @@ function NodesContent({
                 ) : undefined
               }
             >
-              View
+              {m.racks_view_io()}
+              <ArrowRight aria-hidden="true" />
             </Button>
           </ItemActions>
         </Item>

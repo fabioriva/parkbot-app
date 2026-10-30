@@ -736,5 +736,10 @@
   "welcome_diagram_caption": "Precision in motion.",
   "welcome_diagram_note": "From your parking system to your screen.",
   "welcome_service": "Sotefin technology, connected.",
-  "auth_language": "Choose language"
+  "auth_language": "Choose language",
+  "racks_online": "Online",
+  "racks_offline": "Offline",
+  "racks_node_details": "PROFINET · Node {nr} · Type {type}",
+  "racks_view_io": "View I/O",
+  "racks_view_node": "View I/O for {name}"
 }
