@@ -226,7 +226,7 @@ function HistoryResults({
         <Item variant="outline">
           <ItemContent>
             <ItemTitle>{m.history_title()}</ItemTitle>
-            <ItemDescription>
+            <ItemDescription className="text-xs">
               {m.history_description({
                 from: selectedRange.from,
                 to: selectedRange.to,
@@ -257,7 +257,7 @@ function HistoryResults({
         <Item className="mb-3" variant="outline">
           <ItemContent>
             <ItemTitle>{m.history_title()}</ItemTitle>
-            <ItemDescription>
+            <ItemDescription className="text-xs">
               {m.history_description({
                 from: selectedRange.from,
                 to: selectedRange.to,
