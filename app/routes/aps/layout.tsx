@@ -127,7 +127,7 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
           <header className="aps-header">
             <div className="aps-header-location">
               <SidebarTrigger className="shrink-0" />
-              <Separator className="h-5!" orientation="vertical" />
+              <Separator orientation="vertical" />
               <Breadcrumb className="min-w-0">
                 <BreadcrumbList className="flex-nowrap">
                   <BreadcrumbItem className="hidden lg:block">
@@ -162,7 +162,7 @@ function ApsContent({ loaderData }: Pick<Route.ComponentProps, "loaderData">) {
                   </React.Fragment>
                 )}
               </div>
-              <Separator className="h-5!" orientation="vertical" />
+              <Separator orientation="vertical" />
               <LocaleToggle label={m.auth_language()} />
               <ModeToggle />
             </div>
