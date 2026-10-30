@@ -656,7 +656,7 @@
   "tags_edit_dialog_field_label": "Codice PIN",
   "tags_edit_dialog_field_description": "Inserici PIN, pattern: 3 digits, [a-fA-F0-9]}",
   "tags_edit_dialog_field_error": "PIN code not valid",
-  "tags_item_description_parked": "Parcheggito nel posto {nr}",
+  "tags_item_description_parked": "Parcheggiato nel posto {nr}",
   "tags_item_description_valid": "Valido per l'entrata",
   "tags_item_title": "Tag {nr} codice PIN {pin}",
   "two_factor_field_description": "Migliora la sicurezza della tua app con l'autenticazione a due fattori.",
@@ -741,5 +741,10 @@
   "racks_offline": "Offline",
   "racks_node_details": "PROFINET · Nodo {nr} · Tipo {type}",
   "racks_view_io": "Visualizza I/O",
-  "racks_view_node": "Visualizza I/O di {name}"
+  "racks_view_node": "Visualizza I/O di {name}",
+  "tags_item_name": "Tag {nr}",
+  "tags_edit_pin": "Modifica PIN",
+  "tags_edit_pin_label": "Modifica PIN del Tag {nr}",
+  "tags_search_placeholder": "Cerca per numero, PIN…",
+  "tags_all_loaded": "Tutte le tessere sono state caricate."
 }

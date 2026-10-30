@@ -741,5 +741,10 @@
   "racks_offline": "Offline",
   "racks_node_details": "PROFINET · Node {nr} · Type {type}",
   "racks_view_io": "View I/O",
-  "racks_view_node": "View I/O for {name}"
+  "racks_view_node": "View I/O for {name}",
+  "tags_item_name": "Tag {nr}",
+  "tags_edit_pin": "Edit PIN",
+  "tags_edit_pin_label": "Edit PIN for Tag {nr}",
+  "tags_search_placeholder": "Search by number, PIN…",
+  "tags_all_loaded": "All tags loaded."
 }

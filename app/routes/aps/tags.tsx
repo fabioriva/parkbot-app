@@ -1,9 +1,10 @@
 import { requireAps } from "~/lib/authorization.server"
-import { Tag as TagIcon } from "lucide-react"
+import { Pencil, Tag as TagIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useOutletContext } from "react-router"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Button } from "~/components/ui/button"
+import { Badge } from "~/components/ui/badge"
 import {
   Item,
   ItemActions,
@@ -216,7 +217,7 @@ function TagsList({
     !disabled && (user?.role === "admin" || user?.role === "service")
 
   return (
-    <div className="w-full space-y-3 lg:max-w-sm">
+    <div className="w-full space-y-3 lg:max-w-xl">
       {tag && (
         <EditTagDialog
           open={open}
@@ -227,7 +228,7 @@ function TagsList({
       )}
       <SearchInput
         search={search ?? []}
-        placeholder={"Search by number, pin..."}
+        placeholder={m.tags_search_placeholder()}
         handleSearch={handleSearch}
       />
       <InfiniteScroll
@@ -235,36 +236,61 @@ function TagsList({
         next={loadMore}
         hasMore={hasMore}
         loader={null}
-        endMessage={<p className="pt-6">All tags loaded.</p>}
+        endMessage={
+          <p className="pt-6 text-sm text-muted-foreground">
+            {m.tags_all_loaded()}
+          </p>
+        }
       >
-        <ItemGroup>
+        <ItemGroup className="gap-3">
           {visibleTags.map((tag) => (
-            <Item variant="outline" key={tag.nr}>
-              <ItemMedia variant="icon">
-                <TagIcon
-                  className={
-                    tag.status !== 0 ? "stroke-chart-1" : "stroke-chart-2"
-                  }
-                />
+            <Item
+              variant="outline"
+              className="gap-3 rounded-xl bg-card p-4 sm:flex-nowrap"
+              key={tag.nr}
+              role="listitem"
+            >
+              <ItemMedia
+                variant="icon"
+                className="size-9 rounded-lg border bg-muted/40 text-muted-foreground"
+              >
+                <TagIcon aria-hidden="true" />
               </ItemMedia>
-              <ItemContent>
-                <ItemTitle>
-                  {m.tags_item_title({ nr: tag.nr, pin: tag.code })}
-                </ItemTitle>
-                <ItemDescription>
-                  {tag.status === 0
-                    ? m.tags_item_description_valid()
-                    : m.tags_item_description_parked({ nr: tag.status })}
+              <ItemContent className="min-w-0 gap-1.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <ItemTitle className="line-clamp-none max-w-full font-semibold [overflow-wrap:anywhere]">
+                    {m.tags_item_name({ nr: tag.nr })}
+                  </ItemTitle>
+                  <Badge
+                    className={
+                      tag.status === 0
+                        ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+                        : "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+                    }
+                  >
+                    {tag.status === 0
+                      ? m.tags_item_description_valid()
+                      : m.tags_item_description_parked({ nr: tag.status })}
+                  </Badge>
+                </div>
+                <ItemDescription className="line-clamp-none text-sm [overflow-wrap:anywhere]">
+                  {m.tags_edit_dialog_field_label()}
+                  {": "}
+                  <span className="font-mono text-base font-semibold text-foreground tabular-nums">
+                    {tag.code}
+                  </span>
                 </ItemDescription>
               </ItemContent>
-              <ItemActions>
+              <ItemActions className="w-full sm:w-auto">
                 <Button
-                  size="sm"
+                  className="h-9 w-full gap-2 sm:w-auto"
                   variant="outline"
+                  aria-label={m.tags_edit_pin_label({ nr: tag.nr })}
                   onClick={() => handleEdit(tag)}
                   disabled={!isEditable}
                 >
-                  Edit
+                  <Pencil aria-hidden="true" />
+                  {m.tags_edit_pin()}
                 </Button>
               </ItemActions>
             </Item>
