@@ -1,6 +1,5 @@
 import {
   Item,
-  ItemActions,
   ItemContent,
   ItemDescription,
   ItemGroup,
@@ -12,55 +11,74 @@ import { formatPlantDateTime } from "~/lib/date-time"
 import { usePlantTimeZone } from "~/hooks/use-plant-time-zone"
 import { logT, safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
+import { cn } from "~/lib/utils"
 import type { HistoryEntry } from "~/routes/aps/history"
+import "./history-list.css"
 
 interface HistoryListProps {
   query: HistoryEntry[]
   media?: boolean
+  variant?: "compact" | "detailed"
 }
 
-export function HistoryList({ query, media = false }: HistoryListProps) {
+export function HistoryList({
+  query,
+  media = false,
+  variant = "compact",
+}: HistoryListProps) {
   const timeZone = usePlantTimeZone()
   return (
-    <ItemGroup className="gap-0">
+    <ItemGroup className={`history-list history-list-${variant}`}>
       {query.map((item, key) => (
-        <Item className="px-0 py-1.5" key={key}>
+        <Item
+          className={cn(
+            "history-list-item",
+            media && "history-list-with-media"
+          )}
+          key={key}
+          role="listitem"
+        >
           {media && (
-            <ItemMedia>
+            <ItemMedia className="history-list-media" aria-hidden="true">
               <OperationsAvatar
                 device={item.device}
                 operation={item.operation}
               />
             </ItemMedia>
           )}
-          <ItemContent className="min-w-0 gap-0.5">
-            <ItemTitle className="w-full truncate">
-              {item.device?.id === 0 && !item.user ? m.operator() : item.user}
-              {item.device?.id !== 0 && item.device?.key}
+          <ItemContent className="history-list-content">
+            <div className="history-list-heading">
+              <ItemTitle className="history-list-title">
+                {item.device?.id === 0 && !item.user ? m.operator() : item.user}
+                {item.device?.id !== 0 && item.device?.key}
+              </ItemTitle>
               {item.device?.id !== 0 && (
-                <span className="text-normal">
+                <span className="history-list-mode">
                   {safeMessageT("mode", item.mode?.key)}
                 </span>
               )}
-            </ItemTitle>
-            <ItemDescription>
-              <span className="line-clamp-1">{logT(item)}</span>
+            </div>
+            <ItemDescription className="history-list-description">
+              {logT(item)}
             </ItemDescription>
           </ItemContent>
-          <ItemActions>
-            <div className="flex flex-col text-right">
-              <span>
-                {timeZone
-                  ? formatPlantDateTime(item.date, timeZone, "dd/MM/yyyy")
-                  : "—"}
-              </span>
-              <span>
-                {timeZone
-                  ? formatPlantDateTime(item.date, timeZone, "HH:mm:ss xxx")
-                  : "—"}
-              </span>
-            </div>
-          </ItemActions>
+          <div className="history-list-timestamp">
+            <time className="history-list-time" dateTime={item.date}>
+              {timeZone
+                ? formatPlantDateTime(item.date, timeZone, "HH:mm:ss")
+                : "—"}
+              {timeZone && (
+                <span className="history-list-offset">
+                  {formatPlantDateTime(item.date, timeZone, "xxx")}
+                </span>
+              )}
+            </time>
+            <span className="history-list-date">
+              {timeZone
+                ? formatPlantDateTime(item.date, timeZone, "dd/MM/yyyy")
+                : "—"}
+            </span>
+          </div>
         </Item>
       ))}
     </ItemGroup>

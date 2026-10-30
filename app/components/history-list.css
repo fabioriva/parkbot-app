@@ -1,0 +1,142 @@
+.history-list {
+  gap: 0;
+}
+
+.history-list-detailed {
+  container: history-list / inline-size;
+}
+
+.history-list-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 4px 12px;
+  padding: 8px 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.history-list-item + .history-list-item {
+  border-top: 1px solid var(--border);
+}
+
+.history-list-with-media {
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+}
+
+.history-list-media {
+  grid-column: 1;
+  grid-row: 1;
+  translate: none;
+}
+
+.history-list-media [data-slot="avatar"] {
+  width: 32px;
+  height: 32px;
+}
+
+.history-list-media svg {
+  width: 18px;
+  height: 18px;
+}
+
+.history-list-content {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  gap: 2px;
+}
+
+.history-list-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.history-list-title {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: unset;
+  font-weight: 600;
+}
+
+.history-list-mode {
+  color: var(--muted-foreground);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.history-list-description {
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.history-list-detailed .history-list-description {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+.history-list-timestamp {
+  display: flex;
+  flex-direction: column;
+  grid-column: 2;
+  grid-row: 1;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.history-list-time {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.history-list-offset,
+.history-list-date {
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.history-list-with-media > .history-list-content {
+  grid-column: 2;
+}
+
+.history-list-with-media > .history-list-timestamp {
+  grid-column: 3;
+}
+
+@container history-list (max-width: 479px) {
+  .history-list-detailed .history-list-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .history-list-detailed .history-list-with-media {
+    grid-template-columns: 32px minmax(0, 1fr);
+  }
+
+  .history-list-detailed .history-list-timestamp {
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-column: 1;
+    grid-row: 2;
+    align-items: baseline;
+    gap: 4px 10px;
+  }
+
+  .history-list-detailed .history-list-media {
+    grid-row: 1 / span 2;
+  }
+
+  .history-list-detailed .history-list-with-media > .history-list-timestamp {
+    grid-column: 2;
+  }
+}

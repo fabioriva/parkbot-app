@@ -246,7 +246,7 @@ function HistoryResults({
             loader={<p className="pt-6">Loading more records…</p>}
             endMessage={<p className="pt-6">All records loaded.</p>}
           >
-            <HistoryList media={true} query={query} />
+            <HistoryList media={true} variant="detailed" query={query} />
           </InfiniteScroll>
         ) : (
           <NoData />
