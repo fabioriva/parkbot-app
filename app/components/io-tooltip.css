@@ -1,0 +1,75 @@
+.io-tooltip {
+  max-width: min(288px, calc(100vw - 24px));
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.io-tooltip-body {
+  min-width: 0;
+  width: 100%;
+}
+
+.io-tooltip-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.io-tooltip-label,
+.io-tooltip-state,
+.io-tooltip-address dd {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.io-tooltip-label {
+  min-width: 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.io-tooltip-title {
+  font-weight: 600;
+}
+
+.io-tooltip-state {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.io-tooltip-state[data-status="TRUE"] {
+  color: var(--color-green-300);
+}
+
+.dark .io-tooltip-state[data-status="TRUE"] {
+  color: var(--color-green-700);
+}
+
+.io-tooltip-address {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin-top: 8px;
+}
+
+.io-tooltip-address dt {
+  opacity: 0.7;
+}
+
+.io-tooltip-address dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.io-tooltip-description {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid currentColor;
+  border-top-color: color-mix(in oklch, currentColor 20%, transparent);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}

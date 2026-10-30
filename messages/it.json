@@ -751,5 +751,11 @@
   "tags_edit_pin": "Modifica PIN",
   "tags_edit_pin_label": "Modifica PIN del Tag {nr}",
   "tags_search_placeholder": "Cerca per numero, PIN…",
-  "tags_all_loaded": "Tutte le tessere sono state caricate."
+  "tags_all_loaded": "Tutte le tessere sono state caricate.",
+  "io_tooltip_title": "Informazioni segnale",
+  "io_tooltip_address": "Indirizzo",
+  "io_tooltip_status": "Stato",
+  "io_tooltip_unavailable": "Dato non disponibile",
+  "io_tooltip_no_description": "Descrizione non disponibile",
+  "io_tooltip_trigger": "{label}, stato: {status}"
 }

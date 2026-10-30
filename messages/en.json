@@ -751,5 +751,11 @@
   "tags_edit_pin": "Edit PIN",
   "tags_edit_pin_label": "Edit PIN for Tag {nr}",
   "tags_search_placeholder": "Search by number, PIN…",
-  "tags_all_loaded": "All tags loaded."
+  "tags_all_loaded": "All tags loaded.",
+  "io_tooltip_title": "Signal information",
+  "io_tooltip_address": "Address",
+  "io_tooltip_status": "Status",
+  "io_tooltip_unavailable": "Data unavailable",
+  "io_tooltip_no_description": "Description unavailable",
+  "io_tooltip_trigger": "{label}, status: {status}"
 }

@@ -6,6 +6,8 @@ import {
 } from "~/components/ui/tooltip"
 import { safeMessageT } from "~/lib/trans"
 import type { DeviceData } from "~/components/device"
+import { m } from "@paraglide/messages.js"
+import "./io-tooltip.css"
 
 interface IoTooltipProps {
   io?: DeviceData["c"][number] | null
@@ -68,44 +70,51 @@ function get(label?: string) {
 
 export function IoTooltip({ io, children }: IoTooltipProps) {
   const { key, query } = get(io?.label)
+  const status =
+    io?.status === true || io?.status === 1
+      ? "TRUE"
+      : io?.status === false || io?.status === 0
+        ? "FALSE"
+        : "—"
+  const messages: Readonly<Record<string, unknown>> = m
+  const hasDescription =
+    io?.label &&
+    typeof (messages[`io.${key}`] || messages[`io_${key}`]) === "function"
+  const description = hasDescription
+    ? safeMessageT("io", key, query)
+    : m.io_tooltip_no_description()
   return (
     <Tooltip>
-      <TooltipTrigger>{children}</TooltipTrigger>
-      <TooltipContent>
-        <table className="m-0 p-0 text-sm">
-          <thead>
-            <tr>
-              <th className="text-left">Bit info</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Address</td>
-              <td className="w-16 text-right font-semibold">{io?.addr}</td>
-            </tr>
-            <tr>
-              <td>Label</td>
-              <td className="w-16 text-right font-semibold">{io?.label}</td>
-            </tr>
-            <tr>
-              <td>Status</td>
-              <td className="w-16 text-right font-semibold">
-                <span
-                  className={
-                    io?.status ? "text-green-500" : "text-muted-foreground"
-                  }
-                >
-                  {io?.status ? "TRUE" : "FALSE"}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td>{io?.label ? safeMessageT("io", key, query) : ""}</td>
-            </tr>
-          </tfoot>
-        </table>
+      <TooltipTrigger
+        aria-label={m.io_tooltip_trigger({
+          label: io?.label || io?.addr || m.io_tooltip_title(),
+          status: status === "—" ? m.io_tooltip_unavailable() : status,
+        })}
+      >
+        {children}
+      </TooltipTrigger>
+      <TooltipContent className="io-tooltip">
+        <div className="io-tooltip-body">
+          <div className="io-tooltip-heading">
+            <span
+              className={io?.label ? "io-tooltip-label" : "io-tooltip-title"}
+            >
+              {io?.label || m.io_tooltip_title()}
+            </span>
+            <span className="io-tooltip-state" data-status={status}>
+              <span className="sr-only">
+                {m.io_tooltip_status()}
+                {": "}
+              </span>
+              {status}
+            </span>
+          </div>
+          <dl className="io-tooltip-address">
+            <dt>{m.io_tooltip_address()}</dt>
+            <dd>{io?.addr || "—"}</dd>
+          </dl>
+          <p className="io-tooltip-description">{description}</p>
+        </div>
       </TooltipContent>
     </Tooltip>
   )
