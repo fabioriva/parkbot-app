@@ -1,6 +1,6 @@
 import { requireAps } from "~/lib/authorization.server"
 import { data as routeData } from "react-router"
-import { useState } from "react"
+import { useId, useState } from "react"
 import type { DateRange as DateRangeValue } from "react-day-picker"
 import {
   Item,
@@ -85,7 +85,12 @@ function OperationsResults({
   initialRange: PlantDateRange
 }) {
   const [data, setData] = useState(loaderData.data)
-  const [stacked, setStacked] = useState(true)
+  const [operationsStacked, setOperationsStacked] = useState(true)
+  const [devicesStacked, setDevicesStacked] = useState(true)
+  const operationsStackedId = useId()
+  const devicesStackedId = useId()
+  const mobileDateRangeId = useId()
+  const desktopDateRangeId = useId()
   const [selectedRange, setSelectedRange] = useState(initialRange)
   const [error, setError] = useState("")
   const [dateRange, setDateRange] = useState<DateRangeValue | undefined>(
@@ -145,12 +150,19 @@ function OperationsResults({
             </ItemDescription>
           </ItemContent>
         </Item>
-        <DateRange
-          dateRange={dateRange}
-          setDateRange={handleQuery}
-          timeZone="UTC"
-          today={calendarDate(initialRange.to)}
-        />
+        <div className="flex w-full items-center gap-2">
+          <Label className="sr-only" htmlFor={mobileDateRangeId}>
+            {m.operations_period()}
+          </Label>
+          <DateRange
+            id={mobileDateRangeId}
+            className="w-full"
+            dateRange={dateRange}
+            setDateRange={handleQuery}
+            timeZone="UTC"
+            today={calendarDate(initialRange.to)}
+          />
+        </div>
       </div>
       <div className="hidden xl:block">
         <Item className="mb-3" variant="outline">
@@ -164,12 +176,18 @@ function OperationsResults({
             </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <DateRange
-              dateRange={dateRange}
-              setDateRange={handleQuery}
-              timeZone="UTC"
-              today={calendarDate(initialRange.to)}
-            />
+            <div className="flex items-center gap-2">
+              <Label htmlFor={desktopDateRangeId}>
+                {m.operations_period()}
+              </Label>
+              <DateRange
+                id={desktopDateRangeId}
+                dateRange={dateRange}
+                setDateRange={handleQuery}
+                timeZone="UTC"
+                today={calendarDate(initialRange.to)}
+              />
+            </div>
           </ItemActions>
         </Item>
       </div>
@@ -177,35 +195,41 @@ function OperationsResults({
         <CardWrapper
           title={m.operations_card_title()}
           // description={m.operations_card_description({ dateFrom, dateTo })}
-          footer={
-            <div className="flex w-full items-center justify-end gap-2">
-              <Label htmlFor="stacked">Stacked</Label>
+          action={
+            <div className="flex items-center gap-2">
+              <Label htmlFor={operationsStackedId}>Stacked</Label>
               <Switch
-                id="stacked"
-                checked={stacked}
-                onCheckedChange={setStacked}
+                id={operationsStackedId}
+                checked={operationsStacked}
+                onCheckedChange={setOperationsStacked}
               />
             </div>
           }
         >
-          <OperationsChart operations={operations.data} stacked={stacked} />
+          <OperationsChart
+            operations={operations.data}
+            stacked={operationsStacked}
+          />
         </CardWrapper>
         {devices.data.length > 1 && (
           <CardWrapper
             title={m.operations_card_title_by_device()}
             // description={m.operations_card_description({ dateFrom, dateTo })}
-            footer={
-              <div className="flex w-full items-center justify-end gap-2">
-                <Label htmlFor="stacked">Stacked</Label>
+            action={
+              <div className="flex items-center gap-2">
+                <Label htmlFor={devicesStackedId}>Stacked</Label>
                 <Switch
-                  id="stacked"
-                  checked={stacked}
-                  onCheckedChange={setStacked}
+                  id={devicesStackedId}
+                  checked={devicesStacked}
+                  onCheckedChange={setDevicesStacked}
                 />
               </div>
             }
           >
-            <OperationsChart operations={devices.data} stacked={stacked} />
+            <OperationsChart
+              operations={devices.data}
+              stacked={devicesStacked}
+            />
           </CardWrapper>
         )}
       </div>

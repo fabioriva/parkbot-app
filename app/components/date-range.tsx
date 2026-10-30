@@ -1,5 +1,6 @@
 import { ChevronDownIcon } from "lucide-react"
 import { useState } from "react"
+import { cn } from "~/lib/utils"
 import { Button } from "~/components/ui/button"
 import { Calendar } from "~/components/ui/calendar"
 import {
@@ -12,6 +13,7 @@ import { type DateRange as DateRangeValue } from "react-day-picker"
 
 type DateRangeProps = {
   id?: string
+  className?: string
   timeZone?: "UTC"
   today?: Date
   dateRange: DateRangeValue | undefined
@@ -20,6 +22,7 @@ type DateRangeProps = {
 
 export function DateRange({
   id,
+  className,
   dateRange,
   setDateRange,
   timeZone,
@@ -31,12 +34,12 @@ export function DateRange({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
+        id={id}
         render={
           <Button
             variant="outline"
             type="button"
-            id={id}
-            className="w-auto justify-between font-normal"
+            className={cn("w-auto justify-between font-normal", className)}
           >
             {dateRange?.from
               ? `${formatDate(dateRange.from)} - ${dateRange.to ? formatDate(dateRange.to) : "…"}`

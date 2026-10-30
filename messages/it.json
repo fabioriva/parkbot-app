@@ -570,6 +570,7 @@
   "operations_entries": "Ingressi",
   "operations_exits": "Uscite",
   "operations_title": "Istogramma delle operazioni del sistema",
+  "operations_period": "Periodo",
   "operator": "Operatore",
   "password_change_button": "Cambia password",
   "password_change_error_match": "La password non corrisponde",

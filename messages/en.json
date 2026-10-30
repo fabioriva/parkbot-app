@@ -574,6 +574,7 @@
   "operations_entries": "Entries",
   "operations_exits": "Exits",
   "operations_title": "Histogram of system operations",
+  "operations_period": "Period",
   "operator": "Operator",
   "password_change_button": "Change password",
   "password_change_error_match": "Password doesn't match",
