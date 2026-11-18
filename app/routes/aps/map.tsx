@@ -1,5 +1,5 @@
 import { requireAps } from "~/lib/authorization.server"
-import { EyeIcon } from "lucide-react"
+import { ChevronDown, EyeIcon } from "lucide-react"
 import {
   lazy,
   Suspense,
@@ -189,6 +189,7 @@ function MapView({
   disabled: boolean
 }) {
   const DynamicComponent = components[aps]
+  const [activeTab, setActiveTab] = useState("map")
   const [view, setView] = useState<MapProps["view"]>("view2")
   const onViewChange = (value: string) => {
     switch (value) {
@@ -199,44 +200,63 @@ function MapView({
         setView(value)
     }
   }
+  const viewLabel = {
+    view0: m.map_view_icon(),
+    view1: m.map_view_status(),
+    view2: m.map_view_slot(),
+    view3: m.map_view_size(),
+  }[view]
   const total = (arr: MapData["occupancy"]) =>
     arr.reduce((acc, curr) => acc + curr.value, 0)
 
   return (
-    <Tabs defaultValue="map">
-      <div className="flex gap-6">
-        <TabsList className="grid grid-cols-2">
+    <Tabs
+      value={activeTab}
+      onValueChange={(value) => {
+        if (value === "map" || value === "occupancy") setActiveTab(value)
+      }}
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <TabsList className="grid w-full grid-cols-2 sm:w-fit">
           <TabsTrigger value="map">{m.map_tabs_main()}</TabsTrigger>
           <TabsTrigger value="occupancy">{m.map_tabs_occupancy()}</TabsTrigger>
         </TabsList>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button variant="outline">
-                <EyeIcon /> {m.map_view()}
-              </Button>
-            }
-          />
-          <DropdownMenuContent className="w-32">
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>{m.map_view_label()}</DropdownMenuLabel>
-              <DropdownMenuRadioGroup value={view} onValueChange={onViewChange}>
-                <DropdownMenuRadioItem value="view0">
-                  {m.map_view_icon()}
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="view3">
-                  {m.map_view_size()}
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="view2">
-                  {m.map_view_slot()}
-                </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="view1">
-                  {m.map_view_status()}
-                </DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {activeTab === "map" && (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="outline" className="h-8 w-full sm:w-auto">
+                  <EyeIcon data-icon="inline-start" />
+                  <span className="text-muted-foreground">{m.map_view()}:</span>
+                  {viewLabel}
+                  <ChevronDown data-icon="inline-end" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end" className="min-w-44">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>{m.map_view_label()}</DropdownMenuLabel>
+                <DropdownMenuRadioGroup
+                  value={view}
+                  onValueChange={onViewChange}
+                >
+                  <DropdownMenuRadioItem value="view0">
+                    {m.map_view_icon()}
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="view3">
+                    {m.map_view_size()}
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="view2">
+                    {m.map_view_slot()}
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="view1">
+                    {m.map_view_status()}
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
       <TabsContent className="mt-3" value="map">
         <Suspense fallback={<p className="py-3">Loading...</p>}>
