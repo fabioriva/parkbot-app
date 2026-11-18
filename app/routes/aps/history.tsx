@@ -1,5 +1,5 @@
 import { requireAps } from "~/lib/authorization.server"
-import { Search } from "lucide-react"
+import { Download, Search } from "lucide-react"
 import { useState } from "react"
 import { Button } from "~/components/ui/button"
 import InfiniteScroll from "react-infinite-scroll-component"
@@ -24,6 +24,11 @@ import {
   type PlantDateRange,
 } from "~/lib/date-time"
 import type { Route } from "./+types/history"
+import {
+  historySearchParams,
+  type HistoryParameters,
+} from "~/lib/history-query"
+import { getLocale } from "@paraglide/runtime.js"
 import { m } from "@paraglide/messages.js"
 
 export interface HistoryEntry {
@@ -68,22 +73,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   return { data, token, timeZone, range, parameters }
 }
 
-type HistoryParameters = {
-  dateFrom: string
-  dateTo: string
-  card: number
-  device: number
-  stall: number
-}
-
-function historySearchParams(parameters: HistoryParameters, page: number) {
-  return new URLSearchParams(
-    Object.entries({ ...parameters, page, limit: LIMIT }).map(
-      ([key, value]) => [key, String(value)]
-    )
-  )
-}
-
 export default function History({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData.timeZone || !loaderData.range || !loaderData.parameters)
     return (
@@ -123,6 +112,7 @@ function HistoryResults({
   const [parameters, setParameters] = useState(initialParameters)
   const [selectedRange, setSelectedRange] = useState(initialRange)
   const [error, setError] = useState("")
+  const [downloading, setDownloading] = useState(false)
 
   const { devices, query, total } = history
 
@@ -202,6 +192,56 @@ function HistoryResults({
     }
   }
 
+  const downloadReport = async () => {
+    if (downloading) return
+    setDownloading(true)
+    setError("")
+    try {
+      const search = new URLSearchParams({
+        from: selectedRange.from,
+        to: selectedRange.to,
+        card: String(parameters.card),
+        device: String(parameters.device),
+        stall: String(parameters.stall),
+        locale: getLocale(),
+      })
+      const response = await fetch(
+        `/aps/${encodeURIComponent(params.aps!)}/history/report.pdf?${search}`
+      )
+      if (!response.ok)
+        throw new Error(
+          response.status === 413
+            ? m.history_pdf_limit()
+            : m.history_pdf_failed()
+        )
+      if (!response.headers.get("Content-Type")?.startsWith("application/pdf"))
+        throw new Error(m.history_pdf_failed())
+      const url = URL.createObjectURL(await response.blob())
+      const link = document.createElement("a")
+      link.href = url
+      link.download = `parkbot-history-${params.aps}-${selectedRange.from}-${selectedRange.to}.pdf`
+      document.body.append(link)
+      link.click()
+      link.remove()
+      setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    } catch (error) {
+      setError(error instanceof Error ? error.message : m.history_pdf_failed())
+    } finally {
+      setDownloading(false)
+    }
+  }
+  const downloadButton = (
+    <Button
+      onClick={downloadReport}
+      variant="outline"
+      disabled={downloading || total === 0}
+      aria-busy={downloading}
+    >
+      <Download data-icon="inline-start" />
+      {downloading ? m.history_pdf_pending() : m.history_pdf_download()}
+    </Button>
+  )
+
   const NoData = () => <ErrorAlert title="" description="No record found." />
   return (
     <>
@@ -238,6 +278,7 @@ function HistoryResults({
         <Button onClick={() => setOpen(true)} variant="outline">
           <Search data-icon="inline-start" /> Search
         </Button>
+        {downloadButton}
         {query.length > 0 ? (
           <InfiniteScroll
             dataLength={query.length}
@@ -266,6 +307,7 @@ function HistoryResults({
             </ItemDescription>
           </ItemContent>
           <ItemActions>
+            {downloadButton}
             <Button onClick={() => setOpen(true)} variant="outline">
               <Search data-icon="inline-start" /> Search
             </Button>

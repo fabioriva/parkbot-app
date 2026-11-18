@@ -20,6 +20,7 @@ export default [
     route("signout", "routes/auth/signout.tsx"),
     route("signup", "routes/auth/signup.tsx"),
   ]),
+  route("aps/:aps/history/report.pdf", "routes/aps/history-report.ts"),
   ...prefix("aps", [
     layout("routes/aps/layout.tsx", [
       route(":aps/admin/aps", "routes/admin/aps.tsx"),

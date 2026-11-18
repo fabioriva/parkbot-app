@@ -764,5 +764,14 @@
   "comm_info_online": "Online",
   "comm_info_offline": "Offline",
   "comm_info_hint": "Apri la diagnostica I/O dell’impianto",
-  "comm_info_link_label": "PLC {status}. Apri la diagnostica I/O"
+  "comm_info_link_label": "PLC {status}. Apri la diagnostica I/O",
+  "history_pdf_download": "Scarica PDF",
+  "history_pdf_pending": "Generazione PDF…",
+  "history_pdf_failed": "Impossibile generare il report. Riprova.",
+  "history_pdf_limit": "Il report supera 5.000 record. Seleziona un periodo più breve o aggiungi filtri.",
+  "history_pdf_generated": "Generato il {date}",
+  "history_pdf_summary": "Periodo: {from} – {to} · Record: {count}",
+  "history_pdf_all": "Tutti",
+  "history_pdf_page": "Pagina {page}",
+  "history_pdf_empty": "Nessun record trovato."
 }

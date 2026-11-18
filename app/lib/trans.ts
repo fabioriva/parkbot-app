@@ -1,3 +1,4 @@
+import type { Locale } from "@paraglide/runtime.js"
 import { m } from "@paraglide/messages.js"
 import type { DeviceData } from "~/components/device"
 import type { HistoryEntry } from "~/routes/aps/history"
@@ -49,18 +50,21 @@ export function deviceT(
 }
 
 export function logT(
-  log: Pick<HistoryEntry, "alarm" | "card" | "operation" | "mode" | "stall">
+  log: Pick<HistoryEntry, "alarm" | "card" | "operation" | "mode" | "stall">,
+  locale?: Locale
 ): string | null {
   try {
     const { alarm, card, operation, mode, stall } = log
     if (operation?.key === "op-alarm-on" || operation?.key === "op-alarm-off") {
       if (!alarm) return null
       const fn = messages["alarm." + alarm.key]
-      return typeof fn === "function" ? fn({ ...alarm.query }) : null
+      return typeof fn === "function"
+        ? fn({ ...alarm.query }, { locale })
+        : null
     }
     const fn = messages["log." + operation?.key]
     return typeof fn === "function"
-      ? fn({ card, stall, id: mode?.id })
+      ? fn({ card, stall, id: mode?.id }, { locale })
       : `Operation ${operation?.id ?? "?"}`
   } catch {
     return null
@@ -70,7 +74,8 @@ export function logT(
 export function safeMessageT(
   prefix: string,
   key: string | null | undefined,
-  params: Record<string, unknown> = {}
+  params: Record<string, unknown> = {},
+  locale?: Locale
 ): string {
   const fn = messages[`${prefix}.${key}`] || messages[`${prefix}_${key}`]
 
@@ -79,5 +84,5 @@ export function safeMessageT(
     return `Missing translation: ${prefix}.${key ?? ""}`
   }
 
-  return fn(params)
+  return fn(params, { locale })
 }

@@ -764,5 +764,14 @@
   "comm_info_online": "Online",
   "comm_info_offline": "Offline",
   "comm_info_hint": "Open the system I/O diagnostics",
-  "comm_info_link_label": "PLC {status}. Open I/O diagnostics"
+  "comm_info_link_label": "PLC {status}. Open I/O diagnostics",
+  "history_pdf_download": "Download PDF",
+  "history_pdf_pending": "Generating PDF…",
+  "history_pdf_failed": "Unable to generate the report. Please try again.",
+  "history_pdf_limit": "The report exceeds 5,000 records. Select a shorter period or add filters.",
+  "history_pdf_generated": "Generated on {date}",
+  "history_pdf_summary": "Period: {from} – {to} · Records: {count}",
+  "history_pdf_all": "All",
+  "history_pdf_page": "Page {page}",
+  "history_pdf_empty": "No records found."
 }
