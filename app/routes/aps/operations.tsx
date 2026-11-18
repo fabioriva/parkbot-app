@@ -26,6 +26,7 @@ import {
   type PlantDateRange,
 } from "~/lib/date-time"
 import { m } from "@paraglide/messages.js"
+import { getLocale } from "@paraglide/runtime.js"
 
 import type { Route } from "./+types/operations"
 
@@ -101,6 +102,17 @@ function OperationsResults({
   )
 
   const { devices, operations } = data
+  const totals = operations.data.reduce(
+    (
+      total: { entries: number; exits: number },
+      operation: { entries: number; exits: number }
+    ) => ({
+      entries: total.entries + operation.entries,
+      exits: total.exits + operation.exits,
+    }),
+    { entries: 0, exits: 0 }
+  )
+  const numberFormat = new Intl.NumberFormat(getLocale())
   const { from: dateFrom, to: dateTo } = selectedRange
   const handleQuery = async (range: DateRangeValue | undefined) => {
     setDateRange(range)
@@ -191,7 +203,36 @@ function OperationsResults({
           </ItemActions>
         </Item>
       </div>
-      <div className="grid gap-6 2xl:grid-cols-2">
+      <div className="mb-3 grid grid-cols-2 gap-3">
+        {[
+          {
+            label: m.operations_entries(),
+            value: totals.entries,
+            color: "bg-chart-1",
+          },
+          {
+            label: m.operations_exits(),
+            value: totals.exits,
+            color: "bg-chart-2",
+          },
+        ].map(({ label, value, color }) => (
+          <CardWrapper key={color}>
+            <dl className="flex min-w-0 flex-col gap-2">
+              <dt className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span
+                  className={`size-2 shrink-0 rounded-full ${color}`}
+                  aria-hidden="true"
+                />
+                {label}
+              </dt>
+              <dd className="text-2xl font-semibold tracking-tight break-all tabular-nums">
+                {numberFormat.format(value)}
+              </dd>
+            </dl>
+          </CardWrapper>
+        ))}
+      </div>
+      <div className="grid gap-3 2xl:grid-cols-2">
         <CardWrapper
           title={m.operations_card_title()}
           // description={m.operations_card_description({ dateFrom, dateTo })}
