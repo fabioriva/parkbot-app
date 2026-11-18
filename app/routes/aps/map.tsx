@@ -30,6 +30,7 @@ import type { MapProps } from "~/components/maps/types"
 import { connectReconnectingWebSocket } from "~/hooks/use-ws"
 import { getToken } from "~/lib/cookie.server"
 import fetcher from "~/lib/fetch"
+import { safeMessageT } from "~/lib/trans"
 import { m } from "@paraglide/messages.js"
 
 import type { Route } from "./+types/map"
@@ -272,6 +273,29 @@ function MapView({
             count: total(data.occupancy),
           })}
         >
+          <dl className="mb-3 grid grid-cols-3 gap-2">
+            {[
+              { id: "busy", color: "bg-chart-5" },
+              { id: "free", color: "bg-chart-2" },
+              { id: "lock", color: "bg-chart-4" },
+            ].map(({ id, color }) => (
+              <div
+                key={id}
+                className="min-w-0 rounded-lg bg-muted/40 px-3 py-2"
+              >
+                <dt className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span
+                    className={`size-1.5 shrink-0 rounded-full ${color}`}
+                    aria-hidden="true"
+                  />
+                  {safeMessageT("occupancy", id)}
+                </dt>
+                <dd className="mt-1 font-mono text-lg font-semibold tabular-nums">
+                  {data.occupancy.find((item) => item.id === id)?.value ?? "—"}
+                </dd>
+              </div>
+            ))}
+          </dl>
           <Occupancy occupancy={data.occupancy} />
         </CardWrapper>
       </TabsContent>
