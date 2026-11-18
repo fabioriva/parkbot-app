@@ -1,23 +1,29 @@
-import { Loader2Icon } from "lucide-react"
+import { useId } from "react"
 import { data, Form, redirect, useNavigation } from "react-router"
 import { Button } from "~/components/ui/button"
-import { Card, CardContent } from "~/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card"
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
   FieldSet,
   FieldTitle,
 } from "~/components/ui/field"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
-import { Submit } from "~/components/submit-button"
+import { Spinner } from "~/components/ui/spinner"
 import { auth } from "~/lib/auth.server"
 import { findSubscribedApsList } from "~/lib/aps.server"
 import { requireSession } from "~/lib/authorization.server"
 import { m } from "@paraglide/messages.js"
+import "./aps-select.css"
 
 import type { Route } from "./+types/aps-select"
 
@@ -69,28 +75,36 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export default function ApsSelect({ loaderData }: Route.ComponentProps) {
   const navigation = useNavigation()
+  const isPending =
+    navigation.state !== "idle" && navigation.formAction === "/aps-select"
+  const titleId = useId()
+  const descriptionId = useId()
 
   if (loaderData.length <= 0)
     return (
       <Card>
+        <CardHeader>
+          <CardTitle>{m.aps_select_empty_title()}</CardTitle>
+          <CardDescription>{m.aps_select_empty_description()}</CardDescription>
+        </CardHeader>
         <CardContent>
-          <Form method="post" className="flex flex-col gap-3">
-            <p>No Aps assigned.</p>
-            {navigation.formAction === "/aps-select" ? (
-              <Button className="w-full" disabled>
-                <Loader2Icon className="animate-spin" />
-                {m.signout()}
-              </Button>
-            ) : (
-              <Button
-                className="w-full"
-                type="submit"
-                name="intent"
-                value="signout"
-              >
-                {m.signout()}
-              </Button>
-            )}
+          <Form method="post">
+            <Button
+              className="w-full"
+              type="submit"
+              name="intent"
+              value="signout"
+              disabled={isPending}
+              aria-busy={isPending}
+            >
+              {isPending && (
+                <Spinner
+                  aria-hidden="true"
+                  className="motion-reduce:animate-none"
+                />
+              )}
+              {isPending ? m.aps_select_signout_pending() : m.signout()}
+            </Button>
           </Form>
         </CardContent>
       </Card>
@@ -98,45 +112,69 @@ export default function ApsSelect({ loaderData }: Route.ComponentProps) {
 
   return (
     <Card>
+      <CardHeader>
+        <CardTitle id={titleId}>{m.aps_select_card_title()}</CardTitle>
+        <CardDescription id={descriptionId}>
+          {m.aps_select_card_description()}
+        </CardDescription>
+      </CardHeader>
       <CardContent>
         <Form method="post">
           <FieldGroup>
-            <FieldSet>
-              <FieldLegend variant="label">
-                {m.aps_select_card_title()}
-              </FieldLegend>
-              <FieldDescription>
-                {m.aps_select_card_description()}
-              </FieldDescription>
-              <RadioGroup defaultValue={loaderData[0].ns} name="aps">
+            <FieldSet aria-labelledby={titleId}>
+              <RadioGroup
+                disabled={isPending}
+                defaultValue={loaderData[0].ns}
+                name="aps"
+                aria-labelledby={titleId}
+                aria-describedby={descriptionId}
+              >
                 {loaderData.map(
-                  ({ city, country, flag, name, ns, parkingSpaces }, key) => (
-                    <FieldLabel htmlFor={ns} key={key}>
+                  ({ city, country, flag, name, ns, parkingSpaces }) => (
+                    <FieldLabel
+                      htmlFor={ns}
+                      key={ns}
+                      className="aps-select-option"
+                    >
                       <Field orientation="horizontal">
-                        <FieldContent>
-                          <FieldTitle>
-                            {name},
-                            <span
-                              className="text-sm font-normal"
-                              dangerouslySetInnerHTML={{
-                                __html: m.aps_select_parking_spaces({
-                                  count: parkingSpaces,
-                                }),
-                              }}
-                            />
+                        <FieldContent className="min-w-0">
+                          <FieldTitle className="block w-full font-semibold break-words">
+                            {name}
                           </FieldTitle>
-                          <FieldDescription>
+                          <FieldDescription className="break-words">
                             {m.aps_select_location({ city, country, flag })}
                           </FieldDescription>
+                          <p className="mt-1 text-xs font-normal text-muted-foreground">
+                            <strong className="font-mono font-semibold tabular-nums">
+                              {parkingSpaces}
+                            </strong>{" "}
+                            {m.aps_select_parking_spaces()}
+                          </p>
                         </FieldContent>
-                        <RadioGroupItem value={ns} id={ns} />
+                        <RadioGroupItem
+                          value={ns}
+                          id={ns}
+                          className="self-center"
+                        />
                       </Field>
                     </FieldLabel>
                   )
                 )}
               </RadioGroup>
               <Field>
-                <Submit action="/aps-select" title={m.confirm()} />
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  aria-busy={isPending}
+                >
+                  {isPending && (
+                    <Spinner
+                      aria-hidden="true"
+                      className="motion-reduce:animate-none"
+                    />
+                  )}
+                  {isPending ? m.aps_select_confirm_pending() : m.confirm()}
+                </Button>
               </Field>
             </FieldSet>
           </FieldGroup>

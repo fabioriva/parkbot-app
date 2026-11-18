@@ -1,0 +1,28 @@
+.aps-select-option {
+  cursor: pointer;
+  transition:
+    background-color 150ms,
+    border-color 150ms;
+}
+
+.aps-select-option:has([data-slot="radio-group-item"][data-checked]) {
+  border-color: var(--foreground);
+  background-color: var(--muted);
+}
+
+.aps-select-option:not(:has([data-checked])):not(:has([data-disabled])):hover {
+  background-color: color-mix(in oklch, var(--muted) 50%, transparent);
+}
+
+.aps-select-option:has(:focus-visible) {
+  border-color: var(--ring);
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aps-select-option {
+    transition: none;
+  }
+}
