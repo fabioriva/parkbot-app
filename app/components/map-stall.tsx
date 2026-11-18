@@ -45,6 +45,18 @@ export function Stall({ definitions, stall, view }: StallProps) {
     ? formatPlantDateTime(date, timeZone, "dd/MM/yyyy HH:mm:ss xxx")
     : "—"
   const { FREE, LOCK, PAPA, RSVD } = definitions.stallStatus
+  const statusLabel =
+    status === FREE
+      ? m.map_tooltip_free()
+      : status === LOCK
+        ? m.map_tooltip_locked()
+        : m.map_tooltip_card({ status })
+  const accessibleLabel =
+    status === FREE
+      ? m.map_stall_free({ date: formattedDate, nr })
+      : status === LOCK
+        ? m.map_stall_lock({ date: formattedDate, nr })
+        : m.map_stall_busy({ date: formattedDate, nr, status })
   const isEditable =
     !disabled && (user?.role === "admin" || user?.role === "service")
 
@@ -74,7 +86,7 @@ export function Stall({ definitions, stall, view }: StallProps) {
   const stallClasses = clsx(
     "absolute flex h-7.5 w-10 items-center justify-center border text-xs",
     {
-      "pointer-events-none opacity-60": !isEditable,
+      "cursor-default opacity-60": !isEditable,
       "hover:cursor-pointer": isEditable,
       "bg-red-300 text-red-950 dark:bg-red-950 dark:text-red-300":
         status !== 0 && status !== LOCK && status !== PAPA && status !== RSVD,
@@ -93,7 +105,10 @@ export function Stall({ definitions, stall, view }: StallProps) {
     <Tooltip>
       <TooltipTrigger
         render={
-          <div
+          <button
+            type="button"
+            aria-label={accessibleLabel}
+            aria-disabled={!isEditable}
             className={stallClasses}
             id={"s-" + nr}
             onClick={handleStallClick}
@@ -115,15 +130,17 @@ export function Stall({ definitions, stall, view }: StallProps) {
             {view === "view1" && status}
             {view === "view2" && nr}
             {view === "view3" && size}
-          </div>
+          </button>
         }
       />
-      <TooltipContent className="text-center text-sm">
-        {status === 0
-          ? m.map_stall_free({ date: formattedDate, nr })
-          : status === LOCK
-            ? m.map_stall_lock({ date: formattedDate, nr })
-            : m.map_stall_busy({ date: formattedDate, nr, status })}
+      <TooltipContent className="max-w-[min(288px,calc(100vw-24px))] rounded-xl p-3">
+        <div className="flex min-w-0 flex-col gap-2">
+          <p className="text-sm font-semibold">{m.map_tooltip_stall({ nr })}</p>
+          <p className="font-mono font-semibold tabular-nums">{statusLabel}</p>
+          <p className="border-t border-current/20 pt-2 text-xs leading-relaxed tabular-nums opacity-70">
+            {m.map_tooltip_since({ date: formattedDate })}
+          </p>
+        </div>
       </TooltipContent>
     </Tooltip>
   )
