@@ -11,6 +11,7 @@ import {
 import { useOutletContext } from "react-router"
 import useSWR, { useSWRConfig } from "swr"
 import { Button } from "~/components/ui/button"
+import { Spinner } from "~/components/ui/spinner"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -260,7 +261,20 @@ function MapView({
         )}
       </div>
       <TabsContent className="mt-3" value="map">
-        <Suspense fallback={<p className="py-3">Loading...</p>}>
+        <Suspense
+          fallback={
+            <div
+              role="status"
+              className="flex items-center gap-2 py-4 text-sm text-muted-foreground"
+            >
+              <Spinner
+                aria-hidden="true"
+                className="shrink-0 motion-reduce:animate-none"
+              />
+              <span>{m.map_loading()}</span>
+            </div>
+          }
+        >
           <EditStallDialogProvider disabled={disabled}>
             <DynamicComponent data={data} view={view} />
           </EditStallDialogProvider>

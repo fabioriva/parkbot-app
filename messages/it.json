@@ -519,6 +519,7 @@
   "map_edit_dialog_button_lock": "Blocca",
   "map_edit_dialog_button_status": "Stato",
   "map_tabs_main": "Mappa",
+  "map_loading": "Caricamento mappa…",
   "map_level_slots": "Stalli {min}–{max}",
   "map_tabs_occupancy": "Occupazione",
   "map_view": "Vista",

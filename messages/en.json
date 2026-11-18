@@ -523,6 +523,7 @@
   "map_edit_dialog_button_lock": "Lock",
   "map_edit_dialog_button_status": "Status",
   "map_tabs_main": "Parking Map",
+  "map_loading": "Loading map…",
   "map_level_slots": "Slots {min}–{max}",
   "map_tabs_occupancy": "Occupancy",
   "map_view": "View",
