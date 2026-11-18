@@ -230,11 +230,12 @@ function HistoryResults({
       setDownloading(false)
     }
   }
+  // Keep PDF export disabled until the customer release.
   const downloadButton = (
     <Button
       onClick={downloadReport}
       variant="outline"
-      disabled={downloading || total === 0}
+      disabled
       aria-busy={downloading}
     >
       <Download data-icon="inline-start" />
