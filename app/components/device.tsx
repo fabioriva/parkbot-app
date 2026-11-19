@@ -193,7 +193,14 @@ export function Device({
     commandButtons.length > 0 ? (
       <div className="device-commands">{commandButtons}</div>
     ) : undefined
-  const bg = device.operation !== 0 ? "bg-blue-50 dark:bg-blue-950" : undefined
+  const bg = clsx({
+    "bg-chart-1/10 dark:bg-chart-1/20": device.operation === 1,
+    "bg-chart-2/10 dark:bg-chart-2/20": device.operation === 2,
+    "bg-amber-50 dark:bg-amber-950":
+      device.operation !== 0 &&
+      device.operation !== 1 &&
+      device.operation !== 2,
+  })
   const [tab, setTab] = useState("tab-0")
   useEffect(() => setTab(`tab-${device.motor}`), [device.motor])
 
