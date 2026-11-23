@@ -1,0 +1,391 @@
+import { Level } from "~/components/map-level"
+import type { MapProps } from "./types"
+
+export default function Map({ data, view }: MapProps) {
+  const levels = [...data.levels].reverse() // Creates a copy and reverses it
+  return (
+    <div className="flex flex-wrap gap-3 overflow-auto">
+      {levels.map((level) => (
+        <Level
+          definitions={data.definitions}
+          level={level}
+          view={view}
+          key={level.nr}
+        />
+      ))}
+      <style>{`
+        .level {
+          height: 191px;
+          width: 907px;
+        }
+        #el-1 {
+          top: 64px;
+          left: 412px;
+        }
+        /* P1 */
+        #s-1 {
+          top: 95px;
+          left: 2px;
+        }
+        #s-2 {
+          top: 33px;
+          left: 2px;
+        }
+        #s-3 {
+          top: 2px;
+          left: 2px;
+        }
+        #s-4 {
+          top: 95px;
+          left: 43px;
+        }
+        #s-5 {
+          top: 33px;
+          left: 43px;
+        }
+        #s-6 {
+          top: 2px;
+          left: 43px;
+        }
+        #s-7 {
+          top: 95px;
+          left: 84px;
+        }
+        #s-8 {
+          top: 33px;
+          left: 84px;
+        }
+        #s-9 {
+          top: 2px;
+          left: 84px;
+        }
+        #s-10 {
+          top: 95px;
+          left: 125px;
+        }
+        #s-11 {
+          top: 33px;
+          left: 125px;
+        }
+        #s-12 {
+          top: 2px;
+          left: 125px;
+        }
+        #s-13 {
+          top: 95px;
+          left: 166px;
+        }
+        #s-14 {
+          top: 33px;
+          left: 166px;
+        }
+        #s-15 {
+          top: 2px;
+          left: 166px;
+        }
+        #s-16 {
+          top: 95px;
+          left: 207px;
+        }
+        #s-17 {
+          top: 33px;
+          left: 207px;
+        }
+        #s-18 {
+          top: 2px;
+          left: 207px;
+        }
+        #s-19 {
+          top: 95px;
+          left: 248px;
+        }
+        #s-20 {
+          top: 33px;
+          left: 248px;
+        }
+        #s-21 {
+          top: 2px;
+          left: 248px;
+        }
+        #s-22 {
+          top: 95px;
+          left: 289px;
+        }
+        #s-23 {
+          top: 33px;
+          left: 289px;
+        }
+        #s-24 {
+          top: 2px;
+          left: 289px;
+        }
+        #s-25 {
+          top: 95px;
+          left: 330px;
+        }
+        #s-26 {
+          top: 33px;
+          left: 330px;
+        }
+        #s-27 {
+          top: 2px;
+          left: 330px;
+        }
+        #s-28 {
+          top: 95px;
+          left: 371px;
+        }
+        #s-29 {
+          top: 33px;
+          left: 371px;
+        }
+        #s-30 {
+          top: 2px;
+          left: 371px;
+        }
+        /* P2 */
+        #s-31 {
+          top: 95px;
+          left: 2px;
+        }
+        #s-32 {
+          top: 33px;
+          left: 2px;
+        }
+        #s-33 {
+          top: 2px;
+          left: 2px;
+        }
+        #s-34 {
+          top: 95px;
+          left: 43px;
+        }
+        #s-35 {
+          top: 33px;
+          left: 43px;
+        }
+        #s-36 {
+          top: 2px;
+          left: 43px;
+        }
+        #s-37 {
+          top: 95px;
+          left: 84px;
+        }
+        #s-38 {
+          top: 33px;
+          left: 84px;
+        }
+        #s-39 {
+          top: 2px;
+          left: 84px;
+        }
+        #s-40 {
+          top: 95px;
+          left: 125px;
+        }
+        #s-41 {
+          top: 33px;
+          left: 125px;
+        }
+        #s-42 {
+          top: 2px;
+          left: 125px;
+        }
+        #s-43 {
+          top: 95px;
+          left: 166px;
+        }
+        #s-44 {
+          top: 33px;
+          left: 166px;
+        }
+        #s-45 {
+          top: 2px;
+          left: 166px;
+        }
+        #s-46 {
+          top: 95px;
+          left: 207px;
+        }
+        #s-47 {
+          top: 33px;
+          left: 207px;
+        }
+        #s-48 {
+          top: 2px;
+          left: 207px;
+        }
+        #s-49 {
+          top: 95px;
+          left: 248px;
+        }
+        #s-50 {
+          top: 33px;
+          left: 248px;
+        }
+        #s-51 {
+          top: 2px;
+          left: 248px;
+        }
+        #s-52 {
+          top: 95px;
+          left: 289px;
+        }
+        #s-53 {
+          top: 33px;
+          left: 289px;
+        }
+        #s-54 {
+          top: 2px;
+          left: 289px;
+        }
+        #s-55 {
+          top: 95px;
+          left: 330px;
+        }
+        #s-56 {
+          top: 33px;
+          left: 330px;
+        }
+        #s-57 {
+          top: 2px;
+          left: 330px;
+        }
+        #s-58 {
+          top: 95px;
+          left: 371px;
+        }
+        #s-59 {
+          top: 33px;
+          left: 371px;
+        }
+        #s-60 {
+          top: 2px;
+          left: 371px;
+        }
+        /* P3 */
+        #s-61 {
+          top: 95px;
+          left: 2px;
+        }
+        #s-62 {
+          top: 33px;
+          left: 2px;
+        }
+        #s-63 {
+          top: 2px;
+          left: 2px;
+        }
+        #s-64 {
+          top: 95px;
+          left: 43px;
+        }
+        #s-65 {
+          top: 33px;
+          left: 43px;
+        }
+        #s-66 {
+          top: 2px;
+          left: 43px;
+        }
+        #s-67 {
+          top: 95px;
+          left: 84px;
+        }
+        #s-68 {
+          top: 33px;
+          left: 84px;
+        }
+        #s-69 {
+          top: 2px;
+          left: 84px;
+        }
+        #s-70 {
+          top: 95px;
+          left: 125px;
+        }
+        #s-71 {
+          top: 33px;
+          left: 125px;
+        }
+        #s-72 {
+          top: 2px;
+          left: 125px;
+        }
+        #s-73 {
+          top: 95px;
+          left: 166px;
+        }
+        #s-74 {
+          top: 33px;
+          left: 166px;
+        }
+        #s-75 {
+          top: 2px;
+          left: 166px;
+        }
+        #s-76 {
+          top: 95px;
+          left: 207px;
+        }
+        #s-77 {
+          top: 33px;
+          left: 207px;
+        }
+        #s-78 {
+          top: 2px;
+          left: 207px;
+        }
+        #s-79 {
+          top: 95px;
+          left: 248px;
+        }
+        #s-80 {
+          top: 33px;
+          left: 248px;
+        }
+        #s-81 {
+          top: 2px;
+          left: 248px;
+        }
+        #s-82 {
+          top: 95px;
+          left: 289px;
+        }
+        #s-83 {
+          top: 33px;
+          left: 289px;
+        }
+        #s-84 {
+          top: 2px;
+          left: 289px;
+        }
+        #s-85 {
+          top: 95px;
+          left: 330px;
+        }
+        #s-86 {
+          top: 33px;
+          left: 330px;
+        }
+        #s-87 {
+          top: 2px;
+          left: 330px;
+        }
+        #s-88 {
+          top: 95px;
+          left: 371px;
+        }
+        #s-89 {
+          top: 33px;
+          left: 371px;
+        }
+        #s-90 {
+          top: 2px;
+          left: 371px;
+        }
+      `}</style>
+    </div>
+  )
+}

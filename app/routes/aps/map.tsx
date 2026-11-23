@@ -59,6 +59,7 @@ const components = {
   gazit: lazy(() => import("~/components/maps/gazit")),
   hdante: lazy(() => import("~/components/maps/hotel-dante")),
   herzel: lazy(() => import("~/components/maps/herzel")),
+  "hubtown-b": lazy(() => import("~/components/maps/hubtown-b")),
   ironbank: lazy(() => import("~/components/maps/ironbank")),
   kg: lazy(() => import("~/components/maps/kaveri-gold")),
   kgmarg: lazy(() => import("~/components/maps/kg-marg")),
