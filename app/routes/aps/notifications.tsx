@@ -1,5 +1,5 @@
 import { requireAps } from "~/lib/authorization.server"
-import { PlusIcon } from "lucide-react"
+import { BellOff, CheckCircle2, AlertCircle, PlusIcon } from "lucide-react"
 import { useState, type ComponentProps } from "react"
 import { useFetcher, useOutletContext } from "react-router"
 import { Button } from "~/components/ui/button"
@@ -10,10 +10,13 @@ import {
   ItemDescription,
   ItemTitle,
 } from "~/components/ui/item"
-import { Error as ErrorAlert } from "~/components/error-alert"
-import { Success } from "~/components/success-alert"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { Spinner } from "~/components/ui/spinner"
 import { NoDataAlert } from "~/components/no-data-alert"
-import { NotificationsForm } from "~/components/notifications-form"
+import {
+  NotificationsForm,
+  type NotificationRecipient,
+} from "~/components/notifications-form"
 import { NotificationsTable } from "~/components/notifications-table"
 import { getToken } from "~/lib/cookie.server"
 import fetcher from "~/lib/fetch"
@@ -29,7 +32,7 @@ interface NotificationsData {
 }
 
 interface NotificationMutationResponse {
-  result: { acknowledged: boolean }
+  result: { acknowledged: boolean; matchedCount?: number }
 }
 
 export async function action({ params, request }: Route.ActionArgs) {
@@ -97,7 +100,7 @@ export async function action({ params, request }: Route.ActionArgs) {
           phone,
         }),
       })
-      if (!res?.result?.acknowledged)
+      if (!res?.result?.acknowledged || res.result.matchedCount === 0)
         throw new Error(m.notifications_action_error())
       return {
         action: m.notifications_action_update(),
@@ -106,11 +109,11 @@ export async function action({ params, request }: Route.ActionArgs) {
     }
     throw new Error(m.notifications_action_error())
   } catch (error) {
-    if (error instanceof Response) throw error
-    return {
-      error:
-        error instanceof Error ? error.message : m.notifications_action_error(),
+    if (error instanceof Response) {
+      if (error.status === 401 || error.status === 403) throw error
+      return { error: m.notifications_action_error() }
     }
+    return { error: m.notifications_action_error() }
   }
 }
 
@@ -131,80 +134,121 @@ export default function Notifications({ loaderData }: Route.ComponentProps) {
     useOutletContext<Pick<ApsLayoutRoute.ComponentProps["loaderData"], "aps">>()
   const fetcher = useFetcher<typeof action>()
   const [open, setOpen] = useState(false)
+  const [selectedRecipient, setSelectedRecipient] =
+    useState<NotificationRecipient>()
+  const busy = fetcher.state !== "idle"
+
+  const openForm = (recipient?: NotificationRecipient) => {
+    if (busy) return
+    fetcher.reset()
+    setSelectedRecipient(recipient)
+    setOpen(true)
+  }
+  const deleteRecipient = (recipient: NotificationRecipient) => {
+    if (busy) return
+    fetcher.reset()
+    void fetcher.submit(
+      { action: "delete", _id: recipient._id },
+      { method: "post" }
+    )
+  }
 
   if (!loaderData) return <NoDataAlert />
 
   if (!aps?.notifications) {
-    return m.notifications_disabled()
+    return (
+      <Alert role="status" className="bg-muted/30">
+        <BellOff aria-hidden="true" />
+        <AlertTitle>{m.notifications_disabled_title()}</AlertTitle>
+        <AlertDescription>{m.notifications_disabled()}</AlertDescription>
+      </Alert>
+    )
   }
 
   const recipients = [...loaderData.recipients].sort((a, b) =>
     a.email.localeCompare(b.email)
   )
+  const atLimit = recipients.length >= MAX_RECIPIENTS
 
   return (
     <>
-      <div className="mb-3 flex flex-col gap-3 xl:hidden">
-        <Item variant="outline">
-          <ItemContent>
-            <ItemTitle>{m.notifications_title()}</ItemTitle>
-            <ItemDescription className="text-xs">
-              {m.notifications_description({
-                count: recipients.length,
-                max: MAX_RECIPIENTS,
-              })}
-            </ItemDescription>
-          </ItemContent>
-        </Item>
-        <Button
-          className="w-full"
-          onClick={() => setOpen(true)}
-          variant="outline"
-          disabled={recipients.length >= MAX_RECIPIENTS}
+      <Item
+        variant="outline"
+        className="mb-3 flex-col items-stretch gap-3 sm:flex-row sm:items-center"
+      >
+        <ItemContent>
+          <ItemTitle>{m.notifications_title()}</ItemTitle>
+          <ItemDescription className="text-xs tabular-nums">
+            {m.notifications_description({
+              count: recipients.length,
+              max: MAX_RECIPIENTS,
+            })}
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions className="w-full sm:w-auto">
+          <Button
+            className="w-full sm:w-auto"
+            onClick={() => openForm()}
+            variant="outline"
+            disabled={busy || atLimit}
+            aria-describedby={atLimit ? "notifications-limit" : undefined}
+          >
+            <PlusIcon data-icon="inline-start" /> {m.notifications_action_add()}
+          </Button>
+        </ItemActions>
+      </Item>
+      {atLimit && (
+        <p
+          id="notifications-limit"
+          className="mb-3 text-xs text-muted-foreground"
         >
-          <PlusIcon /> {m.notifications_action_add()}
-        </Button>
-      </div>
-      <div className="mb-3 hidden xl:block">
-        <Item variant="outline">
-          <ItemContent>
-            <ItemTitle>{m.notifications_title()}</ItemTitle>
-            <ItemDescription className="text-xs">
-              {m.notifications_description({
-                count: recipients.length,
-                max: MAX_RECIPIENTS,
-              })}
-            </ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <Button
-              onClick={() => setOpen(true)}
-              disabled={recipients.length >= MAX_RECIPIENTS}
-              variant="outline"
-            >
-              <PlusIcon /> {m.notifications_action_add()}
-            </Button>
-          </ItemActions>
-        </Item>
-      </div>
-      {fetcher.data?.error && (
-        <ErrorAlert description={fetcher.data.error} title="Error" />
+          {m.notifications_limit({ max: MAX_RECIPIENTS })}
+        </p>
       )}
-      {fetcher.data?.success && (
-        <Success
-          description={fetcher.data.success}
-          title={fetcher.data.action}
+      {busy && (
+        <p
+          role="status"
+          className="mb-3 flex items-center gap-2 text-sm text-muted-foreground"
+        >
+          <Spinner aria-hidden="true" className="motion-reduce:animate-none" />
+          {m.notifications_working()}
+        </p>
+      )}
+      {!busy && !open && fetcher.data?.error && (
+        <Alert variant="destructive" className="mb-3">
+          <AlertCircle aria-hidden="true" />
+          <AlertTitle>{m.notifications_error_title()}</AlertTitle>
+          <AlertDescription>{fetcher.data.error}</AlertDescription>
+        </Alert>
+      )}
+      {!busy && fetcher.data?.success && (
+        <Alert
+          role="status"
+          className="mb-3 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
+        >
+          <CheckCircle2 aria-hidden="true" />
+          <AlertTitle>{fetcher.data.action}</AlertTitle>
+          <AlertDescription className="text-inherit">
+            {fetcher.data.success}
+          </AlertDescription>
+        </Alert>
+      )}
+      <NotificationsTable
+        recipients={recipients}
+        busy={busy}
+        onUpdate={openForm}
+        onDelete={deleteRecipient}
+      />
+      {open && (
+        <NotificationsForm
+          key={selectedRecipient?._id ?? "create"}
+          action={selectedRecipient ? "update" : "create"}
+          fetcher={fetcher}
+          open={open}
+          setOpen={setOpen}
+          selectedRecipient={selectedRecipient}
         />
       )}
-      <div className="overflow-hidden rounded-lg border">
-        <NotificationsTable fetcher={fetcher} recipients={recipients} />
-      </div>
-      <NotificationsForm
-        action="create"
-        fetcher={fetcher}
-        open={open}
-        setOpen={setOpen}
-      />
     </>
   )
 }
