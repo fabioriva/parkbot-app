@@ -7,7 +7,7 @@ interface GarageProps {
 
 export function Garage({ sensors }: GarageProps) {
   const [FRE, FPE, FLA, FLP, FDR, FDL] = sensors
-  const showGarage =
+  const garageVacant =
     FRE.status === 0 &&
     FPE.status === 1 &&
     FLA.status === 1 &&
@@ -27,7 +27,7 @@ export function Garage({ sensors }: GarageProps) {
           width="100%"
           height="100%"
           href="/garage.png"
-          opacity={showGarage ? "1" : "0.25"}
+          opacity={garageVacant ? "0.25" : "1"}
         />
         <Sensor x="80" y="45" sensor={FRE} />
         <Sensor x="45" y="25" sensor={FPE} />
