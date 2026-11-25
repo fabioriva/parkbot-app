@@ -15,8 +15,8 @@ export default function Map({ data, view }: MapProps) {
       ))}
       <style>{`
         .level {
-          height: 191px;
-          width: 907px;
+          height: 161px;
+          width: 169px;
         }
         #el-1 {
           top: 64px;
