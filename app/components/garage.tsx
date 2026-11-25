@@ -7,6 +7,14 @@ interface GarageProps {
 
 export function Garage({ sensors }: GarageProps) {
   const [FRE, FPE, FLA, FLP, FDR, FDL] = sensors
+  const showGarage =
+    FRE.status === 0 &&
+    FPE.status === 1 &&
+    FLA.status === 1 &&
+    FLP.status === 1 &&
+    FDR.status === 1 &&
+    FDL.status === 1
+
   return (
     <div className="svg-container">
       <svg
@@ -15,7 +23,12 @@ export function Garage({ sensors }: GarageProps) {
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 100 50"
       >
-        <image width="100%" height="100%" href="/garage.png" />
+        <image
+          width="100%"
+          height="100%"
+          href="/garage.png"
+          opacity={showGarage ? "1" : "0.25"}
+        />
         <Sensor x="80" y="45" sensor={FRE} />
         <Sensor x="45" y="25" sensor={FPE} />
         <Sensor x="97" y="25" sensor={FLA} />
