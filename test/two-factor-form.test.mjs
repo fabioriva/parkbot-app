@@ -64,7 +64,7 @@ const hooks = registerHooks({
       )
     if (specifier === "~/lib/auth")
       return mock(
-        "const call=async(method,payload)=>{const s=globalThis.twoFactorFormTest;s.calls.push([method,payload]);return s[method+'Result']};export const authClient={twoFactor:{enable:payload=>call('enable',payload),disable:payload=>call('disable',payload),verifyTotp:payload=>call('verify',payload)}};"
+        "const call=async(method,payload)=>{const s=globalThis.twoFactorFormTest;s.calls.push([method,payload]);const result=s[method+'Result'];if(result instanceof Error)throw result;return result};export const authClient={twoFactor:{enable:payload=>call('enable',payload),disable:payload=>call('disable',payload),verifyTotp:payload=>call('verify',payload)}};"
       )
     if (specifier.startsWith("~/")) {
       const path = specifier.slice(2)
@@ -135,19 +135,33 @@ const action = (tree) =>
     tree,
     (element) =>
       element.props.className === "w-full" &&
-      typeof element.props.onClick === "function"
+      (element.props.type === "submit" ||
+        typeof element.props.onClick === "function")
   )
+const form = (tree) => find(tree, (element) => element.type === "form")
+function pressAction(tree) {
+  const button = action(tree)
+  if (button.props.type !== "submit") return button.props.onClick()
+  let prevented = false
+  const result = form(tree).props.onSubmit({
+    preventDefault() {
+      prevented = true
+    },
+  })
+  assert.equal(prevented, true)
+  return result
+}
 const qr = (tree) => find(tree, (element) => element.props.role === "img")
 const badge = (tree) => find(tree, (element) => element.props.role === "status")
 async function start() {
   input(page(), "password").props.onChange({
     target: { value: "test-password" },
   })
-  await action(page()).props.onClick()
+  await pressAction(page())
 }
 const setCode = (value) =>
   input(page(), "totp").props.onChange({ target: { value } })
-beforeEach(() => {
+function reset() {
   Object.assign(state, {
     values: [],
     index: 0,
@@ -180,7 +194,8 @@ beforeEach(() => {
     },
   })
   setLocale("en", { reload: false })
-})
+}
+beforeEach(reset)
 afterEach(() => {
   if (navigatorDescriptor)
     Object.defineProperty(globalThis, "navigator", navigatorDescriptor)
@@ -272,7 +287,7 @@ test("empty, incomplete, nonnumeric and overlong codes cannot be sent to the ser
   for (const code of ["", "12345", "1234567", "12a456", "١٢٣٤٥٦", " 12345"]) {
     setCode(code)
     assert.equal(action(page()).props.disabled, true)
-    await action(page()).props.onClick()
+    await pressAction(page())
     const tree = page()
     assert.equal(input(tree, "totp").props["aria-invalid"], true)
     const errorId = `${input(tree, "totp").props.id}-error`
@@ -292,7 +307,7 @@ test("valid six-digit code preserves leading zeros and enables 2FA only after ve
   assert.equal(badge(page()).props.children, "2FA not enabled")
   setCode("001234")
   assert.equal(action(page()).props.disabled, false)
-  await action(page()).props.onClick()
+  await pressAction(page())
   assert.deepEqual(state.calls.at(-1), [
     "verify",
     { code: "001234", trustDevice: true },
@@ -308,14 +323,17 @@ test("failed verification retains QR, code and disabled status; editing clears t
   assert.equal(input(page(), "totp").props["aria-invalid"], true)
   setCode("001234")
   assert.equal(input(page(), "totp").props["aria-invalid"], false)
-  state.verifyResult = { error: { message: "Invalid code" } }
-  await action(page()).props.onClick()
+  state.verifyResult = {
+    error: { code: "INVALID_CODE", message: "Private server message" },
+  }
+  await pressAction(page())
   const tree = page()
   assert.equal(qr(tree).props.value, uri)
   assert.equal(input(tree, "totp").props.value, "001234")
   assert.equal(badge(tree).props.children, "2FA not enabled")
   assert.equal(state.success, false)
-  assert.ok(renderToStaticMarkup(tree).includes("Invalid code"))
+  assert.ok(renderToStaticMarkup(tree).includes("Invalid or expired code."))
+  assert.ok(!renderToStaticMarkup(tree).includes("Private server message"))
 })
 
 test("password visibility preserves its value and default shared usage has no status badge", () => {
@@ -344,12 +362,17 @@ const codes = (tree) =>
     (element) => element.props.children
   )
 const copyButton = (tree) =>
-  find(tree, (element) => element.props["aria-busy"] !== undefined)
+  find(
+    tree,
+    (element) =>
+      element.props.type === "button" &&
+      element.props["aria-busy"] !== undefined
+  )
 async function completeVerification() {
   await start()
   assert.deepEqual(codes(page()), [])
   setCode("001234")
-  await action(page()).props.onClick()
+  await pressAction(page())
 }
 
 for (const locale of ["it", "en"])
@@ -391,7 +414,7 @@ for (const locale of ["it", "en"])
     }
     state.effects.forEach((effect) => effect())
     assert.equal(focused, 1)
-    action(tree).props.onClick()
+    pressAction(tree)
     tree = page()
     assert.equal(state.success, false)
     assert.deepEqual(codes(tree), [])
@@ -424,7 +447,7 @@ test("clipboard denial and unavailable clipboard retain every code and allow man
   await copyButton(page()).props.onClick()
   assert.deepEqual(codes(page()), recoveryCodes)
   assert.equal(copyButton(page()).props.disabled, false)
-  action(page()).props.onClick()
+  pressAction(page())
   assert.deepEqual(codes(page()), [])
 })
 
@@ -439,7 +462,7 @@ test("closing during a pending copy clears codes and ignores late clipboard feed
   await copy()
   assert.equal(copyButton(page()).props.disabled, true)
   assert.equal(state.clipboardWrites.length, 1)
-  action(page()).props.onClick()
+  pressAction(page())
   resolveCopy()
   await request
   const tree = page()
@@ -453,7 +476,7 @@ test("disabling reports a distinct outcome and clears password and temporary val
   input(page(), "password").props.onChange({
     target: { value: "test-password" },
   })
-  await action(page()).props.onClick()
+  await pressAction(page())
   const tree = page()
   assert.deepEqual(state.calls, [["disable", { password: "test-password" }]])
   assert.equal(badge(tree).props.children, "2FA not enabled")
@@ -471,7 +494,7 @@ test("missing verification or disable results cannot clear inputs or falsely upd
   input(page(), "password").props.onChange({
     target: { value: "test-password" },
   })
-  await action(page()).props.onClick()
+  await pressAction(page())
   assert.equal(badge(page()).props.children, "2FA enabled")
   assert.equal(input(page(), "password").props.value, "test-password")
   state.enabled = false
@@ -479,7 +502,7 @@ test("missing verification or disable results cannot clear inputs or falsely upd
   await start()
   setCode("001234")
   state.verifyResult = {}
-  await action(page()).props.onClick()
+  await pressAction(page())
   assert.equal(qr(page()).props.value, uri)
   assert.equal(input(page(), "totp").props.value, "001234")
   assert.equal(state.success, false)
@@ -492,7 +515,280 @@ test("auth setup continues to system selection only after recovery codes are exp
   assert.equal(typeof setup.props.onComplete, "function")
   await completeVerification()
   assert.deepEqual(state.navigation, [])
-  action(page(false, setup.props.onComplete)).props.onClick()
+  pressAction(page(false, setup.props.onComplete))
   assert.deepEqual(state.navigation, ["/aps-select"])
   assert.deepEqual(codes(page()), [])
+})
+
+test("password and verification use semantic forms; missing passwords cannot trigger either mutation", async () => {
+  for (const enabled of [false, true]) {
+    reset()
+    state.enabled = enabled
+    let tree = page()
+    assert.equal(form(tree).props.noValidate, true)
+    assert.equal(form(tree).props["aria-busy"], false)
+    assert.equal(action(tree).props.type, "submit")
+    assert.equal(action(tree).props.onClick, undefined)
+    let focused = 0
+    input(tree, "password").props.ref.current = {
+      focus() {
+        focused++
+      },
+    }
+    await pressAction(tree)
+    tree = page()
+    assert.deepEqual(state.calls, [])
+    assert.equal(focused, 1)
+    assert.equal(input(tree, "password").props["aria-invalid"], true)
+    const errorId = `${input(tree, "password").props.id}-error`
+    assert.ok(
+      input(tree, "password").props["aria-describedby"].includes(errorId)
+    )
+    assert.ok(find(tree, (element) => element.props.id === errorId))
+  }
+  reset()
+  await start()
+  assert.equal(action(page()).props.type, "submit")
+  assert.equal(action(page()).props.onClick, undefined)
+  assert.equal(form(page()).props.noValidate, true)
+})
+
+for (const method of ["enable", "disable", "verify"])
+  test(`${method} blocks duplicate submissions and field edits until the request settles`, async () => {
+    if (method === "verify") {
+      await start()
+      setCode("001234")
+    } else {
+      state.enabled = method === "disable"
+      input(page(), "password").props.onChange({
+        target: { value: "test-password" },
+      })
+    }
+    const initialCalls = state.calls.length
+    const tree = page()
+    const fieldName = method === "verify" ? "totp" : "password"
+    const value = input(tree, fieldName).props.value
+    const handler = form(tree).props.onSubmit
+    let resolveRequest
+    state[`${method}Result`] = new Promise((resolve) => {
+      resolveRequest = resolve
+    })
+    const request = handler({ preventDefault() {} })
+    await handler({ preventDefault() {} })
+    let pending = page()
+    assert.equal(form(pending).props["aria-busy"], true)
+    assert.equal(action(pending).props.disabled, true)
+    assert.equal(action(pending).props["aria-busy"], true)
+    assert.equal(input(pending, fieldName).props.disabled, true)
+    input(tree, fieldName).props.onChange({ target: { value: "stale edit" } })
+    input(pending, fieldName).props.onChange({
+      target: { value: "pending edit" },
+    })
+    await pressAction(pending)
+    pending = page()
+    assert.equal(input(pending, fieldName).props.value, value)
+    assert.equal(state.calls.length, initialCalls + 1)
+    const html = renderToStaticMarkup(pending)
+    assert.ok(
+      html.includes(
+        method === "enable"
+          ? "Setting up…"
+          : method === "disable"
+            ? "Disabling…"
+            : "Verifying…"
+      )
+    )
+    if (method === "verify") assert.equal(qr(pending).props.value, uri)
+    else {
+      const toggle = find(
+        pending,
+        (element) =>
+          element.props["aria-controls"] === input(pending, "password").props.id
+      )
+      assert.equal(toggle.props.disabled, true)
+      const oldToggle = find(
+        tree,
+        (element) =>
+          element.props["aria-controls"] === input(tree, "password").props.id
+      )
+      oldToggle.props.onClick()
+      assert.equal(input(page(), "password").props.type, "password")
+    }
+    resolveRequest({
+      error: {
+        code: method === "verify" ? "INVALID_CODE" : "INVALID_PASSWORD",
+      },
+    })
+    await request
+    assert.equal(form(page()).props["aria-busy"], false)
+    assert.equal(input(page(), fieldName).props.value, value)
+    state[`${method}Result`] =
+      method === "enable"
+        ? { data: { method: "totp", totpURI: uri, backupCodes: recoveryCodes } }
+        : { data: { status: true } }
+    await pressAction(page())
+    assert.equal(state.calls.length, initialCalls + 2)
+    assert.equal(state.success, method === "verify")
+  })
+
+for (const locale of ["it", "en"])
+  test(`network failures unlock every operation, preserve the current step and permit retry (${locale})`, async () => {
+    for (const method of ["enable", "disable", "verify"]) {
+      reset()
+      setLocale(locale, { reload: false })
+      if (method === "verify") {
+        await start()
+        setCode("001234")
+      } else {
+        state.enabled = method === "disable"
+        input(page(), "password").props.onChange({
+          target: { value: "test-password" },
+        })
+      }
+      state[`${method}Result`] = new Error("Private network details")
+      await pressAction(page())
+      const tree = page()
+      assert.equal(form(tree).props["aria-busy"], false)
+      assert.ok(
+        renderToStaticMarkup(tree).includes(
+          locale === "it" ? "Connessione non riuscita." : "Connection failed."
+        )
+      )
+      assert.ok(!renderToStaticMarkup(tree).includes("Private network details"))
+      assert.equal(
+        input(tree, method === "verify" ? "totp" : "password").props.value,
+        method === "verify" ? "001234" : "test-password"
+      )
+      if (method === "verify") assert.equal(qr(tree).props.value, uri)
+      assert.equal(state.success, false)
+      let focused = 0
+      find(
+        tree,
+        (element) =>
+          element.props.variant === "destructive" && element.props.ref
+      ).props.ref.current = {
+        focus() {
+          focused++
+        },
+      }
+      state.effects.forEach((effect) => effect())
+      assert.equal(focused, 1)
+      state[`${method}Result`] =
+        method === "enable"
+          ? {
+              data: {
+                method: "totp",
+                totpURI: uri,
+                backupCodes: recoveryCodes,
+              },
+            }
+          : { data: { status: true } }
+      await pressAction(page())
+      assert.equal(state.success, method === "verify")
+      assert.ok(
+        !renderToStaticMarkup(page()).includes(
+          locale === "it" ? "Connessione non riuscita." : "Connection failed."
+        )
+      )
+    }
+  })
+
+for (const locale of ["it", "en"])
+  test(`server errors are localized and raw messages are not displayed (${locale})`, async () => {
+    setLocale(locale, { reload: false })
+    input(page(), "password").props.onChange({
+      target: { value: "test-password" },
+    })
+    for (const [failure, message] of [
+      [
+        { code: "INVALID_PASSWORD" },
+        locale === "it"
+          ? "La password attuale non è corretta."
+          : "Your current password is incorrect.",
+      ],
+      [
+        { status: 401 },
+        locale === "it"
+          ? "La sessione non è più valida."
+          : "Your session is no longer valid.",
+      ],
+      [
+        { status: 429 },
+        locale === "it" ? "Troppi tentativi." : "Too many attempts.",
+      ],
+      [
+        { code: "TOTP_ALREADY_ENABLED" },
+        locale === "it"
+          ? "Le impostazioni 2FA sono cambiate."
+          : "Your 2FA settings have changed.",
+      ],
+      [
+        { code: "UNKNOWN" },
+        locale === "it"
+          ? "Impossibile configurare l’autenticazione"
+          : "Unable to set up two-factor authentication.",
+      ],
+    ]) {
+      state.enableResult = {
+        error: {
+          ...failure,
+          message: "<script>private server message</script>",
+        },
+      }
+      await pressAction(page())
+      const tree = page()
+      const html = renderToStaticMarkup(tree)
+      assert.ok(html.includes(message), message)
+      assert.ok(!html.includes("private server message"))
+      assert.equal(
+        input(tree, "password").props["aria-invalid"],
+        failure.code === "INVALID_PASSWORD"
+      )
+      input(tree, "password").props.onChange({
+        target: { value: "test-password" },
+      })
+      assert.ok(!renderToStaticMarkup(page()).includes(message))
+    }
+  })
+
+test("server code errors stay associated with the code until it is edited", async () => {
+  await start()
+  setCode("001234")
+  state.verifyResult = { error: { code: "INVALID_CODE" } }
+  await pressAction(page())
+  let tree = page()
+  assert.equal(input(tree, "totp").props["aria-invalid"], true)
+  input(tree, "totp").props.onBlur()
+  tree = page()
+  assert.equal(input(tree, "totp").props["aria-invalid"], true)
+  assert.equal(qr(tree).props.value, uri)
+  setCode("001235")
+  tree = page()
+  assert.equal(input(tree, "totp").props["aria-invalid"], false)
+  assert.ok(!renderToStaticMarkup(tree).includes("Invalid or expired code."))
+})
+
+test("malformed setup responses release the lock without showing a QR or losing the password", async () => {
+  input(page(), "password").props.onChange({
+    target: { value: "test-password" },
+  })
+  for (const result of [
+    {},
+    { data: { method: "otp" } },
+    { data: { method: "totp", totpURI: uri, backupCodes: [] } },
+    { data: { method: "totp", totpURI: uri, backupCodes: [42] } },
+  ]) {
+    state.enableResult = result
+    await pressAction(page())
+    const tree = page()
+    assert.equal(form(tree).props["aria-busy"], false)
+    assert.equal(qr(tree), undefined)
+    assert.equal(input(tree, "password").props.value, "test-password")
+    assert.equal(state.success, false)
+    assert.ok(
+      renderToStaticMarkup(tree).includes(
+        "Unable to set up two-factor authentication."
+      )
+    )
+  }
 })

@@ -1,4 +1,10 @@
-import { CheckCircle2Icon, CopyIcon, Eye, EyeOff } from "lucide-react"
+import {
+  AlertCircle,
+  CheckCircle2Icon,
+  CopyIcon,
+  Eye,
+  EyeOff,
+} from "lucide-react"
 import { useEffect, useId, useRef, useState } from "react"
 import { QRCode } from "react-qr-code"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
@@ -31,6 +37,14 @@ interface Setup2FAProps {
   onComplete?: () => void
 }
 
+type TwoFactorRequest = "enable" | "disable" | "verify"
+
+function requestErrorMessage(action: TwoFactorRequest) {
+  if (action === "enable") return m.two_factor_enable_error()
+  if (action === "disable") return m.two_factor_disable_error()
+  return m.two_factor_verify_error()
+}
+
 export function Setup2FA({
   isTwoFactorEnabled,
   success,
@@ -43,6 +57,8 @@ export function Setup2FA({
   const totpRef = useRef<HTMLInputElement>(null)
   const feedbackRef = useRef<HTMLDivElement>(null)
   const copyRequest = useRef({ pending: false, version: 0 })
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const request = useRef<TwoFactorRequest | null>(null)
   const [backupCodes, setBackupCodes] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [password, setPassword] = useState("")
@@ -52,7 +68,7 @@ export function Setup2FA({
     isTwoFactorEnabled ?? false
   )
   const [showPassword, setShowPassword] = useState(false)
-  const [totpInvalid, setTotpInvalid] = useState(false)
+  const [totpError, setTotpError] = useState<string | null>(null)
   const [completion, setCompletion] = useState<"enabled" | "disabled" | null>(
     null
   )
@@ -60,18 +76,81 @@ export function Setup2FA({
     "idle"
   )
   const [copyError, setCopyError] = useState<string | null>(null)
+  const [pending, setPending] = useState<TwoFactorRequest | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const busy = pending !== null
   const isTotpValid = /^[0-9]{6}$/.test(totp)
 
   useEffect(() => {
-    if (completion) feedbackRef.current?.focus()
-  }, [completion])
+    if (error || completion) feedbackRef.current?.focus()
+    else if (passwordError) passwordRef.current?.focus()
+    else if (totpError) totpRef.current?.focus()
+  }, [error, completion, passwordError, totpError])
+
+  const startRequest = (action: TwoFactorRequest) => {
+    if (request.current) return false
+    request.current = action
+    setPending(action)
+    setError(null)
+    setPasswordError(null)
+    setTotpError(null)
+    setCompletion(null)
+    return true
+  }
+
+  const endRequest = () => {
+    request.current = null
+    setPending(null)
+  }
+
+  const handleRequestError = (
+    failure: { code?: string; status?: number },
+    action: TwoFactorRequest
+  ) => {
+    if (
+      failure.status === 429 ||
+      failure.code === "TOO_MANY_ATTEMPTS_REQUEST_NEW_CODE" ||
+      failure.code === "ACCOUNT_TEMPORARILY_LOCKED"
+    ) {
+      setError(m.two_factor_error_rate_limit())
+    } else if (
+      failure.status === 401 ||
+      failure.code === "SESSION_EXPIRED" ||
+      failure.code === "UNAUTHORIZED" ||
+      failure.code === "INVALID_TWO_FACTOR_COOKIE"
+    ) {
+      setError(m.two_factor_error_session())
+    } else if (action !== "verify" && failure.code === "INVALID_PASSWORD") {
+      setPasswordError(m.two_factor_error_password())
+    } else if (action === "verify" && failure.code === "INVALID_CODE") {
+      setTotpError(m.two_factor_error_code())
+    } else if (
+      failure.code === "TOTP_ALREADY_ENABLED" ||
+      failure.code === "TOTP_NOT_ENABLED" ||
+      failure.code === "TWO_FACTOR_NOT_ENABLED"
+    ) {
+      setError(m.two_factor_error_state())
+    } else {
+      setError(requestErrorMessage(action))
+    }
+  }
+
+  const hasPassword = () => {
+    if (password) return true
+    setError(null)
+    setCompletion(null)
+    setPasswordError(m.two_factor_password_required())
+    passwordRef.current?.focus()
+    return false
+  }
 
   const clearTemporaryCredentials = () => {
     setPassword("")
     setTotp("")
     setTotpURI("")
     setShowPassword(false)
-    setTotpInvalid(false)
+    setTotpError(null)
+    setPasswordError(null)
   }
 
   const clearRecoveryCodes = () => {
@@ -83,75 +162,84 @@ export function Setup2FA({
   }
 
   const disable2FA = async () => {
-    setCompletion(null)
-    const { data, error } = await authClient.twoFactor.disable({
-      password,
-    })
-    if (error) {
-      return setError(
-        error.message ?? "Unable to disable two-factor authentication."
-      )
+    if (request.current || !hasPassword() || !startRequest("disable")) return
+    try {
+      const { data, error } = await authClient.twoFactor.disable({ password })
+      if (error) return handleRequestError(error, "disable")
+      if (!data?.status) return setError(m.two_factor_disable_error())
+      setTwoFactorEnabled(false)
+      clearTemporaryCredentials()
+      clearRecoveryCodes()
+      setSuccess(false)
+      setCompletion("disabled")
+    } catch {
+      setError(m.two_factor_error_network())
+    } finally {
+      endRequest()
     }
-    if (!data?.status) return setError(m.two_factor_disable_error())
-    setError(null)
-    setTwoFactorEnabled(false)
-    clearTemporaryCredentials()
-    clearRecoveryCodes()
-    setSuccess(false)
-    setCompletion("disabled")
   }
   const enable2FA = async () => {
-    setCompletion(null)
-    const { data, error } = await authClient.twoFactor.enable({
-      password,
-    })
-    if (error) {
-      return setError(
-        error.message ?? "Unable to enable two-factor authentication."
+    if (request.current || !hasPassword() || !startRequest("enable")) return
+    try {
+      const { data, error } = await authClient.twoFactor.enable({ password })
+      if (error) return handleRequestError(error, "enable")
+      if (
+        !data ||
+        data.method !== "totp" ||
+        !data.totpURI ||
+        !Array.isArray(data.backupCodes) ||
+        !data.backupCodes.length ||
+        !data.backupCodes.every(
+          (code) => typeof code === "string" && code.length > 0
+        )
       )
+        return setError(m.two_factor_enable_error())
+      clearRecoveryCodes()
+      setBackupCodes(data.backupCodes)
+      setTotpURI(data.totpURI)
+      setShowPassword(false)
+    } catch {
+      setError(m.two_factor_error_network())
+    } finally {
+      endRequest()
     }
-    if (
-      !data ||
-      data.method !== "totp" ||
-      !data.totpURI ||
-      !Array.isArray(data.backupCodes) ||
-      !data.backupCodes.length ||
-      !data.backupCodes.every(
-        (code) => typeof code === "string" && code.length > 0
-      )
-    )
-      return setError(m.two_factor_enable_error())
-    setError(null)
-    clearRecoveryCodes()
-    setBackupCodes(data.backupCodes)
-    setTotpURI(data.totpURI)
-    setShowPassword(false)
   }
   const verify2FA = async () => {
+    if (request.current) return
     if (!isTotpValid) {
-      setTotpInvalid(true)
+      setError(null)
+      setTotpError(m.two_factor_code_invalid())
       totpRef.current?.focus()
       return
     }
-    setTotpInvalid(false)
-    setCompletion(null)
-    const { data, error } = await authClient.twoFactor.verifyTotp({
-      code: totp, // required
-      trustDevice: true,
-    })
-    if (error) {
-      return setError(error.message ?? "Unable to verify code.")
+    if (!startRequest("verify")) return
+    try {
+      const { data, error } = await authClient.twoFactor.verifyTotp({
+        code: totp,
+        trustDevice: true,
+      })
+      if (error) return handleRequestError(error, "verify")
+      if (!data || ("status" in data && data.status === false))
+        return setError(m.two_factor_verify_error())
+      setSuccess(true)
+      setTwoFactorEnabled(true)
+      clearTemporaryCredentials()
+      setCompletion("enabled")
+    } catch {
+      setError(m.two_factor_error_network())
+    } finally {
+      endRequest()
     }
-    if (!data) return setError(m.two_factor_verify_error())
-    setError(null)
-    setSuccess(true)
-    setTwoFactorEnabled(true)
-    clearTemporaryCredentials()
-    setCompletion("enabled")
   }
 
   const copyCodes = async () => {
-    if (!success || !backupCodes.length || copyRequest.current.pending) return
+    if (
+      request.current ||
+      !success ||
+      !backupCodes.length ||
+      copyRequest.current.pending
+    )
+      return
     const version = ++copyRequest.current.version
     copyRequest.current.pending = true
     setCopyState("copying")
@@ -173,12 +261,21 @@ export function Setup2FA({
   }
 
   const finishSetup = () => {
+    if (request.current) return
     clearRecoveryCodes()
     clearTemporaryCredentials()
     setError(null)
     setSuccess(false)
     onComplete?.()
   }
+  const requestFeedback =
+    !busy && error ? (
+      <Alert variant="destructive" ref={feedbackRef} tabIndex={-1}>
+        <AlertCircle aria-hidden="true" />
+        <AlertTitle>{m.two_factor_error_title()}</AlertTitle>
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    ) : null
   return (
     <>
       {showStatus && (
@@ -197,7 +294,7 @@ export function Setup2FA({
             : m.two_factor_status_disabled()}
         </Badge>
       )}
-      {completion && (
+      {!busy && completion && (
         <Alert
           role="status"
           ref={feedbackRef}
@@ -218,172 +315,239 @@ export function Setup2FA({
         </Alert>
       )}
       {!success && !totpURI && (
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor={passwordId}>
-              {m.two_factor_password_field_label()}
-            </FieldLabel>
-            <InputGroup aria-label={m.two_factor_password_field_label()}>
-              <InputGroupInput
-                id={passwordId}
-                name="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                  setCompletion(null)
-                }}
-                autoComplete="current-password"
-                aria-describedby={`${passwordId}-description`}
-                required
-                autoFocus={completion === null}
-              />
-              <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  type="button"
-                  size="icon-xs"
-                  aria-label={
-                    showPassword
-                      ? m.two_factor_hide_password()
-                      : m.two_factor_show_password()
-                  }
-                  aria-controls={passwordId}
-                  aria-pressed={showPassword}
-                  onClick={() => setShowPassword((current) => !current)}
-                >
-                  {showPassword ? (
-                    <EyeOff aria-hidden="true" />
-                  ) : (
-                    <Eye aria-hidden="true" />
-                  )}
-                </InputGroupButton>
-              </InputGroupAddon>
-            </InputGroup>
-            <FieldDescription id={`${passwordId}-description`}>
-              {twoFactorEnabled
-                ? m.two_factor_disable_field_description()
-                : m.two_factor_enable_field_description()}
-            </FieldDescription>
-          </Field>
-          <Field>
-            <Button
-              type="button"
-              className="w-full"
-              variant={twoFactorEnabled ? "destructive" : "default"}
-              onClick={twoFactorEnabled ? disable2FA : enable2FA}
-              disabled={!password || totpURI !== ""}
-            >
-              {twoFactorEnabled
-                ? m.two_factor_disable_button()
-                : m.two_factor_enable_button()}
-            </Button>
-          </Field>
-          {error && <FieldError>{error}</FieldError>}
-        </FieldGroup>
-      )}
-      {!success && totpURI && (
-        <FieldGroup>
-          <section
-            aria-labelledby={`${totpId}-scan-title`}
-            className="min-w-0 space-y-3"
-          >
-            <div className="flex items-start gap-2.5">
-              <span
-                aria-hidden="true"
-                className="flex size-6 shrink-0 items-center justify-center rounded-full border bg-muted text-xs font-medium tabular-nums"
-              >
-                1
-              </span>
-              <div className="min-w-0">
-                <h3 id={`${totpId}-scan-title`} className="text-sm font-medium">
-                  {m.two_factor_scan_qr_title()}
-                </h3>
-                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                  {m.two_factor_scan_qr_description()}
-                </p>
-              </div>
-            </div>
-            <div className="mx-auto w-full max-w-64 rounded-xl border bg-white p-4">
-              <QRCode
-                value={totpURI}
-                size={256}
-                bgColor="#ffffff"
-                fgColor="#000000"
-                role="img"
-                title={m.two_factor_qr_label()}
-                aria-label={m.two_factor_qr_label()}
-                style={{ width: "100%", maxWidth: "100%", height: "auto" }}
-              />
-            </div>
-          </section>
-          <section
-            aria-labelledby={`${totpId}-verify-title`}
-            className="min-w-0 space-y-3"
-          >
-            <div className="flex items-center gap-2.5">
-              <span
-                aria-hidden="true"
-                className="flex size-6 shrink-0 items-center justify-center rounded-full border bg-muted text-xs font-medium tabular-nums"
-              >
-                2
-              </span>
-              <h3 id={`${totpId}-verify-title`} className="text-sm font-medium">
-                {m.two_factor_verify_submit()}
-              </h3>
-            </div>
-            <Field data-invalid={totpInvalid}>
-              <FieldLabel htmlFor={totpId}>
-                {m.two_factor_verify_totp()}
+        <form
+          noValidate
+          aria-label={
+            twoFactorEnabled
+              ? m.two_factor_disable_button()
+              : m.two_factor_enable_button()
+          }
+          aria-busy={busy}
+          onSubmit={(event) => {
+            event.preventDefault()
+            return twoFactorEnabled ? disable2FA() : enable2FA()
+          }}
+        >
+          <FieldGroup>
+            <Field data-invalid={!!passwordError}>
+              <FieldLabel htmlFor={passwordId}>
+                {m.two_factor_password_field_label()}
               </FieldLabel>
-              <Input
-                id={totpId}
-                ref={totpRef}
-                type="text"
-                name="totp"
-                value={totp}
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                pattern="[0-9]{6}"
-                minLength={6}
-                maxLength={6}
-                spellCheck={false}
-                autoCapitalize="none"
-                autoFocus
-                onChange={(e) => {
-                  setTotp(e.target.value)
-                  setTotpInvalid(false)
-                }}
-                onBlur={() => setTotpInvalid(totp.length > 0 && !isTotpValid)}
-                aria-invalid={totpInvalid}
-                aria-describedby={`${totpId}-description${totpInvalid ? ` ${totpId}-error` : ""}`}
-                className="text-center font-mono tracking-[0.25em] tabular-nums"
-                required
-              />
-              <FieldDescription
-                id={`${totpId}-description`}
-                className="text-xs"
-              >
-                {m.two_factor_setup_code_description()}
+              <InputGroup aria-label={m.two_factor_password_field_label()}>
+                <InputGroupInput
+                  id={passwordId}
+                  ref={passwordRef}
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => {
+                    if (request.current) return
+                    setPassword(e.target.value)
+                    setCompletion(null)
+                    setError(null)
+                    setPasswordError(null)
+                  }}
+                  disabled={busy}
+                  autoComplete="current-password"
+                  aria-invalid={!!passwordError}
+                  aria-describedby={`${passwordId}-description${passwordError ? ` ${passwordId}-error` : ""}`}
+                  required
+                  autoFocus={completion === null}
+                />
+                <InputGroupAddon align="inline-end">
+                  <InputGroupButton
+                    type="button"
+                    size="icon-xs"
+                    aria-label={
+                      showPassword
+                        ? m.two_factor_hide_password()
+                        : m.two_factor_show_password()
+                    }
+                    aria-controls={passwordId}
+                    aria-pressed={showPassword}
+                    disabled={busy}
+                    onClick={() => {
+                      if (!request.current)
+                        setShowPassword((current) => !current)
+                    }}
+                  >
+                    {showPassword ? (
+                      <EyeOff aria-hidden="true" />
+                    ) : (
+                      <Eye aria-hidden="true" />
+                    )}
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </InputGroup>
+              <FieldDescription id={`${passwordId}-description`}>
+                {twoFactorEnabled
+                  ? m.two_factor_disable_field_description()
+                  : m.two_factor_enable_field_description()}
               </FieldDescription>
-              {totpInvalid && (
-                <FieldError id={`${totpId}-error`}>
-                  {m.two_factor_code_invalid()}
+              {passwordError && (
+                <FieldError id={`${passwordId}-error`}>
+                  {passwordError}
                 </FieldError>
               )}
             </Field>
+            {requestFeedback}
             <Field>
               <Button
-                type="button"
+                type="submit"
                 className="w-full"
-                onClick={verify2FA}
-                disabled={!isTotpValid}
+                variant={twoFactorEnabled ? "destructive" : "default"}
+                disabled={busy || !password || totpURI !== ""}
+                aria-busy={busy}
               >
-                {m.two_factor_verify_submit()}
+                {busy && (
+                  <Spinner
+                    aria-hidden="true"
+                    className="motion-reduce:animate-none"
+                  />
+                )}
+                {pending === "disable"
+                  ? m.two_factor_disabling()
+                  : pending === "enable"
+                    ? m.two_factor_enabling()
+                    : twoFactorEnabled
+                      ? m.two_factor_disable_button()
+                      : m.two_factor_enable_button()}
               </Button>
             </Field>
-            {error && <FieldError>{error}</FieldError>}
-          </section>
-        </FieldGroup>
+          </FieldGroup>
+        </form>
+      )}
+      {!success && totpURI && (
+        <form
+          noValidate
+          aria-label={m.two_factor_verify_submit()}
+          aria-busy={busy}
+          onSubmit={(event) => {
+            event.preventDefault()
+            return verify2FA()
+          }}
+        >
+          <FieldGroup>
+            <section
+              aria-labelledby={`${totpId}-scan-title`}
+              className="min-w-0 space-y-3"
+            >
+              <div className="flex items-start gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full border bg-muted text-xs font-medium tabular-nums"
+                >
+                  1
+                </span>
+                <div className="min-w-0">
+                  <h3
+                    id={`${totpId}-scan-title`}
+                    className="text-sm font-medium"
+                  >
+                    {m.two_factor_scan_qr_title()}
+                  </h3>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    {m.two_factor_scan_qr_description()}
+                  </p>
+                </div>
+              </div>
+              <div className="mx-auto w-full max-w-64 rounded-xl border bg-white p-4">
+                <QRCode
+                  value={totpURI}
+                  size={256}
+                  bgColor="#ffffff"
+                  fgColor="#000000"
+                  role="img"
+                  title={m.two_factor_qr_label()}
+                  aria-label={m.two_factor_qr_label()}
+                  style={{ width: "100%", maxWidth: "100%", height: "auto" }}
+                />
+              </div>
+            </section>
+            <section
+              aria-labelledby={`${totpId}-verify-title`}
+              className="min-w-0 space-y-3"
+            >
+              <div className="flex items-center gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full border bg-muted text-xs font-medium tabular-nums"
+                >
+                  2
+                </span>
+                <h3
+                  id={`${totpId}-verify-title`}
+                  className="text-sm font-medium"
+                >
+                  {m.two_factor_verify_submit()}
+                </h3>
+              </div>
+              <Field data-invalid={!!totpError}>
+                <FieldLabel htmlFor={totpId}>
+                  {m.two_factor_verify_totp()}
+                </FieldLabel>
+                <Input
+                  id={totpId}
+                  ref={totpRef}
+                  type="text"
+                  name="totp"
+                  value={totp}
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  pattern="[0-9]{6}"
+                  minLength={6}
+                  maxLength={6}
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoFocus
+                  onChange={(e) => {
+                    if (request.current) return
+                    setTotp(e.target.value)
+                    setTotpError(null)
+                    setError(null)
+                  }}
+                  onBlur={() => {
+                    if (!request.current && totp.length > 0 && !isTotpValid)
+                      setTotpError(m.two_factor_code_invalid())
+                  }}
+                  disabled={busy}
+                  aria-invalid={!!totpError}
+                  aria-describedby={`${totpId}-description${totpError ? ` ${totpId}-error` : ""}`}
+                  className="text-center font-mono tracking-[0.25em] tabular-nums"
+                  required
+                />
+                <FieldDescription
+                  id={`${totpId}-description`}
+                  className="text-xs"
+                >
+                  {m.two_factor_setup_code_description()}
+                </FieldDescription>
+                {totpError && (
+                  <FieldError id={`${totpId}-error`}>{totpError}</FieldError>
+                )}
+              </Field>
+              {requestFeedback}
+              <Field>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={busy || !isTotpValid}
+                  aria-busy={busy}
+                >
+                  {busy && (
+                    <Spinner
+                      aria-hidden="true"
+                      className="motion-reduce:animate-none"
+                    />
+                  )}
+                  {busy
+                    ? m.two_factor_verifying()
+                    : m.two_factor_verify_submit()}
+                </Button>
+              </Field>
+            </section>
+          </FieldGroup>
+        </form>
       )}
       {success && (
         <div className="flex flex-col gap-3">
