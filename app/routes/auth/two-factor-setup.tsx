@@ -1,6 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router"
-import { Button } from "~/components/ui/button"
+import { useNavigate } from "react-router"
 import {
   Card,
   CardContent,
@@ -12,6 +11,7 @@ import { Setup2FA } from "~/components/setup-2fa"
 import { m } from "@paraglide/messages.js"
 
 export default function TwoFactor() {
+  const navigate = useNavigate()
   const [success, setSuccess] = useState(false)
   return (
     <Card>
@@ -26,12 +26,10 @@ export default function TwoFactor() {
           isTwoFactorEnabled={false}
           success={success}
           setSuccess={setSuccess}
+          onComplete={() => {
+            void navigate("/aps-select")
+          }}
         />
-        {success && (
-          <Button className="w-full" render={<Link to="/aps-select" />}>
-            {m.aps_select_card_title()}
-          </Button>
-        )}
       </CardContent>
     </Card>
   )

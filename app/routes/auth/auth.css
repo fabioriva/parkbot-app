@@ -104,6 +104,16 @@
   font-size: 16px;
 }
 
+.auth-panel [data-slot="input-group"] {
+  height: 44px;
+}
+
+.auth-panel [data-slot="input-group-control"] {
+  height: 100%;
+  padding-inline: 12px;
+  font-size: 16px;
+}
+
 .auth-panel [data-slot="field-description"] {
   font-size: 13px;
   line-height: 1.65;
