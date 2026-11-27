@@ -33,6 +33,7 @@ export default [
       //     route(":aps/nodes", "routes/aps/nodes.tsx"),
       route(":aps/notifications", "routes/aps/notifications.tsx"),
       route(":aps/operations", "routes/aps/operations.tsx"),
+      route(":aps/operations/cards", "routes/aps/operations-cards.tsx"),
       route(":aps/rack/:nr", "routes/aps/rack.tsx"),
       route(":aps/racks", "routes/aps/racks.tsx"),
       route(":aps/tags", "routes/aps/tags.tsx"),

@@ -6,7 +6,35 @@ import {
   formatPlantDateTime,
   getDefaultPlantDateRange,
   isValidTimeZone,
+  plantDateRangeFromSearch,
 } from "../app/lib/date-time.ts"
+
+test("statistics and history links preserve the same local date range", () => {
+  const defaultRange = { from: "2026-11-20", to: "2026-11-27" }
+  const search = new URLSearchParams("from=2026-10-25&to=2026-10-25&card=183")
+  assert.deepEqual(
+    buildPlantDateRangeQuery(
+      plantDateRangeFromSearch(search, defaultRange),
+      "Europe/Rome"
+    ),
+    {
+      dateFrom: "2026-10-24T22:00:00.000Z",
+      dateTo: "2026-10-25T23:00:00.000Z",
+    }
+  )
+  assert.deepEqual(
+    plantDateRangeFromSearch(new URLSearchParams(), defaultRange),
+    defaultRange
+  )
+  assert.throws(
+    () =>
+      plantDateRangeFromSearch(
+        new URLSearchParams("from=2026-10-25"),
+        defaultRange
+      ),
+    RangeError
+  )
+})
 
 test("plant dates and UTC boundaries do not depend on the host time zone", async (t) => {
   const original = process.env.TZ

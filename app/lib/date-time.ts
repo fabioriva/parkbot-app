@@ -62,6 +62,18 @@ export function getDefaultPlantDateRange(
   return { from: shiftCalendarDate(to, -daysBefore), to }
 }
 
+export function plantDateRangeFromSearch(
+  search: URLSearchParams,
+  defaultRange: PlantDateRange
+): PlantDateRange {
+  const from = search.getAll("from")
+  const to = search.getAll("to")
+  if (!from.length && !to.length) return defaultRange
+  if (from.length !== 1 || to.length !== 1)
+    throw new RangeError("Invalid date range")
+  return { from: from[0], to: to[0] }
+}
+
 function plantMidnight(value: string, timeZone: string): string {
   calendarDate(value)
   const wallTime = `${value}T00:00:00`

@@ -98,7 +98,11 @@ export function AppSidebar({ aps, pathname, user }: SidebarProps) {
             {navMain.items.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
-                  isActive={item.pathname === pathname}
+                  isActive={
+                    item.pathname === pathname ||
+                    (pathname === `${item.pathname}/cards` &&
+                      item.pathname.endsWith("/operations"))
+                  }
                   onClick={() => isMobile && setOpenMobile(false)}
                   render={
                     <Link

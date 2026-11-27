@@ -18,9 +18,16 @@ interface OperationsProps {
     exits: number
   }[]
   stacked?: boolean
+  showTooltipLabel?: boolean
+  formatTick?: (value: string | number) => string
 }
 
-export function Operations({ operations, stacked = false }: OperationsProps) {
+export function Operations({
+  operations,
+  stacked = false,
+  showTooltipLabel = false,
+  formatTick = (value) => String(value).toUpperCase(),
+}: OperationsProps) {
   const chartConfig = {
     entries: {
       label: m.operations_entries(),
@@ -46,9 +53,11 @@ export function Operations({ operations, stacked = false }: OperationsProps) {
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          tickFormatter={(value) => String(value).toUpperCase()}
+          tickFormatter={formatTick}
         />
-        <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+        <ChartTooltip
+          content={<ChartTooltipContent hideLabel={!showTooltipLabel} />}
+        />
         <ChartLegend content={<ChartLegendContent />} />
         <Bar
           dataKey="entries"

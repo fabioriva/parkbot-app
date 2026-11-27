@@ -1,5 +1,6 @@
 import { requireAps } from "~/lib/authorization.server"
 import { Download, Search } from "lucide-react"
+import { data as routeData } from "react-router"
 import { useState } from "react"
 import { Button } from "~/components/ui/button"
 import InfiniteScroll from "react-infinite-scroll-component"
@@ -21,6 +22,7 @@ import {
   buildPlantDateRangeQuery,
   getDefaultPlantDateRange,
   isValidTimeZone,
+  plantDateRangeFromSearch,
   type PlantDateRange,
 } from "~/lib/date-time"
 import type { Route } from "./+types/history"
@@ -56,13 +58,26 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (!isValidTimeZone(timeZone)) {
     return { data: null, token, timeZone: null, range: null, parameters: null }
   }
-  const range = getDefaultPlantDateRange(timeZone)
-  const parameters = {
-    ...buildPlantDateRangeQuery(range, timeZone),
-    card: 0,
-    device: 0,
-    stall: 0,
+  const search = new URL(request.url).searchParams
+  const cards = search.getAll("card")
+  const card = cards[0] ?? "0"
+  if (
+    cards.length > 1 ||
+    !/^\d+$/.test(card) ||
+    !Number.isSafeInteger(Number(card))
+  )
+    throw routeData(m.history_request_failed(), { status: 400 })
+  const defaultRange = getDefaultPlantDateRange(timeZone)
+  let range: PlantDateRange
+  let bounds: ReturnType<typeof buildPlantDateRangeQuery>
+  try {
+    range = plantDateRangeFromSearch(search, defaultRange)
+    bounds = buildPlantDateRangeQuery(range, timeZone)
+  } catch (error) {
+    if (!(error instanceof RangeError)) throw error
+    throw routeData(m.history_date_range_invalid(), { status: 400 })
   }
+  const parameters = { ...bounds, card: Number(card), device: 0, stall: 0 }
   const query = historySearchParams(parameters, 1)
   const url = `${process.env.BACKEND_URL}/${params.aps}/history?${query}`
   const data = await fetcher(url, {
@@ -70,7 +85,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       Authorization: `Bearer ${token}`,
     },
   })
-  return { data, token, timeZone, range, parameters }
+  return { data, token, timeZone, range, parameters, today: defaultRange.to }
 }
 
 export default function History({ loaderData, params }: Route.ComponentProps) {
@@ -84,7 +99,7 @@ export default function History({ loaderData, params }: Route.ComponentProps) {
   if (!loaderData.data) return <NoDataAlert />
   return (
     <HistoryResults
-      key={`${params.aps}:${loaderData.timeZone}:${loaderData.parameters.dateFrom}:${loaderData.parameters.dateTo}`}
+      key={`${params.aps}:${loaderData.timeZone}:${loaderData.parameters.dateFrom}:${loaderData.parameters.dateTo}:${loaderData.parameters.card}`}
       loaderData={loaderData}
       params={params}
       timeZone={loaderData.timeZone}
@@ -249,6 +264,8 @@ function HistoryResults({
       {error && <ErrorAlert title="" description={error} />}
       <p className="mb-3 text-sm text-muted-foreground">
         {m.aps_field_time_zone()}: {timeZone}
+        {parameters.card > 0 &&
+          ` · ${m.operations_cards_detail({ card: parameters.card })}`}
       </p>
       {open && (
         <HistoryQueryForm
@@ -258,7 +275,7 @@ function HistoryResults({
           setOpen={setOpen}
           timeZone={timeZone}
           initialRange={selectedRange}
-          today={initialRange.to}
+          today={loaderData.today ?? initialRange.to}
           initialFilters={parameters}
         />
       )}

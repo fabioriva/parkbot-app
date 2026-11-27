@@ -14,6 +14,7 @@ import { Switch } from "~/components/ui/switch"
 import { CardWrapper } from "~/components/card-wrapper"
 import { DateRange } from "~/components/date-range"
 import { Operations as OperationsChart } from "~/components/operations-chart"
+import { OperationsNavigation } from "~/components/operations-navigation"
 import { Error as ErrorAlert } from "~/components/error-alert"
 import { NoDataAlert } from "~/components/no-data-alert"
 import { getToken } from "~/lib/cookie.server"
@@ -23,6 +24,7 @@ import {
   calendarDate,
   getDefaultPlantDateRange,
   isValidTimeZone,
+  plantDateRangeFromSearch,
   type PlantDateRange,
 } from "~/lib/date-time"
 import { m } from "@paraglide/messages.js"
@@ -37,8 +39,18 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   if (!isValidTimeZone(timeZone))
     return { data: null, token, timeZone: null, range: null }
 
-  const range = getDefaultPlantDateRange(timeZone, 7)
-  const query = new URLSearchParams(buildPlantDateRangeQuery(range, timeZone))
+  let range: PlantDateRange
+  let query: URLSearchParams
+  try {
+    range = plantDateRangeFromSearch(
+      new URL(request.url).searchParams,
+      getDefaultPlantDateRange(timeZone, 7)
+    )
+    query = new URLSearchParams(buildPlantDateRangeQuery(range, timeZone))
+  } catch (error) {
+    if (!(error instanceof RangeError)) throw error
+    throw routeData(m.history_date_range_invalid(), { status: 400 })
+  }
   const url = `${process.env.BACKEND_URL}/${params.aps}/statistics?${query}`
   const data = await fetcher(url, {
     headers: { Authorization: `Bearer ${token}` },
@@ -59,10 +71,13 @@ export default function Operations({
 }: Route.ComponentProps) {
   if (!loaderData.timeZone || !loaderData.range)
     return (
-      <ErrorAlert
-        title={m.aps_field_time_zone()}
-        description={m.aps_time_zone_missing()}
-      />
+      <>
+        <OperationsNavigation aps={params.aps} view="overview" />
+        <ErrorAlert
+          title={m.aps_field_time_zone()}
+          description={m.aps_time_zone_missing()}
+        />
+      </>
     )
   if (!loaderData.data) return <NoDataAlert />
   return (
@@ -149,6 +164,11 @@ function OperationsResults({
 
   return (
     <>
+      <OperationsNavigation
+        aps={params.aps}
+        range={selectedRange}
+        view="overview"
+      />
       {error && <ErrorAlert title={m.operations_title()} description={error} />}
       <div className="mb-3 flex flex-col gap-3 xl:hidden">
         <Item variant="outline">
