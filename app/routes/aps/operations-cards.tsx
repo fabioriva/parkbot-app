@@ -290,12 +290,15 @@ export default function OperationsCards({
         <p className="text-sm text-muted-foreground">
           {m.aps_field_time_zone()} {timeZone}
         </p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {stats.map(({ label, value }) => (
-            <CardWrapper key={label}>
-              <dl className="flex flex-col gap-2">
+            <CardWrapper
+              key={label}
+              className="[&>[data-slot=card-content]]:grow max-sm:[&>[data-slot=card-content]]:px-2"
+            >
+              <dl className="flex h-full flex-col justify-between gap-2">
                 <dt className="text-xs text-muted-foreground">{label}</dt>
-                <dd className="text-2xl font-semibold tabular-nums">
+                <dd className="text-2xl font-semibold break-all tabular-nums">
                   {numberFormat.format(value)}
                 </dd>
               </dl>
